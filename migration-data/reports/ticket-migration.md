@@ -1,21 +1,21 @@
 # Ticket Migration
 
-Generated: 2026-09-24T19:07:12.978Z
+Generated: 2026-10-14T02:06:43.254Z
 
 Source: `SA100TRAN` in `superpawnconv.mdb`
 
-Target database: `pawnsystemdb_migration`
+Target database: `pawnsystemdb`
 
-Mode: preview
+Mode: commit
 
 ## Summary
 
 | Metric | Count |
 | --- | ---: |
-| Legacy ticket rows scanned | 631,995 |
+| Legacy ticket rows scanned | 636,518 |
 | Duplicate earlier rows skipped | 5 |
-| Rows insertable | 631,990 |
-| Target ticket rows after commit | 0 |
+| Rows inserted | 636,513 |
+| Target ticket rows after commit | 636,513 |
 | Missing clients mapped to Unknown Legacy Client | 6 |
 
 ## Blockers
@@ -25,48 +25,48 @@ _none_
 ## Statuses
 
 ```txt
- 484443  pawned_picked_up
- 129850  pawned_expired
-  14944  sold_expired
-   2753  pawned
+ 487570  pawned_picked_up
+ 130997  pawned_expired
+  15387  sold_expired
+   2559  pawned
 ```
 
 ## Status Rules
 
 ```txt
- 472954  P treated as P with payback
- 129850  E
-  14944  E at BIWK
-  10771  B treated as B
-   2738  P treated as active P
-    693  S/stolen with payback
+ 476132  P treated as P with payback
+ 130997  E
+  15387  E at BIWK
+  10712  B treated as B
+   2552  P treated as active P
+    701  S/stolen with payback
      25  A treated as B
-     15  S/stolen active
+      7  S/stolen active
 ```
 
 ## Amount Sources
 
 ```txt
- 607369  pawn amount
-  13647  sale amount from amount paid
-  10974  zero amount allowed
+ 611514  pawn amount
+  14084  sale amount from amount paid
+  10915  zero amount allowed
 ```
 
 ## Pickup Amount Paid Sources
 
 ```txt
- 472650  SA100AMOUNPB
- 147547  not picked up
-  10775  SA100AMOUNTPAY fallback
-   1018  zero pickup amount
+ 475821  SA100AMOUNPB
+ 148943  not picked up
+  10716  SA100AMOUNTPAY fallback
+   1033  zero pickup amount
 ```
 
 ## Interest Paid Month Sources
 
 ```txt
- 606863  derived from dates and original due days
-  14944  sell ticket
-  10183  INTFLAG fallback
+ 610942  derived from dates and original due days
+  15387  sell ticket
+  10184  INTFLAG fallback
 ```
 
 ## Warnings

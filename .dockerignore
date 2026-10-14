@@ -1,0 +1,10 @@
+node_modules
+.git
+.env
+.env.*
+.electron-build
+dist
+migration-data/source
+migration-data/exports
+migration-data/backups
+test-results

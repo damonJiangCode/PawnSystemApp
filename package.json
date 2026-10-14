@@ -8,7 +8,7 @@
     "test": "node scripts/runTests.cjs",
     "dev:frontend": "vite --config renderer/vite.config.ts",
     "dev:main": "node scripts/prepareElectronBuild.cjs && tsc -p tsconfig.main.json --watch --preserveWatchOutput",
-    "dev:app": "wait-on http://localhost:5173 file:.electron-build/package.json file:.electron-build/main/index.js && env -u ELECTRON_RUN_AS_NODE electron .electron-build",
+    "dev:app": "wait-on http://localhost:5173 file:.electron-build/package.json file:.electron-build/main/index.js && node scripts/runElectron.cjs",
     "dev": "npm-run-all --parallel dev:frontend dev:main dev:app",
     "typecheck:main": "tsc --noEmit -p tsconfig.main.json",
     "typecheck:renderer": "tsc --noEmit -p renderer/tsconfig.json",

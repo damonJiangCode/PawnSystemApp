@@ -1,25 +1,25 @@
 # Employee Migration
 
-Generated: 2026-09-02T01:27:01.096Z
+Generated: 2026-10-14T02:04:08.433Z
 
 Source: `EM200EMPLOYEE` in `superpawnconv.mdb`
 
-Target database: `pawnsystemdb_migration`
+Target database: `pawnsystemdb`
 
-Mode: preview
+Mode: commit
 
 ## Summary
 
-| Metric                 | Count |
-| ---------------------- | ----: |
-| Legacy employee rows   |   101 |
-| Employees prepared     |   102 |
-| Terminated employees   |    16 |
-| Managers               |     1 |
-| Default DOB rows       |     3 |
-| Employees with address |    78 |
-| Employees with phone   |    86 |
-| Employees with email   |    40 |
+| Metric | Count |
+| --- | ---: |
+| Legacy employee rows | 101 |
+| Employees prepared | 102 |
+| Terminated employees | 16 |
+| Managers | 1 |
+| Default DOB rows | 3 |
+| Employees with address | 77 |
+| Employees with phone | 85 |
+| Employees with email | 39 |
 
 ## Rules
 

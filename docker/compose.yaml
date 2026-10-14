@@ -20,5 +20,24 @@ services:
       retries: 20
       start_period: 10s
 
+  migration:
+    profiles: ["migration"]
+    build:
+      context: ..
+      dockerfile: docker/migration.Dockerfile
+    environment:
+      DB_HOST: pawnsystemdb
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:?Set DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      DB_NAME: ${DB_NAME:?Set DB_NAME}
+    depends_on:
+      pawnsystemdb:
+        condition: service_healthy
+    volumes:
+      - ../migration-data/source:/app/migration-data/source:ro
+      - ../migration-data/exports:/app/migration-data/exports
+      - ../migration-data/reports:/app/migration-data/reports
+
 volumes:
   postgres_data:

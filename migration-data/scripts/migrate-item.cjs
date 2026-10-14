@@ -83,7 +83,7 @@ const parseCategoryReportMappings = () => {
   const parentRules = new Map();
   let inOtherRules = false;
 
-  for (const blockMatch of content.matchAll(/```txt\n([\s\S]*?)```/g)) {
+  for (const blockMatch of content.matchAll(/```txt\r?\n([\s\S]*?)```/g)) {
     const lines = blockMatch[1]
       .split(/\r?\n/)
       .map((line) => line.trim())
@@ -143,6 +143,9 @@ const parseCategoryReportMappings = () => {
     subcategoryRules.set(code, target);
   }
 
+  if (subcategoryRules.size <= 2 || !parentRules.size) {
+    throw new Error("Category mapping rules were not loaded; refusing OTHER-only migration");
+  }
   return { subcategoryRules, parentRules };
 };
 

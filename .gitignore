@@ -7,3 +7,4 @@ dist/
 test-results/
 migration-data/exports
 migration-data/source
+migration-data/backups/

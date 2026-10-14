@@ -1,19 +1,19 @@
 # Client City Migration
 
-Generated: 2026-07-14T04:15:53.580Z
+Generated: 2026-10-14T01:52:54.284Z
 
 Scope: migrate city/province/country values actually used by legacy `AR200CLIENT` into the migration database `city` table, then remove current city rows that overlap those legacy cities but are not legacy-used.
 
 Target database:
 
 ```txt
-localhost:5432/pawnsystemdb_migration as moneyexpress
+pawnsystemdb:5432/pawnsystemdb as moneyexpress
 ```
 
 ## Summary
 
 ```txt
-Legacy client rows: 56024
+Legacy client rows: 56300
 Distinct legacy-used city combos: 601
 City rows before migration: 2136
 Legacy-used combos inserted: 4

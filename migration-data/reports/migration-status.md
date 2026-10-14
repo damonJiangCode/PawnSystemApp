@@ -1,6 +1,22 @@
 # Migration Status
 
-Generated: 2026-07-14
+Updated: 2026-10-13 (America/Regina)
+
+## Current Docker Import
+
+All Access import stages completed into `pawnsystemdb` in `pawnsystemcontainer`.
+Imported: 56,301 clients, 127,121 client IDs, 102 employees, 636,513 tickets,
+494,408 items, and 1,075,693 ticket-item links. Exported 37,968 client photos and
+38,434 item photos to local Windows folders.
+
+Validation passed for links, client statistics, numbering sequences, and file
+existence for every stored photo path. App build passed. Desktop visual checks
+remain pending. Nineteen active pawn tickets have UNKNOWN locations and prevent
+production cutover; see `active-location-review.md`.
+
+See `../../docker/README.md` for commands, backup locations, exceptions, and the
+Windows line-ending category parser correction made before item commit.
+The older completion notes below describe the previous migration environment.
 
 This is the index for the migration workspace. Reports are kept to one file per migration subject.
 
