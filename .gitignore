@@ -3,11 +3,7 @@ node_modules/
 dist/
 
 .env
-.env.local
-.env.*.local
 .DS_Store
-images/
 test-results/
 migration-data/exports
 migration-data/source
-migration-data/rec.mp4
