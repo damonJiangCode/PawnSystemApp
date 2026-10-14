@@ -196,7 +196,6 @@ Services and repos define runtime behavior.
 
 When reviewing a feature, start here:
 
-- `docs/flows.md`: exact user-action chain.
 - `src/renderer/README.md`: renderer folder map.
 - `src/main/README.md`: backend/main folder map.
 - `src/shared/README.md`: model and contract rules.

@@ -7,8 +7,6 @@ is working with.
 For full project-level tracing, start with:
 
 - `docs/architecture.md`
-- `docs/flows.md`
-- `docs/review-guide.md`
 
 ## Top Level
 

@@ -4,7 +4,7 @@ set -euo pipefail
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-5432}"
 DB_USER="${DB_USER:-moneyexpress}"
-DB_PASSWORD="${DB_PASSWORD:-0236}"
+DB_PASSWORD="${DB_PASSWORD:?Set DB_PASSWORD in the private environment}"
 MIGRATION_DB_NAME="${MIGRATION_DB_NAME:-pawnsystemdb_migration}"
 ADMIN_DB_USER="${ADMIN_DB_USER:-$(whoami)}"
 

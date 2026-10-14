@@ -1,10 +1,69 @@
+# Dependencies and generated builds
 node_modules/
 .electron-build/
 dist/
-
-.env
-.DS_Store
+release/
+coverage/
 test-results/
-migration-data/exports
-migration-data/source
-migration-data/backups/
+*.tsbuildinfo
+
+# Private configuration (only sanitized example templates may be public)
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!*.env.example
+.npmrc
+.pgpass
+.pg_service.conf
+credentials/
+secrets/
+private/
+work/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Store records, migration output, and database backups
+/migration-data/source/
+/migration-data/exports/
+/migration-data/reports/
+/migration-data/backups/
+/images/
+/client-photos/
+/item-photos/
+/backups/
+/backup/
+/exports/
+*.mdb
+*.accdb
+*.ldb
+*.laccdb
+*.dump
+*.backup
+*.bak
+*.sqlite
+*.sqlite3
+*.db
+*.sql.gz
+*.dump.*
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# Private third-party integration references; not required at runtime
+/SOAP/
+
+# Runtime traces can contain customer records or API payloads
+logs/
+*.log
+*.log.*
+/reports/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

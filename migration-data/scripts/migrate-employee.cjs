@@ -16,7 +16,7 @@ const dbConfig = {
   user: process.env.DB_USER || "moneyexpress",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "pawnsystemdb_migration",
-  password: process.env.DB_PASSWORD || "0236",
+  password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT || 5432),
 };
 
@@ -197,6 +197,10 @@ const main = async () => {
     throw new Error(
       `Duplicate employee passwords: ${passwordConflicts.map(([password]) => password).join(", ")}`,
     );
+  }
+
+  if (!process.env.DB_PASSWORD) {
+    throw new Error("Set DB_PASSWORD in private environment configuration.");
   }
 
   const pool = new Pool(dbConfig);

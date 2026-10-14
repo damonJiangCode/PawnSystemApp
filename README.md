@@ -1,174 +1,63 @@
-# PawnShopApp
+# PawnSystemApp
 
-PawnShopApp is an Electron desktop application for pawn shop operations. It supports client management, pawn and sell tickets, ticket history, payments, item records, reports, and admin data such as employees, holidays, colors, and locations.
+An Electron desktop application for pawn shop operations, built with React, TypeScript, Material UI and PostgreSQL.
 
-The project uses Electron for the desktop shell, React + Vite + MUI for the renderer UI, TypeScript across the app, PostgreSQL for persistent data, and IPC contracts shared between the main and renderer processes.
+## Features
 
-## Project Structure
+- Customer search, profiles, identification records, photos and holds.
+- Pawn and sell tickets, linked items, ticket conversion, transfer and expiration.
+- Interest payments, pickup, history, repawn and eligible ticket reversals.
+- Item search, categories, photos and printable tickets.
+- Daily, buyback, interest, overdue and LeadsOnline XML reporting.
+- Employee, location, holiday and hair/eye color administration.
 
-```text
-.
-├── renderer/                 # Vite renderer entry files and renderer tsconfig
-│   ├── index.html
-│   ├── index.tsx
-│   ├── tsconfig.json
-│   └── vite.config.ts
-├── scripts/                  # Build, test, migration, and maintenance scripts
-│   ├── migrations/
-│   ├── prepareElectronBuild.cjs
-│   └── runTests.cjs
-├── src/
-│   ├── main/                 # Electron main process
-│   │   ├── database/         # PostgreSQL connection, schema, initialization, seeds
-│   │   ├── ipc/              # IPC channel names and handler registration
-│   │   ├── modules/          # Domain modules: handlers, services, repos, input mapping
-│   │   ├── shared/           # Main-process helpers
-│   │   └── window/           # Electron BrowserWindow creation and routing
-│   ├── preload/              # Electron preload bridge exposed to renderer
-│   ├── renderer/             # React application source
-│   │   ├── app/              # Renderer bootstrap, app routing, window registry
-│   │   ├── modules/          # Feature modules and workflows
-│   │   └── shared/           # Reusable renderer API, UI, layout, and utilities
-│   └── shared/               # Shared types, IPC API contracts, utilities, and tests
-├── images/                   # Local client and item image storage
-├── package.json              # npm scripts and dependencies
-├── package-lock.json         # Locked dependency tree
-├── tsconfig.json             # Shared TypeScript config
-└── tsconfig.main.json        # Main-process TypeScript config
-```
+## Local development
 
-## Main Process
-
-`src/main` owns Electron startup, native windows, menu actions, IPC handler registration, database access, and server-side business rules.
-
-```text
-src/main/
-├── database/
-│   ├── schema/
-│   │   ├── client/
-│   │   ├── employee/
-│   │   ├── item/
-│   │   └── ticket/
-│   ├── seed/
-│   ├── connection.ts
-│   ├── initialize.ts
-│   └── runInit.ts
-├── ipc/
-│   ├── channels.ts
-│   ├── register.ts
-│   └── window.handlers.ts
-├── modules/
-│   ├── clients/
-│   ├── employees/
-│   ├── items/
-│   ├── reports/
-│   └── tickets/
-├── shared/
-├── window/
-└── index.ts
-```
-
-Each domain module keeps related IPC handlers, services, repositories, input validation/mapping, and module exports together. A typical request path is:
-
-```text
-renderer module api -> window.appAPI -> main IPC handler -> service -> repo -> database
-```
-
-## Renderer Process
-
-`src/renderer` is the React UI. It is organized by app orchestration first, feature modules second, and shared UI/helpers last.
-
-```text
-src/renderer/
-├── boot/                     # React mount and main/window selection
-├── main/                     # Main window app, layout, hooks, and shell UI
-│   └── shell/
-├── windows/                  # Non-main window view and registry
-├── modules/
-│   ├── admin/                # Holiday, location, hair color, eye color admin windows
-│   ├── clients/              # Client page, hook, API wrapper, and components
-│   ├── employees/            # Employee API and admin window
-│   ├── history/              # Ticket history workflow
-│   ├── items/                # Item API, dialogs, load/search windows
-│   ├── reports/              # Report secondary-window screens
-│   ├── tickets/              # Ticket API, menu screens, payment workflow
-│   └── transactions/         # Active pawn/sell transaction workflow
-├── shared/
-│   ├── api/
-│   ├── layout/
-│   ├── ui/
-│   └── utils/
-```
-
-For more renderer-specific conventions, see `src/renderer/README.md`.
-
-## Shared Code
-
-`src/shared` contains code used by both the main and renderer processes:
-
-```text
-src/shared/
-├── api/                      # App API shape exposed through window.appAPI
-├── contracts/                # API/IPC input and response contracts
-├── models/                   # Domain models
-├── test/                     # Shared test helpers
-└── utils/                    # Pure shared utilities and tests
-```
-
-Calculation and formatting logic that is independent of Electron should live here so it can be tested without launching the desktop app.
-
-## Development
-
-Install dependencies:
+Use a separate empty development database and fictional data.
 
 ```bash
-npm install
+npm ci
+cp .env.example .env
 ```
 
-Run the Electron app in development:
+Edit the ignored `.env` and set your own database password. To use the included local PostgreSQL service:
 
 ```bash
+docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+npm run db:init
 npm run dev
 ```
 
-Run tests:
+`db:init` initializes schema and reference data; it does not create an initial employee or manager. The current desktop window setup targets the Vite development server at `localhost:5173`. This revision does not include a Windows installer configuration.
 
-```bash
-npm test
-```
+Optional LeadsOnline integration reads `LEADSONLINE_*` configuration from the private environment. Leave it unset for local development without external reporting.
 
-Run type checks:
+## Verification
 
 ```bash
 npm run typecheck:main
 npm run typecheck:renderer
-```
-
-Build the app:
-
-```bash
+npm test
 npm run build
 ```
 
-Initialize the database:
+## Repository structure
 
-```bash
-npm run db:init
-```
+| Path | Purpose |
+| --- | --- |
+| `src/renderer/` | React screens, components and UI workflows |
+| `src/main/` | Electron windows, business services and SQL repositories |
+| `src/preload/` | IPC bridge exposed as `window.appAPI` |
+| `src/shared/` | Shared models, contracts and calculation helpers |
+| `renderer/` | Vite configuration and frontend entry point |
+| `docker/` | Local database and optional migration tooling |
+| `migration-data/scripts/` | Migration tooling; private inputs are supplied separately |
+| `docs/` | Architecture and public repository guidance |
 
-Format the codebase:
+See [architecture](docs/architecture.md), the README in each source module, and [database setup](docker/README.md).
 
-```bash
-npm run format
-```
+## Public source and private data
 
-## Generated And Local Data
+This repository publishes software source and sanitized configuration examples. Customer/employee records, identification data, photos, source databases, backups, migration reports, logs and actual credentials belong in ignored local storage. See [public repository policy](docs/public-repository.md).
 
-```text
-.electron-build/             # Generated Electron build output used during dev/build
-images/                      # Local client and item images
-node_modules/                # Installed npm dependencies
-test-results/                # Local test output
-```
-
-These directories are generated or runtime data. They are not the primary source structure.
+Migration mapping documents and external SOAP reference files are private local inputs, so migration tooling is not self-contained in a fresh public clone. The application does not require those files for ordinary startup.

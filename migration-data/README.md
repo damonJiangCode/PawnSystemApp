@@ -1,18 +1,11 @@
-# Migration Data
+# Migration tooling and private data
 
-Keep only:
+Only reusable scripts and this directory guide are public. Supply your own private inputs locally.
 
-- `source/`: source Access databases, including `superpawnconv.mdb` and `Pictureconv.mdb`
-- `scripts/`: repeatable `migrate-*.cjs` scripts
-- `reports/`: one `*-migration.md` report per migration subject
-- `exports/client-photos/`: exported client photos
-- `exports/item-photos/`: exported item photos
+- `scripts/`: reusable Access-to-PostgreSQL migration tooling.
+- `source/`: private Access databases.
+- `reports/`: private mappings, generated reports and run records.
+- `exports/`: private exported photos and deployment data.
+- `backups/`: private database and photo backups.
 
-When a report or script is updated, replace the old file in place instead of creating dated or duplicate copies.
-
-Start with `reports/migration-status.md` to see the current migration state.
-
-For the final source refresh and production cutover, follow `reports/final-migration-runbook.md`.
-
-Photo migration stores relative `image_path` values. The app serves those files
-through `pawn-image://`; no photo schema conversion is required.
+All directories above except `scripts/` are ignored. Some scripts require private category/location mapping documents in `reports/`; a public clone does not include them. Consult your local migration instructions before running any write operation. Ordinary application startup does not run migration scripts.

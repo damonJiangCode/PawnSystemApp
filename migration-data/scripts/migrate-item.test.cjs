@@ -4,7 +4,17 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { test } = require('node:test');
 const script = fs.readFileSync(path.join(__dirname, 'migrate-item.cjs'), 'utf8').split('const main = async () => {')[0];
-const mapping = fs.readFileSync(path.join(__dirname, '../reports/category-migration.md'), 'utf8');
+// Fictional mapping rules keep this regression test independent of private reports.
+const mapping = [
+  '# Test category mappings',
+  '```txt',
+  'ring',
+  'necklace',
+  'bracelet',
+  '-> JEWELRY / ring',
+  'TEST PARENT -> OTHER / other',
+  '```',
+].join('\n');
 function parse(content) {
   const context = { __dirname, process, console, require: name => name === 'fs' ? { ...fs, readFileSync: () => content } : require(name) };
   return vm.runInNewContext(script + '\nparseCategoryReportMappings();', context);
