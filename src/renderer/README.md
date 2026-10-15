@@ -11,7 +11,9 @@ For full project-level tracing, start with:
 ## Top Level
 
 ```text
-renderer/
+src/renderer/
+  index.html
+  tsconfig.json
   boot/
   workspace/
   windows/
@@ -19,11 +21,15 @@ renderer/
   shared/
 ```
 
+- `index.html` loads `boot/index.tsx` directly; there is no separate frontend entry directory.
+- `tsconfig.json` owns frontend type-checking rules, including the root Vite config.
 - `boot/` starts the renderer and chooses whether to show the main app or a window view.
 - `workspace/` owns the main work area shell.
 - `windows/` chooses which non-main window view to show.
 - `modules/` contains feature and workflow code.
 - `shared/` contains only renderer utilities that are truly reused across modules.
+
+The project-root `vite.config.ts` uses this folder as its frontend root and writes production assets to `dist/`.
 
 ## `boot/`
 

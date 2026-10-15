@@ -6,14 +6,14 @@
   "main": "src/main/index.ts",
   "scripts": {
     "test": "node scripts/runTests.cjs",
-    "dev:frontend": "vite --config renderer/vite.config.ts",
+    "dev:frontend": "vite",
     "dev:main": "node scripts/prepareElectronBuild.cjs && tsc -p tsconfig.main.json --watch --preserveWatchOutput",
     "dev:app": "wait-on http://localhost:5173 file:.electron-build/package.json file:.electron-build/main/index.js && node scripts/runElectron.cjs",
     "dev": "npm-run-all --parallel dev:frontend dev:main dev:app",
     "typecheck:main": "tsc --noEmit -p tsconfig.main.json",
-    "typecheck:renderer": "tsc --noEmit -p renderer/tsconfig.json",
+    "typecheck:renderer": "tsc --noEmit -p src/renderer/tsconfig.json",
     "build:main": "node scripts/prepareElectronBuild.cjs && tsc -p tsconfig.main.json",
-    "build": "npm run build:main && npm run typecheck:renderer && vite build --config renderer/vite.config.ts",
+    "build": "npm run build:main && npm run typecheck:renderer && vite build",
     "db:init": "npm run build:main && node .electron-build/main/database/runInit.js",
     "format": "prettier . --write",
     "format:check": "prettier . --check"

@@ -45,11 +45,11 @@ npm run build
 
 | Path | Purpose |
 | --- | --- |
-| `src/renderer/` | React screens, components and UI workflows |
+| `src/renderer/` | Frontend HTML entry, React screens, components and UI workflows |
 | `src/main/` | Electron windows, business services and SQL repositories |
 | `src/preload/` | IPC bridge exposed as `window.appAPI` |
 | `src/shared/` | Shared models, contracts and calculation helpers |
-| `renderer/` | Vite configuration and frontend entry point |
+| `vite.config.ts` | Frontend development server and build configuration |
 | `docker/` | Local database and optional migration tooling |
 | `migration-data/scripts/` | Migration tooling; private inputs are supplied separately |
 | `docs/` | Architecture and public repository guidance |
