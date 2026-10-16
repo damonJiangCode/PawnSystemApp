@@ -8,9 +8,9 @@ const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = path.join(migrationRoot, "reports");
+const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "item-migration.md");
-const categoryReportPath = path.join(summaryDir, "category-migration.md");
+const categoryMappingPath = path.join(migrationRoot, "mappings", "category-mapping.md");
 const shouldCommit = process.argv.includes("--commit");
 
 const dbConfig = {
@@ -77,8 +77,8 @@ const readAccessTable = (tableName) =>
 const targetKey = (category, subcategory) =>
   `${normalizeKey(category)} / ${normalizeKey(subcategory)}`;
 
-const parseCategoryReportMappings = () => {
-  const content = fs.readFileSync(categoryReportPath, "utf8");
+const parseCategoryMappings = () => {
+  const content = fs.readFileSync(categoryMappingPath, "utf8");
   const subcategoryRules = new Map();
   const parentRules = new Map();
   let inOtherRules = false;
@@ -318,7 +318,7 @@ const main = async () => {
       readAccessTable("WC400INVEN"),
       readAccessTable("SA110ITEM"),
       buildLegacyLookup(),
-      parseCategoryReportMappings(),
+      parseCategoryMappings(),
       pool.query(`
         SELECT c.name AS category_name, s.name AS subcategory_name, s.id
         FROM item_subcategory s
@@ -528,7 +528,7 @@ Mode: ${shouldCommit ? "commit" : "preview"}
 - Generate new item numbers for legacy rows where item number is blank, zero, or invalid.
 - Default quantity to \`1\` when the legacy value is blank, zero, or invalid.
 - Default blank descriptions to \`${UNKNOWN_DESCRIPTION}\`.
-- Map legacy subcategories using \`category-migration.md\`; fall back to parent category and then \`OTHER / other\`.
+- Map legacy subcategories using \`mappings/category-mapping.md\`; fall back to parent category and then \`OTHER / other\`.
 
 ## Blockers
 

@@ -2,7 +2,7 @@ name: pawnsystem
 
 services:
   pawnsystemdb:
-    image: postgres:17
+    image: postgres:16
     container_name: pawnsystemcontainer
     restart: unless-stopped
     environment:
@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in the project .env}
       POSTGRES_DB: ${DB_NAME:?Set DB_NAME in the project .env}
     ports:
-      - "127.0.0.1:${DB_PORT:-5432}:5432"
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -35,9 +35,10 @@ services:
       pawnsystemdb:
         condition: service_healthy
     volumes:
-      - ../migration-data/source:/app/migration-data/source:ro
-      - ../migration-data/exports:/app/migration-data/exports
-      - ../migration-data/reports:/app/migration-data/reports
+      - ../migration/source:/app/migration/source:ro
+      - ../migration/mappings:/app/migration/mappings:ro
+      - ../migration/exports:/app/migration/exports
+      - ../migration/reports:/app/migration/reports
 
 volumes:
   postgres_data:

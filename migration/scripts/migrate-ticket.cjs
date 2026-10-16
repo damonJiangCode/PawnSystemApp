@@ -8,9 +8,9 @@ const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = path.join(migrationRoot, "reports");
+const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "ticket-migration.md");
-const locationMappingPath = path.join(summaryDir, "location-migration.md");
+const locationMappingPath = path.join(migrationRoot, "mappings", "location-mapping.md");
 const shouldCommit = process.argv.includes("--commit");
 
 const INSERT_BATCH_SIZE = 1000;
@@ -58,20 +58,21 @@ const loadLocationMapping = () => {
   const mapping = new Map();
   const content = fs.readFileSync(locationMappingPath, "utf8");
   for (const line of content.split(/\r?\n/)) {
-    if (!line.startsWith("|") || line.includes("---")) continue;
-    const cells = line
-      .split("|")
-      .slice(1, -1)
-      .map((cell) => cell.trim());
-    if (
-      cells.length >= 10 &&
-      cells[0] &&
-      cells[0] !== "legacy_location" &&
-      cells[8]
-    ) {
-      mapping.set(normalizeUpper(cells[0]), cells[8]);
+    if (!line.trim().startsWith("|")) continue;
+    const cells = line.trim().split("|").slice(1, -1).map((cell) => cell.trim());
+    if (cells.every((cell) => /^:?-+:?$/.test(cell))) continue;
+    if (cells[0] === "legacy_location" && cells[1] === "mapped_location") continue;
+    if (cells.length !== 2 || !cells[0] || !cells[1]) {
+      throw new Error("Location mappings must contain only legacy_location and mapped_location columns.");
     }
+    const source = normalizeUpper(cells[0]);
+    const target = normalizeUpper(cells[1]);
+    if (mapping.has(source) && mapping.get(source) !== target) {
+      throw new Error("Conflicting rules in location mapping input.");
+    }
+    mapping.set(source, target);
   }
+  if (!mapping.size) throw new Error("Location mapping rules were not loaded.");
   return mapping;
 };
 

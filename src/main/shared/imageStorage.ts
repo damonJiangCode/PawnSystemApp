@@ -19,7 +19,7 @@ const getItemImageBaseDir = () => {
 const getMigrationImageBaseDir = (kind: ImageKind) => {
   return path.join(
     process.cwd(),
-    "migration-data",
+    "migration",
     "exports",
     kind === "client" ? "client-photos" : "item-photos",
   );

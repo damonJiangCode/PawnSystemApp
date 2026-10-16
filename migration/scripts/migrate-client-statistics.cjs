@@ -5,7 +5,7 @@ const path = require("path");
 const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
-const summaryDir = path.join(migrationRoot, "reports");
+const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "client-migration.md");
 const shouldCommit = process.argv.includes("--commit");
 

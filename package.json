@@ -6,6 +6,8 @@
   "main": "src/main/index.ts",
   "scripts": {
     "test": "node scripts/runTests.cjs",
+    "migration:prepare": "node scripts/prepareDevMigration.cjs",
+    "migration:execute": "node scripts/executeDevMigration.cjs",
     "dev:frontend": "vite",
     "dev:main": "node scripts/prepareElectronBuild.cjs && tsc -p tsconfig.main.json --watch --preserveWatchOutput",
     "dev:app": "wait-on http://localhost:5173 file:.electron-build/package.json file:.electron-build/main/index.js && node scripts/runElectron.cjs",

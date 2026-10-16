@@ -9,7 +9,7 @@ const { Pool } = require("pg");
 const migrationRoot = path.resolve(__dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = path.join(migrationRoot, "reports");
+const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "static-migration.md");
 
 const dbConfig = {
@@ -447,8 +447,8 @@ const main = async () => {
       "## Current Decision Status",
       "",
       "- ID type and hair/eye color mapping is approved in `reports/static-migration.md`.",
-      "- Location mapping is approved in `reports/location-migration.md`; unresolved legacy locations map to `UNKNOWN`.",
-      "- Item category simplification is approved in `reports/category-migration.md`.",
+      "- Location mapping is approved in `mappings/location-mapping.md`; unresolved legacy locations map to `UNKNOWN`.",
+      "- Item category simplification is approved in `mappings/category-mapping.md`.",
       "- Employee migration is still pending; password/nickname/default DOB rules are not finalized.",
       "",
     ].join("\n");

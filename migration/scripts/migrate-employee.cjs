@@ -8,7 +8,7 @@ const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = path.join(migrationRoot, "reports");
+const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "employee-migration.md");
 const shouldCommit = process.argv.includes("--commit");
 

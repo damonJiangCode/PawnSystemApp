@@ -4,7 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { test } = require('node:test');
 const script = fs.readFileSync(path.join(__dirname, 'migrate-item.cjs'), 'utf8').split('const main = async () => {')[0];
-// Fictional mapping rules keep this regression test independent of private reports.
+// Fictional mapping rules keep this regression test independent of private mappings.
 const mapping = [
   '# Test category mappings',
   '```txt',
@@ -17,7 +17,7 @@ const mapping = [
 ].join('\n');
 function parse(content) {
   const context = { __dirname, process, console, require: name => name === 'fs' ? { ...fs, readFileSync: () => content } : require(name) };
-  return vm.runInNewContext(script + '\nparseCategoryReportMappings();', context);
+  return vm.runInNewContext(script + '\nparseCategoryMappings();', context);
 }
 test('category rules load identically from Windows and Linux documents', () => {
   const linux = parse(mapping.replace(/\r\n/g, '\n'));

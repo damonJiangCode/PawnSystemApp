@@ -199,6 +199,13 @@ const LOCATION_CODES = [
   "BIWK",
   "FRON",
   "UNKNOWN",
+  // Provisional legacy locations pending physical verification.
+  "BS31",
+  "AZ93",
+  "BQ41",
+  "BK61",
+  "BG41",
+  "BM42",
   ...Array.from({ length: 26 }, (_value, index) => {
     return `RR-${String.fromCharCode(65 + index)}`;
   }),

@@ -51,13 +51,13 @@ npm run build
 | `src/shared/` | Shared models, contracts and calculation helpers |
 | `vite.config.ts` | Frontend development server and build configuration |
 | `docker/` | Local database and optional migration tooling |
-| `migration-data/scripts/` | Migration tooling; private inputs are supplied separately |
+| `migration/scripts/` | Migration tooling; private inputs are supplied separately |
 | `docs/` | Architecture and public repository guidance |
 
-See [architecture](docs/architecture.md), the README in each source module, and [database setup](docker/README.md).
+See [architecture](docs/architecture.md), the README in each source module, and [Windows development setup](docs/instructions.md).
 
 ## Public source and private data
 
 This repository publishes software source and sanitized configuration examples. Customer/employee records, identification data, photos, source databases, backups, migration reports, logs and actual credentials belong in ignored local storage. See [public repository policy](docs/public-repository.md).
 
-Migration mapping documents and external SOAP reference files are private local inputs, so migration tooling is not self-contained in a fresh public clone. The application does not require those files for ordinary startup.
+Reviewed category and location conversion rules are versioned in `migration/mappings/` and included in a fresh clone. Supply the private Access databases separately. External SOAP reference documents remain private; ordinary application startup does not require them.

@@ -7,7 +7,7 @@ RUN npm ci
 COPY tsconfig.json tsconfig.main.json ./
 COPY scripts ./scripts
 COPY src ./src
-COPY migration-data/scripts ./migration-data/scripts
+COPY migration/scripts ./migration/scripts
 RUN npm run build:main
 ENTRYPOINT ["node"]
 CMD ["--version"]
