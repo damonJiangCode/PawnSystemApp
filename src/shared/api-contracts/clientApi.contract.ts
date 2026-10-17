@@ -7,6 +7,10 @@ import type {
 } from "../payload-contracts/client.contract.ts";
 
 export type ClientApi = {
+  setHoldUntil: (
+    clientNumber: number,
+    holdUntil: string | null,
+  ) => Promise<Client>;
   searchClients: (firstName: string, lastName: string) => Promise<Client[]>;
   searchClientsByDob: (dateOfBirth: string) => Promise<Client[]>;
   loadCities: () => Promise<CitiesResponse>;

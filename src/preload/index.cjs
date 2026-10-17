@@ -21,6 +21,7 @@ const CHANNELS = {
   DEACTIVATE_LOCATION: "deactivate-location",
   ADD_CLIENT: "add-client",
   UPDATE_CLIENT: "update-client",
+  SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
@@ -73,6 +74,8 @@ const CHANNELS = {
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 
 const clientApi = {
+  setHoldUntil: (clientNumber, holdUntil) =>
+    invoke(CHANNELS.SET_CLIENT_HOLD, clientNumber, holdUntil),
   searchClients: (firstName, lastName) =>
     invoke(CHANNELS.SEARCH_CLIENTS, firstName, lastName),
   searchClientsByDob: (dateOfBirth) =>

@@ -15,6 +15,7 @@ const CHANNELS = {
   GET_ID_TYPES: "get-id-types",
   ADD_CLIENT: "add-client",
   UPDATE_CLIENT: "update-client",
+  SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",

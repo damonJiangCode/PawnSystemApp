@@ -158,6 +158,7 @@ const WorkspaceLayout: React.FC = () => {
               incomingTicket={incomingTransactionTicket}
               onSelectedTicketChange={actions.setSelectedTransactionTicket}
               onClientSoldTicket={actions.handleClientSoldTicket}
+              onClientHoldUpdated={actions.handleClientHoldUpdated}
             />
           </MainTabPanel>
 

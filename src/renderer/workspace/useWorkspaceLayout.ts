@@ -375,6 +375,18 @@ export const useWorkspaceLayout = () => {
     }));
   };
 
+  const handleClientHoldUpdated = (updated: Client) => {
+    setSelectedClient((current) =>
+      current && current.client_number === updated.client_number
+        ? {
+            ...current,
+            hold_until: updated.hold_until,
+            updated_at: updated.updated_at,
+          }
+        : current,
+    );
+  };
+
   const handleRepawnCreated = (ticket: Ticket) => {
     setIncomingTransactionTicket(ticket);
     setFocusTicketNumber(ticket.ticket_number);
@@ -420,6 +432,7 @@ export const useWorkspaceLayout = () => {
       handleOpenTicketSearch,
       handleOpenItemSearch,
       handleClientSoldTicket,
+      handleClientHoldUpdated,
       requestHistoryRefresh,
       handleRepawnCreated,
       handleTicketReversed,

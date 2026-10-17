@@ -74,6 +74,14 @@ const normalizeSaveClientInput = (input: SaveClientInput): SaveClientInput => ({
 });
 
 export const clientApi = {
+  setHoldUntil: async (
+    clientNumber: number,
+    holdUntil: string | null,
+  ): Promise<Client> => {
+    const api = getAppApi()?.client;
+    if (!api) throw new Error("Client API is unavailable.");
+    return api.setHoldUntil(clientNumber, holdUntil);
+  },
   searchClients: async (
     firstName: string,
     lastName: string,

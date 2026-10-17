@@ -156,6 +156,7 @@ export const reportRepo = {
       LEFT JOIN ticket_item ti ON ti.ticket_number = t.ticket_number
       LEFT JOIN item i ON i.item_number = ti.item_number
       WHERE t.status = 'pawned'
+        AND (c.hold_until IS NULL OR c.hold_until < $1::date)
         AND t.due_date < ($1::date + INTERVAL '1 day')
         AND UPPER(SUBSTRING(t.location FROM '^[A-Za-z]+')) = $2
         AND CAST(SUBSTRING(t.location FROM '[0-9]+$') AS INTEGER)

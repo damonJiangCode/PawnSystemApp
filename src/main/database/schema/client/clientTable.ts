@@ -21,10 +21,12 @@ export const createClientTable = `
     image_path TEXT NOT NULL,
     image_updated_at TIMESTAMPTZ,
     pickup_self_only BOOLEAN NOT NULL DEFAULT FALSE,
+    hold_until DATE,
     redeem_count INTEGER NOT NULL DEFAULT 0 CHECK (redeem_count >= 0),
     sell_count INTEGER NOT NULL DEFAULT 0 CHECK (sell_count >= 0),
     expire_count INTEGER NOT NULL DEFAULT 0 CHECK (expire_count >= 0),
     overdue_count INTEGER NOT NULL DEFAULT 0 CHECK (overdue_count >= 0),
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
   );
+  ALTER TABLE client ADD COLUMN IF NOT EXISTS hold_until DATE;
 `;

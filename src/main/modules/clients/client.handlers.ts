@@ -8,6 +8,14 @@ const { ipcMain } = require("electron/main") as typeof import("electron");
 
 export const registerClientHandlers = () => {
   ipcMain.handle(
+    CHANNELS.SET_CLIENT_HOLD,
+    async (
+      _event: IpcMainInvokeEvent,
+      clientNumber: number,
+      holdUntil: string | null,
+    ) => clientService.setHoldUntil(clientNumber, holdUntil),
+  );
+  ipcMain.handle(
     CHANNELS.SEARCH_CLIENTS,
     async (_event: IpcMainInvokeEvent, firstName: string, lastName: string) => {
       return clientService.searchClients(firstName, lastName);

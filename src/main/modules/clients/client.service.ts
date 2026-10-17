@@ -11,6 +11,7 @@ import { createFieldError } from "../../shared/createFieldError.ts";
 import { imageStorage } from "../../shared/imageStorage.ts";
 import { runInTransaction } from "../../shared/runInTransaction.ts";
 import type { DbClient } from "../../database/connection.ts";
+import { normalizeClientHoldDate } from "../../../shared/utils/clientHold.ts";
 
 const resolveNotes = async (
   client: Client,
@@ -54,6 +55,17 @@ const resolveNotes = async (
 };
 
 export const clientService = {
+  setHoldUntil: async (
+    clientNumber: number,
+    holdUntil: string | null,
+  ): Promise<Client> => {
+    if (!Number.isSafeInteger(clientNumber) || clientNumber <= 0)
+      throw new Error("Select a valid client.");
+    const date = normalizeClientHoldDate(holdUntil);
+    return runInTransaction("setClientHold", (db) =>
+      clientRepo.setHoldUntil(clientNumber, date, db),
+    );
+  },
   searchClients: async (
     firstName: string,
     lastName: string,

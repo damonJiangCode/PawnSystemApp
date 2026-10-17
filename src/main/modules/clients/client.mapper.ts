@@ -24,6 +24,12 @@ export const mapRowToClient = (row: Record<string, unknown>): Client => ({
     ? (row.image_updated_at as Date)
     : null,
   pickup_self_only: Boolean(row.pickup_self_only),
+  hold_until:
+    row.hold_until instanceof Date
+      ? `${row.hold_until.getFullYear()}-${String(row.hold_until.getMonth() + 1).padStart(2, "0")}-${String(row.hold_until.getDate()).padStart(2, "0")}`
+      : row.hold_until
+        ? String(row.hold_until)
+        : null,
   updated_at: row.updated_at as Date,
   redeem_count: Number(row.redeem_count ?? 0),
   sell_count: Number(row.sell_count ?? 0),

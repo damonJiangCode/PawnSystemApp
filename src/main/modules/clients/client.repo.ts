@@ -20,6 +20,21 @@ const getDbClient = async (dbClient?: DbClient) =>
   dbClient ?? (await connect());
 
 export const clientRepo = {
+  setHoldUntil: async (
+    clientNumber: number,
+    holdUntil: string | null,
+    dbClient: DbClient,
+  ): Promise<Client> => {
+    const updated = await dbClient.query(
+      "UPDATE client SET hold_until=$2::date, updated_at=CURRENT_TIMESTAMP WHERE client_number=$1 RETURNING client_number",
+      [clientNumber, holdUntil],
+    );
+    if (!updated.rowCount)
+      throw new Error("The selected client was not found.");
+    const client = await clientRepo.loadByNumber(clientNumber, dbClient);
+    if (!client) throw new Error("The selected client was not found.");
+    return client;
+  },
   loadByNumber: async (
     clientNumber: number,
     dbClient?: DbClient,

@@ -22,6 +22,7 @@ import TicketEditDialog from "../../tickets/components/dialogs/TicketEditDialog"
 import TicketTransferDialog from "../../tickets/components/dialogs/TicketTransferDialog";
 import TicketConvertDialog from "../../tickets/components/dialogs/TicketConvertDialog";
 import ItemEditDialog from "../../items/components/dialogs/ItemEditDialog";
+import ClientHoldDialog from "../../clients/components/ClientHoldDialog";
 
 interface TransactionPageProps {
   isActive?: boolean;
@@ -32,6 +33,7 @@ interface TransactionPageProps {
   incomingTicket?: Ticket | null;
   onSelectedTicketChange?: (ticket: Ticket | null) => void;
   onClientSoldTicket?: () => void;
+  onClientHoldUpdated?: (client: Client) => void;
 }
 
 const TransactionPage: React.FC<TransactionPageProps> = ({
@@ -43,8 +45,13 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
   incomingTicket,
   onSelectedTicketChange,
   onClientSoldTicket,
+  onClientHoldUpdated,
 }) => {
   const clientNumber = client?.client_number;
+  const [holdDialogOpen, setHoldDialogOpen] = React.useState(false);
+  React.useEffect(() => {
+    setHoldDialogOpen(false);
+  }, [clientNumber]);
   const clientFirstName = client?.first_name ?? "";
   const clientLastName = client?.last_name ?? "";
   const clientMiddleName = client?.middle_name;
@@ -120,6 +127,13 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
           sx={{ flex: "0 0 auto" }}
         >
           Quote
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => setHoldDialogOpen(true)}
+          sx={{ flex: "0 0 auto" }}
+        >
+          {client?.hold_until ? `Hold: ${client.hold_until}` : "Hold"}
         </Button>
       </Box>
 
@@ -208,6 +222,14 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
           clientMiddleName={clientMiddleName}
           onClose={() => actions.setOpenTicketPawnDialog(false)}
           onSave={actions.handlePawnTicket}
+        />
+      )}
+
+      {holdDialogOpen && client && (
+        <ClientHoldDialog
+          client={client}
+          onClose={() => setHoldDialogOpen(false)}
+          onSaved={(updated) => onClientHoldUpdated?.(updated)}
         />
       )}
 
