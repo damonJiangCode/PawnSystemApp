@@ -19,6 +19,7 @@ export type SaveItemInput = {
 };
 
 export type ItemSearchInput = {
+  client_number?: number;
   item_number?: number;
   category_id?: number;
   subcategory_id?: number;

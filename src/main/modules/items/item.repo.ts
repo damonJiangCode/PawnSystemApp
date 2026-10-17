@@ -124,6 +124,15 @@ export const itemRepo = {
     const conditions: string[] = [];
     const values: Array<number | string> = [];
 
+    if (payload.client_number !== undefined) {
+      values.push(payload.client_number);
+      conditions.push(`iws.item_number IN (
+        SELECT ti.item_number FROM ticket t
+        INNER JOIN ticket_item ti ON ti.ticket_number = t.ticket_number
+        WHERE t.client_number = $${values.length}
+      )`);
+    }
+
     if (payload.item_number) {
       values.push(payload.item_number);
       conditions.push(`iws.item_number = $${values.length}`);

@@ -24,6 +24,7 @@ import TransactionItemImage from "../../components/transaction/TransactionItemIm
 import { itemSearchWindowColumns } from "./itemSearchWindowColumns";
 import {
   isItemAddable,
+  getItemStatusRowClass,
   ITEM_SEARCH_WINDOW_PAGE_SIZE,
   type ItemSearchWindowMode,
 } from "./itemSearchWindow.helpers";
@@ -31,6 +32,33 @@ import { useItemSearchWindow } from "./useItemSearchWindow";
 
 const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
   const { refs, state, actions } = useItemSearchWindow();
+
+  const renderSearchButtons = () => (
+    <Stack spacing={0.5} sx={{ minWidth: 86 }}>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={!state.canSearch || state.searching}
+      >
+        {state.searching && !state.loadingClientItems
+          ? "Searching..."
+          : "Search"}
+      </Button>
+      <Button
+        type="button"
+        variant="outlined"
+        disabled={!state.canLoadClientItems}
+        onClick={() => void actions.handleLoadClientItems()}
+        title={
+          state.targetStatus.selectedClientNumber
+            ? `Load items for client #${state.targetStatus.selectedClientNumber}`
+            : "Select a client in the main window first"
+        }
+      >
+        {state.loadingClientItems ? "Loading..." : "Load"}
+      </Button>
+    </Stack>
+  );
 
   const renderFooter = () => (
     <Box
@@ -162,14 +190,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
                     inputProps={{ inputMode: "numeric" }}
                     sx={{ width: 190 }}
                   />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={!state.canSearch || state.searching}
-                    sx={{ minWidth: 86 }}
-                  >
-                    {state.searching ? "Searching..." : "Search"}
-                  </Button>
+                  {renderSearchButtons()}
                 </Stack>
               ) : (
                 <Stack direction="row" spacing={0.75} alignItems="flex-start">
@@ -233,14 +254,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
                     }
                     sx={{ flex: "1 1 124px", minWidth: 96 }}
                   />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={!state.canSearch || state.searching}
-                    sx={{ minWidth: 86 }}
-                  >
-                    {state.searching ? "Searching..." : "Search"}
-                  </Button>
+                  {renderSearchButtons()}
                 </Stack>
               )}
             </Box>
@@ -330,7 +344,9 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
             disableRowSelectionOnClick
             rowSelectionModel={state.checkedItemIds}
             onRowSelectionModelChange={actions.handleCheckedItemsChange}
-            isRowSelectable={(params) => isItemAddable(params.row)}
+            isRowSelectable={(params) =>
+              isItemAddable(params.row, state.targetStatus.targetTicketNumber)
+            }
             paginationModel={state.paginationModel}
             onPaginationModelChange={(model) => {
               actions.setPaginationModel({
@@ -342,11 +358,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
             slots={{ footer: renderFooter }}
             onRowClick={(params) => actions.setSelectedItem(params.row)}
             getRowClassName={(params) => {
-              const classNames: string[] = [];
-
-              if (!isItemAddable(params.row)) {
-                classNames.push("blocked-item-row");
-              }
+              const classNames: string[] = [getItemStatusRowClass(params.row)];
 
               if (params.row.item_number === state.selectedItem?.item_number) {
                 classNames.push("selected-item-row");
@@ -382,36 +394,32 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
               "& .MuiDataGrid-row:hover": {
                 backgroundColor: "#f5f5f5",
               },
-              "& .MuiDataGrid-row.blocked-item-row": {
-                backgroundColor: "#ffcdd2",
-              },
-              "& .MuiDataGrid-row.blocked-item-row:hover": {
-                backgroundColor: "#ef9a9a",
-              },
               "& .MuiDataGrid-row.Mui-selected": {
                 backgroundColor: "transparent",
               },
               "& .MuiDataGrid-row.Mui-selected:hover": {
                 backgroundColor: "#f5f5f5",
               },
-              "& .MuiDataGrid-row.blocked-item-row.Mui-selected": {
-                backgroundColor: "#ffcdd2",
-              },
-              "& .MuiDataGrid-row.blocked-item-row.Mui-selected:hover": {
-                backgroundColor: "#ef9a9a",
-              },
               "& .MuiDataGrid-row.selected-item-row": {
-                backgroundColor: "#d0d7de",
+                outline: "2px solid #718096",
+                outlineOffset: "-2px",
               },
-              "& .MuiDataGrid-row.selected-item-row:hover": {
-                backgroundColor: "#c6d0d9",
-              },
-              "& .MuiDataGrid-row.blocked-item-row.selected-item-row": {
-                backgroundColor: "#ef9a9a",
-              },
-              "& .MuiDataGrid-row.blocked-item-row.selected-item-row:hover": {
-                backgroundColor: "#e57373",
-              },
+              "& .MuiDataGrid-row.pawned-item-row, & .MuiDataGrid-row.pawned-item-row.Mui-selected":
+                {
+                  backgroundColor: "#ffcdd2",
+                },
+              "& .MuiDataGrid-row.pawned-item-row:hover, & .MuiDataGrid-row.pawned-item-row.Mui-selected:hover":
+                {
+                  backgroundColor: "#ef9a9a",
+                },
+              "& .MuiDataGrid-row.expired-item-row, & .MuiDataGrid-row.expired-item-row.Mui-selected":
+                {
+                  backgroundColor: "#fff9c4",
+                },
+              "& .MuiDataGrid-row.expired-item-row:hover, & .MuiDataGrid-row.expired-item-row.Mui-selected:hover":
+                {
+                  backgroundColor: "#fff59d",
+                },
               "& .MuiDataGrid-row.selected-item-row .MuiDataGrid-cell": {
                 borderRight: "1px solid #9aa4af",
                 borderBottom: "1px solid #9aa4af",

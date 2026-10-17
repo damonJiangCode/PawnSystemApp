@@ -127,6 +127,11 @@ export const useWorkspaceLayout = () => {
   const [transactionRefreshKey, setTransactionRefreshKey] = useState(0);
   const currentTabRef = useRef(currentTab);
   const selectedTransactionTicketRef = useRef<Ticket | null>(null);
+  const selectedClientRef = useRef<Client | null>(null);
+
+  useEffect(() => {
+    selectedClientRef.current = selectedClient;
+  }, [selectedClient]);
 
   useEffect(() => {
     currentTabRef.current = currentTab;
@@ -186,6 +191,7 @@ export const useWorkspaceLayout = () => {
         canAddToTicket:
           currentTabRef.current === 1 && Boolean(targetTicket?.ticket_number),
         targetTicketNumber: targetTicket?.ticket_number,
+        selectedClientNumber: selectedClientRef.current?.client_number,
       });
     };
 
@@ -293,9 +299,14 @@ export const useWorkspaceLayout = () => {
       canAddToTicket:
         currentTab === 1 && Boolean(selectedTransactionTicket?.ticket_number),
       targetTicketNumber: selectedTransactionTicket?.ticket_number,
+      selectedClientNumber: selectedClient?.client_number,
     });
     channel.close();
-  }, [currentTab, selectedTransactionTicket?.ticket_number]);
+  }, [
+    currentTab,
+    selectedTransactionTicket?.ticket_number,
+    selectedClient?.client_number,
+  ]);
 
   const handleSearch = ({ firstName, lastName }: SearchParams) => {
     setSelectedClient(null);

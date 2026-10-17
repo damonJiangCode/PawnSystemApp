@@ -26,6 +26,14 @@ export const itemService = {
     const normalizedInput = itemInput.normalizeItemSearch(input);
 
     if (
+      normalizedInput.client_number !== undefined &&
+      (!Number.isSafeInteger(normalizedInput.client_number) ||
+        normalizedInput.client_number <= 0)
+    ) {
+      throw new Error("Select a valid client.");
+    }
+
+    if (
       normalizedInput.item_number &&
       (!Number.isFinite(normalizedInput.item_number) ||
         normalizedInput.item_number <= 0)

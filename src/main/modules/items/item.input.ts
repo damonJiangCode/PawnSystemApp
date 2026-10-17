@@ -41,6 +41,8 @@ const validateItem = (item: SaveItemInput) => {
 };
 
 const normalizeItemSearch = (input: ItemSearchInput): ItemSearchInput => ({
+  client_number:
+    input.client_number === undefined ? undefined : Number(input.client_number),
   item_number: input.item_number ? Number(input.item_number) : undefined,
   category_id: input.category_id ? Number(input.category_id) : undefined,
   subcategory_id: input.subcategory_id

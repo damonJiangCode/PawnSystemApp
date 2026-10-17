@@ -61,6 +61,11 @@ export const useItemSearchWindow = () => {
   const menuEventsChannelRef = React.useRef<BroadcastChannel | null>(null);
   const addToTicketRequestIdRef = React.useRef("");
   const loadedInputItemIdsRef = React.useRef<Set<string>>(new Set());
+  const searchRequestIdRef = React.useRef(0);
+  const selectedClientNumberRef = React.useRef<number | undefined>(undefined);
+  const [loadedClientNumber, setLoadedClientNumber] = React.useState<
+    number | undefined
+  >();
   const [mode, setMode] = React.useState<ItemSearchWindowMode>("details");
   const [itemNumber, setItemNumber] = React.useState("");
   const [categories, setCategories] = React.useState<ItemCategoryOption[]>([]);
@@ -123,8 +128,11 @@ export const useItemSearchWindow = () => {
   }, [checkedItemIds, items]);
 
   const addableCheckedItems = React.useMemo(
-    () => checkedItems.filter(isItemAddable),
-    [checkedItems],
+    () =>
+      checkedItems.filter((item) =>
+        isItemAddable(item, targetStatus.targetTicketNumber),
+      ),
+    [checkedItems, targetStatus.targetTicketNumber],
   );
 
   const canSearch =
@@ -138,8 +146,7 @@ export const useItemSearchWindow = () => {
           serialNumber.trim(),
         );
   const canGoToTicket =
-    Boolean(selectedItem?.latest_ticket_number) &&
-    !openingTicket;
+    Boolean(selectedItem?.latest_ticket_number) && !openingTicket;
   const canAddToTicket =
     targetStatus.canAddToTicket &&
     addableCheckedItems.length > 0 &&
@@ -183,7 +190,9 @@ export const useItemSearchWindow = () => {
       return;
     }
 
-    const nextCheckedIds = nextItems.filter(isItemAddable).map(getItemId);
+    const nextCheckedIds = nextItems
+      .filter((item) => isItemAddable(item))
+      .map(getItemId);
 
     setItems((prev) => mergeItems(prev, nextItems));
     setCheckedItemIds((prev) => mergeCheckedItemIds(prev, nextCheckedIds));
@@ -304,6 +313,7 @@ export const useItemSearchWindow = () => {
         (!event.data.requestId ||
           event.data.requestId === targetStatusRequestId)
       ) {
+        selectedClientNumberRef.current = event.data.selectedClientNumber;
         setTargetStatus(event.data);
       }
     };
@@ -347,6 +357,58 @@ export const useItemSearchWindow = () => {
     };
   }, [appendLoadedItems]);
 
+  React.useEffect(() => {
+    if (
+      loadedClientNumber !== undefined &&
+      loadedClientNumber !== targetStatus.selectedClientNumber
+    ) {
+      searchRequestIdRef.current += 1;
+      setSearching(false);
+      setLoadedClientNumber(undefined);
+      setItems([]);
+      setCheckedItemIds([]);
+      setSelectedItem(null);
+      setMessage("");
+      setError("");
+    }
+  }, [loadedClientNumber, targetStatus.selectedClientNumber]);
+
+  const handleLoadClientItems = async () => {
+    const clientNumber = targetStatus.selectedClientNumber;
+    if (!clientNumber || searching) return;
+    const requestId = ++searchRequestIdRef.current;
+    setLoadedClientNumber(clientNumber);
+    setSearching(true);
+    setError("");
+    setMessage("");
+    setItems([]);
+    setCheckedItemIds([]);
+    setSelectedItem(null);
+    try {
+      const results = await itemApi.searchItems({
+        client_number: clientNumber,
+      });
+      if (
+        requestId !== searchRequestIdRef.current ||
+        selectedClientNumberRef.current !== clientNumber
+      )
+        return;
+      setItems(results);
+      setSelectedItem(results[0] ?? null);
+      setMessage(
+        `${results.length} item(s) previously recorded for client #${clientNumber}.`,
+      );
+    } catch (err) {
+      if (requestId === searchRequestIdRef.current) {
+        setError(
+          err instanceof Error ? err.message : "Unable to load client items.",
+        );
+      }
+    } finally {
+      if (requestId === searchRequestIdRef.current) setSearching(false);
+    }
+  };
+
   const handleSearch = async () => {
     setError("");
     setMessage("");
@@ -366,6 +428,8 @@ export const useItemSearchWindow = () => {
       return;
     }
 
+    const requestId = ++searchRequestIdRef.current;
+    setLoadedClientNumber(undefined);
     setSearching(true);
 
     try {
@@ -381,6 +445,7 @@ export const useItemSearchWindow = () => {
             },
       );
       const checkedIdSet = new Set(checkedItemIds.map(String));
+      if (requestId !== searchRequestIdRef.current) return;
       const retainedCheckedItems = items.filter((item) =>
         checkedIdSet.has(String(getItemId(item))),
       );
@@ -404,10 +469,11 @@ export const useItemSearchWindow = () => {
           : "No matching items found.",
       );
     } catch (err) {
+      if (requestId !== searchRequestIdRef.current) return;
       console.error(err);
       setError(err instanceof Error ? err.message : "Unable to search items.");
     } finally {
-      setSearching(false);
+      if (requestId === searchRequestIdRef.current) setSearching(false);
     }
   };
 
@@ -480,7 +546,9 @@ export const useItemSearchWindow = () => {
 
   const handleCheckedItemsChange = (model: GridRowSelectionModel) => {
     const addableIds = new Set(
-      items.filter(isItemAddable).map((item) => String(getItemId(item))),
+      items
+        .filter((item) => isItemAddable(item, targetStatus.targetTicketNumber))
+        .map((item) => String(getItemId(item))),
     );
     setCheckedItemIds(model.filter((id) => addableIds.has(String(id))));
   };
@@ -514,6 +582,9 @@ export const useItemSearchWindow = () => {
       categoryNames,
       subcategoryOptions,
       canSearch,
+      canLoadClientItems:
+        Boolean(targetStatus.selectedClientNumber) && !searching,
+      loadingClientItems: searching && loadedClientNumber !== undefined,
       canGoToTicket,
       canAddToTicket,
     },
@@ -528,6 +599,7 @@ export const useItemSearchWindow = () => {
       setSelectedItem,
       setPaginationModel,
       handleSearch,
+      handleLoadClientItems,
       handleGoToTicket,
       handleAddToTicket,
       handleModeChange,

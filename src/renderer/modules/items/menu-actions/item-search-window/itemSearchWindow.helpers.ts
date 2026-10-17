@@ -6,6 +6,7 @@ export type ItemSearchWindowMode = "details" | "item-number";
 export type ItemSearchWindowTargetStatus = {
   canAddToTicket: boolean;
   targetTicketNumber?: number;
+  selectedClientNumber?: number;
 };
 
 export const ITEM_SEARCH_WINDOW_PAGE_SIZE = 100;
@@ -20,9 +21,20 @@ export const activeItemTicketStatuses = new Set(["pawned", "sold"]);
 
 export const getItemId = (item: Item) => item.item_number;
 
-export const isItemAddable = (item: Item) =>
+export const isItemAddable = (item: Item, targetTicketNumber?: number) =>
   item.is_loadable !== false &&
+  (!targetTicketNumber || item.latest_ticket_number !== targetTicketNumber) &&
   !activeItemTicketStatuses.has(item.latest_ticket_status ?? "");
+
+export const getItemStatusRowClass = (item: Item) => {
+  if (item.latest_ticket_status === "pawned") return "pawned-item-row";
+  if (
+    item.latest_ticket_status === "pawned_expired" ||
+    item.latest_ticket_status === "sold_expired"
+  )
+    return "expired-item-row";
+  return "";
+};
 
 export const mergeItems = (baseItems: Item[], nextItems: Item[]) => {
   const seen = new Set<number>();
