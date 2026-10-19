@@ -77,17 +77,11 @@ const normalizeSaveClient = (
 
 const normalizeColor = (color: string) => color?.trim() ?? "";
 
-const normalizeNameSearch = (firstName: string, lastName: string) => ({
-  firstName: firstName?.trim() ?? "",
-  lastName: lastName?.trim() ?? "",
-});
-
 const normalizeDobSearch = (dateOfBirth: string) => dateOfBirth?.trim() ?? "";
 
 export const clientInput = {
   normalizeSaveClient,
   normalizeColor,
-  normalizeNameSearch,
   normalizeDobSearch,
   validateClient,
 };

@@ -16,4 +16,9 @@ export class ClientController {
   ) {
     return this.clientService.search(query.firstName, query.lastName);
   }
+
+  @Get('db-check')
+  checkDatabaseConnection() {
+    return this.clientService.checkDatabaseConnection();
+  }
 }

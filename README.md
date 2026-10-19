@@ -28,6 +28,21 @@ npm run db:init
 npm run dev
 ```
 
+Client name search uses the Nest HTTP server. In a second terminal, configure
+`server/.env` with the development database connection and run:
+
+```bash
+cd server
+npm ci
+npm run start:dev
+```
+
+The renderer defaults to `http://localhost:3000`. Set `VITE_API_BASE_URL` in the
+root `.env` to change it, then restart Vite. The backend allows requests from
+`http://localhost:5173` by default; set `CORS_ORIGINS` in `server/.env` to a
+comma-separated list of renderer origins when needed. Other business operations
+and local image loading still use Electron while they are being ported.
+
 `db:init` initializes schema and reference data; it does not create an initial employee or manager. The current desktop window setup targets the Vite development server at `localhost:5173`. This revision does not include a Windows installer configuration.
 
 Optional LeadsOnline integration reads `LEADSONLINE_*` configuration from the private environment. Leave it unset for local development without external reporting.

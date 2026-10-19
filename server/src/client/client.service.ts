@@ -1,20 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { Pool } from 'pg';
+import { ClientRepository } from './client.repository.js';
 
 @Injectable()
 export class ClientService {
-    search(firstName?: string, lastName?: string) {
+    constructor(
+        private readonly pool: Pool,
+        private readonly clientRepository: ClientRepository,
+    ) {}
+
+    async checkDatabaseConnection() {
+        const result = await this.pool.query('SELECT 1 AS value');
+        return result.rows[0];
+    }
+    async search(firstName?: string, lastName?: string) {
         const first = firstName?.trim() ?? '';
         const last = lastName?.trim() ?? '';
-        if (!firstName && !lastName) {
+        if (!first && !last) {
             return [];
         }
 
-        return [
-            {
-                clientNumber: 1,
-                firstName: first,
-                lastName: last,
-            }
-        ];
+        return this.clientRepository.searchByName(first, last);
     }
 }

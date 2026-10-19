@@ -66,20 +66,6 @@ export const clientService = {
       clientRepo.setHoldUntil(clientNumber, date, db),
     );
   },
-  searchClients: async (
-    firstName: string,
-    lastName: string,
-  ): Promise<Client[]> => {
-    const { firstName: safeFirst, lastName: safeLast } =
-      clientInput.normalizeNameSearch(firstName, lastName);
-
-    if (!safeFirst && !safeLast) {
-      return [];
-    }
-
-    return clientRepo.searchByName(safeFirst, safeLast);
-  },
-
   searchClientsByDob: async (dateOfBirth: string): Promise<Client[]> => {
     const safeDob = clientInput.normalizeDobSearch(dateOfBirth);
 

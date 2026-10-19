@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  SEARCH_CLIENTS: "search-clients",
   SEARCH_CLIENTS_BY_DOB: "search-clients-by-dob",
   GET_CITIES: "get-cities",
   GET_HAIR_COLORS: "get-hair-colors",
@@ -76,8 +75,6 @@ const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 const clientApi = {
   setHoldUntil: (clientNumber, holdUntil) =>
     invoke(CHANNELS.SET_CLIENT_HOLD, clientNumber, holdUntil),
-  searchClients: (firstName, lastName) =>
-    invoke(CHANNELS.SEARCH_CLIENTS, firstName, lastName),
   searchClientsByDob: (dateOfBirth) =>
     invoke(CHANNELS.SEARCH_CLIENTS_BY_DOB, dateOfBirth),
   loadCities: () => invoke(CHANNELS.GET_CITIES),

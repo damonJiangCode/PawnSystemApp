@@ -56,35 +56,6 @@ export const clientRepo = {
     }
   },
 
-  searchByName: async (
-    firstName: string,
-    lastName: string,
-    dbClient?: DbClient,
-  ): Promise<Client[]> => {
-    const client = await getDbClient(dbClient);
-    const query = `
-      ${clientWithIdentificationsFromClause}
-      WHERE
-        (LOWER(c.first_name) LIKE LOWER($1) || '%' OR $1 = '')
-        AND
-        (LOWER(c.last_name) LIKE LOWER($2) || '%' OR $2 = '')
-      ORDER BY c.last_name, c.first_name, c.client_number
-    `;
-    const values = [
-      firstName ? firstName.toLowerCase() : "",
-      lastName ? lastName.toLowerCase() : "",
-    ];
-
-    try {
-      const result = await client.query(query, values);
-      return result.rows.map(mapRowToClient);
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
   searchByDob: async (
     dateOfBirth: string,
     dbClient?: DbClient,
