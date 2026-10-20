@@ -7,10 +7,12 @@ interface ClientPhotoCaptureProps {
   client: Client;
   onCapture: (fileName: string, base64: string) => void;
   active?: boolean;
+  previewSrc?: string;
+  disabled?: boolean;
 }
 
 const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
-  const { client, onCapture, active } = props;
+  const { client, onCapture, active, previewSrc, disabled } = props;
   const [photoData, setPhotoData] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -61,8 +63,8 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
   }, [active]);
 
   useEffect(() => {
-    setPhotoData(getClientImageUrl(client.image_path));
-  }, [client.client_number, client.image_path]);
+    setPhotoData(previewSrc ?? getClientImageUrl(client.image_path));
+  }, [client.client_number, client.image_path, previewSrc, active]);
 
   const handleTakePhoto = () => {
     const video = videoRef.current;
@@ -114,7 +116,11 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
       </Box>
 
       <Box mt={1}>
-        <Button variant="contained" onClick={handleTakePhoto}>
+        <Button
+          variant="contained"
+          onClick={handleTakePhoto}
+          disabled={disabled}
+        >
           Capture
         </Button>
       </Box>

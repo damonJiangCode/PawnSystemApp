@@ -1,30 +1,105 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Post,
+  Query,
+  StreamableFile,
+  ValidationPipe,
+} from '@nestjs/common';
+import { createReadStream } from 'node:fs';
+import { ClientImageService } from './client-image.service.js';
+import { CreateClientDto } from './dto/create-client.dto.js';
+import { SaveClientImageDto } from './dto/save-client-image.dto.js';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ClientService } from './client.service.js';
 import { SearchClientDto } from './dto/search-client.dto.js';
 import { SearchClientByDobDto } from './dto/search-client-by-dob.dto.js';
 
+class ClientImageQueryDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(500)
+  path!: string;
+}
+
 @Controller('client')
 export class ClientController {
-    constructor(private readonly clientService: ClientService) {}
-  @Get()
-  search(
-    @Query(new ValidationPipe({ 
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly images: ClientImageService,
+  ) {}
+
+  @Post()
+  create(
+    @Body(
+      new ValidationPipe({
         transform: true,
         whitelist: true,
         forbidNonWhitelisted: true,
-    })) 
-    query: SearchClientDto
+      }),
+    )
+    input: CreateClientDto,
+  ) {
+    return this.clientService.create(input);
+  }
+
+  @Post('images')
+  async saveImage(
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    input: SaveClientImageDto,
+  ) {
+    return { imagePath: await this.images.save(input.base64) };
+  }
+
+  @Get('images')
+  @Header('Cache-Control', 'private, no-store')
+  @Header('X-Content-Type-Options', 'nosniff')
+  async loadImage(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    query: ClientImageQueryDto,
+  ) {
+    const file = await this.images.resolve(query.path);
+    return new StreamableFile(createReadStream(file), {
+      type: /\.png$/i.test(file) ? 'image/png' : 'image/jpeg',
+    });
+  }
+  @Get()
+  search(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    query: SearchClientDto,
   ) {
     return this.clientService.search(query.firstName, query.lastName);
   }
 
   @Get('by-dob')
   searchByDob(
-    @Query(new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }))
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
     query: SearchClientByDobDto,
   ) {
     return this.clientService.searchByDob(query.dateOfBirth);

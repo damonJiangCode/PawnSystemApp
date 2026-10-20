@@ -10,6 +10,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import type { Client } from "../../../../../shared/models/client.model";
+import type { ClientPhotoInput } from "../../../../../shared/payload-contracts/client.contract";
 import ClientPhotoCapture from "./fields/ClientPhotoCapture";
 import HeightWeightFields from "./fields/HeightWeightFields";
 import NameFields from "./fields/NameFields";
@@ -49,6 +50,9 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [cameraActive, setCameraActive] = useState(true);
   const [photoCaptured, setPhotoCaptured] = useState(false);
+  const [pendingPhoto, setPendingPhoto] = useState<ClientPhotoInput | null>(
+    null,
+  );
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [employeePassword, setEmployeePassword] = useState("");
   const [pendingUpdate, setPendingUpdate] =
@@ -77,6 +81,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
     }
     setClient(clientExisted || defaultClient);
     setPhotoCaptured(Boolean(clientExisted?.image_path));
+    setPendingPhoto(null);
     setCameraActive(true);
     setShowPasswordDialog(false);
     setEmployeePassword("");
@@ -146,6 +151,13 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
     fileName: string,
     base64: string,
   ): Promise<void> {
+    if (!isEditMode) {
+      // New clients keep the photo in browser memory until the Add request.
+      setPendingPhoto({ fileName, base64 });
+      setPhotoCaptured(true);
+      clearValidationError("photo");
+      return;
+    }
     try {
       const relPath = await clientApi.saveClientImage(fileName, base64);
       setClient((prev) => ({
@@ -187,14 +199,24 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
     try {
       setSavingClient(true);
       setSubmitError("");
-      const savedClient: Client = isEditMode
-        ? await clientApi.updateClient(payload)
-        : await clientApi.createClient(payload);
+      let savedClient: Client;
+      if (isEditMode) {
+        savedClient = await clientApi.updateClient(payload);
+      } else {
+        if (!pendingPhoto) {
+          throw new Error("Capture a client photo before saving.");
+        }
+        savedClient = await clientApi.createClient({
+          ...payload,
+          photo: pendingPhoto,
+        });
+      }
 
       setShowPasswordDialog(false);
       setEmployeePassword("");
       setEmployeePasswordError("");
       setPendingUpdate(null);
+      setPendingPhoto(null);
       onSave(savedClient);
     } catch (err) {
       const clientError = err as ClientFormError;
@@ -273,8 +295,10 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
   };
 
   const handleClose = () => {
+    if (savingClient) return;
     setCameraActive(false);
     setPhotoCaptured(false);
+    setPendingPhoto(null);
     setShowPasswordDialog(false);
     setEmployeePassword("");
     setPendingUpdate(null);
@@ -403,6 +427,12 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                   client={client}
                   onCapture={handleCapture}
                   active={cameraActive}
+                  previewSrc={
+                    pendingPhoto
+                      ? `data:image/png;base64,${pendingPhoto.base64}`
+                      : undefined
+                  }
+                  disabled={savingClient}
                 />
                 <Alert
                   severity="error"
@@ -432,7 +462,12 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                 alignItems: "center",
               }}
             >
-              <Button type="button" onClick={handleClose} sx={{ mr: 1 }}>
+              <Button
+                type="button"
+                onClick={handleClose}
+                disabled={savingClient}
+                sx={{ mr: 1 }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="contained" disabled={savingClient}>

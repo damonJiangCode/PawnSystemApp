@@ -13,3 +13,12 @@ export type SaveClientInput = {
   employee_password?: string;
   notes_action?: ClientNotesAction;
 };
+
+export type ClientPhotoInput = {
+  fileName: string;
+  base64: string;
+};
+
+export type CreateClientInput = SaveClientInput & {
+  photo: ClientPhotoInput;
+};

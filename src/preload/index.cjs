@@ -17,14 +17,12 @@ const CHANNELS = {
   GET_ADMIN_LOCATIONS: "get-admin-locations",
   ADD_LOCATION: "add-location",
   DEACTIVATE_LOCATION: "deactivate-location",
-  ADD_CLIENT: "add-client",
   UPDATE_CLIENT: "update-client",
   SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",
-  SAVE_CLIENT_IMAGE: "save-client-image",
   GET_TICKETS: "get-tickets",
   GET_HOLIDAY_DATES: "get-holiday-dates",
   ADD_HOLIDAY_DATE: "add-holiday-date",
@@ -86,11 +84,8 @@ const clientApi = {
   activateEyeColor: (color) => invoke(CHANNELS.ACTIVATE_EYE_COLOR, color),
   deactivateEyeColor: (color) => invoke(CHANNELS.DEACTIVATE_EYE_COLOR, color),
   loadIdTypes: () => invoke(CHANNELS.GET_ID_TYPES),
-  createClient: (payload) => invoke(CHANNELS.ADD_CLIENT, payload),
   updateClient: (payload) => invoke(CHANNELS.UPDATE_CLIENT, payload),
   deleteClient: (clientNumber) => invoke(CHANNELS.DELETE_CLIENT, clientNumber),
-  saveClientImage: (fileName, base64) =>
-    invoke(CHANNELS.SAVE_CLIENT_IMAGE, fileName, base64),
 };
 
 const ticketApi = {

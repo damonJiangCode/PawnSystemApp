@@ -63,12 +63,7 @@ export const registerClientHandlers = () => {
   ipcMain.handle(CHANNELS.GET_ID_TYPES, async () =>
     clientReferenceService.loadIdTypes(),
   );
-  ipcMain.handle(
-    CHANNELS.ADD_CLIENT,
-    async (_event: IpcMainInvokeEvent, payload: SaveClientInput) => {
-      return clientService.createClient(payload);
-    },
-  );
+
   ipcMain.handle(
     CHANNELS.UPDATE_CLIENT,
     async (_event: IpcMainInvokeEvent, payload: SaveClientInput) => {
@@ -79,12 +74,6 @@ export const registerClientHandlers = () => {
     CHANNELS.DELETE_CLIENT,
     async (_event: IpcMainInvokeEvent, clientNumber: number) => {
       return clientService.deleteClient(clientNumber);
-    },
-  );
-  ipcMain.handle(
-    CHANNELS.SAVE_CLIENT_IMAGE,
-    async (_event: IpcMainInvokeEvent, fileName: string, base64: string) => {
-      return clientService.saveClientImage(fileName, base64);
     },
   );
 };

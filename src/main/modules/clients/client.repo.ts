@@ -56,83 +56,6 @@ export const clientRepo = {
     }
   },
 
-  create: async (
-    clientData: Client,
-    dbClient?: DbClient,
-  ): Promise<{ client_number: number; updated_at: Date }> => {
-    const client = await getDbClient(dbClient);
-    const query = `
-      INSERT INTO client (
-        first_name,
-        last_name,
-        middle_name,
-        date_of_birth,
-        gender,
-        hair_color,
-        eye_color,
-        height_cm,
-        weight_kg,
-        address,
-        postal_code,
-        city,
-        province,
-        country,
-        email,
-        phone,
-        notes,
-        image_path,
-        image_updated_at,
-        pickup_self_only,
-        redeem_count,
-        sell_count,
-        expire_count,
-        overdue_count
-      ) VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24
-      )
-      RETURNING client_number, updated_at
-    `;
-
-    const values = [
-      toDbNullable(clientData.first_name),
-      toDbNullable(clientData.last_name),
-      toDbNullable(clientData.middle_name),
-      toDbNullable(clientData.date_of_birth),
-      toDbNullable(clientData.gender),
-      toDbNullable(clientData.hair_color),
-      toDbNullable(clientData.eye_color),
-      clientData.height_cm ?? null,
-      clientData.weight_kg ?? null,
-      toDbNullable(clientData.address),
-      toDbNullable(clientData.postal_code),
-      toDbNullable(clientData.city),
-      toDbNullable(clientData.province),
-      toDbNullable(clientData.country),
-      toDbNullable(clientData.email),
-      toDbNullable(clientData.phone),
-      toDbNullable(clientData.notes),
-      toDbNullable(clientData.image_path),
-      clientData.image_updated_at ?? null,
-      Boolean(clientData.pickup_self_only),
-      clientData.redeem_count ?? 0,
-      clientData.sell_count ?? 0,
-      clientData.expire_count ?? 0,
-      clientData.overdue_count ?? 0,
-    ];
-
-    try {
-      const result = await client.query(query, values);
-      return {
-        client_number: result.rows[0].client_number as number,
-        updated_at: result.rows[0].updated_at as Date,
-      };
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
   update: async (
     clientData: Client,
     dbClient?: DbClient,
@@ -215,31 +138,6 @@ export const clientRepo = {
       return {
         updated_at: result.rows[0].updated_at as Date,
       };
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
-  updateImagePath: async (
-    clientNumber: number,
-    imagePath: string,
-    dbClient?: DbClient,
-  ): Promise<void> => {
-    const client = await getDbClient(dbClient);
-
-    try {
-      await client.query(
-        `
-          UPDATE client
-          SET image_path = $1,
-              image_updated_at = COALESCE(image_updated_at, CURRENT_TIMESTAMP),
-              updated_at = CURRENT_TIMESTAMP
-          WHERE client_number = $2
-        `,
-        [imagePath, clientNumber],
-      );
     } finally {
       if (!dbClient) {
         client.release();

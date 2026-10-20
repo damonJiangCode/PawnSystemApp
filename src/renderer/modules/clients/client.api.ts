@@ -5,6 +5,7 @@ import type {
   CitiesResponse,
   ClientNotesAction,
   SaveClientInput,
+  CreateClientInput,
 } from "../../../shared/payload-contracts/client.contract";
 import { getAppApi } from "../../shared/api/app.api";
 import { extractBackendFieldError } from "../../shared/utils/formError";
@@ -244,14 +245,17 @@ export const clientApi = {
     return api.saveClientImage(fileName, base64);
   },
 
-  createClient: async (input: SaveClientInput): Promise<Client> => {
+  createClient: async (input: CreateClientInput): Promise<Client> => {
     const api = getAppApi()?.client;
     if (!api) {
       throw new Error("createClient is not available");
     }
 
     try {
-      return await api.createClient(normalizeSaveClientInput(input));
+      return await api.createClient({
+        ...normalizeSaveClientInput(input),
+        photo: input.photo,
+      });
     } catch (error) {
       throw mapBackendError(error);
     }

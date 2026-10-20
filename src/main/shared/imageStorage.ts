@@ -35,10 +35,6 @@ const resolveImagePath = (baseDir: string, imagePath: string) => {
   return resolved;
 };
 
-const resolveClientImagePath = (imagePath: string) => {
-  return resolveImagePath(getClientImageBaseDir(), imagePath);
-};
-
 const resolveItemImagePath = (imagePath: string) => {
   return resolveImagePath(getItemImageBaseDir(), imagePath);
 };
@@ -137,30 +133,14 @@ const finalizeImage = async (
 };
 
 export const imageStorage = {
-  saveClientImage: async (
-    fileName: string,
-    base64: string,
-  ): Promise<string> => {
-    if (!base64) {
-      throw new Error("Missing image data");
-    }
-
-    const baseDir = getClientImageBaseDir();
-    await fs.mkdir(baseDir, { recursive: true });
-
-    const safeName = path.basename(fileName);
-    const relPath = path.join("images", "clients", safeName);
-    const absPath = resolveClientImagePath(safeName);
-    const buffer = Buffer.from(base64, "base64");
-
-    await fs.writeFile(absPath, buffer);
-    return relPath;
-  },
-
   finalizeClientImage: async (
     clientNumber: number,
     imagePath: string,
   ): Promise<string> => {
+    // Server uploads already have stable names; the desktop must not rename them.
+    if (/^images\/clients\/[0-9a-f-]{36}\.(png|jpg)$/.test(imagePath)) {
+      return imagePath;
+    }
     return finalizeImage(
       imagePath,
       getClientImageBaseDir(),

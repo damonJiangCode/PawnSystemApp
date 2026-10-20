@@ -18,3 +18,11 @@ test("returns null when an image path is unavailable", () => {
   assert.equal(getImageUrl("item", ""), null);
   assert.equal(getImageUrl("item"), null);
 });
+
+test("new server-uploaded client photos use HTTP", () => {
+  const path = "images/clients/00000000-0000-4000-8000-000000000000.png";
+  const url = new URL(getImageUrl("client", path)!);
+  assert.equal(url.protocol, "http:");
+  assert.equal(url.pathname, "/client/images");
+  assert.equal(url.searchParams.get("path"), path);
+});
