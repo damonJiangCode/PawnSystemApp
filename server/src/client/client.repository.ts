@@ -36,4 +36,31 @@ export class ClientRepository {
 
     return result.rows.map(mapRowToClient);
   }
+
+  async searchByDob(dateOfBirth: string) {
+    const result = await this.pool.query(
+      `SELECT
+    c.*,
+    COALESCE(ci.identifications, '[]') AS identifications
+  FROM client c
+  LEFT JOIN LATERAL (
+    SELECT json_agg(
+      jsonb_build_object(
+        'id', client_id.id,
+        'id_type', client_id.id_type,
+        'id_value', client_id.id_value,
+        'updated_at', client_id.updated_at
+      )
+      ORDER BY client_id.id
+    ) AS identifications
+    FROM client_id
+    WHERE client_id.client_number = c.client_number
+  ) ci ON TRUE
+       WHERE c.date_of_birth = $1::date
+       ORDER BY c.last_name, c.first_name, c.client_number`,
+      [dateOfBirth],
+    );
+    return result.rows.map(mapRowToClient);
+  }
+
 }

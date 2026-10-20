@@ -15,13 +15,6 @@ export const registerClientHandlers = () => {
       holdUntil: string | null,
     ) => clientService.setHoldUntil(clientNumber, holdUntil),
   );
-  ipcMain.handle(
-    CHANNELS.SEARCH_CLIENTS_BY_DOB,
-    async (_event: IpcMainInvokeEvent, dateOfBirth: string) => {
-      return clientService.searchClientsByDob(dateOfBirth);
-    },
-  );
-
   ipcMain.handle(CHANNELS.GET_CITIES, async () =>
     clientReferenceService.loadCities(),
   );

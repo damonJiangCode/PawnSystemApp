@@ -1,8 +1,8 @@
 import type { AppApi } from "../../../shared/api-contracts/appApi.contract";
-import { searchClientsHttp } from "./client.http.ts";
+import { searchClientsHttp, searchClientsByDobHttp } from "./client.http.ts";
 
 type DesktopApi = Omit<AppApi, "client"> & {
-  client: Omit<AppApi["client"], "searchClients">;
+  client: Omit<AppApi["client"], "searchClients" | "searchClientsByDob">;
 };
 
 declare global {
@@ -18,6 +18,10 @@ export const getAppApi = (): AppApi | undefined => {
     ...desktop,
     client: {
       ...desktop.client,
+      searchClientsByDob: dateOfBirth => searchClientsByDobHttp(
+        dateOfBirth,
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+      ),
       searchClients: (firstName, lastName) => searchClientsHttp(
         firstName,
         lastName,

@@ -28,7 +28,7 @@ npm run db:init
 npm run dev
 ```
 
-Client name search uses the Nest HTTP server. In a second terminal, configure
+Client name and date-of-birth searches use the Nest HTTP server. In a second terminal, configure
 `server/.env` with the development database connection and run:
 
 ```bash

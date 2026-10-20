@@ -56,27 +56,6 @@ export const clientRepo = {
     }
   },
 
-  searchByDob: async (
-    dateOfBirth: string,
-    dbClient?: DbClient,
-  ): Promise<Client[]> => {
-    const client = await getDbClient(dbClient);
-    const query = `
-      ${clientWithIdentificationsFromClause}
-      WHERE c.date_of_birth = $1::date
-      ORDER BY c.last_name, c.first_name, c.client_number
-    `;
-
-    try {
-      const result = await client.query(query, [dateOfBirth]);
-      return result.rows.map(mapRowToClient);
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
   create: async (
     clientData: Client,
     dbClient?: DbClient,

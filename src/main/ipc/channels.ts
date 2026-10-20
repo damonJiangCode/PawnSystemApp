@@ -1,5 +1,4 @@
 const CHANNELS = {
-  SEARCH_CLIENTS_BY_DOB: "search-clients-by-dob",
   GET_CITIES: "get-cities",
   GET_HAIR_COLORS: "get-hair-colors",
   GET_ADMIN_HAIR_COLORS: "get-admin-hair-colors",

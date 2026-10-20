@@ -5,10 +5,11 @@ import { ClientRepository } from './client.repository.js';
 import { ClientService } from './client.service.js';
 import { mapRowToClient } from './client.mapper.js';
 
-describe('ClientService.search', () => {
+describe('ClientService searches', () => {
   let service: ClientService;
   const repository = {
     searchByName: vi.fn<ClientRepository['searchByName']>(),
+    searchByDob: vi.fn<ClientRepository['searchByDob']>(),
   };
   const pool = { query: vi.fn() };
 
@@ -66,4 +67,27 @@ describe('ClientService.search', () => {
     await expect(service.search('Da')).rejects.toBe(error);
     expect(repository.searchByName).toHaveBeenCalledExactlyOnceWith('Da', '');
   });
+  it('trims the DOB and returns repository results', async () => {
+    const clients = [mapRowToClient({ client_number: 1 })];
+    repository.searchByDob.mockResolvedValue(clients);
+    expect(await service.searchByDob(' 1990-01-01 ')).toEqual(clients);
+    expect(repository.searchByDob).toHaveBeenCalledExactlyOnceWith('1990-01-01');
+  });
+
+  it('skips the repository for a blank DOB', async () => {
+    expect(await service.searchByDob('   ')).toEqual([]);
+    expect(repository.searchByDob).not.toHaveBeenCalled();
+  });
+
+  it('returns no DOB matches without inventing data', async () => {
+    repository.searchByDob.mockResolvedValue([]);
+    expect(await service.searchByDob('1990-01-01')).toEqual([]);
+  });
+
+  it('propagates DOB repository errors', async () => {
+    const error = new Error('Database unavailable');
+    repository.searchByDob.mockRejectedValue(error);
+    await expect(service.searchByDob('1990-01-01')).rejects.toBe(error);
+  });
+
 });

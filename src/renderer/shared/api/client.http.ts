@@ -8,6 +8,20 @@ export async function searchClientsHttp(
   const url = new URL(`${baseUrl.replace(/\/$/, "")}/client`);
   url.search = new URLSearchParams({ firstName, lastName }).toString();
 
+  return requestClients(url);
+}
+
+export async function searchClientsByDobHttp(
+  dateOfBirth: string,
+  baseUrl = "http://localhost:3000",
+): Promise<Client[]> {
+  const url = new URL(`${baseUrl.replace(/\/$/, "")}/client/by-dob`);
+  url.search = new URLSearchParams({ dateOfBirth }).toString();
+  return requestClients(url);
+}
+
+// HTTP response handling is shared by both client searches.
+async function requestClients(url: URL): Promise<Client[]> {
   let response: Response;
   try {
     response = await fetch(url, { signal: AbortSignal.timeout(15000) });

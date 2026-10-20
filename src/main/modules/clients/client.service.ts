@@ -66,16 +66,6 @@ export const clientService = {
       clientRepo.setHoldUntil(clientNumber, date, db),
     );
   },
-  searchClientsByDob: async (dateOfBirth: string): Promise<Client[]> => {
-    const safeDob = clientInput.normalizeDobSearch(dateOfBirth);
-
-    if (!safeDob) {
-      return [];
-    }
-
-    return clientRepo.searchByDob(safeDob);
-  },
-
   saveClientImage: async (
     fileName: string,
     base64: string,

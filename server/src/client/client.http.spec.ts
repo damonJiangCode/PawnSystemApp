@@ -51,4 +51,38 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       expect(pool.query).not.toHaveBeenCalled();
     },
   );
+  it('searches an exact leap-day DOB and returns mapped clients', async () => {
+    pool.query.mockResolvedValue({ rows: [{
+      client_number: 1, first_name: 'Damon',
+      date_of_birth: new Date('2000-02-29T00:00:00Z'),
+      identifications: [{ id: 1, id_type: 'TEST', id_value: '123' }],
+    }] });
+    const response = await fetch(`${baseUrl}/client/by-dob?dateOfBirth=%202000-02-29%20`);
+    expect(response.status).toBe(200);
+    const [client] = await response.json();
+    expect(client.first_name).toBe('DAMON');
+    expect(client.identifications).toHaveLength(1);
+    expect(pool.query.mock.calls[0][0]).toContain('c.date_of_birth = $1::date');
+    expect(pool.query.mock.calls[0][1]).toEqual(['2000-02-29']);
+  });
+
+  it('returns an empty array when DOB has no matches', async () => {
+    pool.query.mockResolvedValue({ rows: [] });
+    const response = await fetch(`${baseUrl}/client/by-dob?dateOfBirth=1990-01-01`);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual([]);
+  });
+
+  it.each([
+    '', 'dateOfBirth=', 'dateOfBirth=2025-02-29',
+    'dateOfBirth=2000-02-30', 'dateOfBirth=1990-13-01',
+    'dateOfBirth=01-01-1990', 'dateOfBirth=1990-01-01T00:00:00Z',
+    'dateOfBirth=1990-01-01&extra=x',
+    'dateOfBirth=1990-01-01&dateOfBirth=1991-01-01',
+  ])('rejects invalid DOB before querying: %s', async query => {
+    const response = await fetch(`${baseUrl}/client/by-dob?${query}`);
+    expect(response.status).toBe(400);
+    expect(pool.query).not.toHaveBeenCalled();
+  });
+
 });

@@ -22,4 +22,10 @@ export class ClientService {
 
         return this.clientRepository.searchByName(first, last);
     }
+    async searchByDob(dateOfBirth: string) {
+        const date = dateOfBirth.trim();
+        if (!date) return [];
+        return this.clientRepository.searchByDob(date);
+    }
+
 }
