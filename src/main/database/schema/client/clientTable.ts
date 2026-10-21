@@ -28,5 +28,4 @@ export const createClientTable = `
     overdue_count INTEGER NOT NULL DEFAULT 0 CHECK (overdue_count >= 0),
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
   );
-  ALTER TABLE client ADD COLUMN IF NOT EXISTS hold_until DATE;
 `;

@@ -1,0 +1,6 @@
+{
+  "hold_until": {
+    "source": "fixed_date",
+    "value": "2026-01-01"
+  }
+}

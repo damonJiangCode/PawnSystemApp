@@ -9,7 +9,8 @@ const { Pool } = require("pg");
 const migrationRoot = path.resolve(__dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "client-migration.md");
 const shouldCommit = process.argv.includes("--commit");
 
@@ -119,7 +120,8 @@ const OTHER_MIGRATION_CLIENT = {
   country: "Other",
   email: null,
   phone: null,
-  notes: "Fallback client for legacy tickets whose client number is missing from AR200CLIENT.",
+  notes:
+    "Fallback client for legacy tickets whose client number is missing from AR200CLIENT.",
   image_path: "",
   pickup_self_only: false,
   redeem_count: 0,
@@ -129,12 +131,44 @@ const OTHER_MIGRATION_CLIENT = {
 };
 const INSERT_BATCH_SIZE = 1000;
 
+const getMigrationHoldUntil = () => {
+  const mapping = JSON.parse(
+    fs.readFileSync(
+      path.join(migrationRoot, "mappings", "client-mapping.json"),
+      "utf8",
+    ),
+  );
+  const rule = mapping?.hold_until;
+  if (
+    !mapping ||
+    Object.keys(mapping).join(",") !== "hold_until" ||
+    !rule ||
+    Object.keys(rule).sort().join(",") !== "source,value" ||
+    rule.source !== "fixed_date" ||
+    typeof rule.value !== "string" ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(rule.value)
+  ) {
+    throw new Error(
+      "Client hold_until mapping must use fixed_date with a YYYY-MM-DD value.",
+    );
+  }
+  const value = rule.value;
+  const date = new Date(`${value}T00:00:00Z`);
+  if (
+    !Number.isFinite(date.getTime()) ||
+    date.toISOString().slice(0, 10) !== value
+  ) {
+    throw new Error(
+      "Client hold_until mapping must use a valid calendar date.",
+    );
+  }
+  return value;
+};
+
 const normalizeText = (value) => String(value ?? "").trim();
 const normalizeUpper = (value) => normalizeText(value).toUpperCase();
 const normalizeCityKeyPart = (value) =>
-  normalizeUpper(value)
-    .replace(/\./g, "")
-    .replace(/\s+/g, " ");
+  normalizeUpper(value).replace(/\./g, "").replace(/\s+/g, " ");
 
 const normalizeMigrationLocation = (city, province, country) => {
   const resolvedCountry = country || "Canada";
@@ -166,9 +200,13 @@ const getValue = (row, key) => {
 const readAccessTable = (tableName) => {
   return new Promise((resolve, reject) => {
     const rows = [];
-    const child = spawn("mdb-export", ["-b", "strip", sourceDbPath, tableName], {
-      cwd: projectRoot,
-    });
+    const child = spawn(
+      "mdb-export",
+      ["-b", "strip", sourceDbPath, tableName],
+      {
+        cwd: projectRoot,
+      },
+    );
 
     child.stdout.pipe(csv()).on("data", (row) => rows.push(row));
 
@@ -372,6 +410,7 @@ const insertClients = async (pool, clients) => {
       "notes",
       "image_path",
       "pickup_self_only",
+      "hold_until",
       "redeem_count",
       "sell_count",
       "expire_count",
@@ -398,6 +437,7 @@ const insertClients = async (pool, clients) => {
       client.notes || null,
       client.image_path,
       client.pickup_self_only,
+      client.hold_until,
       client.redeem_count,
       client.sell_count,
       client.expire_count,
@@ -434,6 +474,8 @@ const insertClientIds = async (pool, ids) => {
 };
 
 const main = async () => {
+  // Use the configured historical baseline, never the migration execution date.
+  const migrationHoldUntil = getMigrationHoldUntil();
   fs.mkdirSync(summaryDir, { recursive: true });
   if (!process.env.DB_PASSWORD) {
     throw new Error("Set DB_PASSWORD in private environment configuration.");
@@ -500,18 +542,24 @@ const main = async () => {
     const countryByCode = buildLookupByCode(countryRows, "MF120CODE", (row) =>
       normalizeText(getValue(row, "MF120COUNTRY")),
     );
-    const provinceByCode = buildLookupByCode(provinceRows, "MF110CODE", (row) => ({
-      province: normalizeText(getValue(row, "MF110PROVINCE")),
-      countryCode: normalizeText(getValue(row, "MF110COUNTRYCODE")),
-    }));
+    const provinceByCode = buildLookupByCode(
+      provinceRows,
+      "MF110CODE",
+      (row) => ({
+        province: normalizeText(getValue(row, "MF110PROVINCE")),
+        countryCode: normalizeText(getValue(row, "MF110COUNTRYCODE")),
+      }),
+    );
     const cityByCode = buildLookupByCode(cityRows, "MF100CITY", (row) => {
       const provinceCode = normalizeText(getValue(row, "MF100PROVINCENO"));
       const province = provinceByCode.get(provinceCode);
       const countryCode =
-        province?.countryCode || normalizeText(getValue(row, "MF110COUNTRYCODE"));
+        province?.countryCode ||
+        normalizeText(getValue(row, "MF110COUNTRYCODE"));
       return {
         city: normalizeText(getValue(row, "MF100NAME")),
-        province: province?.province || normalizeText(getValue(row, "MF100PROVSHNAME")),
+        province:
+          province?.province || normalizeText(getValue(row, "MF100PROVSHNAME")),
         country: countryByCode.get(countryCode) || "",
       };
     });
@@ -524,7 +572,11 @@ const main = async () => {
       .map((value) => Number(value))
       .filter((value) => Number.isFinite(value));
     let nextGeneratedClientNumber =
-      Math.max(0, ...numericSourceClientNumbers, ...numericExistingClientNumbers) + 1;
+      Math.max(
+        0,
+        ...numericSourceClientNumbers,
+        ...numericExistingClientNumbers,
+      ) + 1;
 
     const clientsToInsert = [];
     const clientIdsToInsert = [];
@@ -576,10 +628,14 @@ const main = async () => {
       const firstName = rawFirstName || DEFAULT_MISSING_NAME;
       const lastName = rawLastName || DEFAULT_MISSING_NAME;
       if (!rawFirstName) {
-        rowWarnings.push(`missing first name defaulted to ${DEFAULT_MISSING_NAME}`);
+        rowWarnings.push(
+          `missing first name defaulted to ${DEFAULT_MISSING_NAME}`,
+        );
       }
       if (!rawLastName) {
-        rowWarnings.push(`missing last name defaulted to ${DEFAULT_MISSING_NAME}`);
+        rowWarnings.push(
+          `missing last name defaulted to ${DEFAULT_MISSING_NAME}`,
+        );
       }
 
       const parsedDateOfBirth =
@@ -642,7 +698,9 @@ const main = async () => {
         rowWarnings.push("missing/short phone");
       }
 
-      const cityInfo = cityByCode.get(normalizeText(getValue(row, "AR200CITYNO")));
+      const cityInfo = cityByCode.get(
+        normalizeText(getValue(row, "AR200CITYNO")),
+      );
       const provinceInfo = provinceByCode.get(
         normalizeText(getValue(row, "AR200PROVINCENO")),
       );
@@ -659,7 +717,9 @@ const main = async () => {
       const cityKey = `${normalizeUpper(city)}|${normalizeUpper(province)}|${normalizeUpper(country)}`;
       if (!targetCityKeys.has(cityKey)) {
         cityMissCount += 1;
-        rowBlockers.push(`city missing in target: ${city} / ${province} / ${country}`);
+        rowBlockers.push(
+          `city missing in target: ${city} / ${province} / ${country}`,
+        );
       }
       increment(provinceCounts, province || "<blank>");
       increment(countryCounts, country || "<blank>");
@@ -720,7 +780,9 @@ const main = async () => {
       };
       for (const [counterName, value] of Object.entries(rawCounters)) {
         if (value < 0) {
-          rowWarnings.push(`${counterName} negative value ${value} defaulted to 0`);
+          rowWarnings.push(
+            `${counterName} negative value ${value} defaulted to 0`,
+          );
         }
       }
 
@@ -758,6 +820,7 @@ const main = async () => {
           notes: cleanNullable(getValue(row, "AR200CLIENTMEMO")),
           image_path: "",
           pickup_self_only: false,
+          hold_until: migrationHoldUntil,
           ...counters,
         });
         clientIdsToInsert.push(...ids);
@@ -767,7 +830,10 @@ const main = async () => {
         increment(warningCounts, warning);
       }
       if (rowWarnings.length) {
-        samplePush(warningSamples, `${clientNumber}: ${rowWarnings.join("; ")}`);
+        samplePush(
+          warningSamples,
+          `${clientNumber}: ${rowWarnings.join("; ")}`,
+        );
       }
     }
 
@@ -777,12 +843,16 @@ const main = async () => {
       clientsToInsert.push({
         client_number: otherMigrationClientNumber,
         ...OTHER_MIGRATION_CLIENT,
+        hold_until: migrationHoldUntil,
       });
       samplePush(
         warningSamples,
         `${otherMigrationClientNumber}: Unknown Legacy Client fallback client inserted`,
       );
-      increment(warningCounts, "Unknown Legacy Client fallback client inserted");
+      increment(
+        warningCounts,
+        "Unknown Legacy Client fallback client inserted",
+      );
     }
 
     let insertedClients = 0;
@@ -802,14 +872,23 @@ const main = async () => {
         await pool.query(
           "SELECT setval(pg_get_serial_sequence('client', 'client_number'), (SELECT COALESCE(MAX(client_number), 1) FROM client), true)",
         );
-        const clientCount = await pool.query("SELECT count(*)::int AS count FROM client");
-        const idCount = await pool.query("SELECT count(*)::int AS count FROM client_id");
+        const clientCount = await pool.query(
+          "SELECT count(*)::int AS count FROM client",
+        );
+        const idCount = await pool.query(
+          "SELECT count(*)::int AS count FROM client_id",
+        );
         insertedClients = clientsToInsert.length;
         insertedClientIds = clientIdsToInsert.length;
         await pool.query("COMMIT");
 
-        if (clientCount.rows[0].count < insertedClients || idCount.rows[0].count < insertedClientIds) {
-          throw new Error("Post-commit counts were lower than inserted row counts.");
+        if (
+          clientCount.rows[0].count < insertedClients ||
+          idCount.rows[0].count < insertedClientIds
+        ) {
+          throw new Error(
+            "Post-commit counts were lower than inserted row counts.",
+          );
         }
       } catch (error) {
         await pool.query("ROLLBACK");
@@ -860,6 +939,7 @@ const main = async () => {
       "- Default negative legacy client counters to `0` so target check constraints pass.",
       "- Import valid ID slots from `AR200ID_1` through `AR200ID_5`; skip `PHO`.",
       "- Leave `image_path` blank for now.",
+      `- Set hold_until to the fixed date ${migrationHoldUntil} (client-mapping.json), independent of the migration execution date.`,
       "",
       "## Blockers",
       "",
@@ -910,7 +990,9 @@ const main = async () => {
     ].join("\n");
 
     fs.writeFileSync(reportPath, report);
-    console.log(`Client migration ${shouldCommit ? "commit" : "dry-run"} written to ${reportPath}`);
+    console.log(
+      `Client migration ${shouldCommit ? "commit" : "dry-run"} written to ${reportPath}`,
+    );
   } finally {
     await pool.end();
   }
