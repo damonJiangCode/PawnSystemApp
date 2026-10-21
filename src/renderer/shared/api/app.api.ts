@@ -3,13 +3,13 @@ import {
   searchClientsHttp,
   searchClientsByDobHttp,
   createClientHttp,
-  saveClientImageHttp,
+  updateClientHttp,
 } from "./client.http.ts";
 
 type DesktopApi = Omit<AppApi, "client"> & {
   client: Omit<
     AppApi["client"],
-    "searchClients" | "searchClientsByDob" | "createClient" | "saveClientImage"
+    "searchClients" | "searchClientsByDob" | "createClient" | "updateClient"
   >;
 };
 
@@ -31,10 +31,9 @@ export const getAppApi = (): AppApi | undefined => {
           input,
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),
-      saveClientImage: (fileName, base64) =>
-        saveClientImageHttp(
-          fileName,
-          base64,
+      updateClient: (input) =>
+        updateClientHttp(
+          input,
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),
       searchClientsByDob: (dateOfBirth) =>

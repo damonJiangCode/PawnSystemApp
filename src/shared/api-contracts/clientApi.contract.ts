@@ -3,7 +3,7 @@ import type { HairColor } from "../models/hair-color.model.ts";
 import type { EyeColor } from "../models/eye-color.model.ts";
 import type {
   CitiesResponse,
-  SaveClientInput,
+  UpdateClientInput,
   CreateClientInput,
 } from "../payload-contracts/client.contract.ts";
 
@@ -27,7 +27,6 @@ export type ClientApi = {
   deactivateEyeColor: (color: string) => Promise<EyeColor>;
   loadIdTypes: () => Promise<string[]>;
   createClient: (input: CreateClientInput) => Promise<Client>;
-  updateClient: (input: SaveClientInput) => Promise<Client>;
+  updateClient: (input: UpdateClientInput) => Promise<Client>;
   deleteClient: (clientNumber: number) => Promise<boolean>;
-  saveClientImage: (fileName: string, base64: string) => Promise<string>;
 };

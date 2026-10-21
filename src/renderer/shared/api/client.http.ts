@@ -1,5 +1,8 @@
 import type { Client } from "../../../shared/models/client.model.ts";
-import type { CreateClientInput } from "../../../shared/payload-contracts/client.contract.ts";
+import type {
+  CreateClientInput,
+  UpdateClientInput,
+} from "../../../shared/payload-contracts/client.contract.ts";
 import { formatIsoDate } from "../utils/formatters.ts";
 
 export async function createClientHttp(
@@ -48,20 +51,57 @@ export async function createClientHttp(
   return restoreClientDates(result);
 }
 
-export async function saveClientImageHttp(
-  fileName: string,
-  base64: string,
+export async function updateClientHttp(
+  input: UpdateClientInput,
   baseUrl = "http://localhost:3000",
-): Promise<string> {
-  const result = await requestJson<{ imagePath: string }>(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/images`),
+): Promise<Client> {
+  const client: Record<string, unknown> = {};
+  const fields = [
+    "first_name",
+    "last_name",
+    "middle_name",
+    "date_of_birth",
+    "gender",
+    "hair_color",
+    "eye_color",
+    "height_cm",
+    "weight_kg",
+    "address",
+    "postal_code",
+    "city",
+    "province",
+    "country",
+    "email",
+    "phone",
+    "notes",
+    "pickup_self_only",
+  ] as const;
+  for (const field of fields) {
+    const value = input.client[field];
+    if (value !== undefined)
+      client[field] =
+        field === "date_of_birth" ? formatIsoDate(value as Date) : value;
+  }
+  const result = await requestJson<Client>(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/${input.client.client_number}`,
+    ),
     {
-      method: "POST",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fileName, base64 }),
+      body: JSON.stringify({
+        client,
+        identifications: input.identifications?.map((id) => ({
+          id_type: id.id_type,
+          id_value: id.id_value,
+        })),
+        photo: input.photo,
+        employee_password: input.employee_password,
+        notes_action: input.notes_action,
+      }),
     },
   );
-  return result.imagePath;
+  return restoreClientDates(result);
 }
 
 export async function searchClientsHttp(

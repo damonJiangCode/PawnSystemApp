@@ -4,6 +4,9 @@ import {
   Get,
   Header,
   Post,
+  Patch,
+  Param,
+  ParseIntPipe,
   Query,
   StreamableFile,
   ValidationPipe,
@@ -11,7 +14,7 @@ import {
 import { createReadStream } from 'node:fs';
 import { ClientImageService } from './client-image.service.js';
 import { CreateClientDto } from './dto/create-client.dto.js';
-import { SaveClientImageDto } from './dto/save-client-image.dto.js';
+import { UpdateClientDto } from './dto/update-client.dto.js';
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ClientService } from './client.service.js';
 import { SearchClientDto } from './dto/search-client.dto.js';
@@ -45,8 +48,9 @@ export class ClientController {
     return this.clientService.create(input);
   }
 
-  @Post('images')
-  async saveImage(
+  @Patch(':clientNumber')
+  update(
+    @Param('clientNumber', ParseIntPipe) clientNumber: number,
     @Body(
       new ValidationPipe({
         transform: true,
@@ -54,9 +58,9 @@ export class ClientController {
         forbidNonWhitelisted: true,
       }),
     )
-    input: SaveClientImageDto,
+    input: UpdateClientDto,
   ) {
-    return { imagePath: await this.images.save(input.base64) };
+    return this.clientService.update(clientNumber, input);
   }
 
   @Get('images')

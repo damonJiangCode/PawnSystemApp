@@ -48,6 +48,7 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
         type="password"
         label="Employee Password"
         value={employeePassword}
+        disabled={savingClient}
         onChange={(event) => onPasswordChange(event.target.value)}
         sx={{ mt: 1 }}
         error={Boolean(employeePasswordError)}
@@ -59,7 +60,7 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
         Cancel
       </Button>
       <Button onClick={onConfirm} variant="contained" disabled={savingClient}>
-        Confirm
+        {savingClient ? "Saving..." : "Confirm"}
       </Button>
     </DialogActions>
   </Dialog>

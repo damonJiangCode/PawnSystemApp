@@ -294,4 +294,139 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     expect(response.status).toBe(400);
     expect(await readdir(imageRoot)).toEqual(before);
   });
+
+  function arrangeUpdate() {
+    const stored: Record<string, unknown> = {
+      ...validCreate.client,
+      client_number: 42,
+      phone: 'old-phone',
+      image_path: 'images/clients/old.png',
+      notes: 'Existing note',
+      redeem_count: 7,
+    };
+    connection.query.mockImplementation(
+      async (sql: string, values: unknown[] = []) => {
+        if (sql.includes('FROM employee'))
+          return {
+            rows:
+              values[0] === 'valid-code'
+                ? [{ employee_number: 7, first_name: 'STAFF' }]
+                : [],
+          };
+        if (sql.includes('FOR UPDATE')) return { rows: [{ ...stored }] };
+        if (sql.startsWith('UPDATE client')) {
+          for (const match of sql.matchAll(/(\w+) = \$(\d+)/g)) {
+            if (match[1] !== 'client_number')
+              stored[match[1]] = values[Number(match[2]) - 1];
+          }
+          return { rows: [{ ...stored }] };
+        }
+        if (sql.startsWith('SELECT id,'))
+          return { rows: [{ id: 1, id_type: 'TEST', id_value: 'original' }] };
+        return { rows: [] };
+      },
+    );
+    return stored;
+  }
+
+  function patch(body: unknown, number = '42') {
+    return fetch(`${baseUrl}/client/${number}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  }
+
+  it('accepts a partial PATCH without requiring unchanged fields', async () => {
+    arrangeUpdate();
+    const response = await patch({ client: { phone: 'new-phone' } });
+    expect(response.status).toBe(200);
+    const client = await response.json();
+    expect(client.phone).toBe('new-phone');
+    expect(client.redeem_count).toBe(7);
+    expect(client.image_path).toBe('images/clients/old.png');
+    expect(client.identifications).toHaveLength(1);
+    expect(
+      connection.query.mock.calls.some(([sql]) =>
+        sql.includes('DELETE FROM client_id'),
+      ),
+    ).toBe(false);
+  });
+
+  it('returns a field error for wrong passwords before file or record writes', async () => {
+    arrangeUpdate();
+    const files = await readdir(imageRoot);
+    const response = await patch({
+      client: { notes: 'New note' },
+      notes_action: 'append_signature',
+      employee_password: 'wrong',
+      photo,
+    });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({ field: 'employee_password' });
+    expect(await readdir(imageRoot)).toEqual(files);
+    expect(
+      connection.query.mock.calls.some(([sql]) =>
+        /UPDATE client|INSERT INTO client_id|DELETE FROM client_id/.test(sql),
+      ),
+    ).toBe(false);
+  });
+
+  it('signs notes after verifying the employee in the same PATCH request', async () => {
+    arrangeUpdate();
+    const response = await patch({
+      client: { notes: 'New note' },
+      notes_action: 'append_signature',
+      employee_password: 'valid-code',
+    });
+    expect(response.status).toBe(200);
+    expect((await response.json()).notes).toMatch(
+      /^New note \(STAFF, \d{4}-\d{2}-\d{2}\)$/,
+    );
+  });
+
+  it('replaces a photo in the PATCH request and leaves previous files intact', async () => {
+    arrangeUpdate();
+    const files = await readdir(imageRoot);
+    const response = await patch({ photo });
+    expect(response.status).toBe(200);
+    const client = await response.json();
+    expect(client.image_path).not.toBe('images/clients/old.png');
+    expect(await readdir(imageRoot)).toHaveLength(files.length + 1);
+    for (const file of files) expect(await readdir(imageRoot)).toContain(file);
+  });
+
+  it.each([
+    {},
+    { client: {} },
+    { client: null },
+    { client: { first_name: '' } },
+    { client: { date_of_birth: '2025-02-29' } },
+    { client: { date_of_birth: null } },
+    { client: { phone: null } },
+    { client: { redeem_count: 999 } },
+    { identifications: [] },
+    { identifications: null },
+    {
+      identifications: [
+        { id_type: 'TEST' },
+        { id_type: 'TEST', id_value: '2' },
+      ],
+    },
+    { photo: null },
+    { photo: { fileName: 'test.png' } },
+  ])('rejects invalid PATCH fields without connecting', async (body) => {
+    const response = await patch(body);
+    expect(response.status).toBe(400);
+    expect(pool.connect).not.toHaveBeenCalled();
+  });
+
+  it.each(['0', '-1', 'not-a-number', '9007199254740992'])(
+    'rejects invalid PATCH client number %s',
+    async (number) => {
+      const response = await patch({ client: { phone: '123' } }, number);
+      expect(response.status).toBe(400);
+      expect(pool.connect).not.toHaveBeenCalled();
+    },
+  );
 });

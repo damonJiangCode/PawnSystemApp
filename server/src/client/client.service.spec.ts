@@ -15,6 +15,10 @@ describe('ClientService', () => {
     searchByDob: vi.fn<ClientRepository['searchByDob']>(),
     create: vi.fn(),
     insertIds: vi.fn(),
+    loadForUpdate: vi.fn(),
+    update: vi.fn(),
+    deleteIds: vi.fn(),
+    loadIds: vi.fn(),
   };
   const connection = { query: vi.fn(), release: vi.fn() };
   const pool = { query: vi.fn(), connect: vi.fn() };
@@ -26,6 +30,22 @@ describe('ClientService', () => {
     vi.resetAllMocks();
     pool.connect.mockResolvedValue(connection);
     images.save.mockResolvedValue(imagePath);
+    repository.loadForUpdate.mockResolvedValue({
+      client_number: 42,
+      notes: 'Existing note',
+      image_path: 'old.png',
+      redeem_count: 7,
+    });
+    repository.update.mockImplementation(async (number, changes) => ({
+      client_number: number,
+      notes: 'Existing note',
+      image_path: 'old.png',
+      redeem_count: 7,
+      ...changes,
+    }));
+    repository.loadIds.mockResolvedValue([
+      { id: 1, id_type: 'TEST', id_value: '1' },
+    ]);
     const module = await Test.createTestingModule({
       providers: [
         ClientService,
@@ -251,5 +271,125 @@ describe('ClientService', () => {
     });
     await expect(service.create(createInput())).rejects.toBe(error);
     expect(images.removeCreatedImage).not.toHaveBeenCalled();
+  });
+  it('updates only submitted fields and keeps existing IDs and photo', async () => {
+    const client = await service.update(42, { client: { phone: '' } });
+    expect(repository.update).toHaveBeenCalledWith(
+      42,
+      { phone: '' },
+      connection,
+    );
+    expect(repository.deleteIds).not.toHaveBeenCalled();
+    expect(images.save).not.toHaveBeenCalled();
+    expect(client.image_path).toBe('old.png');
+    expect(client.redeem_count).toBe(7);
+    expect(client.identifications).toHaveLength(1);
+    expect(connection.query).toHaveBeenCalledWith('COMMIT');
+  });
+
+  it('rejects incorrect attribution before locking, uploading or modifying data', async () => {
+    employees.findActiveByPassword.mockResolvedValue(null);
+    await expect(
+      service.update(42, {
+        client: { notes: 'New note' },
+        notes_action: 'append_signature',
+        employee_password: 'wrong',
+        photo: createInput().photo,
+      }),
+    ).rejects.toMatchObject({ response: { field: 'employee_password' } });
+    expect(repository.loadForUpdate).not.toHaveBeenCalled();
+    expect(repository.update).not.toHaveBeenCalled();
+    expect(repository.deleteIds).not.toHaveBeenCalled();
+    expect(images.save).not.toHaveBeenCalled();
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+  });
+
+  it('rejects unsigned changes to non-empty notes', async () => {
+    await expect(
+      service.update(42, { client: { notes: 'Changed note' } }),
+    ).rejects.toThrow('signature');
+    expect(repository.update).not.toHaveBeenCalled();
+  });
+
+  it('does not re-sign unchanged notes', async () => {
+    await service.update(42, {
+      client: { notes: 'Existing note', phone: '123' },
+      notes_action: 'keep',
+    });
+    expect(employees.findActiveByPassword).not.toHaveBeenCalled();
+    expect(repository.update.mock.calls[0][1].notes).toBe('Existing note');
+  });
+
+  it('clears notes without an employee signature', async () => {
+    await service.update(42, { notes_action: 'clear' });
+    expect(repository.update).toHaveBeenCalledWith(
+      42,
+      { notes: '' },
+      connection,
+    );
+    expect(employees.findActiveByPassword).not.toHaveBeenCalled();
+  });
+
+  it('signs notes with the verified employee before updating', async () => {
+    employees.findActiveByPassword.mockResolvedValue({
+      employee_number: 7,
+      first_name: 'STAFF',
+    });
+    await service.update(42, {
+      client: { notes: 'New note' },
+      notes_action: 'append_signature',
+      employee_password: ' code ',
+    });
+    expect(employees.findActiveByPassword).toHaveBeenCalledWith(
+      'code',
+      connection,
+    );
+    expect(repository.update.mock.calls[0][1].notes).toMatch(
+      /^New note \(STAFF, \d{4}-\d{2}-\d{2}\)$/,
+    );
+  });
+
+  it('replaces supplied IDs with one batch inside the transaction', async () => {
+    const ids = createInput().identifications;
+    repository.insertIds.mockResolvedValue(ids);
+    await service.update(42, { identifications: ids });
+    expect(repository.deleteIds).toHaveBeenCalledWith(42, connection);
+    expect(repository.insertIds).toHaveBeenCalledWith(42, ids, connection);
+    expect(repository.loadIds).not.toHaveBeenCalled();
+  });
+
+  it('keeps the old image and cleans up only the new one on failure', async () => {
+    repository.update.mockRejectedValue(new Error('Update failed'));
+    await expect(
+      service.update(42, { photo: createInput().photo }),
+    ).rejects.toThrow('Update failed');
+    expect(images.removeCreatedImage).toHaveBeenCalledExactlyOnceWith(
+      imagePath,
+    );
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    expect(connection.release).toHaveBeenCalledOnce();
+  });
+
+  it('returns 404 without saving a photo when the client does not exist', async () => {
+    repository.loadForUpdate.mockResolvedValue(undefined);
+    await expect(
+      service.update(42, { photo: createInput().photo }),
+    ).rejects.toMatchObject({ status: 404 });
+    expect(images.save).not.toHaveBeenCalled();
+  });
+
+  it.each([0, -1, Number.MAX_SAFE_INTEGER + 1])(
+    'rejects invalid client number %s',
+    async (number) => {
+      await expect(
+        service.update(number, { client: { phone: '123' } }),
+      ).rejects.toMatchObject({ status: 400 });
+      expect(pool.connect).not.toHaveBeenCalled();
+    },
+  );
+
+  it('rejects an empty update', async () => {
+    await expect(service.update(42, {})).rejects.toThrow('at least one change');
+    expect(pool.connect).not.toHaveBeenCalled();
   });
 });

@@ -10,7 +10,11 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import type { Client } from "../../../../../shared/models/client.model";
-import type { ClientPhotoInput } from "../../../../../shared/payload-contracts/client.contract";
+import type {
+  ClientPhotoInput,
+  UpdateClientInput,
+} from "../../../../../shared/payload-contracts/client.contract";
+import { formatIsoDate } from "../../../../shared/utils/formatters";
 import ClientPhotoCapture from "./fields/ClientPhotoCapture";
 import HeightWeightFields from "./fields/HeightWeightFields";
 import NameFields from "./fields/NameFields";
@@ -147,35 +151,11 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
     }));
   };
 
-  async function handleCapture(
-    fileName: string,
-    base64: string,
-  ): Promise<void> {
-    if (!isEditMode) {
-      // New clients keep the photo in browser memory until the Add request.
-      setPendingPhoto({ fileName, base64 });
-      setPhotoCaptured(true);
-      clearValidationError("photo");
-      return;
-    }
-    try {
-      const relPath = await clientApi.saveClientImage(fileName, base64);
-      setClient((prev) => ({
-        ...prev,
-        image_path: relPath,
-        image_updated_at: new Date(),
-      }));
-      setPhotoCaptured(true);
-      clearValidationError("photo");
-    } catch (error) {
-      setPhotoCaptured(false);
-      console.error(
-        "Failed to save client image (ClientAddEditDialog.tsx):",
-        error,
-      );
-      setSubmitError("Failed to save client image. Please try again.");
-      throw error;
-    }
+  function handleCapture(fileName: string, base64: string): void {
+    // Both create and edit submit a new photo only when the user saves.
+    setPendingPhoto({ fileName, base64 });
+    setPhotoCaptured(true);
+    clearValidationError("photo");
   }
 
   const buildPendingUpdate = (): PendingClientUpdate | null => {
@@ -201,7 +181,59 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
       setSubmitError("");
       let savedClient: Client;
       if (isEditMode) {
-        savedClient = await clientApi.updateClient(payload);
+        if (!clientExisted?.client_number)
+          throw new Error("Select a client to update.");
+        const update: UpdateClientInput = {
+          client: { client_number: clientExisted.client_number },
+          photo: pendingPhoto ?? undefined,
+          employee_password: payload.employee_password,
+          notes_action: payload.notes_action,
+        };
+        const fields = [
+          "first_name",
+          "last_name",
+          "middle_name",
+          "date_of_birth",
+          "gender",
+          "hair_color",
+          "eye_color",
+          "height_cm",
+          "weight_kg",
+          "address",
+          "postal_code",
+          "city",
+          "province",
+          "country",
+          "email",
+          "phone",
+          "notes",
+          "pickup_self_only",
+        ] as const;
+        for (const field of fields) {
+          const next = payload.client[field];
+          const previous = clientExisted[field];
+          const changed =
+            field === "date_of_birth"
+              ? formatIsoDate(next as Date) !== formatIsoDate(previous as Date)
+              : next !== previous;
+          if (changed) Object.assign(update.client, { [field]: next });
+        }
+        const nextIds = payload.identifications.map((id) => ({
+          id_type: id.id_type,
+          id_value: id.id_value,
+        }));
+        const previousIds = (clientExisted.identifications ?? []).map((id) => ({
+          id_type: id.id_type,
+          id_value: id.id_value,
+        }));
+        if (JSON.stringify(nextIds) !== JSON.stringify(previousIds))
+          update.identifications = payload.identifications;
+        savedClient =
+          Object.keys(update.client).length === 1 &&
+          !update.photo &&
+          update.identifications === undefined
+            ? clientExisted
+            : await clientApi.updateClient(update);
       } else {
         if (!pendingPhoto) {
           throw new Error("Capture a client photo before saving.");
@@ -251,6 +283,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (savingClient) return;
     setSubmitError("");
     const nextPendingUpdate = buildPendingUpdate();
 
@@ -274,6 +307,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
   };
 
   const handleConfirmEmployeePassword = async () => {
+    if (savingClient) return;
     if (!pendingUpdate) {
       return;
     }

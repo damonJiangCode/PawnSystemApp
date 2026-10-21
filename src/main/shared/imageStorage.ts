@@ -133,21 +133,6 @@ const finalizeImage = async (
 };
 
 export const imageStorage = {
-  finalizeClientImage: async (
-    clientNumber: number,
-    imagePath: string,
-  ): Promise<string> => {
-    // Server uploads already have stable names; the desktop must not rename them.
-    if (/^images\/clients\/[0-9a-f-]{36}\.(png|jpg)$/.test(imagePath)) {
-      return imagePath;
-    }
-    return finalizeImage(
-      imagePath,
-      getClientImageBaseDir(),
-      `client_${clientNumber}`,
-    );
-  },
-
   saveItemImage: async (fileName: string, base64: string): Promise<string> => {
     if (!base64) {
       throw new Error("Missing image data");

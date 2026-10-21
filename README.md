@@ -28,7 +28,7 @@ npm run db:init
 npm run dev
 ```
 
-Client name/DOB searches, client creation and client photo storage use the
+Client name/DOB searches, client creation/updates and client photo storage use the
 Nest HTTP server. In a second terminal, configure
 `server/.env` with the development database connection and run:
 
@@ -58,8 +58,17 @@ It enforces the adult-age rule, owns statistics and timestamps, and commits
 client/ID writes on one database connection. Failed saves roll back records and
 remove the new photo, while the form retains the local photo for retry.
 If the COMMIT outcome is uncertain or the process crashes, a photo may remain;
-there is no automatic orphan cleanup. The unported edit flow still uses the
-separate photo-upload endpoint.
+there is no automatic orphan cleanup.
+
+`PATCH /client/:clientNumber` updates only submitted editable fields. Omitted
+fields, IDs and photos remain unchanged; optional text can be cleared with an
+empty string. Supplied IDs replace the existing list in one transaction and
+must contain at least two entries. Capture in the edit dialog also stays local
+until Save; a replacement photo is sent in the PATCH request, not uploaded
+separately. Non-empty note changes require an employee signature: the backend
+checks the password before file or record writes in the same request. There is
+no separate password-precheck API or login session. New photos are removed on
+ordinary update failures; previous photos are retained after successful changes.
 
 `db:init` initializes schema and reference data; it does not create an initial employee or manager. The current desktop window setup targets the Vite development server at `localhost:5173`. This revision does not include a Windows installer configuration.
 

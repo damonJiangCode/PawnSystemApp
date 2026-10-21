@@ -22,3 +22,11 @@ export type ClientPhotoInput = {
 export type CreateClientInput = SaveClientInput & {
   photo: ClientPhotoInput;
 };
+
+export type UpdateClientInput = {
+  client: Partial<Client> & { client_number: number };
+  identifications?: ID[];
+  photo?: ClientPhotoInput;
+  employee_password?: string;
+  notes_action?: ClientNotesAction;
+};

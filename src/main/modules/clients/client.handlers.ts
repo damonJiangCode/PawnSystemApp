@@ -1,5 +1,4 @@
 import type { IpcMainInvokeEvent } from "electron";
-import type { SaveClientInput } from "../../../shared/payload-contracts/client.contract.ts";
 import { clientReferenceService } from "./client-reference.service.ts";
 import { clientService } from "./client.service.ts";
 import { CHANNELS } from "../../ipc/channels.ts";
@@ -64,12 +63,6 @@ export const registerClientHandlers = () => {
     clientReferenceService.loadIdTypes(),
   );
 
-  ipcMain.handle(
-    CHANNELS.UPDATE_CLIENT,
-    async (_event: IpcMainInvokeEvent, payload: SaveClientInput) => {
-      return clientService.updateClient(payload);
-    },
-  );
   ipcMain.handle(
     CHANNELS.DELETE_CLIENT,
     async (_event: IpcMainInvokeEvent, clientNumber: number) => {

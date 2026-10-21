@@ -68,3 +68,30 @@ describe('ClientRepository.insertIds', () => {
     ).rejects.toBe(error);
   });
 });
+
+describe('ClientRepository.update', () => {
+  it('updates only allowed submitted columns using parameters', async () => {
+    const query = vi
+      .fn()
+      .mockResolvedValue({ rows: [{ client_number: 42, phone: null }] });
+    const repository = new ClientRepository({} as Pool);
+    await repository.update(42, { phone: '', first_name: " O'Neil " }, {
+      query,
+    } as unknown as PoolClient);
+    const [sql, values] = query.mock.calls[0];
+    expect(sql).toContain('first_name = $2');
+    expect(sql).toContain('phone = $3');
+    expect(sql).not.toContain('redeem_count');
+    expect(sql).not.toContain('image_path');
+    expect(sql).not.toContain("O'Neil");
+    expect(values).toEqual([42, "O'NEIL", null]);
+  });
+
+  it('locks the selected client before the service changes it', async () => {
+    const query = vi.fn().mockResolvedValue({ rows: [{ client_number: 42 }] });
+    const repository = new ClientRepository({} as Pool);
+    await repository.loadForUpdate(42, { query } as unknown as PoolClient);
+    expect(query.mock.calls[0][0]).toContain('FOR UPDATE');
+    expect(query.mock.calls[0][1]).toEqual([42]);
+  });
+});

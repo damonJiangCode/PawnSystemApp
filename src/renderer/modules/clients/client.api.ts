@@ -6,6 +6,7 @@ import type {
   ClientNotesAction,
   SaveClientInput,
   CreateClientInput,
+  UpdateClientInput,
 } from "../../../shared/payload-contracts/client.contract";
 import { getAppApi } from "../../shared/api/app.api";
 import { extractBackendFieldError } from "../../shared/utils/formError";
@@ -233,18 +234,6 @@ export const clientApi = {
     return api.loadIdTypes();
   },
 
-  saveClientImage: async (
-    fileName: string,
-    base64: string,
-  ): Promise<string> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("saveClientImage is not available");
-    }
-
-    return api.saveClientImage(fileName, base64);
-  },
-
   createClient: async (input: CreateClientInput): Promise<Client> => {
     const api = getAppApi()?.client;
     if (!api) {
@@ -261,14 +250,14 @@ export const clientApi = {
     }
   },
 
-  updateClient: async (input: SaveClientInput): Promise<Client> => {
+  updateClient: async (input: UpdateClientInput): Promise<Client> => {
     const api = getAppApi()?.client;
     if (!api) {
       throw new Error("updateClient is not available");
     }
 
     try {
-      return await api.updateClient(normalizeSaveClientInput(input));
+      return await api.updateClient(input);
     } catch (error) {
       throw mapBackendError(error);
     }

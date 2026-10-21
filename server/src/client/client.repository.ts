@@ -7,9 +7,91 @@ import type {
 
 import { mapRowToClient } from './client.mapper.js';
 
+export type ClientChanges = Partial<CreateClientDetailsDto> & {
+  image_path?: string;
+};
+
 @Injectable()
 export class ClientRepository {
   constructor(private readonly pool: Pool) {}
+
+  async loadForUpdate(clientNumber: number, connection: PoolClient) {
+    const result = await connection.query(
+      'SELECT * FROM client WHERE client_number = $1 FOR UPDATE',
+      [clientNumber],
+    );
+    return result.rows[0] as Record<string, unknown> | undefined;
+  }
+
+  async update(
+    clientNumber: number,
+    changes: ClientChanges,
+    connection: PoolClient,
+  ) {
+    const columns = [
+      'first_name',
+      'last_name',
+      'middle_name',
+      'date_of_birth',
+      'gender',
+      'hair_color',
+      'eye_color',
+      'height_cm',
+      'weight_kg',
+      'address',
+      'postal_code',
+      'city',
+      'province',
+      'country',
+      'email',
+      'phone',
+      'notes',
+      'pickup_self_only',
+      'image_path',
+    ] as const;
+    const uppercase = new Set([
+      'first_name',
+      'last_name',
+      'middle_name',
+      'gender',
+      'hair_color',
+      'eye_color',
+    ]);
+    const values: unknown[] = [clientNumber];
+    const assignments: string[] = [];
+    for (const column of columns) {
+      let value = changes[column];
+      if (value === undefined) continue;
+      if (typeof value === 'string') {
+        value = value.trim();
+        if (uppercase.has(column)) value = value.toUpperCase();
+      }
+      values.push(value === '' ? null : value);
+      assignments.push(`${column} = $${values.length}`);
+    }
+    if (changes.image_path !== undefined)
+      assignments.push('image_updated_at = CURRENT_TIMESTAMP');
+    assignments.push('updated_at = CURRENT_TIMESTAMP');
+    const result = await connection.query(
+      `UPDATE client SET ${assignments.join(', ')} WHERE client_number = $1 RETURNING *`,
+      values,
+    );
+    return result.rows[0] as Record<string, unknown>;
+  }
+
+  async loadIds(clientNumber: number, connection: PoolClient) {
+    const result = await connection.query(
+      'SELECT id, id_type, id_value, updated_at FROM client_id WHERE client_number = $1 ORDER BY id',
+      [clientNumber],
+    );
+    return result.rows;
+  }
+
+  async deleteIds(clientNumber: number, connection: PoolClient) {
+    await connection.query('DELETE FROM client_id WHERE client_number = $1', [
+      clientNumber,
+    ]);
+  }
 
   async create(
     details: CreateClientDetailsDto & { image_path: string },

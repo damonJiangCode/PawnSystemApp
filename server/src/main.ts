@@ -10,7 +10,7 @@ async function bootstrap() {
       .split(',')
       .map((origin) => origin.trim())
       .filter(Boolean),
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   });
   await app.listen(process.env.PORT ?? 3000);
 }

@@ -17,7 +17,6 @@ const CHANNELS = {
   GET_ADMIN_LOCATIONS: "get-admin-locations",
   ADD_LOCATION: "add-location",
   DEACTIVATE_LOCATION: "deactivate-location",
-  UPDATE_CLIENT: "update-client",
   SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
@@ -84,7 +83,6 @@ const clientApi = {
   activateEyeColor: (color) => invoke(CHANNELS.ACTIVATE_EYE_COLOR, color),
   deactivateEyeColor: (color) => invoke(CHANNELS.DEACTIVATE_EYE_COLOR, color),
   loadIdTypes: () => invoke(CHANNELS.GET_ID_TYPES),
-  updateClient: (payload) => invoke(CHANNELS.UPDATE_CLIENT, payload),
   deleteClient: (clientNumber) => invoke(CHANNELS.DELETE_CLIENT, clientNumber),
 };
 

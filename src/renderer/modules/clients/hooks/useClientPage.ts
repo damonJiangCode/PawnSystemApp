@@ -356,7 +356,6 @@ export const useClientPage = ({
 
   const handleSaveClientNotes = async ({
     client,
-    identifications,
     notes,
     employeePassword,
     notesAction,
@@ -367,12 +366,12 @@ export const useClientPage = ({
     employeePassword: string;
     notesAction: ClientNotesAction;
   }) => {
+    if (!client.client_number) throw new Error("Select a client to update.");
     const updatedClient = await clientApi.updateClient({
       client: {
-        ...client,
+        client_number: client.client_number,
         notes,
       },
-      identifications: identifications || [],
       notes_action: notesAction,
       employee_password: employeePassword,
     });

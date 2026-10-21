@@ -4,7 +4,7 @@ import {
   searchClientsHttp,
   searchClientsByDobHttp,
   createClientHttp,
-  saveClientImageHttp,
+  updateClientHttp,
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
 
@@ -145,18 +145,50 @@ test("create preserves employee field errors for the form", async (t) => {
   );
 });
 
-test("photo upload sends JSON and returns the server path", async (t) => {
+test("update sends a partial PATCH with an optional photo and no server-owned fields", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.pathname, "/client/images");
-    assert.equal(init.method, "POST");
+    assert.equal(url.pathname, "/client/42");
+    assert.equal(init.method, "PATCH");
     assert.deepEqual(JSON.parse(init.body as string), {
-      fileName: "photo.png",
-      base64: "test-image",
+      client: { phone: "" },
+      photo: { fileName: "photo.png", base64: "test-image" },
     });
-    return Response.json({ imagePath: "images/clients/server-name.png" });
+    return Response.json({
+      client_number: 42,
+      date_of_birth: "1990-01-01",
+      updated_at: "2026-10-20T00:00:00Z",
+      image_path: "images/clients/server-name.png",
+    });
   });
-  assert.equal(
-    await saveClientImageHttp("photo.png", "test-image"),
-    "images/clients/server-name.png",
-  );
+  const client = await updateClientHttp({
+    client: {
+      client_number: 42,
+      phone: "",
+      redeem_count: 999,
+      image_path: "untrusted",
+    },
+    photo: { fileName: "photo.png", base64: "test-image" },
+  });
+  assert.equal(client.client_number, 42);
+  assert.ok(client.updated_at instanceof Date);
+});
+
+test("notes-only PATCH omits photos, IDs and unchanged fields", async (t) => {
+  t.mock.method(globalThis, "fetch", async (_url: URL, init: RequestInit) => {
+    assert.deepEqual(JSON.parse(init.body as string), {
+      client: { notes: "New note" },
+      employee_password: "employee-code",
+      notes_action: "append_signature",
+    });
+    return Response.json({
+      client_number: 42,
+      date_of_birth: "1990-01-01",
+      updated_at: "2026-10-20T00:00:00Z",
+    });
+  });
+  await updateClientHttp({
+    client: { client_number: 42, notes: "New note" },
+    employee_password: "employee-code",
+    notes_action: "append_signature",
+  });
 });
