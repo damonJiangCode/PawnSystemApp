@@ -1,0 +1,2071 @@
+{
+  "subcategoryRules": [
+    {
+      "source": "ring",
+      "category": "JEWELRY",
+      "subcategory": "ring"
+    },
+    {
+      "source": "ringset",
+      "category": "JEWELRY",
+      "subcategory": "ring"
+    },
+    {
+      "source": "band",
+      "category": "JEWELRY",
+      "subcategory": "ring"
+    },
+    {
+      "source": "necklace",
+      "category": "JEWELRY",
+      "subcategory": "necklace"
+    },
+    {
+      "source": "bracelet",
+      "category": "JEWELRY",
+      "subcategory": "bracelet"
+    },
+    {
+      "source": "bangle",
+      "category": "JEWELRY",
+      "subcategory": "bracelet"
+    },
+    {
+      "source": "chain",
+      "category": "JEWELRY",
+      "subcategory": "chain"
+    },
+    {
+      "source": "earrings",
+      "category": "JEWELRY",
+      "subcategory": "earrings"
+    },
+    {
+      "source": "pendant charm",
+      "category": "JEWELRY",
+      "subcategory": "pendant"
+    },
+    {
+      "source": "locket",
+      "category": "JEWELRY",
+      "subcategory": "pendant"
+    },
+    {
+      "source": "watch",
+      "category": "JEWELRY",
+      "subcategory": "watch"
+    },
+    {
+      "source": "watch mens",
+      "category": "JEWELRY",
+      "subcategory": "watch"
+    },
+    {
+      "source": "watch ladies",
+      "category": "JEWELRY",
+      "subcategory": "watch"
+    },
+    {
+      "source": "watch pocket",
+      "category": "JEWELRY",
+      "subcategory": "watch"
+    },
+    {
+      "source": "scrap gold",
+      "category": "JEWELRY",
+      "subcategory": "gold scrap"
+    },
+    {
+      "source": "phone",
+      "category": "ELECTRONICS",
+      "subcategory": "phone"
+    },
+    {
+      "source": "phone cellular",
+      "category": "ELECTRONICS",
+      "subcategory": "phone"
+    },
+    {
+      "source": "phone cordless",
+      "category": "ELECTRONICS",
+      "subcategory": "phone"
+    },
+    {
+      "source": "laptop computer",
+      "category": "ELECTRONICS",
+      "subcategory": "laptop"
+    },
+    {
+      "source": "computer",
+      "category": "ELECTRONICS",
+      "subcategory": "desktop"
+    },
+    {
+      "source": "monitor",
+      "category": "ELECTRONICS",
+      "subcategory": "monitor"
+    },
+    {
+      "source": "computer accessories",
+      "category": "ELECTRONICS",
+      "subcategory": "computer accessory"
+    },
+    {
+      "source": "hard drive",
+      "category": "ELECTRONICS",
+      "subcategory": "computer accessory"
+    },
+    {
+      "source": "printer",
+      "category": "ELECTRONICS",
+      "subcategory": "printer"
+    },
+    {
+      "source": "television",
+      "category": "ELECTRONICS",
+      "subcategory": "tv"
+    },
+    {
+      "source": "tv and remote",
+      "category": "ELECTRONICS",
+      "subcategory": "tv"
+    },
+    {
+      "source": "tv dvd unit",
+      "category": "ELECTRONICS",
+      "subcategory": "tv"
+    },
+    {
+      "source": "tv vcr unit",
+      "category": "ELECTRONICS",
+      "subcategory": "tv"
+    },
+    {
+      "source": "dvd disk",
+      "category": "ELECTRONICS",
+      "subcategory": "dvd"
+    },
+    {
+      "source": "media dvd disc",
+      "category": "ELECTRONICS",
+      "subcategory": "dvd"
+    },
+    {
+      "source": "dvd player",
+      "category": "ELECTRONICS",
+      "subcategory": "dvd player"
+    },
+    {
+      "source": "vcr dvd unit",
+      "category": "ELECTRONICS",
+      "subcategory": "dvd player"
+    },
+    {
+      "source": "vcr",
+      "category": "ELECTRONICS",
+      "subcategory": "other"
+    },
+    {
+      "source": "vcr and remote",
+      "category": "ELECTRONICS",
+      "subcategory": "other"
+    },
+    {
+      "source": "video tape",
+      "category": "ELECTRONICS",
+      "subcategory": "other"
+    },
+    {
+      "source": "remote control",
+      "category": "ELECTRONICS",
+      "subcategory": "other"
+    },
+    {
+      "source": "system",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "xbox",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "sony playstation",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "sony playstation 2",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "nintendo",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "nintendo 64",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "nintendo gamecube",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "gameboy",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "gameboy advance",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "dreamcast",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "super nintendo",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "sega genesis",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "sega game gear",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "sega saturn",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "xbox game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "sony playstation game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "sony playstation 2 game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "nintendo game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "nintendo 64 game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "nintendo gamecube game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "gameboy game",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "other games",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "controller",
+      "category": "ELECTRONICS",
+      "subcategory": "controller"
+    },
+    {
+      "source": "memory card",
+      "category": "ELECTRONICS",
+      "subcategory": "controller"
+    },
+    {
+      "source": "accessories",
+      "category": "ELECTRONICS",
+      "subcategory": "controller"
+    },
+    {
+      "source": "radar detector",
+      "category": "ELECTRONICS",
+      "subcategory": "radar detector"
+    },
+    {
+      "source": "gps receiver",
+      "category": "ELECTRONICS",
+      "subcategory": "radar detector"
+    },
+    {
+      "source": "35mm camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "digital camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "point and shoot camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "camcorder",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "8mm video camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "digital video camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "hi 8 video camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "instant camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "polaroid camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "disposable camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "rangefinder",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "aps camera",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "lens",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "telephoto lens",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "projector lens",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "tri pods",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "studio light",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "flash",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "binoculars",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "speaker",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "speaker"
+    },
+    {
+      "source": "loud speakers",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "speaker"
+    },
+    {
+      "source": "subwoofer",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "subwoofer"
+    },
+    {
+      "source": "receiver",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "receiver"
+    },
+    {
+      "source": "microphone",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "microphone"
+    },
+    {
+      "source": "amp",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "amplifier"
+    },
+    {
+      "source": "guitar amp",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "amplifier"
+    },
+    {
+      "source": "mixer amp",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "amplifier"
+    },
+    {
+      "source": "cd player",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "cd player"
+    },
+    {
+      "source": "stereo",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "stereo mini",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "stereo component",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "tape deck",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "ghetto blaster",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "ghetto cd unit",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "walkman",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "discman",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "mp3 player",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "radio",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "recorder",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "turntable",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "mini disc player",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "tuner",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "equalizer",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "pre amp",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "microcassette rec",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "clock radio",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "cassette recorder",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "clock cassette",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "karaoke machine",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "other"
+    },
+    {
+      "source": "car amp",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "car audio"
+    },
+    {
+      "source": "car cd player",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "car audio"
+    },
+    {
+      "source": "car tape player",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "car audio"
+    },
+    {
+      "source": "car subwoofer",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "car audio"
+    },
+    {
+      "source": "car speakers",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "car audio"
+    },
+    {
+      "source": "headphone",
+      "category": "ELECTRONICS",
+      "subcategory": "headphone"
+    },
+    {
+      "source": "headphones",
+      "category": "ELECTRONICS",
+      "subcategory": "headphone"
+    },
+    {
+      "source": "drill",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "drill cordless",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "drill power",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "drill hammer",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "drill hand",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "drill press",
+      "category": "POWER TOOLS",
+      "subcategory": "drill"
+    },
+    {
+      "source": "impact",
+      "category": "POWER TOOLS",
+      "subcategory": "impact driver"
+    },
+    {
+      "source": "air impacts",
+      "category": "POWER TOOLS",
+      "subcategory": "impact driver"
+    },
+    {
+      "source": "saw",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw circular",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw jigsaw",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw mitre",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "sawzall",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw reciprocating",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw chain",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "chainsaw",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw table saw",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw table",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw compound",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw scroll",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw trim",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw band",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw bandsaw",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw cement",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "saw radial arm",
+      "category": "POWER TOOLS",
+      "subcategory": "saw"
+    },
+    {
+      "source": "grinder",
+      "category": "POWER TOOLS",
+      "subcategory": "grinder"
+    },
+    {
+      "source": "bench grinder",
+      "category": "POWER TOOLS",
+      "subcategory": "grinder"
+    },
+    {
+      "source": "sander",
+      "category": "POWER TOOLS",
+      "subcategory": "sander"
+    },
+    {
+      "source": "belt sander",
+      "category": "POWER TOOLS",
+      "subcategory": "sander"
+    },
+    {
+      "source": "air sander",
+      "category": "POWER TOOLS",
+      "subcategory": "sander"
+    },
+    {
+      "source": "air nailer",
+      "category": "POWER TOOLS",
+      "subcategory": "nailer"
+    },
+    {
+      "source": "percussion nailer",
+      "category": "POWER TOOLS",
+      "subcategory": "nailer"
+    },
+    {
+      "source": "air stapler",
+      "category": "POWER TOOLS",
+      "subcategory": "stapler"
+    },
+    {
+      "source": "stapler",
+      "category": "POWER TOOLS",
+      "subcategory": "stapler"
+    },
+    {
+      "source": "carpet tacker",
+      "category": "POWER TOOLS",
+      "subcategory": "stapler"
+    },
+    {
+      "source": "planer",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "polisher",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "moto tool",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "buffer",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "air hammer",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "air chisel",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "joiner",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "shaper",
+      "category": "POWER TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "socket set",
+      "category": "HAND TOOLS",
+      "subcategory": "socket"
+    },
+    {
+      "source": "wrenches",
+      "category": "HAND TOOLS",
+      "subcategory": "wrench"
+    },
+    {
+      "source": "hammer",
+      "category": "HAND TOOLS",
+      "subcategory": "hammer"
+    },
+    {
+      "source": "ratchet",
+      "category": "HAND TOOLS",
+      "subcategory": "ratchet"
+    },
+    {
+      "source": "air ratchet",
+      "category": "HAND TOOLS",
+      "subcategory": "ratchet"
+    },
+    {
+      "source": "tool box",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "tool set",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "tool misc",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "drill bits",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "screw drivers",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "dremel",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "bit set",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "tap and die set",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "bolt cutter",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "level carpenter",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "multimeter",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "torque wrench",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "tile cutter",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "screwdriver electric",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "glue gun",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "fish tape",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "micrometer",
+      "category": "HAND TOOLS",
+      "subcategory": "hand tool"
+    },
+    {
+      "source": "tool belt",
+      "category": "HAND TOOLS",
+      "subcategory": "tool belt"
+    },
+    {
+      "source": "air compressor",
+      "category": "UTILITY TOOLS",
+      "subcategory": "air compressor"
+    },
+    {
+      "source": "compressor",
+      "category": "UTILITY TOOLS",
+      "subcategory": "air compressor"
+    },
+    {
+      "source": "12 volt compressor",
+      "category": "UTILITY TOOLS",
+      "subcategory": "air compressor"
+    },
+    {
+      "source": "pressure washer",
+      "category": "UTILITY TOOLS",
+      "subcategory": "pressure washer"
+    },
+    {
+      "source": "generator",
+      "category": "UTILITY TOOLS",
+      "subcategory": "generator"
+    },
+    {
+      "source": "welder",
+      "category": "UTILITY TOOLS",
+      "subcategory": "welder"
+    },
+    {
+      "source": "ladder",
+      "category": "UTILITY TOOLS",
+      "subcategory": "ladder"
+    },
+    {
+      "source": "battery charger",
+      "category": "UTILITY TOOLS",
+      "subcategory": "battery charger"
+    },
+    {
+      "source": "jack car",
+      "category": "UTILITY TOOLS",
+      "subcategory": "jack"
+    },
+    {
+      "source": "jackall",
+      "category": "UTILITY TOOLS",
+      "subcategory": "jack"
+    },
+    {
+      "source": "jack hydraulic",
+      "category": "UTILITY TOOLS",
+      "subcategory": "jack"
+    },
+    {
+      "source": "mower",
+      "category": "UTILITY TOOLS",
+      "subcategory": "lawn mower"
+    },
+    {
+      "source": "riding mower",
+      "category": "UTILITY TOOLS",
+      "subcategory": "lawn mower"
+    },
+    {
+      "source": "snow blower",
+      "category": "UTILITY TOOLS",
+      "subcategory": "snow blower"
+    },
+    {
+      "source": "weed eater",
+      "category": "UTILITY TOOLS",
+      "subcategory": "trimmer"
+    },
+    {
+      "source": "hedger",
+      "category": "UTILITY TOOLS",
+      "subcategory": "trimmer"
+    },
+    {
+      "source": "edger",
+      "category": "UTILITY TOOLS",
+      "subcategory": "trimmer"
+    },
+    {
+      "source": "leaf blower",
+      "category": "UTILITY TOOLS",
+      "subcategory": "leaf blower"
+    },
+    {
+      "source": "blower",
+      "category": "UTILITY TOOLS",
+      "subcategory": "leaf blower"
+    },
+    {
+      "source": "winch",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "chain hoist",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "hoist",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "pump sump",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "pump water",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "heat gun",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "torch",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "air tank",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "carpet kicker",
+      "category": "UTILITY TOOLS",
+      "subcategory": "carpet kicker"
+    },
+    {
+      "source": "solder gun",
+      "category": "UTILITY TOOLS",
+      "subcategory": "soldering gun"
+    },
+    {
+      "source": "powder activated nailer",
+      "category": "POWER TOOLS",
+      "subcategory": "nailer"
+    },
+    {
+      "source": "gas nailer airless",
+      "category": "POWER TOOLS",
+      "subcategory": "nailer"
+    },
+    {
+      "source": "screw gun",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "screw gun"
+    },
+    {
+      "source": "drywall stilts",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "stilts"
+    },
+    {
+      "source": "drywall tool",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "bazooka for taping",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "taping tool"
+    },
+    {
+      "source": "level lazer",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "level"
+    },
+    {
+      "source": "safety gear",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "safety gear"
+    },
+    {
+      "source": "router",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "router"
+    },
+    {
+      "source": "drywall cutout tool",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "router"
+    },
+    {
+      "source": "sprayer",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "sprayer"
+    },
+    {
+      "source": "air sprayer",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "sprayer"
+    },
+    {
+      "source": "guitar",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "guitar"
+    },
+    {
+      "source": "guitar acoustic",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "guitar"
+    },
+    {
+      "source": "guitar electric",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "guitar"
+    },
+    {
+      "source": "guitar steel",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "guitar"
+    },
+    {
+      "source": "bass",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "bass"
+    },
+    {
+      "source": "bass guitar",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "bass"
+    },
+    {
+      "source": "keyboard",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "keyboard"
+    },
+    {
+      "source": "drums",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "drum machine",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "drum stand",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "drum throne",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "snare stand",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "hi hat",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "hi hat stand",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "drum"
+    },
+    {
+      "source": "cymbal",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "cymbal"
+    },
+    {
+      "source": "harmonica",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "harmonica"
+    },
+    {
+      "source": "mouth harp",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "harmonica"
+    },
+    {
+      "source": "violin bow and case",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "violin"
+    },
+    {
+      "source": "flute",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "flute"
+    },
+    {
+      "source": "saxophone",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "saxophone"
+    },
+    {
+      "source": "saxaphone",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "saxophone"
+    },
+    {
+      "source": "golf clubs",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "drivers",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "putter",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "golfset",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "irons",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "golf cart",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "fishing rod",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "fishing reel",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "rod and reel",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "tackle box",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "ice auger power",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "ice auger hand",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fishing gear"
+    },
+    {
+      "source": "knife",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "knife"
+    },
+    {
+      "source": "hockey equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hockey equipment"
+    },
+    {
+      "source": "weights",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "weight belt",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "dumbbell",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "weight bench",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "exercise equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "treadmill",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "sparing gloves",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "rowing machine",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "fitness equipment"
+    },
+    {
+      "source": "punching bag",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "punching bag"
+    },
+    {
+      "source": "tent",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "camping gear"
+    },
+    {
+      "source": "camping equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "camping gear"
+    },
+    {
+      "source": "sleeping bag",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "camping gear"
+    },
+    {
+      "source": "propane camp stove",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "camping gear"
+    },
+    {
+      "source": "propane lantern",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "camping gear"
+    },
+    {
+      "source": "snowboard",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "snowboard"
+    },
+    {
+      "source": "snowboard boots",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "snowboard"
+    },
+    {
+      "source": "snowboard bindings",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "snowboard"
+    },
+    {
+      "source": "air gun",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "air gun"
+    },
+    {
+      "source": "air guns",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "air gun"
+    },
+    {
+      "source": "paintball gun",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "bow compound",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "bow recurve",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "bow arrows",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "rifle",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "shotgun",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "hand gun",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "gun case",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "gun powder",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "laser sight",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "scope",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "spotting scope",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "monocular",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "helmet",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "pool cue",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "skates",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "skateboard",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "sword",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "bat",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "ball glove",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "vacuum",
+      "category": "APPLIANCE",
+      "subcategory": "vacuum"
+    },
+    {
+      "source": "microwave",
+      "category": "APPLIANCE",
+      "subcategory": "microwave"
+    },
+    {
+      "source": "blender",
+      "category": "APPLIANCE",
+      "subcategory": "blender"
+    },
+    {
+      "source": "food mixer",
+      "category": "APPLIANCE",
+      "subcategory": "blender"
+    },
+    {
+      "source": "fridge",
+      "category": "APPLIANCE",
+      "subcategory": "fridge"
+    },
+    {
+      "source": "fridge bar",
+      "category": "APPLIANCE",
+      "subcategory": "fridge"
+    },
+    {
+      "source": "freezer",
+      "category": "APPLIANCE",
+      "subcategory": "freezer"
+    },
+    {
+      "source": "coffee maker",
+      "category": "APPLIANCE",
+      "subcategory": "coffee machine"
+    },
+    {
+      "source": "sewing machine",
+      "category": "APPLIANCE",
+      "subcategory": "sewing machine"
+    },
+    {
+      "source": "fan",
+      "category": "APPLIANCE",
+      "subcategory": "fan"
+    },
+    {
+      "source": "heater",
+      "category": "APPLIANCE",
+      "subcategory": "heater"
+    },
+    {
+      "source": "air conditioner",
+      "category": "APPLIANCE",
+      "subcategory": "air conditioner"
+    },
+    {
+      "source": "toaster",
+      "category": "APPLIANCE",
+      "subcategory": "toaster"
+    },
+    {
+      "source": "humidifier",
+      "category": "APPLIANCE",
+      "subcategory": "humidifier"
+    },
+    {
+      "source": "barbeque",
+      "category": "APPLIANCE",
+      "subcategory": "barbecue"
+    },
+    {
+      "source": "washer",
+      "category": "APPLIANCE",
+      "subcategory": "washer"
+    },
+    {
+      "source": "dryer",
+      "category": "APPLIANCE",
+      "subcategory": "dryer"
+    },
+    {
+      "source": "stove",
+      "category": "APPLIANCE",
+      "subcategory": "stove"
+    },
+    {
+      "source": "iron",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "food processor",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "breadmaker",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "electric cooler",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "pasta machine",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "clock",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "grill",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "furniture",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "coffee table",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "dresser",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "beadwork",
+      "category": "APPAREL",
+      "subcategory": "beadwork"
+    },
+    {
+      "source": "boots",
+      "category": "APPAREL",
+      "subcategory": "boots"
+    },
+    {
+      "source": "muks",
+      "category": "APPAREL",
+      "subcategory": "mukluk"
+    },
+    {
+      "source": "mitts",
+      "category": "APPAREL",
+      "subcategory": "mitten"
+    },
+    {
+      "source": "jacket",
+      "category": "APPAREL",
+      "subcategory": "jacket"
+    },
+    {
+      "source": "coat leather",
+      "category": "APPAREL",
+      "subcategory": "jacket"
+    },
+    {
+      "source": "coat fur",
+      "category": "APPAREL",
+      "subcategory": "jacket"
+    },
+    {
+      "source": "sunglasses",
+      "category": "APPAREL",
+      "subcategory": "sunglasses"
+    },
+    {
+      "source": "belt",
+      "category": "APPAREL",
+      "subcategory": "belt"
+    },
+    {
+      "source": "hat",
+      "category": "APPAREL",
+      "subcategory": "hat"
+    },
+    {
+      "source": "handcuffs",
+      "category": "APPAREL",
+      "subcategory": "handcuffs"
+    },
+    {
+      "source": "shaver",
+      "category": "APPAREL",
+      "subcategory": "other"
+    },
+    {
+      "source": "coin set",
+      "category": "COLLECTIBLES",
+      "subcategory": "coin"
+    },
+    {
+      "source": "bill",
+      "category": "COLLECTIBLES",
+      "subcategory": "bill"
+    },
+    {
+      "source": "picture",
+      "category": "COLLECTIBLES",
+      "subcategory": "picture"
+    },
+    {
+      "source": "painting",
+      "category": "COLLECTIBLES",
+      "subcategory": "painting"
+    },
+    {
+      "source": "stamps postage ne",
+      "category": "COLLECTIBLES",
+      "subcategory": "stamp"
+    },
+    {
+      "source": "stamps used",
+      "category": "COLLECTIBLES",
+      "subcategory": "stamp"
+    },
+    {
+      "source": "stamps sub mint",
+      "category": "COLLECTIBLES",
+      "subcategory": "stamp"
+    },
+    {
+      "source": "print",
+      "category": "COLLECTIBLES",
+      "subcategory": "other"
+    },
+    {
+      "source": "wall hanging",
+      "category": "COLLECTIBLES",
+      "subcategory": "other"
+    },
+    {
+      "source": "sculpture",
+      "category": "COLLECTIBLES",
+      "subcategory": "other"
+    },
+    {
+      "source": "bicycle",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "mountain bike",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "bmx bike",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "child bike",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "scooter",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "bicycle light",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "accessory stroller",
+      "category": "BABY & KIDS",
+      "subcategory": "stroller"
+    },
+    {
+      "source": "baby monitor",
+      "category": "BABY & KIDS",
+      "subcategory": "baby monitor"
+    },
+    {
+      "source": "toy",
+      "category": "BABY & KIDS",
+      "subcategory": "toy"
+    },
+    {
+      "source": "remote control vehicle",
+      "category": "BABY & KIDS",
+      "subcategory": "toy"
+    },
+    {
+      "source": "doll",
+      "category": "BABY & KIDS",
+      "subcategory": "toy"
+    },
+    {
+      "source": "accessory car seat",
+      "category": "BABY & KIDS",
+      "subcategory": "car seat"
+    },
+    {
+      "source": "battery cables",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "battery warmer",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "7777",
+      "category": "OTHER",
+      "subcategory": "other"
+    },
+    {
+      "source": "7779",
+      "category": "OTHER",
+      "subcategory": "other"
+    }
+  ],
+  "parentRules": [
+    {
+      "source": "wc520subcat wc520desc",
+      "category": "new item_category",
+      "subcategory": "item_subcategory"
+    },
+    {
+      "source": "wc510category wc510description",
+      "category": "new item_category",
+      "subcategory": "item_subcategory"
+    },
+    {
+      "source": "stilts",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "stilts"
+    },
+    {
+      "source": "pump",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "pump"
+    },
+    {
+      "source": "tube",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "tube"
+    },
+    {
+      "source": "handle",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "handle"
+    },
+    {
+      "source": "flusher",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "flusher"
+    },
+    {
+      "source": "roller",
+      "category": "DRYWALL TOOLS",
+      "subcategory": "roller"
+    },
+    {
+      "source": "jewellery",
+      "category": "JEWELRY",
+      "subcategory": "other"
+    },
+    {
+      "source": "tools",
+      "category": "HAND TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "tools industrial",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "television video",
+      "category": "ELECTRONICS",
+      "subcategory": "other"
+    },
+    {
+      "source": "game systems",
+      "category": "ELECTRONICS",
+      "subcategory": "game system"
+    },
+    {
+      "source": "game cartridges accessories",
+      "category": "ELECTRONICS",
+      "subcategory": "game"
+    },
+    {
+      "source": "stereo audio radio",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "other"
+    },
+    {
+      "source": "telecommunications",
+      "category": "ELECTRONICS",
+      "subcategory": "phone"
+    },
+    {
+      "source": "office computer equipment",
+      "category": "ELECTRONICS",
+      "subcategory": "computer accessory"
+    },
+    {
+      "source": "camera optics",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "camera accessories",
+      "category": "ELECTRONICS",
+      "subcategory": "camera accessory"
+    },
+    {
+      "source": "sporting goods",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "golf equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "golf"
+    },
+    {
+      "source": "riding equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "marine equipment",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "other"
+    },
+    {
+      "source": "musical instrument",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "other"
+    },
+    {
+      "source": "music accessory",
+      "category": "MUSICAL INSTRUMENTS",
+      "subcategory": "other"
+    },
+    {
+      "source": "music media",
+      "category": "AUDIO EQUIPMENT",
+      "subcategory": "stereo"
+    },
+    {
+      "source": "appliance small",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "appliance large",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "personal items",
+      "category": "APPAREL",
+      "subcategory": "other"
+    },
+    {
+      "source": "bicycle",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "bike"
+    },
+    {
+      "source": "child",
+      "category": "BABY & KIDS",
+      "subcategory": "other"
+    },
+    {
+      "source": "toys",
+      "category": "BABY & KIDS",
+      "subcategory": "toy"
+    },
+    {
+      "source": "vehicle accessories",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "vehicle",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "lawn and garden",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "art",
+      "category": "COLLECTIBLES",
+      "subcategory": "other"
+    },
+    {
+      "source": "coins",
+      "category": "COLLECTIBLES",
+      "subcategory": "coin"
+    },
+    {
+      "source": "antiques collectibles",
+      "category": "COLLECTIBLES",
+      "subcategory": "other"
+    },
+    {
+      "source": "furniture",
+      "category": "APPLIANCE",
+      "subcategory": "other"
+    },
+    {
+      "source": "vacuum",
+      "category": "APPLIANCE",
+      "subcategory": "vacuum"
+    },
+    {
+      "source": "firearms",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "firearm accessories",
+      "category": "SPORTS & OUTDOOR",
+      "subcategory": "hunting gear"
+    },
+    {
+      "source": "farm implements",
+      "category": "UTILITY TOOLS",
+      "subcategory": "other"
+    },
+    {
+      "source": "demo",
+      "category": "OTHER",
+      "subcategory": "other"
+    },
+    {
+      "source": "other",
+      "category": "OTHER",
+      "subcategory": "other"
+    },
+    {
+      "source": "7777",
+      "category": "OTHER",
+      "subcategory": "other"
+    },
+    {
+      "source": "7779",
+      "category": "OTHER",
+      "subcategory": "other"
+    }
+  ]
+}

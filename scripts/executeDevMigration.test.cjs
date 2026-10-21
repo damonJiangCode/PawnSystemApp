@@ -43,8 +43,9 @@ const fixture = (t, options = {}) => {
   for (const name of [
     "source/superpawnconv.mdb",
     "source/Pictureconv.mdb",
-    "mappings/category-mapping.md",
-    "mappings/location-mapping.md",
+    "mappings/category-mapping.json",
+    "mappings/location-mapping.json",
+    "mappings/client-mapping.json",
   ]) {
     fs.writeFileSync(
       path.join(root, "migration", name),
@@ -262,6 +263,14 @@ test("simulated execution imports in order, writes backups, and never starts/res
     ),
   );
   assert.equal(manifest.status, "completed");
+  assert.deepEqual(Object.keys(manifest.mappings).sort(), [
+    "category-mapping.json",
+    "client-mapping.json",
+    "location-mapping.json",
+  ]);
+  for (const checksum of Object.values(manifest.mappings)) {
+    assert.match(checksum, /^[a-f0-9]{64}$/);
+  }
   assert.equal(Object.keys(manifest.backups).length, 3);
   assert.ok(!JSON.stringify(manifest).includes("test-only-private-password"));
   assert.ok(!f.logs.join("\n").includes("test-only-private-password"));

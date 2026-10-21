@@ -447,8 +447,8 @@ const main = async () => {
       "## Current Decision Status",
       "",
       "- ID type and hair/eye color mapping is approved in `reports/static-migration.md`.",
-      "- Location mapping is approved in `mappings/location-mapping.md`; unresolved legacy locations map to `UNKNOWN`.",
-      "- Item category simplification is approved in `mappings/category-mapping.md`.",
+      "- Location mapping is approved in `mappings/location-mapping.json`; unresolved legacy locations map to `UNKNOWN`.",
+      "- Item category simplification is approved in `mappings/category-mapping.json`.",
       "- Employee migration is still pending; password/nickname/default DOB rules are not finalized.",
       "",
     ].join("\n");

@@ -13,8 +13,9 @@ const PRIVATE_PATHS = [
 const REQUIRED_INPUTS = [
   "migration/source/superpawnconv.mdb",
   "migration/source/Pictureconv.mdb",
-  "migration/mappings/category-mapping.md",
-  "migration/mappings/location-mapping.md",
+  "migration/mappings/category-mapping.json",
+  "migration/mappings/location-mapping.json",
+  "migration/mappings/client-mapping.json",
 ];
 
 const parseEnv = (content) => {

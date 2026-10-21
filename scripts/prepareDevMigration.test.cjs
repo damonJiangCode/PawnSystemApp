@@ -26,8 +26,9 @@ const fixture = (t) => {
   for (const input of [
     "source/superpawnconv.mdb",
     "source/Pictureconv.mdb",
-    "mappings/category-mapping.md",
-    "mappings/location-mapping.md",
+    "mappings/category-mapping.json",
+    "mappings/location-mapping.json",
+    "mappings/client-mapping.json",
   ]) {
     const file = path.join(root, "migration", input);
     fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -86,16 +87,18 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
 
 test("reports both missing mappings and a stopped Docker engine instead of declaring readiness", (t) => {
   const f = fixture(t);
-  fs.unlinkSync(path.join(f.root, "migration/mappings/category-mapping.md"));
-  fs.unlinkSync(path.join(f.root, "migration/mappings/location-mapping.md"));
+  fs.unlinkSync(path.join(f.root, "migration/mappings/category-mapping.json"));
+  fs.unlinkSync(path.join(f.root, "migration/mappings/location-mapping.json"));
+  fs.unlinkSync(path.join(f.root, "migration/mappings/client-mapping.json"));
   const run = (executable, args, options) =>
     args[0] === "info"
       ? { status: 1, stdout: "", stderr: "Docker is stopped" }
       : f.run(executable, args, options);
   assert.equal(prepareDevMigration({ ...f.options, run }), 1);
   const output = f.logs.join("\n");
-  assert.match(output, /category-mapping\.md/);
-  assert.match(output, /location-mapping\.md/);
+  assert.match(output, /category-mapping\.json/);
+  assert.match(output, /location-mapping\.json/);
+  assert.match(output, /client-mapping\.json/);
   assert.match(output, /Start Docker Desktop/);
   assert.doesNotMatch(output, /checks passed|Next:/);
 });

@@ -8,9 +8,14 @@ const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "item-migration.md");
-const categoryMappingPath = path.join(migrationRoot, "mappings", "category-mapping.md");
+const categoryMappingPath = path.join(
+  migrationRoot,
+  "mappings",
+  "category-mapping.json",
+);
 const shouldCommit = process.argv.includes("--commit");
 
 const dbConfig = {
@@ -78,75 +83,65 @@ const targetKey = (category, subcategory) =>
   `${normalizeKey(category)} / ${normalizeKey(subcategory)}`;
 
 const parseCategoryMappings = () => {
-  const content = fs.readFileSync(categoryMappingPath, "utf8");
-  const subcategoryRules = new Map();
-  const parentRules = new Map();
-  let inOtherRules = false;
-
-  for (const blockMatch of content.matchAll(/```txt\r?\n([\s\S]*?)```/g)) {
-    const lines = blockMatch[1]
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-    if (!lines.some((line) => line.includes("->"))) continue;
-
-    const pendingSources = [];
-    for (const line of lines) {
-      if (line.includes("Use the legacy parent category")) {
-        inOtherRules = true;
-        continue;
-      }
-
-      const targetMatch = line.match(/^(.+?)\s*->\s*(.+?)\s*\/\s*(.+)$/);
-      if (targetMatch) {
-        const inlineSource = normalizeText(targetMatch[1]);
-        const target = {
-          category: normalizeText(targetMatch[2]),
-          subcategory: normalizeText(targetMatch[3]),
-        };
-
-        if (inlineSource && inlineSource !== "->") {
-          parentRules.set(normalizeKey(inlineSource), target);
-        } else {
-          for (const source of pendingSources.splice(0)) {
-            subcategoryRules.set(normalizeKey(source), target);
-          }
-        }
-        continue;
-      }
-
-      if (line.startsWith("->")) {
-        const [, category, subcategory] =
-          line.match(/^->\s*(.+?)\s*\/\s*(.+)$/) || [];
-        if (category && subcategory) {
-          for (const source of pendingSources.splice(0)) {
-            const map = inOtherRules ? parentRules : subcategoryRules;
-            map.set(normalizeKey(source), {
-              category: normalizeText(category),
-              subcategory: normalizeText(subcategory),
-            });
-          }
-        }
-        continue;
-      }
-
-      pendingSources.push(line);
+  const input = JSON.parse(fs.readFileSync(categoryMappingPath, "utf8"));
+  if (
+    !input ||
+    Object.keys(input).sort().join(",") !== "parentRules,subcategoryRules"
+  ) {
+    throw new Error(
+      "Category mapping must contain only subcategoryRules and parentRules arrays.",
+    );
+  }
+  const result = {};
+  for (const name of ["subcategoryRules", "parentRules"]) {
+    if (!Array.isArray(input[name]) || !input[name].length) {
+      throw new Error(
+        "Category mapping rules were not loaded; refusing OTHER-only migration",
+      );
     }
-
-    if (blockMatch[0].includes("Jewellery ->")) inOtherRules = true;
+    const mapping = new Map();
+    for (const rule of input[name]) {
+      if (
+        !rule ||
+        Object.keys(rule).sort().join(",") !== "category,source,subcategory" ||
+        ![rule.source, rule.category, rule.subcategory].every(
+          (value) => typeof value === "string" && value.trim(),
+        )
+      ) {
+        throw new Error(
+          "Category rules require only non-empty source, category and subcategory strings.",
+        );
+      }
+      const source = normalizeKey(rule.source);
+      if (!source)
+        throw new Error(
+          "Category source must have a non-empty normalized key.",
+        );
+      const target = {
+        category: rule.category.trim(),
+        subcategory: rule.subcategory.trim(),
+      };
+      const previous = mapping.get(source);
+      if (
+        previous &&
+        (previous.category !== target.category ||
+          previous.subcategory !== target.subcategory)
+      ) {
+        throw new Error("Conflicting rules in category mapping input.");
+      }
+      mapping.set(source, target);
+    }
+    result[name] = mapping;
   }
-
-  for (const [code, target] of [
-    ["7777", { category: "OTHER", subcategory: "other" }],
-    ["7779", { category: "OTHER", subcategory: "other" }],
-  ]) {
-    subcategoryRules.set(code, target);
+  for (const code of ["7777", "7779"]) {
+    const target = result.subcategoryRules.get(code);
+    if (target?.category !== "OTHER" || target.subcategory !== "other") {
+      throw new Error(
+        "Category mapping must map legacy codes 7777 and 7779 to OTHER / other.",
+      );
+    }
   }
-
-  if (subcategoryRules.size <= 2 || !parentRules.size) {
-    throw new Error("Category mapping rules were not loaded; refusing OTHER-only migration");
-  }
-  return { subcategoryRules, parentRules };
+  return result;
 };
 
 const buildLegacyLookup = async () => {
@@ -218,7 +213,8 @@ const resolveSubcategory = ({
     category: "OTHER",
     subcategory: "other",
     reason: "global other fallback",
-    legacySubcategory: subcategoryDescription || legacySubcategoryCode || "<blank>",
+    legacySubcategory:
+      subcategoryDescription || legacySubcategoryCode || "<blank>",
     legacyCategory: categoryDescription || legacyCategoryCode || "<blank>",
   });
 
@@ -234,7 +230,8 @@ const resolveSubcategory = ({
     subcategory: "other",
     id: targetSubcategoryIds.get(targetKey("OTHER", "other")),
     reason: "target missing fallback",
-    legacySubcategory: subcategoryDescription || legacySubcategoryCode || "<blank>",
+    legacySubcategory:
+      subcategoryDescription || legacySubcategoryCode || "<blank>",
     legacyCategory: categoryDescription || legacyCategoryCode || "<blank>",
   };
 };
@@ -262,7 +259,8 @@ const mapLegacyItem = (row, prefix, source, context, itemNumberOverride) => {
     category_reason: mappedSubcategory.reason,
     legacy_subcategory: mappedSubcategory.legacySubcategory,
     legacy_category: mappedSubcategory.legacyCategory,
-    description: normalizeText(row[`${prefix}DESCRIPTION`]) || UNKNOWN_DESCRIPTION,
+    description:
+      normalizeText(row[`${prefix}DESCRIPTION`]) || UNKNOWN_DESCRIPTION,
     description_defaulted: !normalizeText(row[`${prefix}DESCRIPTION`]),
     brand_name: normalizeText(row[`${prefix}TRADEMARK`]) || null,
     model_number: normalizeText(row[`${prefix}MODELNO`]) || null,
@@ -371,17 +369,26 @@ const main = async () => {
 
     const addTicketItem = (ticketNumber, itemNumber) => {
       if (!migratedTickets.has(ticketNumber)) {
-        increment(warningCounts, "ticket_item skipped because ticket is not migrated");
+        increment(
+          warningCounts,
+          "ticket_item skipped because ticket is not migrated",
+        );
         return;
       }
       if (!itemByNumber.has(itemNumber)) {
-        increment(warningCounts, "ticket_item skipped because item is not migrated");
+        increment(
+          warningCounts,
+          "ticket_item skipped because item is not migrated",
+        );
         return;
       }
       const key = `${ticketNumber}:${itemNumber}`;
       if (ticketItemKeys.has(key)) return;
       ticketItemKeys.add(key);
-      ticketItems.push({ ticket_number: ticketNumber, item_number: itemNumber });
+      ticketItems.push({
+        ticket_number: ticketNumber,
+        item_number: itemNumber,
+      });
     };
 
     for (const row of wcRows) {
@@ -398,20 +405,35 @@ const main = async () => {
         syntheticItemNumber,
       );
       if (syntheticItemNumber) {
-        increment(warningCounts, "synthetic item number generated for invalid WC400 item number");
+        increment(
+          warningCounts,
+          "synthetic item number generated for invalid WC400 item number",
+        );
       }
       if (itemByNumber.has(item.item_number)) {
-        increment(warningCounts, "duplicate WC400 item number skipped after first row");
+        increment(
+          warningCounts,
+          "duplicate WC400 item number skipped after first row",
+        );
         continue;
       }
       itemByNumber.set(item.item_number, item);
       addTicketItem(item.ticket_number, item.item_number);
       increment(sourceCounts, "WC400INVEN item");
       increment(mappingReasonCounts, item.category_reason);
-      increment(targetSubcategoryCounts, `${item.category_name} / ${item.subcategory_name}`);
+      increment(
+        targetSubcategoryCounts,
+        `${item.category_name} / ${item.subcategory_name}`,
+      );
       if (item.category_name === "OTHER" || item.subcategory_name === "other") {
-        increment(otherMappingCounts, `${item.legacy_category} / ${item.legacy_subcategory} -> ${item.category_name} / ${item.subcategory_name}`);
-        samplePush(otherSamples, `WC400 item ${item.item_number}: ${item.legacy_category} / ${item.legacy_subcategory}`);
+        increment(
+          otherMappingCounts,
+          `${item.legacy_category} / ${item.legacy_subcategory} -> ${item.category_name} / ${item.subcategory_name}`,
+        );
+        samplePush(
+          otherSamples,
+          `WC400 item ${item.item_number}: ${item.legacy_category} / ${item.legacy_subcategory}`,
+        );
       }
     }
 
@@ -429,16 +451,31 @@ const main = async () => {
         syntheticItemNumber,
       );
       if (syntheticItemNumber) {
-        increment(warningCounts, "synthetic item number generated for invalid SA110 item number");
+        increment(
+          warningCounts,
+          "synthetic item number generated for invalid SA110 item number",
+        );
       }
       if (!itemByNumber.has(item.item_number)) {
         itemByNumber.set(item.item_number, item);
         increment(sourceCounts, "SA110ITEM item fallback");
         increment(mappingReasonCounts, item.category_reason);
-        increment(targetSubcategoryCounts, `${item.category_name} / ${item.subcategory_name}`);
-        if (item.category_name === "OTHER" || item.subcategory_name === "other") {
-          increment(otherMappingCounts, `${item.legacy_category} / ${item.legacy_subcategory} -> ${item.category_name} / ${item.subcategory_name}`);
-          samplePush(otherSamples, `SA110 item ${item.item_number}: ${item.legacy_category} / ${item.legacy_subcategory}`);
+        increment(
+          targetSubcategoryCounts,
+          `${item.category_name} / ${item.subcategory_name}`,
+        );
+        if (
+          item.category_name === "OTHER" ||
+          item.subcategory_name === "other"
+        ) {
+          increment(
+            otherMappingCounts,
+            `${item.legacy_category} / ${item.legacy_subcategory} -> ${item.category_name} / ${item.subcategory_name}`,
+          );
+          samplePush(
+            otherSamples,
+            `SA110 item ${item.item_number}: ${item.legacy_category} / ${item.legacy_subcategory}`,
+          );
         }
       }
       addTicketItem(item.ticket_number, item.item_number);
@@ -446,18 +483,26 @@ const main = async () => {
 
     const items = [...itemByNumber.values()];
     for (const item of items) {
-      if (item.quantity_defaulted) increment(warningCounts, "quantity defaulted to 1");
-      if (item.description_defaulted) increment(warningCounts, "description defaulted to Unknown item");
-      if (item.amount_defaulted) increment(warningCounts, "amount defaulted to 0");
+      if (item.quantity_defaulted)
+        increment(warningCounts, "quantity defaulted to 1");
+      if (item.description_defaulted)
+        increment(warningCounts, "description defaulted to Unknown item");
+      if (item.amount_defaulted)
+        increment(warningCounts, "amount defaulted to 0");
       if (!item.subcategory_id) {
         increment(blockerCounts, "mapped subcategory missing target id");
-        samplePush(blockerSamples, `${item.item_number}: ${item.category_name} / ${item.subcategory_name}`);
+        samplePush(
+          blockerSamples,
+          `${item.item_number}: ${item.category_name} / ${item.subcategory_name}`,
+        );
       }
     }
 
     await client.query("BEGIN");
     if (shouldCommit && !blockerCounts.size) {
-      await client.query("TRUNCATE TABLE ticket_item, item RESTART IDENTITY CASCADE");
+      await client.query(
+        "TRUNCATE TABLE ticket_item, item RESTART IDENTITY CASCADE",
+      );
       await insertBatches(
         client,
         "item",
@@ -528,7 +573,7 @@ Mode: ${shouldCommit ? "commit" : "preview"}
 - Generate new item numbers for legacy rows where item number is blank, zero, or invalid.
 - Default quantity to \`1\` when the legacy value is blank, zero, or invalid.
 - Default blank descriptions to \`${UNKNOWN_DESCRIPTION}\`.
-- Map legacy subcategories using \`mappings/category-mapping.md\`; fall back to parent category and then \`OTHER / other\`.
+- Map legacy subcategories using \`mappings/category-mapping.json\`; fall back to parent category and then \`OTHER / other\`.
 
 ## Blockers
 
@@ -566,7 +611,9 @@ ${formatCounts(warningCounts, 80)}
     fs.writeFileSync(reportPath, report);
     console.log(`Item migration ${shouldCommit ? "committed" : "previewed"}`);
     console.log(`Items prepared: ${items.length.toLocaleString()}`);
-    console.log(`Ticket-item links prepared: ${ticketItems.length.toLocaleString()}`);
+    console.log(
+      `Ticket-item links prepared: ${ticketItems.length.toLocaleString()}`,
+    );
     console.log(`Blocker types: ${blockerCounts.size}`);
     console.log(`Report: ${reportPath}`);
   } catch (error) {

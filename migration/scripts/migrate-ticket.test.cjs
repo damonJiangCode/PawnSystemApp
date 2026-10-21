@@ -19,10 +19,13 @@ const parse = (content) =>
     },
     { timeout: 5000 },
   );
-const mapping =
-  "# Conversion rules\n\n| legacy_location | mapped_location |\n| --- | --- |\n| OLD1 | AA11 |\n| OLD2 | UNKNOWN |\n";
+const rules = [
+  { legacy_location: " old1 ", mapped_location: "aa11" },
+  { legacy_location: "OLD2", mapped_location: "UNKNOWN" },
+];
+const mapping = JSON.stringify(rules, null, 2);
 
-test("reads public two-column location rules with Windows or Linux line endings", () => {
+test("reads JSON location rules with Windows or Linux line endings", () => {
   for (const content of [mapping, mapping.replace(/\n/g, "\r\n")]) {
     const result = parse(content);
     assert.equal(result.size, 2);
@@ -31,17 +34,34 @@ test("reads public two-column location rules with Windows or Linux line endings"
   }
 });
 test("rejects empty location rules", () => {
-  assert.throws(() => parse("# No rules"), /rules were not loaded/);
+  assert.throws(() => parse("[]"), /rules were not loaded/);
 });
-test("rejects conflicting rules for the same legacy location", () => {
+test("rejects conflicting normalized locations but permits identical duplicates", () => {
   assert.throws(
-    () => parse(mapping + "| OLD1 | AA12 |\n"),
+    () =>
+      parse(
+        JSON.stringify([
+          ...rules,
+          { legacy_location: "OLD1", mapped_location: "AA12" },
+        ]),
+      ),
     /Conflicting rules/,
   );
+  assert.equal(parse(JSON.stringify([...rules, rules[0]])).size, 2);
 });
-test("rejects extra metadata columns instead of treating them as conversion rules", () => {
-  assert.throws(
-    () => parse(mapping + "| OLD3 | AA13 | 123 |\n"),
-    /only legacy_location and mapped_location/,
-  );
+test("rejects metadata, missing fields, empty values and malformed JSON", () => {
+  for (const rule of [
+    null,
+    {},
+    { legacy_location: "x", mapped_location: "" },
+    { legacy_location: "x", mapped_location: 123 },
+    { legacy_location: "x", mapped_location: "y", count: 123 },
+  ]) {
+    assert.throws(
+      () => parse(JSON.stringify([rule])),
+      /only legacy_location and mapped_location/,
+    );
+  }
+  assert.throws(() => parse("{}"), /must be an array/);
+  assert.throws(() => parse("{broken"), /JSON|property/i);
 });
