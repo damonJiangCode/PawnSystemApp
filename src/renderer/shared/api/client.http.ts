@@ -75,6 +75,7 @@ export async function updateClientHttp(
     "phone",
     "notes",
     "pickup_self_only",
+    "hold_until",
   ] as const;
   for (const field of fields) {
     const value = input.client[field];

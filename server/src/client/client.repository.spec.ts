@@ -70,6 +70,26 @@ describe('ClientRepository.insertIds', () => {
 });
 
 describe('ClientRepository.update', () => {
+  it.each(['2026-11-15', null])(
+    'writes hold and notes together using parameters (%s)',
+    async (hold_until) => {
+      const query = vi
+        .fn()
+        .mockResolvedValue({ rows: [{ client_number: 42 }] });
+      const repository = new ClientRepository({} as Pool);
+      await repository.update(
+        42,
+        { hold_until, notes: 'History\nHold entry' },
+        { query } as unknown as PoolClient,
+      );
+      expect(query).toHaveBeenCalledOnce();
+      const [sql, values] = query.mock.calls[0];
+      expect(sql).toContain('notes = $2');
+      expect(sql).toContain('hold_until = $3');
+      expect(sql).not.toContain('2026-11-15');
+      expect(values).toEqual([42, 'History\nHold entry', hold_until]);
+    },
+  );
   it('updates only allowed submitted columns using parameters', async () => {
     const query = vi
       .fn()

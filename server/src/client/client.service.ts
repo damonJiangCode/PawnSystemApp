@@ -29,7 +29,20 @@ export class ClientService {
         ([, value]) => value !== undefined,
       ),
     );
-    if (Object.values(changes).some((value) => value === null)) {
+    const hasHold = changes.hold_until !== undefined;
+    const settingHold = hasHold && changes.hold_until !== null;
+    if (
+      hasHold &&
+      (changes.notes !== undefined ||
+        (input.notes_action !== undefined && input.notes_action !== 'keep'))
+    ) {
+      throw new BadRequestException('Update hold and manual notes separately.');
+    }
+    if (
+      Object.entries(changes).some(
+        ([field, value]) => field !== 'hold_until' && value === null,
+      )
+    ) {
       throw new BadRequestException(
         'Use an empty string to clear optional text fields; null is not allowed.',
       );
@@ -69,7 +82,7 @@ export class ClientService {
       await connection.query('BEGIN');
       // Check attribution before saving files, changing records or replacing IDs.
       let employee: { first_name: string } | null = null;
-      if (input.notes_action === 'append_signature') {
+      if (settingHold || input.notes_action === 'append_signature') {
         const password = input.employee_password?.trim();
         employee = password
           ? await this.employees.findActiveByPassword(password, connection)
@@ -104,6 +117,14 @@ export class ClientService {
           }).format(new Date());
           changes.notes = `${notes} (${employee.first_name}, ${date})`;
         } else changes.notes = notes;
+      }
+      if (settingHold) {
+        const date = new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'America/Regina',
+        }).format(new Date());
+        const entry = `Hold till ${changes.hold_until} (${employee!.first_name}, ${date})`;
+        const previous = String(existing.notes ?? '');
+        changes.notes = previous ? `${previous} ${entry}` : entry;
       }
       if (input.photo) {
         imagePath = await this.images.save(input.photo.base64);

@@ -9,6 +9,7 @@ import { mapRowToClient } from './client.mapper.js';
 
 export type ClientChanges = Partial<CreateClientDetailsDto> & {
   image_path?: string;
+  hold_until?: string | null;
 };
 
 @Injectable()
@@ -47,6 +48,7 @@ export class ClientRepository {
       'phone',
       'notes',
       'pickup_self_only',
+      'hold_until',
       'image_path',
     ] as const;
     const uppercase = new Set([

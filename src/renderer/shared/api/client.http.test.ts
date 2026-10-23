@@ -8,6 +8,29 @@ import {
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
 
+test("hold PATCH sends only date and attribution; clear preserves explicit null", async (t) => {
+  const bodies: unknown[] = [];
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/client/42");
+    assert.equal(init.method, "PATCH");
+    bodies.push(JSON.parse(init.body as string));
+    return Response.json({
+      client_number: 42,
+      date_of_birth: "1990-01-01",
+      updated_at: "2026-10-22",
+    });
+  });
+  await updateClientHttp({
+    client: { client_number: 42, hold_until: "2026-11-15" },
+    employee_password: "code",
+  });
+  await updateClientHttp({ client: { client_number: 42, hold_until: null } });
+  assert.deepEqual(bodies, [
+    { client: { hold_until: "2026-11-15" }, employee_password: "code" },
+    { client: { hold_until: null } },
+  ]);
+});
+
 test("HTTP search encodes names and restores client and ID dates", async (t) => {
   t.mock.method(globalThis, "fetch", async (input: URL) => {
     assert.equal(input.pathname, "/client");

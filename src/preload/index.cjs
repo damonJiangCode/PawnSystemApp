@@ -17,7 +17,6 @@ const CHANNELS = {
   GET_ADMIN_LOCATIONS: "get-admin-locations",
   ADD_LOCATION: "add-location",
   DEACTIVATE_LOCATION: "deactivate-location",
-  SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
@@ -69,8 +68,6 @@ const CHANNELS = {
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 
 const clientApi = {
-  setHoldUntil: (clientNumber, holdUntil) =>
-    invoke(CHANNELS.SET_CLIENT_HOLD, clientNumber, holdUntil),
   loadCities: () => invoke(CHANNELS.GET_CITIES),
   loadHairColors: () => invoke(CHANNELS.GET_HAIR_COLORS),
   loadHairColorsForAdmin: () => invoke(CHANNELS.GET_ADMIN_HAIR_COLORS),

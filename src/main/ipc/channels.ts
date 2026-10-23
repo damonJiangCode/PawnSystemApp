@@ -11,7 +11,6 @@ const CHANNELS = {
   ACTIVATE_EYE_COLOR: "activate-eye-color",
   DEACTIVATE_EYE_COLOR: "deactivate-eye-color",
   GET_ID_TYPES: "get-id-types",
-  SET_CLIENT_HOLD: "set-client-hold",
   DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",

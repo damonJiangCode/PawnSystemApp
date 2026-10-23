@@ -9,7 +9,11 @@ import {
 type DesktopApi = Omit<AppApi, "client"> & {
   client: Omit<
     AppApi["client"],
-    "searchClients" | "searchClientsByDob" | "createClient" | "updateClient"
+    | "searchClients"
+    | "searchClientsByDob"
+    | "createClient"
+    | "updateClient"
+    | "setHoldUntil"
   >;
 };
 
@@ -26,6 +30,16 @@ export const getAppApi = (): AppApi | undefined => {
     ...desktop,
     client: {
       ...desktop.client,
+      setHoldUntil: (clientNumber, holdUntil, employeePassword) =>
+        updateClientHttp(
+          {
+            client: { client_number: clientNumber, hold_until: holdUntil },
+            ...(holdUntil !== null
+              ? { employee_password: employeePassword }
+              : {}),
+          },
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
       createClient: (input) =>
         createClientHttp(
           input,

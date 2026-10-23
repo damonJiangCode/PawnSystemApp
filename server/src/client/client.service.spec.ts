@@ -287,6 +287,47 @@ describe('ClientService', () => {
     expect(connection.query).toHaveBeenCalledWith('COMMIT');
   });
 
+  it('rolls back if saving the hold and signed notes fails', async () => {
+    employees.findActiveByPassword.mockResolvedValue({ first_name: 'STAFF' });
+    const error = new Error('Update failed');
+    repository.update.mockRejectedValue(error);
+    await expect(
+      service.update(42, {
+        client: { hold_until: '2026-11-15' },
+        employee_password: 'code',
+      }),
+    ).rejects.toBe(error);
+    expect(repository.update).toHaveBeenCalledWith(
+      42,
+      {
+        hold_until: '2026-11-15',
+        notes: expect.stringMatching(
+          /^Existing note\nHold till 2026-11-15 \(STAFF, \d{4}-\d{2}-\d{2}\)$/,
+        ),
+      },
+      connection,
+    );
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    expect(connection.query).not.toHaveBeenCalledWith('COMMIT');
+    expect(connection.release).toHaveBeenCalled();
+  });
+
+  it('does not let a hold request replace or clear the existing notes', async () => {
+    await expect(
+      service.update(42, {
+        client: { hold_until: '2026-11-15', notes: 'stale notes' },
+        employee_password: 'code',
+      }),
+    ).rejects.toThrow('Update hold and manual notes separately.');
+    await expect(
+      service.update(42, {
+        client: { hold_until: null },
+        notes_action: 'clear',
+      }),
+    ).rejects.toThrow('Update hold and manual notes separately.');
+    expect(pool.connect).not.toHaveBeenCalled();
+  });
+
   it('rejects incorrect attribution before locking, uploading or modifying data', async () => {
     employees.findActiveByPassword.mockResolvedValue(null);
     await expect(

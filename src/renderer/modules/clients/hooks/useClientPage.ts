@@ -76,6 +76,16 @@ export const useClientPage = ({
       return;
     }
 
+    // Keep local result overrides in sync with updates from other tabs.
+    setClientOverrides((prev) =>
+      prev[activeClientNumber] === activeClient
+        ? prev
+        : { ...prev, [activeClientNumber]: activeClient },
+    );
+    setCreatedClient((prev) =>
+      prev?.client_number === activeClientNumber ? activeClient : prev,
+    );
+
     setAdditionalClients((prev) => {
       const existingIndex = prev.findIndex(
         (client) => client.client_number === activeClientNumber,
@@ -103,13 +113,9 @@ export const useClientPage = ({
     }
 
     if (activeClient) {
-      setSelectedClient(
-        activeClient.client_number
-          ? (clientOverrides[activeClient.client_number] ?? activeClient)
-          : activeClient,
-      );
+      setSelectedClient(activeClient);
     }
-  }, [activeClient, clientOverrides, isActive]);
+  }, [activeClient, isActive]);
 
   useEffect(() => {
     setCreatedClient(null);
@@ -130,8 +136,12 @@ export const useClientPage = ({
     );
 
     if (createdClient?.client_number) {
-      setDisplayResults([createdClient]);
-      setSelectedClient(createdClient);
+      const latest =
+        activeClient?.client_number === createdClient.client_number
+          ? activeClient
+          : createdClient;
+      setDisplayResults([latest]);
+      setSelectedClient(latest);
       lastNoResultPromptKeyRef.current = "";
       return;
     }
@@ -141,12 +151,12 @@ export const useClientPage = ({
         return null;
       }
 
-      if (clientOverrides[clientNumber]) {
-        return clientOverrides[clientNumber];
-      }
-
       if (activeClient?.client_number === clientNumber) {
         return activeClient;
+      }
+
+      if (clientOverrides[clientNumber]) {
+        return clientOverrides[clientNumber];
       }
 
       return null;
@@ -174,10 +184,10 @@ export const useClientPage = ({
     );
     const overrideResults = hasQuery
       ? [
-          ...Object.values(clientOverrides),
           ...[activeClient].filter((client): client is Client =>
             Boolean(client?.client_number),
           ),
+          ...Object.values(clientOverrides),
         ].filter((client, index, clients) => {
           const clientNumber = client.client_number;
           if (!clientNumber || deletedClientNumbers.includes(clientNumber)) {
@@ -209,7 +219,7 @@ export const useClientPage = ({
       )
       .map((client) =>
         client.client_number
-          ? (clientOverrides[client.client_number] ?? client)
+          ? (getClientOverride(client.client_number) ?? client)
           : client,
       );
     const combinedResults = [
@@ -228,10 +238,7 @@ export const useClientPage = ({
       !combinedResults.some(
         (client) => client.client_number === activeClient.client_number,
       )
-        ? [
-            clientOverrides[activeClient.client_number] ?? activeClient,
-            ...combinedResults,
-          ]
+        ? [activeClient, ...combinedResults]
         : combinedResults;
 
     setDisplayResults(rowsWithActiveClient);
@@ -306,6 +313,7 @@ export const useClientPage = ({
   }, [selectedClient, onClientSelected]);
 
   const handleClientCreated = (newClient: Client) => {
+    onClientSelected?.(newClient);
     if (newClient.client_number) {
       setDeletedClientNumbers((prev) =>
         prev.filter((clientNumber) => clientNumber !== newClient.client_number),
@@ -321,6 +329,7 @@ export const useClientPage = ({
   };
 
   const handleClientUpdated = (updatedClient: Client) => {
+    onClientSelected?.(updatedClient);
     if (updatedClient.client_number) {
       setDeletedClientNumbers((prev) =>
         prev.filter(

@@ -337,6 +337,93 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     });
   }
 
+  it('appends a signed hold entry on every submission, including the same date', async () => {
+    const stored = arrangeUpdate();
+    for (let count = 1; count <= 2; count++) {
+      const response = await patch({
+        client: { hold_until: '2026-11-15' },
+        employee_password: 'valid-code',
+      });
+      expect(response.status).toBe(200);
+      const client = await response.json();
+      expect(client.hold_until).toBe('2026-11-15');
+      expect(client.notes.startsWith('Existing note\n')).toBe(true);
+      expect(
+        client.notes.match(
+          /Hold till 2026-11-15 \(STAFF, \d{4}-\d{2}-\d{2}\)/g,
+        ),
+      ).toHaveLength(count);
+      expect(client.identifications).toHaveLength(1);
+    }
+    expect(stored.hold_until).toBe('2026-11-15');
+  });
+
+  it('clears a hold without employee checks and preserves historical notes', async () => {
+    const stored = arrangeUpdate();
+    stored.hold_until = '2026-11-15';
+    stored.notes = 'Existing note\nHold till 2026-11-15 (STAFF, 2026-10-22)';
+    const response = await patch({ client: { hold_until: null } });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      hold_until: null,
+      notes: stored.notes,
+    });
+    expect(
+      connection.query.mock.calls.some(([sql]) =>
+        sql.includes('FROM employee'),
+      ),
+    ).toBe(false);
+  });
+
+  it('returns 404 when the hold client does not exist', async () => {
+    connection.query.mockResolvedValue({ rows: [] });
+    const response = await patch({ client: { hold_until: null } });
+    expect(response.status).toBe(404);
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    expect(
+      connection.query.mock.calls.some(([sql]) =>
+        sql.startsWith('UPDATE client'),
+      ),
+    ).toBe(false);
+  });
+
+  it.each([undefined, 'wrong'])(
+    'requires a valid employee to set a hold (%s)',
+    async (password) => {
+      const stored = arrangeUpdate();
+      const response = await patch({
+        client: { hold_until: '2026-11-15' },
+        employee_password: password,
+      });
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        field: 'employee_password',
+      });
+      expect(stored.notes).toBe('Existing note');
+      expect(
+        connection.query.mock.calls.some(([sql]) =>
+          sql.startsWith('UPDATE client'),
+        ),
+      ).toBe(false);
+    },
+  );
+
+  it.each([
+    '2026-02-30',
+    '2026-2-01',
+    '',
+    '2026-11-15T00:00:00Z',
+    '0999-01-01',
+    123,
+  ])('rejects invalid hold dates before connecting: %s', async (hold_until) => {
+    const response = await patch({
+      client: { hold_until },
+      employee_password: 'valid-code',
+    });
+    expect(response.status).toBe(400);
+    expect(pool.connect).not.toHaveBeenCalled();
+  });
+
   it('accepts a partial PATCH without requiring unchanged fields', async () => {
     arrangeUpdate();
     const response = await patch({ client: { phone: 'new-phone' } });

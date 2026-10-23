@@ -11,6 +11,7 @@ export type ClientApi = {
   setHoldUntil: (
     clientNumber: number,
     holdUntil: string | null,
+    employeePassword?: string,
   ) => Promise<Client>;
   searchClients: (firstName: string, lastName: string) => Promise<Client[]>;
   searchClientsByDob: (dateOfBirth: string) => Promise<Client[]>;

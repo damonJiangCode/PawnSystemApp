@@ -4,10 +4,12 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsDateString,
   IsIn,
   IsObject,
   IsString,
   MaxLength,
+  Matches,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
@@ -21,7 +23,12 @@ import { SaveClientImageDto } from './save-client-image.dto.js';
 export class UpdateClientDetailsDto extends PartialType(
   CreateClientDetailsDto,
   { skipNullProperties: false },
-) {}
+) {
+  @ValidateIf((_object, value) => value !== undefined && value !== null)
+  @Matches(/^[1-9]\d{3}-\d{2}-\d{2}$/)
+  @IsDateString({ strict: true })
+  hold_until?: string | null;
+}
 
 export class UpdateClientDto {
   @ValidateIf((_object, value) => value !== undefined)
