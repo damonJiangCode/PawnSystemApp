@@ -28,7 +28,6 @@ const fixture = (t) => {
     "source/Pictureconv.mdb",
     "mappings/category-mapping.json",
     "mappings/location-mapping.json",
-    "mappings/client-mapping.json",
   ]) {
     const file = path.join(root, "migration", input);
     fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -89,7 +88,6 @@ test("reports both missing mappings and a stopped Docker engine instead of decla
   const f = fixture(t);
   fs.unlinkSync(path.join(f.root, "migration/mappings/category-mapping.json"));
   fs.unlinkSync(path.join(f.root, "migration/mappings/location-mapping.json"));
-  fs.unlinkSync(path.join(f.root, "migration/mappings/client-mapping.json"));
   const run = (executable, args, options) =>
     args[0] === "info"
       ? { status: 1, stdout: "", stderr: "Docker is stopped" }
@@ -98,7 +96,6 @@ test("reports both missing mappings and a stopped Docker engine instead of decla
   const output = f.logs.join("\n");
   assert.match(output, /category-mapping\.json/);
   assert.match(output, /location-mapping\.json/);
-  assert.match(output, /client-mapping\.json/);
   assert.match(output, /Start Docker Desktop/);
   assert.doesNotMatch(output, /checks passed|Next:/);
 });

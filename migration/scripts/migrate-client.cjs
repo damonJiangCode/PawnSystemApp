@@ -131,40 +131,6 @@ const OTHER_MIGRATION_CLIENT = {
 };
 const INSERT_BATCH_SIZE = 1000;
 
-const getMigrationHoldUntil = () => {
-  const mapping = JSON.parse(
-    fs.readFileSync(
-      path.join(migrationRoot, "mappings", "client-mapping.json"),
-      "utf8",
-    ),
-  );
-  const rule = mapping?.hold_until;
-  if (
-    !mapping ||
-    Object.keys(mapping).join(",") !== "hold_until" ||
-    !rule ||
-    Object.keys(rule).sort().join(",") !== "source,value" ||
-    rule.source !== "fixed_date" ||
-    typeof rule.value !== "string" ||
-    !/^\d{4}-\d{2}-\d{2}$/.test(rule.value)
-  ) {
-    throw new Error(
-      "Client hold_until mapping must use fixed_date with a YYYY-MM-DD value.",
-    );
-  }
-  const value = rule.value;
-  const date = new Date(`${value}T00:00:00Z`);
-  if (
-    !Number.isFinite(date.getTime()) ||
-    date.toISOString().slice(0, 10) !== value
-  ) {
-    throw new Error(
-      "Client hold_until mapping must use a valid calendar date.",
-    );
-  }
-  return value;
-};
-
 const normalizeText = (value) => String(value ?? "").trim();
 const normalizeUpper = (value) => normalizeText(value).toUpperCase();
 const normalizeCityKeyPart = (value) =>
@@ -410,7 +376,6 @@ const insertClients = async (pool, clients) => {
       "notes",
       "image_path",
       "pickup_self_only",
-      "hold_until",
       "redeem_count",
       "sell_count",
       "expire_count",
@@ -437,7 +402,6 @@ const insertClients = async (pool, clients) => {
       client.notes || null,
       client.image_path,
       client.pickup_self_only,
-      client.hold_until,
       client.redeem_count,
       client.sell_count,
       client.expire_count,
@@ -475,7 +439,6 @@ const insertClientIds = async (pool, ids) => {
 
 const main = async () => {
   // Use the configured historical baseline, never the migration execution date.
-  const migrationHoldUntil = getMigrationHoldUntil();
   fs.mkdirSync(summaryDir, { recursive: true });
   if (!process.env.DB_PASSWORD) {
     throw new Error("Set DB_PASSWORD in private environment configuration.");
@@ -820,7 +783,6 @@ const main = async () => {
           notes: cleanNullable(getValue(row, "AR200CLIENTMEMO")),
           image_path: "",
           pickup_self_only: false,
-          hold_until: migrationHoldUntil,
           ...counters,
         });
         clientIdsToInsert.push(...ids);
@@ -843,7 +805,6 @@ const main = async () => {
       clientsToInsert.push({
         client_number: otherMigrationClientNumber,
         ...OTHER_MIGRATION_CLIENT,
-        hold_until: migrationHoldUntil,
       });
       samplePush(
         warningSamples,
@@ -939,7 +900,7 @@ const main = async () => {
       "- Default negative legacy client counters to `0` so target check constraints pass.",
       "- Import valid ID slots from `AR200ID_1` through `AR200ID_5`; skip `PHO`.",
       "- Leave `image_path` blank for now.",
-      `- Set hold_until to the fixed date ${migrationHoldUntil} (client-mapping.json), independent of the migration execution date.`,
+      "- Leave hold_until unset (NULL), including the fallback client; holds are optional and set by users later.",
       "",
       "## Blockers",
       "",

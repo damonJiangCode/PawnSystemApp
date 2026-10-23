@@ -15,7 +15,6 @@ const REQUIRED_INPUTS = [
   "migration/source/Pictureconv.mdb",
   "migration/mappings/category-mapping.json",
   "migration/mappings/location-mapping.json",
-  "migration/mappings/client-mapping.json",
 ];
 
 const parseEnv = (content) => {

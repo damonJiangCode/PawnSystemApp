@@ -45,7 +45,6 @@ const fixture = (t, options = {}) => {
     "source/Pictureconv.mdb",
     "mappings/category-mapping.json",
     "mappings/location-mapping.json",
-    "mappings/client-mapping.json",
   ]) {
     fs.writeFileSync(
       path.join(root, "migration", name),
@@ -265,7 +264,6 @@ test("simulated execution imports in order, writes backups, and never starts/res
   assert.equal(manifest.status, "completed");
   assert.deepEqual(Object.keys(manifest.mappings).sort(), [
     "category-mapping.json",
-    "client-mapping.json",
     "location-mapping.json",
   ]);
   for (const checksum of Object.values(manifest.mappings)) {
