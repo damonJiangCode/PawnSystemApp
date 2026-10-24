@@ -133,7 +133,9 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
           onClick={() => setHoldDialogOpen(true)}
           sx={{ flex: "0 0 auto" }}
         >
-          {client?.hold_until ? `Hold: ${client.hold_until}` : "Hold"}
+          {client?.hold_until
+            ? `Hold: ${client.hold_until.slice(5, 7)}-${client.hold_until.slice(8, 10)}-${client.hold_until.slice(0, 4)}`
+            : "Hold"}
         </Button>
       </Box>
 

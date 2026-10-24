@@ -347,10 +347,10 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       expect(response.status).toBe(200);
       const client = await response.json();
       expect(client.hold_until).toBe('2026-11-15');
-      expect(client.notes.startsWith('Existing note\n')).toBe(true);
+      expect(client.notes.startsWith('Existing note ')).toBe(true);
       expect(
         client.notes.match(
-          /Hold till 2026-11-15 \(STAFF, \d{4}-\d{2}-\d{2}\)/g,
+          /Hold till 11-15-2026 \(STAFF, \d{2}-\d{2}-\d{4}\)/g,
         ),
       ).toHaveLength(count);
       expect(client.identifications).toHaveLength(1);

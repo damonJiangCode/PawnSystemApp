@@ -302,7 +302,7 @@ describe('ClientService', () => {
       {
         hold_until: '2026-11-15',
         notes: expect.stringMatching(
-          /^Existing note\nHold till 2026-11-15 \(STAFF, \d{4}-\d{2}-\d{2}\)$/,
+          /^Existing note Hold till 11-15-2026 \(STAFF, \d{2}-\d{2}-\d{4}\)$/,
         ),
       },
       connection,

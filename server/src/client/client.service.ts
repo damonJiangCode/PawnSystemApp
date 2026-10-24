@@ -119,10 +119,16 @@ export class ClientService {
         } else changes.notes = notes;
       }
       if (settingHold) {
-        const date = new Intl.DateTimeFormat('en-CA', {
+        const date = new Intl.DateTimeFormat('en-US', {
           timeZone: 'America/Regina',
-        }).format(new Date());
-        const entry = `Hold till ${changes.hold_until} (${employee!.first_name}, ${date})`;
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+        })
+          .format(new Date())
+          .replaceAll('/', '-');
+        const [year, month, day] = changes.hold_until!.split('-');
+        const entry = `Hold till ${month}-${day}-${year} (${employee!.first_name}, ${date})`;
         const previous = String(existing.notes ?? '');
         changes.notes = previous ? `${previous} ${entry}` : entry;
       }
