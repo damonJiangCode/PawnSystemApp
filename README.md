@@ -20,7 +20,9 @@ npm ci
 cp .env.example .env
 ```
 
-Edit the ignored `.env` and set your own database password. To use the included local PostgreSQL service:
+Edit the ignored `.env` and set your own database password. Install the NestJS
+dependencies once with `npm --prefix server ci`, and configure `server/.env`
+with the development database connection. To use the included local PostgreSQL service:
 
 ```bash
 docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
@@ -28,17 +30,25 @@ npm run db:init
 npm run dev
 ```
 
-Client name/DOB searches, client creation/updates and client photo storage use the
-Nest HTTP server. In a second terminal, configure
-`server/.env` with the development database connection and run:
+Root `npm run dev` starts Vite, the NestJS server in watch mode, the Electron
+TypeScript compiler in watch mode, and Electron in one terminal. Electron waits
+for Vite, the backend on port 3000, and its compiled entry file before launching.
+Press Ctrl+C to stop the development processes together; Docker stays running.
+Main/preload changes are recompiled but still require restarting Electron.
+
+To run only the backend from the project root:
 
 ```bash
-cd server
-npm ci
-npm run start:dev
+npm run dev:server
 ```
 
-The renderer defaults to `http://localhost:3000`. Set `VITE_API_BASE_URL` in the
+The same `npm run dev:server` command also works inside `server/`. Stop any
+separately running Vite/server/Electron development processes before starting
+the combined command to avoid port conflicts. The combined launcher assumes
+Vite port 5173 and backend port 3000; update its wait targets if changing ports.
+
+Client name/DOB searches, client creation/updates and client photo storage use
+the Nest HTTP server. The renderer defaults to `http://localhost:3000`. Set `VITE_API_BASE_URL` in the
 root `.env` to change it, then restart Vite. The backend allows requests from
 `http://localhost:5173` by default; set `CORS_ORIGINS` in `server/.env` to a
 comma-separated list of renderer origins when needed. New client photos are
@@ -85,16 +95,16 @@ npm run build
 
 ## Repository structure
 
-| Path | Purpose |
-| --- | --- |
-| `src/renderer/` | Frontend HTML entry, React screens, components and UI workflows |
-| `src/main/` | Electron windows, business services and SQL repositories |
-| `src/preload/` | IPC bridge exposed as `window.appAPI` |
-| `src/shared/` | Shared models, contracts and calculation helpers |
-| `vite.config.ts` | Frontend development server and build configuration |
-| `docker/` | Local database and optional migration tooling |
-| `migration/scripts/` | Migration tooling; private inputs are supplied separately |
-| `docs/` | Architecture and public repository guidance |
+| Path                 | Purpose                                                         |
+| -------------------- | --------------------------------------------------------------- |
+| `src/renderer/`      | Frontend HTML entry, React screens, components and UI workflows |
+| `src/main/`          | Electron windows, business services and SQL repositories        |
+| `src/preload/`       | IPC bridge exposed as `window.appAPI`                           |
+| `src/shared/`        | Shared models, contracts and calculation helpers                |
+| `vite.config.ts`     | Frontend development server and build configuration             |
+| `docker/`            | Local database and optional migration tooling                   |
+| `migration/scripts/` | Migration tooling; private inputs are supplied separately       |
+| `docs/`              | Architecture and public repository guidance                     |
 
 See [architecture](docs/architecture.md), the README in each source module, and [Windows development setup](docs/instructions.md).
 
