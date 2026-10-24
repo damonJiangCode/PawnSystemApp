@@ -18,7 +18,7 @@ const { insertClients } = vm.runInNewContext(
   },
 );
 
-test("migration omits optional holds for ordinary and fallback clients", async () => {
+test("migration starts ordinary and fallback clients active with no hold", async () => {
   const calls = [];
   await insertClients(
     { query: async (sql, values) => calls.push({ sql, values }) },
@@ -31,6 +31,10 @@ test("migration omits optional holds for ordinary and fallback clients", async (
   const { sql, values } = calls[0];
   const columns = sql.match(/INSERT INTO client \(([^)]+)\)/)[1].split(",");
   assert.equal(columns.includes("hold_until"), false);
+  const activeIndex = columns.indexOf("is_active");
+  assert.ok(activeIndex >= 0);
+  assert.equal(values[activeIndex], true);
+  assert.equal(values[columns.length + activeIndex], true);
   assert.equal(values.length, columns.length * 2);
   assert.equal(values[0], 1);
   assert.equal(values[columns.length], 2);
@@ -44,4 +48,5 @@ test("migration omits optional holds for ordinary and fallback clients", async (
     "utf8",
   );
   assert.match(schema, /hold_until DATE\s*,/);
+  assert.match(schema, /is_active BOOLEAN NOT NULL DEFAULT TRUE\s*,/);
 });

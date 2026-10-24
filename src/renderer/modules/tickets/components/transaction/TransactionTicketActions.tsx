@@ -11,6 +11,7 @@ import TicketActionsLayout from "../shared/TicketActionsLayout";
 interface TransactionTicketActionsProps {
   selectedTicket: Ticket | null;
   transferDisabled?: boolean;
+  issuanceDisabled?: boolean;
   onPawn: () => void;
   onSell: () => void;
   onEdit: () => void;
@@ -25,6 +26,7 @@ const TransactionTicketActions: React.FC<TransactionTicketActionsProps> = (
   const {
     selectedTicket,
     transferDisabled = false,
+    issuanceDisabled = false,
     onPawn,
     onSell,
     onEdit,
@@ -40,11 +42,13 @@ const TransactionTicketActions: React.FC<TransactionTicketActionsProps> = (
       actions={[
         {
           label: "Pawn",
+          disabled: issuanceDisabled,
           icon: <AddIcon fontSize="small" />,
           onClick: onPawn,
         },
         {
           label: "Sell",
+          disabled: issuanceDisabled,
           icon: <SellIcon fontSize="small" />,
           onClick: onSell,
         },
@@ -63,13 +67,13 @@ const TransactionTicketActions: React.FC<TransactionTicketActionsProps> = (
         {
           label: "Conv",
           icon: <AutorenewIcon fontSize="small" />,
-          disabled: ticketActionDisabled,
+          disabled: ticketActionDisabled || issuanceDisabled,
           onClick: onConvert,
         },
         {
           label: "Trns",
           icon: <SwapHorizIcon fontSize="small" />,
-          disabled: transferDisabled,
+          disabled: transferDisabled || issuanceDisabled,
           onClick: onTransfer,
         },
       ]}

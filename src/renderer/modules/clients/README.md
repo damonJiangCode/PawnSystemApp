@@ -40,11 +40,19 @@ This module owns:
 ClientPage
   -> useClientPage / useClientSearch
   -> client.api.ts
-  -> preload
-  -> client.handlers.ts
-  -> client.service.ts
-  -> client.repo.ts
+  -> app.api.ts / client.http.ts
+  -> HTTP /client
+  -> ClientController
+  -> ClientService
+  -> ClientRepository
 ```
+
+Client status updates use PATCH with `client.is_active` and an employee password.
+Changing status appends a signed note; an unchanged status does not. Deactivated
+clients remain searchable and editable. Pawn, Sell, Convert, Transfer (either
+party), and Repawn are disabled and rejected by the ticket backend. Existing
+ticket handling stays available. Client deletion is not supported. Reference
+data lookups still use the desktop API.
 
 ## Client Images
 

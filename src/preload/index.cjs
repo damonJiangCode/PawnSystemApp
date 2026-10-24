@@ -17,7 +17,6 @@ const CHANNELS = {
   GET_ADMIN_LOCATIONS: "get-admin-locations",
   ADD_LOCATION: "add-location",
   DEACTIVATE_LOCATION: "deactivate-location",
-  DELETE_CLIENT: "delete-client",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",
@@ -80,7 +79,6 @@ const clientApi = {
   activateEyeColor: (color) => invoke(CHANNELS.ACTIVATE_EYE_COLOR, color),
   deactivateEyeColor: (color) => invoke(CHANNELS.DEACTIVATE_EYE_COLOR, color),
   loadIdTypes: () => invoke(CHANNELS.GET_ID_TYPES),
-  deleteClient: (clientNumber) => invoke(CHANNELS.DELETE_CLIENT, clientNumber),
 };
 
 const ticketApi = {

@@ -115,6 +115,7 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
     >
       <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
         <ClientBar
+          is_active={client?.is_active}
           client_last_name={clientLastName}
           client_first_name={clientFirstName}
           client_middle_name={clientMiddleName}
@@ -154,6 +155,7 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
           tickets={tickets}
           selectedTicket={selectedTicket}
           transferDisabled={!clientNumber}
+          issuanceDisabled={client?.is_active === false}
           onSelectTicket={actions.handleTicketSelected}
           onPawn={actions.handlePawnButtonClick}
           onSell={actions.handleSellButtonClick}

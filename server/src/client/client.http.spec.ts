@@ -302,6 +302,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       phone: 'old-phone',
       image_path: 'images/clients/old.png',
       notes: 'Existing note',
+      is_active: true,
       redeem_count: 7,
     };
     connection.query.mockImplementation(
@@ -336,6 +337,81 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       body: JSON.stringify(body),
     });
   }
+
+  it('deactivates and reactivates with signed history, keeping existing ticket data', async () => {
+    const stored = arrangeUpdate();
+    for (const [is_active, action] of [
+      [false, 'Deactivated'],
+      [true, 'Reactivated'],
+    ] as const) {
+      const response = await patch({
+        client: { is_active },
+        employee_password: 'valid-code',
+      });
+      expect(response.status).toBe(200);
+      const client = await response.json();
+      expect(client.is_active).toBe(is_active);
+      expect(client.notes).toContain('Existing note');
+      expect(client.notes).toMatch(
+        new RegExp(`${action} client \\(STAFF, \\d{2}-\\d{2}-\\d{4}\\)`),
+      );
+      expect(client.redeem_count).toBe(7);
+      expect(client.identifications).toHaveLength(1);
+    }
+    expect(stored.notes).toContain('Deactivated client');
+    expect(stored.notes).toContain('Reactivated client');
+  });
+
+  it.each([undefined, 'wrong'])(
+    'rejects status changes without a valid employee (%s)',
+    async (employee_password) => {
+      const stored = arrangeUpdate();
+      const response = await patch({
+        client: { is_active: false },
+        employee_password,
+      });
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        field: 'employee_password',
+      });
+      expect(stored.is_active).toBe(true);
+      expect(stored.notes).toBe('Existing note');
+      expect(
+        connection.query.mock.calls.some(([sql]) =>
+          sql.startsWith('UPDATE client'),
+        ),
+      ).toBe(false);
+    },
+  );
+
+  it('does not require a password or duplicate signatures for an unchanged status', async () => {
+    arrangeUpdate();
+    const response = await patch({ client: { is_active: true, phone: '123' } });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      is_active: true,
+      phone: '123',
+      notes: 'Existing note',
+    });
+    expect(
+      connection.query.mock.calls.some(([sql]) =>
+        sql.includes('FROM employee'),
+      ),
+    ).toBe(false);
+  });
+
+  it('signs edited notes and appends the status entry in the same PATCH', async () => {
+    arrangeUpdate();
+    const response = await patch({
+      client: { is_active: false, notes: 'Updated note' },
+      employee_password: 'valid-code',
+      notes_action: 'append_signature',
+    });
+    expect(response.status).toBe(200);
+    expect((await response.json()).notes).toMatch(
+      /^Updated note \(STAFF, .*\) Deactivated client \(STAFF, \d{2}-\d{2}-\d{4}\)$/,
+    );
+  });
 
   it('appends a signed hold entry on every submission, including the same date', async () => {
     const stored = arrangeUpdate();
@@ -491,6 +567,8 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     { client: { date_of_birth: '2025-02-29' } },
     { client: { date_of_birth: null } },
     { client: { phone: null } },
+    { client: { is_active: null } },
+    { client: { is_active: 'false' } },
     { client: { redeem_count: 999 } },
     { identifications: [] },
     { identifications: null },

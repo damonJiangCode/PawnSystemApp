@@ -72,13 +72,14 @@ focuses its existing window; closing it removes that entry from the map.
 
 ### clients
 
-Owns client search, create/update/delete, client IDs, reference data, city/color
-lookups, and client image paths.
+Keeps reference data, city/color lookups, and legacy client readers used by ticket
+operations. Client search and writes use the NestJS HTTP server. Clients are
+deactivated/reactivated rather than deleted.
 
 Start here:
 
 - `modules/clients/client.handlers.ts`
-- `modules/clients/client.service.ts`
+- `modules/clients/client-reference.service.ts`
 - `modules/clients/client.repo.ts`
 
 ### tickets

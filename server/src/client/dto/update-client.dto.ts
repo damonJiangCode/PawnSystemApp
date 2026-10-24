@@ -4,6 +4,7 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsDateString,
   IsIn,
   IsObject,
@@ -24,6 +25,10 @@ export class UpdateClientDetailsDto extends PartialType(
   CreateClientDetailsDto,
   { skipNullProperties: false },
 ) {
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsBoolean()
+  is_active?: boolean;
+
   @ValidateIf((_object, value) => value !== undefined && value !== null)
   @Matches(/^[1-9]\d{3}-\d{2}-\d{2}$/)
   @IsDateString({ strict: true })

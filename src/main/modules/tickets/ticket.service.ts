@@ -72,13 +72,29 @@ export const ticketService = {
       throw createFieldError("ticket_number", "Enter a valid ticket number.");
     }
 
-    return ticketRepo.loadTransferTicketPreview(normalizedTicketNumber);
+    const preview = await ticketRepo.loadTransferTicketPreview(
+      normalizedTicketNumber,
+    );
+    if (preview) {
+      const source = await clientRepo.loadByNumber(
+        preview.previous_client_number,
+      );
+      if (!source?.is_active)
+        throw new Error(
+          "The source client is deactivated. Reactivate the client before transferring.",
+        );
+    }
+    return preview;
   },
 
   createPawnTicket: async (input: CreatePawnTicketInput): Promise<Ticket> => {
     const normalizedInput = ticketInput.normalizeCreatePawnTicket(input);
 
     return runInTransaction("createPawnTicket", async (client) => {
+      await clientRepo.assertActiveForTicket(
+        [normalizedInput.client_number],
+        client,
+      );
       const transactionDatetime = calculation.getCurrentDatetime();
       const dueDate = calculation.getDueDatetime(transactionDatetime);
       const employeeName =
@@ -118,6 +134,10 @@ export const ticketService = {
     const normalizedInput = ticketInput.normalizeCreateSellTicket(input);
 
     return runInTransaction("createSellTicket", async (client) => {
+      await clientRepo.assertActiveForTicket(
+        [normalizedInput.client_number],
+        client,
+      );
       const transactionDatetime = calculation.getCurrentDatetime();
       const employeeName =
         await employeeService.getEmployeeDisplayNameByPassword(
@@ -258,7 +278,7 @@ export const ticketService = {
         );
       }
 
-      const existingTicket = await ticketRepo.loadByTicketNumber(
+      const existingTicket = await ticketRepo.loadByTicketNumberForUpdate(
         normalizedInput.ticket_number,
         client,
       );
@@ -288,6 +308,10 @@ export const ticketService = {
       }
 
       const conversionDatetime = calculation.getCurrentDatetime();
+      await clientRepo.assertActiveForTicket(
+        [existingTicket.client_number],
+        client,
+      );
       const dueDate =
         normalizedInput.target_status === "pawned"
           ? calculation.getDueDatetime(conversionDatetime)
@@ -457,8 +481,9 @@ export const ticketService = {
         throw new Error("A client is required to transfer a ticket.");
       }
 
-      const transferPreview = await ticketRepo.loadTransferTicketPreview(
+      const transferPreview = await ticketRepo.loadByTicketNumberForUpdate(
         normalizedInput.ticket_number,
+        client,
       );
 
       if (!transferPreview) {
@@ -478,15 +503,17 @@ export const ticketService = {
         );
       }
 
-      if (
-        transferPreview.previous_client_number === normalizedInput.client_number
-      ) {
+      if (transferPreview.client_number === normalizedInput.client_number) {
         throw createFieldError(
           "ticket_number",
           "This ticket already belongs to the selected client.",
         );
       }
 
+      await clientRepo.assertActiveForTicket(
+        [transferPreview.client_number, normalizedInput.client_number],
+        client,
+      );
       return ticketRepo.transfer(
         normalizedInput.ticket_number,
         normalizedInput.client_number,

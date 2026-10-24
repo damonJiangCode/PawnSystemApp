@@ -9,6 +9,7 @@ interface TransactionTicketsPanelProps {
   tickets: Ticket[];
   selectedTicket?: Ticket | null;
   transferDisabled?: boolean;
+  issuanceDisabled?: boolean;
   onSelectTicket: (ticket: Ticket | null) => void;
   onPawn: () => void;
   onSell: () => void;
@@ -22,6 +23,7 @@ const TransactionTicketsPanel: React.FC<TransactionTicketsPanelProps> = ({
   tickets,
   selectedTicket,
   transferDisabled = false,
+  issuanceDisabled = false,
   onSelectTicket,
   onPawn,
   onSell,
@@ -87,6 +89,7 @@ const TransactionTicketsPanel: React.FC<TransactionTicketsPanelProps> = ({
         <TransactionTicketActions
           selectedTicket={selectedTicket ?? null}
           transferDisabled={transferDisabled}
+          issuanceDisabled={issuanceDisabled}
           onPawn={onPawn}
           onSell={onSell}
           onEdit={onEdit}

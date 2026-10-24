@@ -8,6 +8,29 @@ import {
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
 
+test("activation PATCH sends the boolean and employee password without overwriting notes", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/client/42");
+    assert.equal(init.method, "PATCH");
+    assert.deepEqual(JSON.parse(init.body as string), {
+      client: { is_active: false },
+      employee_password: "code",
+    });
+    return Response.json({
+      ...defaultClient,
+      client_number: 42,
+      date_of_birth: "1990-01-01",
+      updated_at: "2026-10-23",
+      is_active: false,
+    });
+  });
+  const client = await updateClientHttp({
+    client: { client_number: 42, is_active: false },
+    employee_password: "code",
+  });
+  assert.equal(client.is_active, false);
+});
+
 test("hold PATCH sends only date and attribution; clear preserves explicit null", async (t) => {
   const bodies: unknown[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {

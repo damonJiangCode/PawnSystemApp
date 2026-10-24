@@ -10,6 +10,7 @@ import { mapRowToClient } from './client.mapper.js';
 export type ClientChanges = Partial<CreateClientDetailsDto> & {
   image_path?: string;
   hold_until?: string | null;
+  is_active?: boolean;
 };
 
 @Injectable()
@@ -48,6 +49,7 @@ export class ClientRepository {
       'phone',
       'notes',
       'pickup_self_only',
+      'is_active',
       'hold_until',
       'image_path',
     ] as const;

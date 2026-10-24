@@ -6,11 +6,18 @@ interface ClientBarProps {
   client_last_name?: string;
   client_first_name?: string;
   client_middle_name?: string;
+  is_active?: boolean;
   sx?: SxProps<Theme>;
 }
 
 const ClientBar: React.FC<ClientBarProps> = (props) => {
-  const { client_last_name, client_first_name, client_middle_name, sx } = props;
+  const {
+    client_last_name,
+    client_first_name,
+    client_middle_name,
+    is_active,
+    sx,
+  } = props;
   const formattedClientName = [client_first_name, client_middle_name]
     .filter((value): value is string => Boolean(value?.trim()))
     .map((value) => value.toUpperCase())
@@ -43,6 +50,11 @@ const ClientBar: React.FC<ClientBarProps> = (props) => {
           }}
         >
           {client_last_name.toUpperCase()}, {formattedClientName}
+        </Typography>
+      )}
+      {is_active === false && (
+        <Typography color="error" fontWeight={700} sx={{ ml: 2 }}>
+          Deactivated — new tickets disabled
         </Typography>
       )}
     </Box>

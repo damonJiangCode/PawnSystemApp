@@ -263,15 +263,6 @@ export const clientApi = {
       throw mapBackendError(error);
     }
   },
-
-  deleteClient: async (clientNumber: number): Promise<boolean> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("Client API is unavailable.");
-    }
-
-    return api.deleteClient(clientNumber);
-  },
 };
 
 export type { CitiesResponse, ClientNotesAction, SaveClientInput };

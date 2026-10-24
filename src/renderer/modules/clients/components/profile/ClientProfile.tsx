@@ -159,6 +159,12 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
 
   return (
     <Box>
+      {client.is_active === false && (
+        <Alert severity="warning" sx={{ mb: 1 }}>
+          Deactivated client. New tickets are disabled; existing tickets can
+          still be handled.
+        </Alert>
+      )}
       <Box
         sx={{
           display: "grid",
@@ -205,7 +211,10 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
               label="Hair Color:"
               value={display.text(client.hair_color)}
             />
-            <InfoRow label="Eye Color:" value={display.text(client.eye_color)} />
+            <InfoRow
+              label="Eye Color:"
+              value={display.text(client.eye_color)}
+            />
             <InfoRow
               label="Height:"
               value={display.measurement(client.height_cm, "cm")}

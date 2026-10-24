@@ -28,6 +28,7 @@ export interface Client {
   image_path: string;
   image_updated_at?: Date | null;
   pickup_self_only: boolean;
+  is_active: boolean;
   hold_until?: string | null;
   updated_at: Date;
   redeem_count: number;

@@ -361,6 +361,7 @@ export const useTransactionPage = ({
   };
 
   const handlePawnButtonClick = () => {
+    if (client?.is_active === false) return;
     setOpenTicketPawnDialog(true);
     setStatusMessage("");
   };
@@ -371,11 +372,13 @@ export const useTransactionPage = ({
   };
 
   const handleSellButtonClick = () => {
+    if (client?.is_active === false) return;
     setOpenTicketSellDialog(true);
     setStatusMessage("");
   };
 
   const handleConvertTicket = () => {
+    if (client?.is_active === false) return;
     if (!selectedTicket) {
       return;
     }
@@ -385,6 +388,7 @@ export const useTransactionPage = ({
   };
 
   const handleTransferTicket = () => {
+    if (client?.is_active === false) return;
     if (!clientNumber) {
       return;
     }

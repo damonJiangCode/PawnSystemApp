@@ -33,6 +33,7 @@ describe('ClientService', () => {
     repository.loadForUpdate.mockResolvedValue({
       client_number: 42,
       notes: 'Existing note',
+      is_active: true,
       image_path: 'old.png',
       redeem_count: 7,
     });
@@ -285,6 +286,30 @@ describe('ClientService', () => {
     expect(client.redeem_count).toBe(7);
     expect(client.identifications).toHaveLength(1);
     expect(connection.query).toHaveBeenCalledWith('COMMIT');
+  });
+
+  it('rolls back a failed deactivation and signed note together', async () => {
+    employees.findActiveByPassword.mockResolvedValue({ first_name: 'STAFF' });
+    const error = new Error('Cannot save');
+    repository.update.mockRejectedValue(error);
+    await expect(
+      service.update(42, {
+        client: { is_active: false },
+        employee_password: 'code',
+      }),
+    ).rejects.toBe(error);
+    expect(repository.update).toHaveBeenCalledWith(
+      42,
+      {
+        is_active: false,
+        notes: expect.stringMatching(
+          /^Existing note Deactivated client \(STAFF, \d{2}-\d{2}-\d{4}\)$/,
+        ),
+      },
+      connection,
+    );
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    expect(connection.query).not.toHaveBeenCalledWith('COMMIT');
   });
 
   it('rolls back if saving the hold and signed notes fails', async () => {

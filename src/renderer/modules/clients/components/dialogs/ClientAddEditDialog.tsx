@@ -8,6 +8,8 @@ import {
   DialogTitle,
   DialogContent,
   FormControlLabel,
+  Switch,
+  Typography,
 } from "@mui/material";
 import type { Client } from "../../../../../shared/models/client.model";
 import type {
@@ -208,6 +210,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
           "phone",
           "notes",
           "pickup_self_only",
+          "is_active",
         ] as const;
         for (const field of fields) {
           const next = payload.client[field];
@@ -292,7 +295,9 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
     }
 
     const requiresEmployeePassword =
-      nextPendingUpdate.notes_action === "append_signature";
+      nextPendingUpdate.notes_action === "append_signature" ||
+      (isEditMode &&
+        nextPendingUpdate.client.is_active !== clientExisted?.is_active);
 
     if (!requiresEmployeePassword) {
       await saveClientRecord(nextPendingUpdate);
@@ -423,6 +428,62 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                   onChange={handleInputChange}
                 />
 
+                {isEditMode && (
+                  <Box
+                    sx={{
+                      mt: 0.5,
+                      pt: 1.5,
+                      borderTop: 1,
+                      borderColor: "divider",
+                    }}
+                  >
+                    <FormControlLabel
+                      labelPlacement="start"
+                      sx={{
+                        m: 0,
+                        width: "100%",
+                        justifyContent: "space-between",
+                        gap: 2,
+                      }}
+                      control={
+                        <Switch
+                          checked={client.is_active}
+                          disabled={savingClient}
+                          onChange={(_event, checked) =>
+                            setClient((prev) => ({
+                              ...prev,
+                              is_active: checked,
+                            }))
+                          }
+                        />
+                      }
+                      label={
+                        <Box>
+                          <Typography variant="body2" fontWeight={600}>
+                            Client status
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color={
+                              client.is_active ? "text.secondary" : "error.main"
+                            }
+                          >
+                            {client.is_active
+                              ? "Active · Can issue new tickets"
+                              : "Deactivated · Existing tickets remain available"}
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ display: "block", mt: 0.5 }}
+                    >
+                      Status changes require an employee password when saving.
+                    </Typography>
+                  </Box>
+                )}
                 <FormControlLabel
                   control={
                     <Checkbox

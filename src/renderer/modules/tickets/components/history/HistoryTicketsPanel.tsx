@@ -9,6 +9,7 @@ interface HistoryTicketsPanelProps {
   tickets: Ticket[];
   selectedTicket?: Ticket | null;
   loading?: boolean;
+  issuanceDisabled?: boolean;
   scrollRequestKey?: number;
   onSelectTicket: (ticket: Ticket | null) => void;
   onRepawn: () => void;
@@ -20,6 +21,7 @@ const HistoryTicketsPanel: React.FC<HistoryTicketsPanelProps> = ({
   tickets,
   selectedTicket,
   loading = false,
+  issuanceDisabled = false,
   scrollRequestKey = 0,
   onSelectTicket,
   onRepawn,
@@ -71,6 +73,7 @@ const HistoryTicketsPanel: React.FC<HistoryTicketsPanelProps> = ({
         }}
       >
         <HistoryTicketActions
+          issuanceDisabled={issuanceDisabled}
           selectedTicket={selectedTicket}
           onRepawn={onRepawn}
           onLoad={onLoad}

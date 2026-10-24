@@ -8,6 +8,7 @@ import TicketActionsLayout from "../shared/TicketActionsLayout";
 
 interface HistoryTicketActionsProps {
   selectedTicket?: Ticket | null;
+  issuanceDisabled?: boolean;
   onRepawn: () => void;
   onLoad: () => void;
   onReverse: () => void;
@@ -15,12 +16,13 @@ interface HistoryTicketActionsProps {
 
 const HistoryTicketActions: React.FC<HistoryTicketActionsProps> = ({
   selectedTicket,
+  issuanceDisabled = false,
   onRepawn,
   onLoad,
   onReverse,
 }) => {
   const disabled = !selectedTicket;
-  const repawnDisabled = !canRepawnTicket(selectedTicket);
+  const repawnDisabled = issuanceDisabled || !canRepawnTicket(selectedTicket);
   const reverseDisabled =
     !selectedTicket ||
     (selectedTicket.status !== "pawned_expired" &&

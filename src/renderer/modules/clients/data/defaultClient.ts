@@ -28,6 +28,7 @@ const defaultClient: Client = {
   image_path: "",
   image_updated_at: null,
   pickup_self_only: false,
+  is_active: true,
   updated_at: new Date(""),
   redeem_count: 0,
   sell_count: 0,

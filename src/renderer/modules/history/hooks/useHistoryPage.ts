@@ -15,6 +15,7 @@ import { canRepawnTicket, sortHistoryTickets } from "../history.helpers";
 interface UseHistoryPageParams {
   isActive?: boolean;
   clientNumber?: number;
+  clientIsActive?: boolean;
   printClient?: PrintClient;
   focusTicketNumber?: number;
   focusRequestId?: number;
@@ -37,6 +38,7 @@ const historyTicketStatuses = new Set<Ticket["status"]>([
 export const useHistoryPage = ({
   isActive = true,
   clientNumber,
+  clientIsActive = true,
   printClient,
   focusTicketNumber,
   focusRequestId,
@@ -275,6 +277,7 @@ export const useHistoryPage = ({
   ]);
 
   const handleRepawn = async () => {
+    if (!clientIsActive) return;
     if (!selectedTicket) return;
 
     if (!canRepawnTicket(selectedTicket)) {
@@ -297,6 +300,8 @@ export const useHistoryPage = ({
   const handleRepawnSave = async (
     ticketData: Omit<CreatePawnTicketInput, "client_number">,
   ) => {
+    if (!clientIsActive)
+      throw new Error("Reactivate the client before issuing a ticket.");
     if (!clientNumber || !selectedTicket) {
       throw new Error("Please select a client and ticket first.");
     }

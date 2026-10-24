@@ -52,6 +52,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({
   const { state, actions } = useHistoryPage({
     isActive,
     clientNumber: resolvedClientNumber,
+    clientIsActive: client?.is_active,
     printClient: client,
     focusTicketNumber,
     focusRequestId,
@@ -105,6 +106,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({
       }}
     >
       <ClientBar
+        is_active={client?.is_active}
         client_last_name={resolvedClientLastName}
         client_first_name={resolvedClientFirstName}
         client_middle_name={resolvedClientMiddleName}
@@ -122,6 +124,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({
         }}
       >
         <HistoryTicketsPanel
+          issuanceDisabled={client?.is_active === false}
           tickets={tickets}
           selectedTicket={selectedTicket}
           loading={ticketsLoading}

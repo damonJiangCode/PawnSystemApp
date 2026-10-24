@@ -1,6 +1,5 @@
 import type { IpcMainInvokeEvent } from "electron";
 import { clientReferenceService } from "./client-reference.service.ts";
-import { clientService } from "./client.service.ts";
 import { CHANNELS } from "../../ipc/channels.ts";
 
 const { ipcMain } = require("electron/main") as typeof import("electron");
@@ -53,12 +52,5 @@ export const registerClientHandlers = () => {
   );
   ipcMain.handle(CHANNELS.GET_ID_TYPES, async () =>
     clientReferenceService.loadIdTypes(),
-  );
-
-  ipcMain.handle(
-    CHANNELS.DELETE_CLIENT,
-    async (_event: IpcMainInvokeEvent, clientNumber: number) => {
-      return clientService.deleteClient(clientNumber);
-    },
   );
 };

@@ -102,6 +102,24 @@ export class ClientService {
       );
       if (!existing) throw new NotFoundException('Client not found.');
 
+      const statusChanged =
+        changes.is_active !== undefined &&
+        changes.is_active !== existing.is_active;
+      if (statusChanged && !employee) {
+        const password = input.employee_password?.trim();
+        employee = password
+          ? await this.employees.findActiveByPassword(password, connection)
+          : null;
+        if (!employee) {
+          throw new BadRequestException({
+            field: 'employee_password',
+            message: password
+              ? 'Employee password is incorrect.'
+              : 'Employee password is required.',
+          });
+        }
+      }
+
       if (input.notes_action === 'clear') changes.notes = '';
       if (changes.notes !== undefined) {
         const notes = changes.notes.trim();
@@ -111,7 +129,7 @@ export class ClientService {
             'Notes require an employee signature before saving.',
           );
         }
-        if (employee) {
+        if (employee && notes) {
           const date = new Intl.DateTimeFormat('en-CA', {
             timeZone: 'America/Regina',
           }).format(new Date());
@@ -135,6 +153,19 @@ export class ClientService {
       if (input.photo) {
         imagePath = await this.images.save(input.photo.base64);
         changes.image_path = imagePath;
+      }
+      if (statusChanged) {
+        const date = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Regina',
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+        })
+          .format(new Date())
+          .replaceAll('/', '-');
+        const entry = `${changes.is_active ? 'Reactivated' : 'Deactivated'} client (${employee!.first_name}, ${date})`;
+        const notes = changes.notes ?? String(existing.notes ?? '');
+        changes.notes = notes ? `${notes} ${entry}` : entry;
       }
       const row = await this.clientRepository.update(
         clientNumber,

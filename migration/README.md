@@ -22,6 +22,12 @@ fixed baseline date. Users can set or clear a hold later. The fresh-database
 CREATE TABLE definition includes the column; existing databases must be updated
 with separate SQL before importing.
 
+Client migration explicitly inserts `is_active = TRUE` for every imported client,
+including the fallback client. The CREATE TABLE definition also defaults new
+clients to active. Existing databases need this column added separately before
+importing; the migration does not alter the schema. Clients can be deactivated
+later by the application without deleting their records or tickets.
+
 Private local data (ignored by Git and Docker builds):
 
 - `source/`: original Access databases; supply these privately on a new computer.

@@ -381,6 +381,7 @@ export const useWorkspaceLayout = () => {
         ? {
             ...current,
             hold_until: updated.hold_until,
+            is_active: updated.is_active,
             notes: updated.notes,
             updated_at: updated.updated_at,
           }

@@ -11,6 +11,34 @@ const getDbClient = async (dbClient?: DbClient) =>
   dbClient ?? (await connect());
 
 export const clientRepo = {
+  // Every ticket-issuing operation holds these locks until its transaction ends.
+  // Sorting avoids reverse-order client locks when transferring between accounts.
+  assertActiveForTicket: async (
+    clientNumbers: number[],
+    dbClient: DbClient,
+  ): Promise<void> => {
+    const numbers = [...new Set(clientNumbers)].sort((a, b) => a - b);
+    if (
+      !numbers.length ||
+      numbers.some((number) => !Number.isSafeInteger(number) || number <= 0)
+    ) {
+      throw new Error("Select a valid client before issuing a ticket.");
+    }
+    const result = await dbClient.query<{
+      client_number: number;
+      is_active: boolean;
+    }>(
+      "SELECT client_number, is_active FROM client WHERE client_number = ANY($1::int[]) ORDER BY client_number FOR UPDATE",
+      [numbers],
+    );
+    if (result.rows.length !== numbers.length)
+      throw new Error("Client not found.");
+    if (result.rows.some((row) => row.is_active !== true)) {
+      throw new Error(
+        "Deactivated clients cannot issue, convert or transfer tickets. Reactivate the client first.",
+      );
+    }
+  },
   loadByNumber: async (
     clientNumber: number,
     dbClient?: DbClient,
@@ -71,25 +99,6 @@ export const clientRepo = {
         `,
         [clientNumber],
       );
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
-  deleteByNumber: async (
-    clientNumber: number,
-    dbClient?: DbClient,
-  ): Promise<boolean> => {
-    const client = await getDbClient(dbClient);
-
-    try {
-      const result = await client.query(
-        `DELETE FROM client WHERE client_number = $1`,
-        [clientNumber],
-      );
-      return (result.rowCount ?? 0) > 0;
     } finally {
       if (!dbClient) {
         client.release();

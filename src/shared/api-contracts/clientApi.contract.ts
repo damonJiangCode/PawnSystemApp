@@ -29,5 +29,4 @@ export type ClientApi = {
   loadIdTypes: () => Promise<string[]>;
   createClient: (input: CreateClientInput) => Promise<Client>;
   updateClient: (input: UpdateClientInput) => Promise<Client>;
-  deleteClient: (clientNumber: number) => Promise<boolean>;
 };
