@@ -111,9 +111,9 @@ const executeDevMigration = async ({
     new Date().toISOString().replace(/[:.]/g, "-") +
     "-" +
     crypto.randomBytes(4).toString("hex");
-  const reportDir = path.join(projectRoot, "migration/reports", runId);
-  const backupDir = path.join(projectRoot, "migration/backups", runId);
-  const relativeReportDir = `migration/reports/${runId}`;
+  const reportDir = path.join(projectRoot, "database/migration/reports", runId);
+  const backupDir = path.join(projectRoot, "database/migration/backups", runId);
+  const relativeReportDir = `database/migration/reports/${runId}`;
   const saveManifest = () => {
     if (manifestPath)
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n", {
@@ -219,14 +219,14 @@ const executeDevMigration = async ({
     }
     for (const folder of ["source", "mappings", "exports", "reports"]) {
       const mount = migrationService.volumes?.find(
-        (volume) => volume.target === `/app/migration/${folder}`,
+        (volume) => volume.target === `/app/database/migration/${folder}`,
       );
       const readOnly = folder === "source" || folder === "mappings";
       if (
         !mount ||
         mount.type !== "bind" ||
         path.resolve(mount.source) !==
-          path.join(projectRoot, "migration", folder) ||
+          path.join(projectRoot, "database", "migration", folder) ||
         Boolean(mount.read_only) !== readOnly
       ) {
         throw new Error(
@@ -280,7 +280,7 @@ const executeDevMigration = async ({
     locked = true;
     await assertEmptyDatabase(client);
     // Fresh database only. Old exports must not get mixed into this run's photos.
-    const exportRoot = path.join(projectRoot, "migration/exports");
+    const exportRoot = path.join(projectRoot, "database/migration/exports");
     const containsFile = (dir) =>
       fs.readdirSync(dir, { withFileTypes: true }).some((entry) => {
         if (entry.name === ".DS_Store" || entry.name === "Thumbs.db")
@@ -310,13 +310,13 @@ const executeDevMigration = async ({
       currentStep = `hash-${filename}`;
       log(`Recording source checksum: ${filename}`);
       manifest.sources[filename] = await hash(
-        path.join(projectRoot, "migration/source", filename),
+        path.join(projectRoot, "database/migration/source", filename),
       );
       saveManifest();
     }
     for (const filename of ["category-mapping.json", "location-mapping.json"]) {
       manifest.mappings[filename] = await hash(
-        path.join(projectRoot, "migration/mappings", filename),
+        path.join(projectRoot, "database/migration/mappings", filename),
       );
     }
     await command("check-archive-tool", "tar", ["--version"]);
@@ -368,7 +368,7 @@ const executeDevMigration = async ({
     await assertEmptyDatabase(client);
     writesStarted = true;
     await command("initialize-schema", process.execPath, [
-      path.join(projectRoot, ".electron-build/main/database/runInit.js"),
+      path.join(projectRoot, ".electron-build/database/runInit.js"),
     ]);
     await assertEmptyDatabase(client);
     await compose("build-migration-image", ["build", "migration"]);
@@ -388,7 +388,7 @@ const executeDevMigration = async ({
         "-e",
         `MIGRATION_REPORT_DIR=/app/${relativeReportDir}`,
         "migration",
-        `migration/scripts/${script}`,
+        `database/migration/scripts/${script}`,
         ...args,
       ]);
       manifest.steps.push(label);
@@ -425,7 +425,7 @@ const executeDevMigration = async ({
         currentStep = `verify-input-${filename}`;
         if (
           (await hash(
-            path.join(projectRoot, "migration", folder, filename),
+            path.join(projectRoot, "database", "migration", folder, filename),
           )) !== checksum
         )
           throw new Error(
@@ -440,7 +440,7 @@ const executeDevMigration = async ({
       archive,
       "-C",
       projectRoot,
-      "migration/exports",
+      "database/migration/exports",
     ]);
     await command("check-photo-archive", "tar", ["-tzf", archive]);
     manifest.backups["photos.tar.gz"] = await hash(archive);
@@ -456,7 +456,7 @@ const executeDevMigration = async ({
     saveManifest();
     log(`Migration completed. Private results: ${relativeReportDir}`);
     log(
-      `Backups: migration/backups/${runId}. Copy them to independent storage and test a restore.`,
+      `Backups: database/migration/backups/${runId}. Copy them to independent storage and test a restore.`,
     );
     log(
       "Review source-data warnings in the private reports, then start the app with npm run dev.",

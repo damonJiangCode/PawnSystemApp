@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 import type { TransferTicketPreview } from "../../../shared/payload-contracts/ticket.contract.ts";
 import type { Ticket } from "../../../shared/models/ticket.model.ts";
 import {

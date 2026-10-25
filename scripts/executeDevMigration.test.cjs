@@ -38,7 +38,7 @@ const fixture = (t, options = {}) => {
     "reports",
     "backups",
   ]) {
-    fs.mkdirSync(path.join(root, "migration", folder), { recursive: true });
+    fs.mkdirSync(path.join(root, "database", "migration", folder), { recursive: true });
   }
   for (const name of [
     "source/superpawnconv.mdb",
@@ -47,7 +47,7 @@ const fixture = (t, options = {}) => {
     "mappings/location-mapping.json",
   ]) {
     fs.writeFileSync(
-      path.join(root, "migration", name),
+      path.join(root, "database", "migration", name),
       "Synthetic fixture only.\n",
     );
   }
@@ -128,8 +128,8 @@ const fixture = (t, options = {}) => {
               volumes: ["source", "mappings", "exports", "reports"].map(
                 (folder) => ({
                   type: "bind",
-                  source: path.join(root, "migration", folder),
-                  target: `/app/migration/${folder}`,
+                  source: path.join(root, "database", "migration", folder),
+                  target: `/app/database/migration/${folder}`,
                   read_only: folder === "source" || folder === "mappings",
                 }),
               ),
@@ -163,7 +163,7 @@ const fixture = (t, options = {}) => {
       fs.writeFileSync(args[1], "synthetic photo archive");
     if (args.some((arg) => arg.endsWith("/database/runInit.js")))
       initialized = true;
-    const script = args.find((arg) => arg.startsWith("migration/scripts/"));
+    const script = args.find((arg) => arg.startsWith("database/migration/scripts/"));
     if (script) {
       const reportRoot = path.join(
         root,
@@ -230,7 +230,7 @@ const fixture = (t, options = {}) => {
 const committed = (f, kind) =>
   f.calls.some(
     ({ args }) =>
-      args.includes(`migration/scripts/migrate-${kind}.cjs`) &&
+      args.includes(`database/migration/scripts/migrate-${kind}.cjs`) &&
       args.includes("--commit"),
   );
 
@@ -241,12 +241,12 @@ test("simulated execution imports in order, writes backups, and never starts/res
   const commits = f.calls
     .filter(({ args }) => args.includes("--commit"))
     .map(({ args }) =>
-      args.find((arg) => arg.startsWith("migration/scripts/")),
+      args.find((arg) => arg.startsWith("database/migration/scripts/")),
     );
   assert.deepEqual(
     commits,
     ["client", "employee", "ticket", "item", "client-statistics"].map(
-      (kind) => `migration/scripts/migrate-${kind}.cjs`,
+      (kind) => `database/migration/scripts/migrate-${kind}.cjs`,
     ),
   );
   assert.ok(
@@ -254,10 +254,10 @@ test("simulated execution imports in order, writes backups, and never starts/res
       args.some((arg) => ["up", "down", "stop", "start"].includes(arg)),
     ),
   );
-  const run = fs.readdirSync(path.join(f.root, "migration/reports"))[0];
+  const run = fs.readdirSync(path.join(f.root, "database/migration/reports"))[0];
   const manifest = JSON.parse(
     fs.readFileSync(
-      path.join(f.root, "migration/reports", run, "execution.json"),
+      path.join(f.root, "database/migration/reports", run, "execution.json"),
       "utf8",
     ),
   );
@@ -279,7 +279,7 @@ test("rejects an existing populated target before initialization, image build, o
   assert.equal(await executeDevMigration(f.options), 1);
   assert.equal(f.initialized, false);
   assert.equal(
-    fs.readdirSync(path.join(f.root, "migration/backups")).length,
+    fs.readdirSync(path.join(f.root, "database/migration/backups")).length,
     0,
   );
   assert.ok(
@@ -314,10 +314,10 @@ test("a zero-exit preview with blockers never reaches the corresponding commit",
 test("unresolved final validation saves backups but cannot declare success", async (t) => {
   const f = fixture(t, { invalidFinal: true });
   assert.equal(await executeDevMigration(f.options), 1);
-  const run = fs.readdirSync(path.join(f.root, "migration/reports"))[0];
+  const run = fs.readdirSync(path.join(f.root, "database/migration/reports"))[0];
   const manifest = JSON.parse(
     fs.readFileSync(
-      path.join(f.root, "migration/reports", run, "execution.json"),
+      path.join(f.root, "database/migration/reports", run, "execution.json"),
       "utf8",
     ),
   );
@@ -377,7 +377,7 @@ test("final photo checks reject paths outside the expected exported-photo direct
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "migration-photos-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   for (const folder of ["client-photos", "item-photos"])
-    fs.mkdirSync(path.join(dir, "migration/exports", folder), {
+    fs.mkdirSync(path.join(dir, "database/migration/exports", folder), {
       recursive: true,
     });
   fs.writeFileSync(path.join(dir, "unrelated.txt"), "synthetic");

@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Pool } = require('pg');
-require('../.electron-build/main/config/env.js').loadEnv();
+require('../.electron-build/database/env.js').loadEnv();
 const root = path.resolve(__dirname, '..');
 const pool = new Pool({ host: process.env.DB_HOST, port: Number(process.env.DB_PORT || 5432), user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME });
 (async () => {
@@ -11,7 +11,8 @@ const pool = new Pool({ host: process.env.DB_HOST, port: Number(process.env.DB_P
       let missing = 0;
       let outsideProject = 0;
       for (const row of rows) {
-        const filename = path.resolve(root, row.image_path);
+        const normalized = row.image_path.replace(/\\/g, '/');
+        const filename = path.resolve(root, normalized.startsWith('migration/exports/') ? `database/${normalized}` : row.image_path);
         if (!filename.startsWith(root + path.sep)) outsideProject++;
         else if (!fs.existsSync(filename) || !fs.statSync(filename).isFile()) missing++;
       }

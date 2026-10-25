@@ -1,5 +1,5 @@
 import type { Client } from "../../../shared/models/client.model.ts";
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 import {
   clientWithIdentificationsFromClause,
   mapRowToClient,

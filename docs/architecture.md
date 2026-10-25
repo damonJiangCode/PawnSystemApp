@@ -179,7 +179,7 @@ only routes and frames those windows.
 Database setup lives in:
 
 ```text
-src/main/database/
+database/
   schema/
   seed/
   views/

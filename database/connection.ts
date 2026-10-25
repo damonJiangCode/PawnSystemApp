@@ -1,5 +1,5 @@
 import { Pool, type PoolClient } from "pg";
-import { loadEnv } from "../config/env.ts";
+import { loadEnv } from "./env.ts";
 
 loadEnv();
 

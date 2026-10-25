@@ -68,10 +68,7 @@ const seedColors = async (
 };
 
 export const seedCities = async (client: DbClient) => {
-  const filePath = path.resolve(
-    process.cwd(),
-    "src/main/database/seed/canadacities.csv",
-  );
+  const filePath = path.join(__dirname, "canadacities.csv");
   const stream = fs.createReadStream(filePath).pipe(csv());
   const cities = new Map<
     string,

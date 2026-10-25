@@ -101,9 +101,10 @@ npm run build
 | `src/main/`          | Electron windows, business services and SQL repositories        |
 | `src/preload/`       | IPC bridge exposed as `window.appAPI`                           |
 | `src/shared/`        | Shared models, contracts and calculation helpers                |
+| `database/`          | PostgreSQL connection, schema, seeds, views and initialization |
 | `vite.config.ts`     | Frontend development server and build configuration             |
 | `docker/`            | Local database and optional migration tooling                   |
-| `migration/scripts/` | Migration tooling; private inputs are supplied separately       |
+| `database/migration/scripts/` | Migration tooling; private inputs are supplied separately       |
 | `docs/`              | Architecture and public repository guidance                     |
 
 See [architecture](docs/architecture.md), the README in each source module, and [Windows development setup](docs/instructions.md).
@@ -112,4 +113,4 @@ See [architecture](docs/architecture.md), the README in each source module, and 
 
 This repository publishes software source and sanitized configuration examples. Customer/employee records, identification data, photos, source databases, backups, migration reports, logs and actual credentials belong in ignored local storage. See [public repository policy](docs/public-repository.md).
 
-Reviewed category and location conversion rules are versioned in `migration/mappings/` and included in a fresh clone. Supply the private Access databases separately. External SOAP reference documents remain private; ordinary application startup does not require them.
+Reviewed category and location conversion rules are versioned in `database/migration/mappings/` and included in a fresh clone. Supply the private Access databases separately. External SOAP reference documents remain private; ordinary application startup does not require them.

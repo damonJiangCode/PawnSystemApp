@@ -155,13 +155,19 @@ const validateImportedDatabase = async (client, projectRoot) => {
     ["item", "item-photos"],
   ]) {
     const base = fs.realpathSync(
-      path.join(projectRoot, "migration/exports", folder),
+      path.join(projectRoot, "database/migration/exports", folder),
     );
     const photos = await client.query(
       `SELECT image_path FROM ${table} WHERE COALESCE(image_path,'')<>''`,
     );
     for (const { image_path: imagePath } of photos.rows) {
-      const filename = path.resolve(projectRoot, imagePath);
+      const normalized = imagePath.replace(/\\/g, "/");
+      const filename = path.resolve(
+        projectRoot,
+        normalized.startsWith("migration/exports/")
+          ? `database/${normalized}`
+          : imagePath,
+      );
       try {
         const real = fs.realpathSync(filename);
         const relative = path.relative(base, real);

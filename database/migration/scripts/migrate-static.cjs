@@ -7,7 +7,7 @@ const csv = require("csv-parser");
 const { Pool } = require("pg");
 
 const migrationRoot = path.resolve(__dirname, "..");
-const projectRoot = path.resolve(migrationRoot, "..");
+const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "static-migration.md");

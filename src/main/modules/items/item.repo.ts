@@ -1,5 +1,5 @@
-import { connect } from "../../database/connection.ts";
-import type { DbClient } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
+import type { DbClient } from "../../../../database/connection.ts";
 import type {
   ItemCategoryOption,
   ItemSearchInput,

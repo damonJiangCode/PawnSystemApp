@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 import type { HolidayDate } from "../../../shared/models/holiday-date.model.ts";
 import type { SaveHolidayInput } from "../../../shared/payload-contracts/ticket.contract.ts";
 

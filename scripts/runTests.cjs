@@ -8,7 +8,7 @@ const result = spawnSync(
     "--test",
     "src/**/*.test.ts",
     "scripts/*.test.cjs",
-    "migration/scripts/*.test.cjs",
+    "database/migration/scripts/*.test.cjs",
   ],
   {
     stdio: "inherit",

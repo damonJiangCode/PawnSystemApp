@@ -5,16 +5,16 @@ const { spawnSync } = require("node:child_process");
 
 const PRIVATE_PATHS = [
   ".env",
-  "migration/source/check.txt",
-  "migration/exports/check.txt",
-  "migration/reports/check.txt",
-  "migration/backups/check.txt",
+  "database/migration/source/check.txt",
+  "database/migration/exports/check.txt",
+  "database/migration/reports/check.txt",
+  "database/migration/backups/check.txt",
 ];
 const REQUIRED_INPUTS = [
-  "migration/source/superpawnconv.mdb",
-  "migration/source/Pictureconv.mdb",
-  "migration/mappings/category-mapping.json",
-  "migration/mappings/location-mapping.json",
+  "database/migration/source/superpawnconv.mdb",
+  "database/migration/source/Pictureconv.mdb",
+  "database/migration/mappings/category-mapping.json",
+  "database/migration/mappings/location-mapping.json",
 ];
 
 const parseEnv = (content) => {
@@ -93,10 +93,10 @@ const prepareDevMigration = ({
     "ls-files",
     "--",
     ".env",
-    "migration/source",
-    "migration/exports",
-    "migration/reports",
-    "migration/backups",
+    "database/migration/source",
+    "database/migration/exports",
+    "database/migration/reports",
+    "database/migration/backups",
   ]);
   if (tracked.status !== 0 || tracked.stdout?.trim()) {
     fail("Private migration files must not be tracked by Git.");
@@ -110,7 +110,7 @@ const prepareDevMigration = ({
     "reports",
     "backups",
   ]) {
-    fs.mkdirSync(path.join(projectRoot, "migration", folder), {
+    fs.mkdirSync(path.join(projectRoot, "database", "migration", folder), {
       recursive: true,
     });
   }
@@ -173,7 +173,7 @@ const prepareDevMigration = ({
       !fs.statSync(filePath).isFile() ||
       fs.statSync(filePath).size === 0
     ) {
-      const inputType = relativePath.startsWith("migration/mappings/")
+      const inputType = relativePath.startsWith("database/migration/mappings/")
         ? "versioned mapping"
         : "private source database";
       fail(`Provide a nonempty ${inputType}: ${relativePath}`);

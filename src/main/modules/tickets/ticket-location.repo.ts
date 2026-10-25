@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 import type { Location } from "../../../shared/models/location.model.ts";
 import type { SaveLocationInput } from "../../../shared/payload-contracts/ticket.contract.ts";
 

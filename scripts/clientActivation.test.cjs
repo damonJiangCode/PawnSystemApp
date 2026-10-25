@@ -52,7 +52,7 @@ function fixture(inactive = []) {
   };
   const mapper = load("src/main/modules/clients/client.mapper.ts");
   const { clientRepo } = load("src/main/modules/clients/client.repo.ts", {
-    "../../database/connection.ts": {
+    "../../../../database/connection.ts": {
       connect: () => {
         throw new Error("Unexpected extra connection");
       },
@@ -60,7 +60,7 @@ function fixture(inactive = []) {
     "./client.mapper.ts": mapper,
   });
   const transaction = load("src/main/shared/runInTransaction.ts", {
-    "../database/connection.ts": { connect: async () => connection },
+    "../../../database/connection.ts": { connect: async () => connection },
   });
   const ticket = { ticket_number: 100, client_number: 11, status: "pawned" };
   const ticketRepo = {

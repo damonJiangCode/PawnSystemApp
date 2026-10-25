@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 import type { EyeColor } from "../../../shared/models/eye-color.model.ts";
 import type { HairColor } from "../../../shared/models/hair-color.model.ts";
 

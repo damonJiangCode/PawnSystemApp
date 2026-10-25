@@ -43,7 +43,7 @@ test("migration starts ordinary and fallback clients active with no hold", async
   const schema = fs.readFileSync(
     path.join(
       __dirname,
-      "../../src/main/database/schema/client/clientTable.ts",
+      "../../schema/client/clientTable.ts",
     ),
     "utf8",
   );

@@ -1,5 +1,5 @@
 import { employeeRepo } from "./employee.repo.ts";
-import type { DbClient } from "../../database/connection.ts";
+import type { DbClient } from "../../../../database/connection.ts";
 import type { Employee } from "../../../shared/models/employee.model.ts";
 import type {
   CreateEmployeeInput,

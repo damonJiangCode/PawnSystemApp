@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": ".electron-build",
     "rewriteRelativeImportExtensions": true,
     "esModuleInterop": true,
@@ -12,5 +12,5 @@
     "noEmitOnError": true,
     "types": ["node"]
   },
-  "include": ["src/main", "src/shared/**/*.ts"]
+  "include": ["src/main", "src/shared/**/*.ts", "database/**/*.ts"]
 }

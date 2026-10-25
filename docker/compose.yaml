@@ -35,10 +35,10 @@ services:
       pawnsystemdb:
         condition: service_healthy
     volumes:
-      - ../migration/source:/app/migration/source:ro
-      - ../migration/mappings:/app/migration/mappings:ro
-      - ../migration/exports:/app/migration/exports
-      - ../migration/reports:/app/migration/reports
+      - ../database/migration/source:/app/database/migration/source:ro
+      - ../database/migration/mappings:/app/database/migration/mappings:ro
+      - ../database/migration/exports:/app/database/migration/exports
+      - ../database/migration/reports:/app/database/migration/reports
 
 volumes:
   postgres_data:

@@ -12,10 +12,16 @@ fs.writeFileSync(
     {
       name: "pawnsystemsub-electron-build",
       private: true,
-      main: "main/index.js",
+      main: "src/main/index.js",
       type: "commonjs",
     },
     null,
     2,
   ) + "\n",
+);
+const seedDir = path.join(buildDir, "database", "seed");
+fs.mkdirSync(seedDir, { recursive: true });
+fs.copyFileSync(
+  path.resolve(process.cwd(), "database/seed/canadacities.csv"),
+  path.join(seedDir, "canadacities.csv"),
 );

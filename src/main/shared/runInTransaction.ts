@@ -1,4 +1,4 @@
-import { connect, type DbClient } from "../database/connection.ts";
+import { connect, type DbClient } from "../../../database/connection.ts";
 
 const rollbackQuietly = async (client: DbClient, scope: string) => {
   try {

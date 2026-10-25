@@ -4,12 +4,12 @@ node_modules
 .env.*
 .electron-build
 dist
-migration/source
-migration/exports
-migration/backups
+database/migration/source
+database/migration/exports
+database/migration/backups
 test-results
 
-migration/reports
+database/migration/reports
 images
 backups
 exports

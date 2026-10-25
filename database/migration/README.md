@@ -1,5 +1,15 @@
 # Migration inputs and outputs
 
+This folder is `database/migration/` at the repository root. Run the existing
+`npm run migration:prepare` and `npm run migration:execute` commands from the
+project root. After moving files, stage or commit the mapping inputs at their new
+paths before preparation; preparation requires tracked mapping files.
+
+Fresh photo exports store paths under `database/migration/exports/`. Electron and
+the Nest client-image service also accept older `migration/exports/` paths and
+resolve them to the new folders. No database photo-path rewrite or Access reimport
+is required solely for this folder move.
+
 Tracked inputs:
 
 - `scripts/`: reusable migration code.

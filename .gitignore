@@ -27,10 +27,10 @@ work/
 *.pfx
 
 # Store records, migration output, and database backups
-/migration/source/
-/migration/exports/
-/migration/reports/
-/migration/backups/
+/database/migration/source/
+/database/migration/exports/
+/database/migration/reports/
+/database/migration/backups/
 /images/
 /client-photos/
 /item-photos/

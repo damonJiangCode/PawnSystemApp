@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 type DbClient = Awaited<ReturnType<typeof connect>>;
 
 type AddInterestPaymentPayload = {

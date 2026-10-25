@@ -7,7 +7,7 @@ const pool = new Pool({ host: process.env.DB_HOST, port: Number(process.env.DB_P
   try {
     const { rows } = await pool.query("SELECT ticket_number FROM ticket WHERE status='pawned' AND location='UNKNOWN' ORDER BY ticket_number");
     const affected = new Map(rows.map(row => [String(row.ticket_number), '']));
-    const child = spawn('mdb-export', ['-b', 'strip', 'migration/source/superpawnconv.mdb', 'SA100TRAN']);
+    const child = spawn('mdb-export', ['-b', 'strip', 'database/migration/source/superpawnconv.mdb', 'SA100TRAN']);
     let stderr = '';
     child.stderr.on('data', chunk => { stderr += chunk; });
     const completion = new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ const pool = new Pool({ host: process.env.DB_HOST, port: Number(process.env.DB_P
     }
     await completion;
     const report = '# Active tickets requiring location review\n\nGenerated from the current source and target database. These active pawn tickets map to UNKNOWN under the existing rules. Resolve before production cutover.\n\n| Ticket number | Legacy location |\n| --- | --- |\n' + [...affected].map(([number, location]) => `| ${number} | ${location.replace(/\|/g, '\\|')} |`).join('\n') + '\n';
-    fs.writeFileSync('migration/reports/active-location-review.md', report);
+    fs.writeFileSync('database/migration/reports/active-location-review.md', report);
     console.log(`Active locations requiring review: ${affected.size}`);
   } finally { await pool.end(); }
 })().catch(error => { console.error(error.message); process.exitCode = 1; });

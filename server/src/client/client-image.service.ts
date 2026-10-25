@@ -19,7 +19,7 @@ export class ClientImageService {
     );
     this.migrationRoot = path.resolve(
       config.get<string>('CLIENT_MIGRATION_IMAGE_DIR') ??
-        '../migration/exports/client-photos',
+        '../database/migration/exports/client-photos',
     );
   }
 
@@ -65,6 +65,13 @@ export class ClientImageService {
     if (imagePath.startsWith('images/clients/')) {
       base = this.root;
       name = imagePath.slice('images/clients/'.length);
+    } else if (
+      imagePath.startsWith('database/migration/exports/client-photos/')
+    ) {
+      base = this.migrationRoot;
+      name = imagePath.slice(
+        'database/migration/exports/client-photos/'.length,
+      );
     } else if (imagePath.startsWith('migration/exports/client-photos/')) {
       base = this.migrationRoot;
       name = imagePath.slice('migration/exports/client-photos/'.length);

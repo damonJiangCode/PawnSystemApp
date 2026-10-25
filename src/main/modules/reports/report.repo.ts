@@ -1,4 +1,4 @@
-import { connect } from "../../database/connection.ts";
+import { connect } from "../../../../database/connection.ts";
 
 export type BuybackReportSourceRow = {
   ticket_number: number;

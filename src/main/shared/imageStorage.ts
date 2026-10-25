@@ -19,6 +19,7 @@ const getItemImageBaseDir = () => {
 const getMigrationImageBaseDir = (kind: ImageKind) => {
   return path.join(
     process.cwd(),
+    "database",
     "migration",
     "exports",
     kind === "client" ? "client-photos" : "item-photos",
@@ -74,6 +75,10 @@ const resolveStoredImagePath = async (
   imagePath: string,
   baseDir: string,
 ): Promise<string> => {
+  const normalized = imagePath.replace(/\\/g, "/");
+  if (normalized.startsWith("migration/exports/")) {
+    imagePath = `database/${normalized}`;
+  }
   if (path.isAbsolute(imagePath)) {
     return imagePath;
   }

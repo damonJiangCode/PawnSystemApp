@@ -1,5 +1,12 @@
 import { ConfigService } from '@nestjs/config';
-import { mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -30,6 +37,19 @@ describe('ClientImageService', () => {
     expect(await readFile(await service.resolve(imagePath))).toEqual(
       Buffer.from(png, 'base64'),
     );
+  });
+
+  it.each([
+    'migration/exports/client-photos/',
+    'database/migration/exports/client-photos/',
+  ])('resolves current and older migrated image paths: %s', async (prefix) => {
+    const base = path.join(root, 'legacy');
+    await mkdir(base, { recursive: true });
+    await writeFile(path.join(base, 'client.jpg'), Buffer.from(png, 'base64'));
+    expect(await service.resolve(`${prefix}client.jpg`)).toBe(
+      path.join(base, 'client.jpg'),
+    );
+    await expect(service.resolve(`${prefix}../outside.jpg`)).rejects.toThrow();
   });
 
   it.each(['not base64!', Buffer.from('not an image').toString('base64')])(

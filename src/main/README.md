@@ -11,7 +11,6 @@ main/
   image/
   ipc/
   window/
-  database/
   modules/
   shared/
 ```
@@ -20,7 +19,7 @@ main/
 - `image/`: registers the controlled `pawn-image://` protocol.
 - `ipc/`: channel names and handler registration.
 - `window/`: app window creation, reuse, and window-action handlers.
-- `database/`: schema, seed data, views, and initializer.
+- Root-level `database/`: shared connection, schema, seed data, views, and initializer.
 - `modules/`: domain handlers, services, repos, inputs, mappers.
 - `shared/`: main-process helpers used by more than one module.
 
@@ -128,6 +127,8 @@ Start here:
 - `modules/reports/report.repo.ts`
 
 ## Database
+
+This folder lives at the repository root, beside `server/`, rather than under `src/main`.
 
 ```text
 database/
