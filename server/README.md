@@ -54,8 +54,8 @@ handle business rules and transactions. `ClientRepository` methods in
 [client.repository.ts](src/client/client.repository.ts) handle parameterized SQL;
 `mapRowToClient` in [client.mapper.ts](src/client/client.mapper.ts) creates responses.
 `getAppApi` in [app.api.ts](../src/renderer/shared/api/app.api.ts) connects renderer
-client operations to HTTP. Detailed local parameter notes remain in
-`src/client/README.local.md` (intentionally Git-ignored).
+client operations to HTTP. Concise module references:
+[Client](src/client/README.md) and [Reference](src/reference/README.md).
 
 ### Reference queries (implemented)
 
