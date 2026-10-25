@@ -93,11 +93,19 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: 1,
+        justifyItems: "center",
+        alignItems: "start",
+      }}
+    >
       <Box
         sx={{
-          width: 180,
-          height: 180,
+          width: 140,
+          height: 140,
           border: "1px solid #ccc",
           borderRadius: 2,
           display: "flex",
@@ -115,7 +123,7 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
         />
       </Box>
 
-      <Box mt={1}>
+      <Box sx={{ gridRow: 2, gridColumn: "1 / -1" }}>
         <Button
           variant="contained"
           onClick={handleTakePhoto}
@@ -125,11 +133,11 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
         </Button>
       </Box>
 
-      <Box mt={4}>
+      <Box sx={{ gridColumn: 2, gridRow: 1 }}>
         <Box
           sx={{
-            width: 180,
-            height: 180,
+            width: 140,
+            height: 140,
             border: "1px solid #ccc",
             borderRadius: 2,
             display: "flex",

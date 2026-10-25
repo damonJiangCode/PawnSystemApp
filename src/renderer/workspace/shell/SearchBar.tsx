@@ -20,6 +20,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
 
 interface SearchBarProps {
+  lastNameInputRef?: React.RefObject<HTMLInputElement>;
   onSearch?: (params: { firstName: string; lastName: string }) => void;
   onBirthdaySearch?: (params: { dateOfBirth: string }) => void;
   onClear?: () => void;
@@ -28,6 +29,7 @@ interface SearchBarProps {
 const uppercaseSearchName = (value: string) => value.toUpperCase();
 
 const SearchBar: React.FC<SearchBarProps> = ({
+  lastNameInputRef: externalLastNameInputRef,
   onSearch,
   onBirthdaySearch,
   onClear,
@@ -39,7 +41,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [birthdayDialogOpen, setBirthdayDialogOpen] = useState(false);
   const [validationMessage, setValidationMessage] = useState("");
   const validationTargetRef = useRef<"name" | "birthday">("name");
-  const lastNameInputRef = useRef<HTMLInputElement>(null);
+  const localLastNameInputRef = useRef<HTMLInputElement>(null);
+  const lastNameInputRef = externalLastNameInputRef ?? localLastNameInputRef;
   const birthdayInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

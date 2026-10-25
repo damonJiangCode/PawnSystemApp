@@ -1,17 +1,5 @@
 import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  MenuItem,
-  TextField,
-} from "@mui/material";
+import { Box, Typography, Button, MenuItem, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { ID } from "../../../../../../shared/models/client.model";
@@ -104,7 +92,7 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
       showFieldErrors && !id.id_value?.trim() ? "ID number is required." : "";
 
     return (
-      <Box sx={{ mt: 3 }}>
+      <Box sx={{ pt: 1.5, borderTop: 1, borderColor: "divider" }}>
         <Box
           sx={{
             display: "flex",
@@ -123,101 +111,83 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
           </Button>
         </Box>
 
-        <TableContainer component="div" sx={{ mt: 1 }}>
-          <Table size="small" sx={{ tableLayout: "fixed" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  align="left"
-                  sx={{ borderBottom: "none", width: 250 }}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              md: "repeat(2, minmax(0, 1fr))",
+            },
+            gap: 1.5,
+            mt: 1.5,
+          }}
+        >
+          {identifications.map((element, i) => {
+            const typeError = getTypeError(element);
+            const numberError = getNumberError(element);
+            return (
+              <Box
+                key={i}
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    identifications.length > 2
+                      ? "minmax(0, 1fr) minmax(0, 1.25fr) auto"
+                      : "minmax(0, 1fr) minmax(0, 1.25fr)",
+                  gap: 1,
+                  alignItems: "start",
+                  minWidth: 0,
+                }}
+              >
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  name="id_type"
+                  label="ID Type"
+                  value={
+                    idTypes.includes(element.id_type) ? element.id_type : ""
+                  }
+                  error={Boolean(typeError)}
+                  helperText={typeError || " "}
+                  onChange={(e) => handleUpdate(i, "id_type", e.target.value)}
                 >
-                  Type
-                </TableCell>
-                <TableCell align="left" sx={{ borderBottom: "none" }}>
-                  Number
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ borderBottom: "none", width: 88 }}
-                >
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {identifications.length > 0 &&
-                identifications.map((element, i) => {
-                  const typeError = getTypeError(element);
-                  const numberError = getNumberError(element);
-
-                  return (
-                    <TableRow key={i}>
-                      <TableCell sx={{ borderBottom: "none", width: 180 }}>
-                        <TextField
-                          select
-                          fullWidth
-                          size="small"
-                          name="id_type"
-                          label="ID Type"
-                          value={
-                            idTypes.includes(element.id_type)
-                              ? element.id_type
-                              : ""
-                          }
-                          error={Boolean(typeError)}
-                          helperText={typeError || " "}
-                          onChange={(e) =>
-                            handleUpdate(i, "id_type", e.target.value)
-                          }
-                        >
-                          <MenuItem value="">Select an ID Type</MenuItem>
-                          {idTypes.map((type, type_idx) => (
-                            <MenuItem key={type_idx} value={type}>
-                              {type}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </TableCell>
-                      <TableCell sx={{ borderBottom: "none" }}>
-                        <TextField
-                          fullWidth
-                          size="small"
-                          name="id_value"
-                          label="ID Number"
-                          value={element.id_value || ""}
-                          error={Boolean(numberError)}
-                          helperText={numberError || " "}
-                          onChange={(e) =>
-                            handleUpdate(i, "id_value", e.target.value)
-                          }
-                        />
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ borderBottom: "none", width: 88 }}
-                      >
-                        {identifications.length > 2 && (
-                          <Button
-                            size="small"
-                            color="error"
-                            onClick={() => handleRemove(i)}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  <MenuItem value="">Select an ID Type</MenuItem>
+                  {idTypes.map((type, type_idx) => (
+                    <MenuItem key={type_idx} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  fullWidth
+                  size="small"
+                  name="id_value"
+                  label="ID Number"
+                  value={element.id_value || ""}
+                  error={Boolean(numberError)}
+                  helperText={numberError || " "}
+                  onChange={(e) => handleUpdate(i, "id_value", e.target.value)}
+                />
+                {identifications.length > 2 && (
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => handleRemove(i)}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                )}
+              </Box>
+            );
+          })}
+        </Box>
         <Typography
           variant="body2"
           color={error || idTypeLoadError ? "error" : "text.secondary"}
-          sx={{ mt: 1, minHeight: 20 }}
+          sx={{ mt: 0, minHeight: error || idTypeLoadError ? 20 : 0 }}
         >
-          {error || idTypeLoadError || " "}
+          {error || idTypeLoadError || ""}
         </Typography>
       </Box>
     );

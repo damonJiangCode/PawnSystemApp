@@ -297,10 +297,6 @@ export class ClientService {
     }
   }
 
-  async checkDatabaseConnection() {
-    const result = await this.pool.query('SELECT 1 AS value');
-    return result.rows[0];
-  }
   async search(firstName?: string, lastName?: string) {
     const first = firstName?.trim() ?? '';
     const last = lastName?.trim() ?? '';

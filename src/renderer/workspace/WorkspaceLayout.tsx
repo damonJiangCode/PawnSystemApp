@@ -31,6 +31,7 @@ const MainTabPanel: React.FC<MainTabPanelProps> = ({ active, children }) => {
 };
 
 const WorkspaceLayout: React.FC = () => {
+  const lastNameSearchInputRef = React.useRef<HTMLInputElement>(null);
   const { state, actions } = useWorkspaceLayout();
   const {
     currentTab,
@@ -50,6 +51,7 @@ const WorkspaceLayout: React.FC = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <TopBar
+        lastNameInputRef={lastNameSearchInputRef}
         onSearch={actions.handleSearch}
         onBirthdaySearch={actions.handleBirthdaySearch}
         onClear={actions.handleClear}
@@ -138,6 +140,11 @@ const WorkspaceLayout: React.FC = () => {
         >
           <MainTabPanel active={currentTab === 0}>
             <ClientPage
+              onSearchDialogExited={() => {
+                if (searchDateOfBirth) return;
+                lastNameSearchInputRef.current?.focus();
+                lastNameSearchInputRef.current?.select();
+              }}
               isActive={currentTab === 0}
               searchFirstName={searchFirstName}
               searchLastName={searchLastName}

@@ -1,114 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# PawnSystem HTTP Server
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS backend. Client core operations use HTTP; reference data and ticket
+operations are not fully converted yet. The default URL is `http://localhost:3000`.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Development
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+From the project root:
 
 ```bash
-$ npm install
+npm --prefix server ci
+npm run dev:server
+# Or run frontend + server + Electron together:
+npm run dev
 ```
 
-## Compile and run the project
+Configure the private `server/.env` with `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`
+and `DB_PASSWORD`; start PostgreSQL separately. `PORT` defaults to 3000.
+`CORS_ORIGINS` defaults to `http://localhost:5173` (comma-separated origins).
+The combined root launcher assumes Vite 5173 and backend 3000.
+
+New images default to `../images/clients` (`CLIENT_IMAGE_DIR`); imported images
+can be served from `../migration/exports/client-photos`
+(`CLIENT_MIGRATION_IMAGE_DIR`). Relative storage paths resolve from the server
+working directory. Do not commit credentials or customer photos.
+
+Sources: `bootstrap` in [src/main.ts](src/main.ts), `DatabaseModule` pool
+`useFactory` in [src/database/database.module.ts](src/database/database.module.ts),
+`ClientImageService.constructor` in
+[src/client/client-image.service.ts](src/client/client-image.service.ts), and
+`scripts` in [../package.json](../package.json).
+
+## Client API status
+
+These are the actual routes in `ClientController` in
+[src/client/client.controller.ts](src/client/client.controller.ts):
+
+| Status      | Endpoint                    | Input                                                            | Controller method |
+| ----------- | --------------------------- | ---------------------------------------------------------------- | ----------------- |
+| Implemented | GET /client                 | Query: firstName?, lastName?                                     | search            |
+| Implemented | GET /client/by-dob          | Query: dateOfBirth=YYYY-MM-DD                                    | searchByDob       |
+| Implemented | POST /client                | JSON: client, identifications, photo, optional notes attribution | create            |
+| Implemented | PATCH /client/:clientNumber | JSON: submitted client fields, optional IDs/photo/attribution    | update            |
+| Implemented | GET /client/images          | Query: path                                                      | loadImage         |
+
+PATCH covers profile edits, notes, photo replacement, client-only pickup, hold,
+and deactivate/reactivate. There is no separate hold/status/notes route. Clients
+cannot be deleted: there is no DELETE route or client deletion bridge. PUT and
+standalone POST /client/images are not implemented; images are submitted inside
+POST/PATCH. Search and write results include client details and identifications.
+
+`ClientService.create/update` in [client.service.ts](src/client/client.service.ts)
+handle business rules and transactions. `ClientRepository` methods in
+[client.repository.ts](src/client/client.repository.ts) handle parameterized SQL;
+`mapRowToClient` in [client.mapper.ts](src/client/client.mapper.ts) creates responses.
+`getAppApi` in [app.api.ts](../src/renderer/shared/api/app.api.ts) connects renderer
+client operations to HTTP. Detailed local parameter notes remain in
+`src/client/README.local.md` (intentionally Git-ignored).
+
+### Rules
+
+- POST requires client details, 2–20 identifications and a photo. Age must be at
+  least 18 using the Regina calendar date. Photos remain in renderer state until
+  submission; the server assigns UUID filenames to PNG/JPEG images up to 5 MB.
+- PATCH preserves omitted fields, IDs and photos. Provided IDs replace the ID
+  set and must contain 2–20 entries. Optional text clears with `""`; only
+  `hold_until` accepts `null` to clear. Unknown or server-owned fields are rejected.
+- New/non-empty changed notes require `notes_action: "append_signature"` and an
+  active employee password. `notes_action: "clear"` clears notes without a password.
+  Passwords attribute the action to an employee; they do not create a login session.
+- Setting a hold requires a valid employee every time, including repeated dates,
+  and appends `Hold till MM-DD-YYYY (NAME, MM-DD-YYYY)`. Clearing a hold needs no
+  password and preserves notes. API dates remain `YYYY-MM-DD`; the frontend's
+  today-or-later restriction is not enforced by the backend. Submit hold changes
+  separately from manual notes changes.
+- Changing `is_active` requires an employee and appends `Deactivated client (...)`
+  or `Reactivated client (...)` with an MM-DD-YYYY action date. Unchanged status
+  does not add a signature. Clients remain searchable and existing tickets remain.
+  Ticket issuance is blocked in the current ticket backend: Pawn, Sell, Convert,
+  Transfer (either party), and Repawn. These ticket operations still run in main.
+
+Sources: `CreateClientDto` / `UpdateClientDto` in [dto/](src/client/dto/),
+`ClientService.create/update`, `EmployeeRepository.findActiveByPassword` in
+[employee.repository.ts](src/employees/employee.repository.ts),
+`ClientImageService.save`, `ClientHoldDialog.save` in
+[ClientHoldDialog.tsx](../src/renderer/modules/clients/components/ClientHoldDialog.tsx),
+and `ticketService.createPawnTicket/createSellTicket/convertTicket/transferTicket`
+in [ticket.service.ts](../src/main/modules/tickets/ticket.service.ts).
+
+### Remaining work
+
+| Area                                    | Current implementation                                                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Cities and ID types                     | No Nest routes; clientReferenceService.loadCities/loadIdTypes                                                       |
+| Hair/eye color lists and administration | No Nest routes; load/add/activate/deactivate methods on clientReferenceService                                      |
+| Imported legacy photo display           | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
+
+Sources: `registerClientHandlers` in
+[client.handlers.ts](../src/main/modules/clients/client.handlers.ts),
+`clientReferenceService` in
+[client-reference.service.ts](../src/main/modules/clients/client-reference.service.ts),
+and `getImageUrl` in [imageUrl.ts](../src/renderer/shared/utils/imageUrl.ts).
+Thus core Client APIs are implemented, but the entire Client/reference/image
+boundary is not yet HTTP-only.
+
+## Verification
+
+Run from `server/`:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run dev:server
-
-# production mode
-$ npm run start:prod
+npm test -- src/client
+npm run build
 ```
 
-## Run tests
+Client HTTP tests run real Nest routing/DTOs/services/repositories with a mocked
+PostgreSQL connection; they are not live-database integration tests. See
+`describe` in [client.http.spec.ts](src/client/client.http.spec.ts).
+`ClientService`, repository and image service tests cover isolated behavior.
+The root `scripts/clientActivation.test.cjs` also checks ticket restrictions.
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Observability
-
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
-
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
-
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The full `npm test` currently includes an unrelated starter test:
+`AppController.getHello` returns `Hello, guest!`, while
+[src/app.controller.spec.ts](src/app.controller.spec.ts) expects `Hello World!`.

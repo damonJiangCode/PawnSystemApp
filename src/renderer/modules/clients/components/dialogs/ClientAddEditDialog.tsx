@@ -3,11 +3,10 @@ import {
   Alert,
   Box,
   Button,
-  Checkbox,
   Dialog,
   DialogTitle,
+  DialogActions,
   DialogContent,
-  FormControlLabel,
   Switch,
   Typography,
 } from "@mui/material";
@@ -53,6 +52,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
   const isEditMode = Boolean(clientExisted?.client_number);
   const [client, setClient] = useState<Client>(clientExisted || defaultClient);
   const idRef = useRef<IDFieldsRef>(null);
+  const formId = React.useId();
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [cameraActive, setCameraActive] = useState(true);
   const [photoCaptured, setPhotoCaptured] = useState(false);
@@ -348,24 +348,47 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
 
   return (
     <>
-      <Dialog open={open} maxWidth="md" fullWidth>
+      <Dialog
+        open={open}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            m: 2,
+            width: "calc(100% - 32px)",
+            maxWidth: 1200,
+            maxHeight: "calc(100% - 32px)",
+          },
+        }}
+      >
         <DialogTitle>
           {isEditMode ? "Edit Client" : "Add New Client"}
         </DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSave} noValidate>
+        <DialogContent sx={{ px: 3, pb: 1.5 }}>
+          <form id={formId} onSubmit={handleSave} noValidate>
             {submitError && (
               <Alert severity="error" sx={{ mt: 1 }}>
                 {submitError}
               </Alert>
             )}
-            <Box sx={{ display: "flex", gap: 2, py: 1 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "minmax(0, 1fr)",
+                  md: "minmax(0, 1fr) 340px",
+                },
+                gap: 2.5,
+                pt: 1,
+                pb: 1.5,
+              }}
+            >
               <Box
                 sx={{
-                  flex: 3,
+                  minWidth: 0,
                   display: "flex",
                   flexDirection: "column",
-                  gap: 2,
+                  gap: 1.25,
                 }}
               >
                 <NameFields
@@ -422,99 +445,20 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                 />
 
                 <ContactNotesFields
+                  section="contact"
                   email={client.email ?? ""}
                   phone={client.phone ?? ""}
                   notes={client.notes}
                   onChange={handleInputChange}
                 />
-
-                {isEditMode && (
-                  <Box
-                    sx={{
-                      mt: 0.5,
-                      pt: 1.5,
-                      borderTop: 1,
-                      borderColor: "divider",
-                    }}
-                  >
-                    <FormControlLabel
-                      labelPlacement="start"
-                      sx={{
-                        m: 0,
-                        width: "100%",
-                        justifyContent: "space-between",
-                        gap: 2,
-                      }}
-                      control={
-                        <Switch
-                          checked={client.is_active}
-                          disabled={savingClient}
-                          onChange={(_event, checked) =>
-                            setClient((prev) => ({
-                              ...prev,
-                              is_active: checked,
-                            }))
-                          }
-                        />
-                      }
-                      label={
-                        <Box>
-                          <Typography variant="body2" fontWeight={600}>
-                            Client status
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color={
-                              client.is_active ? "text.secondary" : "error.main"
-                            }
-                          >
-                            {client.is_active
-                              ? "Active · Can issue new tickets"
-                              : "Deactivated · Existing tickets remain available"}
-                          </Typography>
-                        </Box>
-                      }
-                    />
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{ display: "block", mt: 0.5 }}
-                    >
-                      Status changes require an employee password when saving.
-                    </Typography>
-                  </Box>
-                )}
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={Boolean(client.pickup_self_only)}
-                      onChange={(_event, checked) => {
-                        setClient((prev) => ({
-                          ...prev,
-                          pickup_self_only: checked,
-                        }));
-                      }}
-                      color="error"
-                    />
-                  }
-                  label="Only client can pick up his or her own items"
-                  sx={{
-                    alignSelf: "flex-start",
-                    ml: 0,
-                    "& .MuiFormControlLabel-label": {
-                      color: "error.main",
-                      fontWeight: 700,
-                    },
-                  }}
-                />
               </Box>
 
               <Box
                 sx={{
-                  flex: 1,
+                  minWidth: 0,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
+                  alignItems: "stretch",
                   gap: 1,
                 }}
               >
@@ -529,16 +473,126 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                   }
                   disabled={savingClient}
                 />
-                <Alert
-                  severity="error"
+                {validationErrors.photo && (
+                  <Alert severity="error">{validationErrors.photo}</Alert>
+                )}
+                <Box
                   sx={{
-                    width: "100%",
-                    visibility: validationErrors.photo ? "visible" : "hidden",
+                    mt: 0.5,
+                    pt: 1.5,
+                    borderTop: 1,
+                    borderColor: "divider",
                   }}
                 >
-                  {validationErrors.photo || " "}
-                </Alert>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      component="label"
+                      htmlFor={`${formId}-active`}
+                      variant="body2"
+                      fontWeight={600}
+                    >
+                      Active client
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        minWidth: 70,
+                      }}
+                    >
+                      <Switch
+                        inputProps={{ id: `${formId}-active` }}
+                        color="primary"
+                        checked={client.is_active}
+                        disabled={!isEditMode || savingClient}
+                        sx={{
+                          "& .MuiSwitch-switchBase.Mui-checked.Mui-disabled": {
+                            color: "primary.main",
+                          },
+                          "& .MuiSwitch-switchBase.Mui-checked.Mui-disabled + .MuiSwitch-track":
+                            { backgroundColor: "primary.main", opacity: 0.5 },
+                        }}
+                        onChange={(_event, checked) =>
+                          setClient((prev) => ({ ...prev, is_active: checked }))
+                        }
+                      />
+                      <Typography
+                        variant="caption"
+                        color={
+                          client.is_active ? "primary.main" : "text.secondary"
+                        }
+                      >
+                        {client.is_active ? "Active" : "Deactive"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mt: 1,
+                    }}
+                  >
+                    <Typography
+                      component="label"
+                      htmlFor={`${formId}-pickup`}
+                      variant="body2"
+                      fontWeight={600}
+                    >
+                      Client-only pickup
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        minWidth: 70,
+                      }}
+                    >
+                      <Switch
+                        inputProps={{ id: `${formId}-pickup` }}
+                        color="primary"
+                        checked={Boolean(client.pickup_self_only)}
+                        disabled={savingClient}
+                        onChange={(_event, checked) => {
+                          setClient((prev) => ({
+                            ...prev,
+                            pickup_self_only: checked,
+                          }));
+                        }}
+                      />
+                      <Typography
+                        variant="caption"
+                        color={
+                          client.pickup_self_only
+                            ? "primary.main"
+                            : "text.secondary"
+                        }
+                      >
+                        {client.pickup_self_only ? "Yes" : "No"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
+            </Box>
+
+            <Box sx={{ pb: 2 }}>
+              <ContactNotesFields
+                section="notes"
+                email={client.email ?? ""}
+                phone={client.phone ?? ""}
+                notes={client.notes}
+                onChange={handleInputChange}
+              />
             </Box>
 
             <Box>
@@ -549,28 +603,34 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                 onIdsChange={() => clearValidationError("identifications")}
               />
             </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                type="button"
-                onClick={handleClose}
-                disabled={savingClient}
-                sx={{ mr: 1 }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" variant="contained" disabled={savingClient}>
-                {isEditMode ? "Update" : "Add"}
-              </Button>
-            </Box>
           </form>
         </DialogContent>
+        <DialogActions
+          sx={{
+            px: 3,
+            py: 1.5,
+            borderTop: 1,
+            borderColor: "divider",
+            flexShrink: 0,
+          }}
+        >
+          <Button
+            type="button"
+            onClick={handleClose}
+            disabled={savingClient}
+            sx={{ mr: 1 }}
+          >
+            Cancel
+          </Button>
+          <Button
+            form={formId}
+            type="submit"
+            variant="contained"
+            disabled={savingClient}
+          >
+            {isEditMode ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
       </Dialog>
 
       <EmployeePasswordDialog

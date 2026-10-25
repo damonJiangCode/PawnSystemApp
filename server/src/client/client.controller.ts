@@ -108,9 +108,4 @@ export class ClientController {
   ) {
     return this.clientService.searchByDob(query.dateOfBirth);
   }
-
-  @Get('db-check')
-  checkDatabaseConnection() {
-    return this.clientService.checkDatabaseConnection();
-  }
 }

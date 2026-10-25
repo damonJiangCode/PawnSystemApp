@@ -24,6 +24,7 @@ interface ClientPageProps {
   searchRequestKey?: number;
   activeClient?: Client | null;
   onClientSelected?: (client: Client | null) => void;
+  onSearchDialogExited?: () => void;
 }
 
 const ClientPage: React.FC<ClientPageProps> = ({
@@ -34,6 +35,7 @@ const ClientPage: React.FC<ClientPageProps> = ({
   searchRequestKey = 0,
   activeClient,
   onClientSelected,
+  onSearchDialogExited,
 }) => {
   const { state, actions } = useClientPage({
     isActive,
@@ -122,13 +124,19 @@ const ClientPage: React.FC<ClientPageProps> = ({
       <Dialog
         open={searchDialogOpen}
         onClose={actions.closeSearchDialog}
+        disableRestoreFocus={!searchDateOfBirth}
+        TransitionProps={{ onExited: onSearchDialogExited }}
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle>Client Search</DialogTitle>
         <DialogContent>No client found.</DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={actions.closeSearchDialog}>
+          <Button
+            autoFocus
+            variant="contained"
+            onClick={actions.closeSearchDialog}
+          >
             OK
           </Button>
         </DialogActions>
