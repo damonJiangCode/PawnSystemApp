@@ -362,7 +362,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
         }}
       >
         <DialogTitle>
-          {isEditMode ? "Edit Client" : "Add New Client"}
+          {isEditMode ? "Edit client" : "Add new client"}
         </DialogTitle>
         <DialogContent sx={{ px: 3, pb: 1.5 }}>
           <form id={formId} onSubmit={handleSave} noValidate>
@@ -615,6 +615,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
           }}
         >
           <Button
+            style={{ textTransform: "none" }}
             type="button"
             onClick={handleClose}
             disabled={savingClient}
@@ -623,6 +624,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
             Cancel
           </Button>
           <Button
+            style={{ textTransform: "none" }}
             form={formId}
             type="submit"
             variant="contained"

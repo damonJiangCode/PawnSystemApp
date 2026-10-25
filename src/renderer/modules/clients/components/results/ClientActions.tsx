@@ -29,7 +29,7 @@ const ClientActions: React.FC<ClientActionsProps> = ({
             onClick: () => setAddOpen(true),
           },
           {
-            label: "Edit Client",
+            label: "Edit client",
             icon: <EditIcon />,
             disabled: !client?.client_number,
             onClick: () => setEditOpen(true),

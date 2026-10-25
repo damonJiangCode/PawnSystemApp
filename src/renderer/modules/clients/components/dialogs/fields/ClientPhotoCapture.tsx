@@ -125,6 +125,7 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
 
       <Box sx={{ gridRow: 2, gridColumn: "1 / -1" }}>
         <Button
+          style={{ textTransform: "none" }}
           variant="contained"
           onClick={handleTakePhoto}
           disabled={disabled}

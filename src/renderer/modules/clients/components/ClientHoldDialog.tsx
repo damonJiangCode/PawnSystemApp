@@ -105,7 +105,7 @@ export default function ClientHoldDialog({ client, onClose, onSaved }: Props) {
           if (date) void save(date);
         }}
       >
-        <DialogTitle id="client-hold-title">Hold Client Items</DialogTitle>
+        <DialogTitle id="client-hold-title">Hold client items</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ pt: 1 }}>
             <Typography>
@@ -172,7 +172,7 @@ export default function ClientHoldDialog({ client, onClose, onSaved }: Props) {
               cutoff is on or before this date. Ticket due dates do not change.
             </Typography>
             <TextField
-              label="Employee Password"
+              label="Employee password"
               type="password"
               inputRef={passwordInputRef}
               autoComplete="off"
@@ -200,17 +200,27 @@ export default function ClientHoldDialog({ client, onClose, onSaved }: Props) {
         <DialogActions>
           {client.hold_until && (
             <Button
+              style={{ textTransform: "none" }}
               color="warning"
               disabled={saving}
               onClick={() => void save(null)}
             >
-              Clear Hold
+              Clear hold
             </Button>
           )}
-          <Button disabled={saving} onClick={onClose}>
+          <Button
+            style={{ textTransform: "none" }}
+            disabled={saving}
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={saving || !date}>
+          <Button
+            style={{ textTransform: "none" }}
+            type="submit"
+            variant="contained"
+            disabled={saving || !date}
+          >
             {saving ? "Saving..." : "Confirm"}
           </Button>
         </DialogActions>

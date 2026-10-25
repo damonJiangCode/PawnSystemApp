@@ -35,7 +35,7 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
   onClose,
 }) => (
   <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-    <DialogTitle>Employee Password</DialogTitle>
+    <DialogTitle>Employee password</DialogTitle>
     <DialogContent>
       {submitError && (
         <Alert severity="error" sx={{ mt: 1 }}>
@@ -46,7 +46,7 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
         inputRef={passwordInputRef}
         fullWidth
         type="password"
-        label="Employee Password"
+        label="Employee password"
         value={employeePassword}
         disabled={savingClient}
         onChange={(event) => onPasswordChange(event.target.value)}
@@ -56,10 +56,19 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
       />
     </DialogContent>
     <DialogActions>
-      <Button onClick={onCancel} disabled={savingClient}>
+      <Button
+        style={{ textTransform: "none" }}
+        onClick={onCancel}
+        disabled={savingClient}
+      >
         Cancel
       </Button>
-      <Button onClick={onConfirm} variant="contained" disabled={savingClient}>
+      <Button
+        style={{ textTransform: "none" }}
+        onClick={onConfirm}
+        variant="contained"
+        disabled={savingClient}
+      >
         {savingClient ? "Saving..." : "Confirm"}
       </Button>
     </DialogActions>

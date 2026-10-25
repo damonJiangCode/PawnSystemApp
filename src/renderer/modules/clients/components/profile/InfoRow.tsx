@@ -1,6 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { formatDisplayValue, formatShortDate } from "../../../../shared/utils/formatters";
+import {
+  formatDisplayValue,
+  formatShortDate,
+} from "../../../../shared/utils/formatters";
 
 interface InfoRowProps {
   label: string;
@@ -9,16 +12,10 @@ interface InfoRowProps {
 
 const InfoRow: React.FC<InfoRowProps> = ({ label, value }) => {
   let displayValue = value;
-  const looksLikeDateString =
-    typeof value === "string" &&
-    /^\d{4}-\d{1,2}-\d{1,2}(?:[T\s].*)?$/.test(value.trim());
-
   if (value instanceof Date) {
     displayValue = formatShortDate(value);
-  } else if (looksLikeDateString && !Number.isNaN(Date.parse(value))) {
-    displayValue = formatShortDate(value);
   }
-  const renderedValue = formatDisplayValue(displayValue, "-");
+  const renderedValue = formatDisplayValue(displayValue, "—");
 
   return (
     <Box

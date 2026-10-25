@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import { clientApi } from "../../../client.api";
+import { formatClientOption } from "../../../utils/clientDisplay.ts";
 import {
   formatLocalIsoDatePart,
   resolveDate,
@@ -75,7 +76,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         required
         type="date"
         name="date_of_birth"
-        label="Date of Birth"
+        label="Date of birth"
         value={
           typeof date_of_birth === "string"
             ? date_of_birth
@@ -104,9 +105,9 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         helperText={genderError || " "}
       >
         <MenuItem value=""></MenuItem>
-        <MenuItem value="MALE">MALE</MenuItem>
-        <MenuItem value="FEMALE">FEMALE</MenuItem>
-        <MenuItem value="OTHER">OTHER</MenuItem>
+        <MenuItem value="MALE">Male</MenuItem>
+        <MenuItem value="FEMALE">Female</MenuItem>
+        <MenuItem value="OTHER">Other</MenuItem>
       </TextField>
 
       <TextField
@@ -114,7 +115,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         fullWidth
         required
         name="hair_color"
-        label="Hair Color"
+        label="Hair color"
         value={
           hairColors.some(
             (c) =>
@@ -131,7 +132,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
       >
         {hairColors.map((color) => (
           <MenuItem key={color} value={color}>
-            {color}
+            {formatClientOption(color)}
           </MenuItem>
         ))}
       </TextField>
@@ -141,7 +142,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         fullWidth
         required
         name="eye_color"
-        label="Eye Color"
+        label="Eye color"
         value={
           eyeColors.some(
             (c) =>
@@ -157,7 +158,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
       >
         {eyeColors.map((color) => (
           <MenuItem key={color} value={color}>
-            {color}
+            {formatClientOption(color)}
           </MenuItem>
         ))}
       </TextField>

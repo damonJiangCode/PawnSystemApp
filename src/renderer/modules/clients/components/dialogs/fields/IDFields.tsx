@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { ID } from "../../../../../../shared/models/client.model";
 import { clientApi } from "../../../client.api";
+import { formatClientIdType } from "../../../utils/clientDisplay.ts";
 
 export interface IDFieldsRef {
   getIDs: () => ID[];
@@ -100,8 +101,9 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
             alignItems: "center",
           }}
         >
-          <Typography variant="subtitle1">ID Information</Typography>
+          <Typography variant="subtitle1">ID information</Typography>
           <Button
+            style={{ textTransform: "none" }}
             variant="contained"
             size="small"
             startIcon={<AddIcon />}
@@ -144,7 +146,7 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
                   fullWidth
                   size="small"
                   name="id_type"
-                  label="ID Type"
+                  label="ID type"
                   value={
                     idTypes.includes(element.id_type) ? element.id_type : ""
                   }
@@ -152,10 +154,10 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
                   helperText={typeError || " "}
                   onChange={(e) => handleUpdate(i, "id_type", e.target.value)}
                 >
-                  <MenuItem value="">Select an ID Type</MenuItem>
+                  <MenuItem value="">Select an ID type</MenuItem>
                   {idTypes.map((type, type_idx) => (
                     <MenuItem key={type_idx} value={type}>
-                      {type}
+                      {formatClientIdType(type)}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -163,7 +165,7 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
                   fullWidth
                   size="small"
                   name="id_value"
-                  label="ID Number"
+                  label="ID number"
                   value={element.id_value || ""}
                   error={Boolean(numberError)}
                   helperText={numberError || " "}
@@ -171,6 +173,7 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
                 />
                 {identifications.length > 2 && (
                   <Button
+                    style={{ textTransform: "none" }}
                     size="small"
                     color="error"
                     onClick={() => handleRemove(i)}

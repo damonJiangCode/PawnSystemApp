@@ -1,8 +1,9 @@
+import { formatClientOption } from "../../utils/clientDisplay.ts";
 import {
   formatDisplayValue,
   formatShortDate,
   formatUppercase,
-} from "../../../../shared/utils/formatters";
+} from "../../../../shared/utils/formatters.ts";
 
 export const clientProfilePanelSx = {
   minWidth: 0,
@@ -19,18 +20,20 @@ export const clientProfilePanelSx = {
 
 export const createClientProfileDisplay = (placeholder: boolean) => ({
   text: (value: unknown) =>
-    placeholder ? "-" : formatDisplayValue(value, "-"),
+    placeholder ? "—" : formatDisplayValue(value, "—"),
+  option: (value?: string | null) =>
+    placeholder ? "—" : formatClientOption(value),
   uppercase: (value?: string | null) =>
-    placeholder ? "-" : formatUppercase(value, "-"),
+    placeholder ? "—" : formatUppercase(value, "—"),
   count: (value: number | undefined) =>
-    placeholder ? "-" : String(value ?? 0),
+    placeholder ? "—" : String(value ?? 0),
   date: (value: unknown) => {
     if (placeholder || !value) {
-      return "-";
+      return "—";
     }
 
     return formatShortDate(value as string | Date);
   },
   measurement: (value: number | undefined, unit: string) =>
-    placeholder || value === undefined ? "-" : `${value} ${unit}`,
+    placeholder || value === undefined ? "—" : `${value} ${unit}`,
 });

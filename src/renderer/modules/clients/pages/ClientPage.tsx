@@ -129,10 +129,11 @@ const ClientPage: React.FC<ClientPageProps> = ({
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle>Client Search</DialogTitle>
+        <DialogTitle>Client search</DialogTitle>
         <DialogContent>No client found.</DialogContent>
         <DialogActions>
           <Button
+            style={{ textTransform: "none" }}
             autoFocus
             variant="contained"
             onClick={actions.closeSearchDialog}

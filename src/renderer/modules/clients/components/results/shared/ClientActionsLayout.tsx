@@ -37,6 +37,7 @@ const ClientActionsLayout: React.FC<ClientActionsLayoutProps> = ({
         <Tooltip key={action.label} title={action.label} placement="left">
           <span style={{ display: "block", width: "100%" }}>
             <Button
+              style={{ textTransform: "none" }}
               size="small"
               variant="contained"
               aria-label={action.label}

@@ -131,7 +131,8 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
         <TextField
           fullWidth
           name="postal_code"
-          label="Postal Code"
+          label="Postal code"
+          sx={{ "& input": { textTransform: "uppercase" } }}
           value={client_postal_code || ""}
           onChange={onChange}
           size="small"

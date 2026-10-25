@@ -19,6 +19,7 @@ import {
   clientProfilePanelSx,
   createClientProfileDisplay,
 } from "./clientProfileDisplay";
+import { formatClientIdType } from "../../utils/clientDisplay.ts";
 
 interface ClientProfileProps {
   client: Client;
@@ -183,19 +184,19 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
               value={display.text(client.client_number)}
             />
             <InfoRow
-              label="Last Name:"
+              label="Last name:"
               value={display.text(client.last_name?.toUpperCase())}
             />
             <InfoRow
-              label="First Name:"
+              label="First name:"
               value={display.text(client.first_name?.toUpperCase())}
             />
             <InfoRow
-              label="Mid Name:"
+              label="Middle name:"
               value={display.text(client.middle_name?.toUpperCase())}
             />
             <InfoRow
-              label="Date of Birth:"
+              label="Date of birth:"
               value={display.date(client.date_of_birth)}
             />
           </Box>
@@ -206,14 +207,14 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
             Physical
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            <InfoRow label="Gender:" value={display.uppercase(client.gender)} />
+            <InfoRow label="Gender:" value={display.option(client.gender)} />
             <InfoRow
-              label="Hair Color:"
-              value={display.text(client.hair_color)}
+              label="Hair color:"
+              value={display.option(client.hair_color)}
             />
             <InfoRow
-              label="Eye Color:"
-              value={display.text(client.eye_color)}
+              label="Eye color:"
+              value={display.option(client.eye_color)}
             />
             <InfoRow
               label="Height:"
@@ -312,14 +313,14 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
               identifications.map((element, index) => (
                 <Box key={index}>
                   <InfoRow
-                    label={`${element.id_type}:`}
-                    value={element.id_value || "-"}
+                    label={`${formatClientIdType(element.id_type)}:`}
+                    value={element.id_value || "—"}
                   />
                 </Box>
               ))
             ) : (
               <Typography color="text.secondary">
-                {placeholder ? "-" : "No identifications available."}
+                {placeholder ? "—" : "No identifications available."}
               </Typography>
             )}
           </Box>
@@ -332,8 +333,8 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
             <InfoRow label="Address:" value={display.text(client.address)} />
             <InfoRow
-              label="Postal Code:"
-              value={display.text(client.postal_code)}
+              label="Postal code:"
+              value={display.uppercase(client.postal_code)}
             />
             <InfoRow label="City:" value={display.text(client.city)} />
             <InfoRow label="Province:" value={display.text(client.province)} />
@@ -357,12 +358,13 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
               Notes
             </Typography>
             <Button
+              style={{ textTransform: "none" }}
               variant="outlined"
               size="small"
               onClick={handleOpenNoteForm}
               disabled={placeholder}
             >
-              Edit Notes
+              Edit notes
             </Button>
           </Box>
           <Box
@@ -380,7 +382,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
                 lineHeight: 1.45,
               }}
             >
-              {placeholder ? "-" : client.notes || "No notes available."}
+              {placeholder ? "—" : client.notes || "No notes available."}
             </Typography>
           </Box>
         </Box>
@@ -396,7 +398,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Edit Notes</DialogTitle>
+        <DialogTitle>Edit notes</DialogTitle>
         <DialogContent>
           {submitError && (
             <Alert severity="error" sx={{ mt: 1 }}>
@@ -420,10 +422,15 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowNoteForm(false)} disabled={savingNotes}>
+          <Button
+            style={{ textTransform: "none" }}
+            onClick={() => setShowNoteForm(false)}
+            disabled={savingNotes}
+          >
             Cancel
           </Button>
           <Button
+            style={{ textTransform: "none" }}
             onClick={handleRequestSaveNote}
             variant="contained"
             disabled={savingNotes}
@@ -445,7 +452,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle>Employee Password</DialogTitle>
+        <DialogTitle>Employee password</DialogTitle>
         <DialogContent>
           {submitError && (
             <Alert severity="error" sx={{ mt: 1 }}>
@@ -456,7 +463,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
             inputRef={passwordInputRef}
             fullWidth
             type="password"
-            label="Employee Password"
+            label="Employee password"
             value={employeePassword}
             onChange={(event) => {
               setEmployeePassword(event.target.value);
@@ -474,6 +481,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
         </DialogContent>
         <DialogActions>
           <Button
+            style={{ textTransform: "none" }}
             onClick={() => {
               setShowPasswordForm(false);
               setShowNoteForm(true);
@@ -484,6 +492,7 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
             Cancel
           </Button>
           <Button
+            style={{ textTransform: "none" }}
             onClick={() => {
               void handleSaveNotes();
             }}

@@ -139,7 +139,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             inputRef={lastNameInputRef}
             name="lastName"
             size="small"
-            label="Last Name"
+            label="Last name"
             value={lastName}
             sx={{ width: { xs: 140, sm: 170, md: 190 } }}
             onChange={(e) => setLastName(uppercaseSearchName(e.target.value))}
@@ -147,13 +147,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <TextField
             name="firstName"
             size="small"
-            label="First Name"
+            label="First name"
             value={firstName}
             sx={{ width: { xs: 140, sm: 170, md: 190 } }}
             onChange={(e) => setFirstName(uppercaseSearchName(e.target.value))}
           />
 
           <Button
+            style={{ textTransform: "none" }}
             type="submit"
             size="small"
             variant="contained"
@@ -164,6 +165,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           </Button>
 
           <Button
+            style={{ textTransform: "none" }}
             size="small"
             variant="outlined"
             startIcon={<ClearIcon />}
@@ -229,8 +231,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setBirthdayDialogOpen(false)}>Cancel</Button>
             <Button
+              style={{ textTransform: "none" }}
+              onClick={() => setBirthdayDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              style={{ textTransform: "none" }}
               type="submit"
               variant="contained"
               startIcon={<SearchIcon />}
@@ -250,7 +258,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <DialogTitle>Search</DialogTitle>
         <DialogContent>{validationMessage}</DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={closeValidationDialog}>
+          <Button
+            style={{ textTransform: "none" }}
+            variant="contained"
+            onClick={closeValidationDialog}
+          >
             OK
           </Button>
         </DialogActions>
