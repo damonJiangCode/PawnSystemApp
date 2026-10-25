@@ -2,8 +2,26 @@ import type { Client } from "../../../shared/models/client.model.ts";
 import type {
   CreateClientInput,
   UpdateClientInput,
+  CitiesResponse,
 } from "../../../shared/payload-contracts/client.contract.ts";
 import { formatIsoDate } from "../utils/formatters.ts";
+
+export async function loadClientReferenceHttp(
+  resource: "cities",
+  baseUrl?: string,
+): Promise<CitiesResponse>;
+export async function loadClientReferenceHttp(
+  resource: "id-types" | "hair-colors" | "eye-colors",
+  baseUrl?: string,
+): Promise<string[]>;
+export async function loadClientReferenceHttp(
+  resource: "cities" | "id-types" | "hair-colors" | "eye-colors",
+  baseUrl = "http://localhost:3000",
+): Promise<CitiesResponse | string[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/${resource}`),
+  );
+}
 
 export async function createClientHttp(
   input: CreateClientInput,

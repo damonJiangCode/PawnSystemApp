@@ -5,17 +5,8 @@ import { CHANNELS } from "../../ipc/channels.ts";
 const { ipcMain } = require("electron/main") as typeof import("electron");
 
 export const registerClientHandlers = () => {
-  ipcMain.handle(CHANNELS.GET_CITIES, async () =>
-    clientReferenceService.loadCities(),
-  );
-  ipcMain.handle(CHANNELS.GET_HAIR_COLORS, async () =>
-    clientReferenceService.loadHairColors(),
-  );
   ipcMain.handle(CHANNELS.GET_ADMIN_HAIR_COLORS, async () =>
     clientReferenceService.loadHairColorsForAdmin(),
-  );
-  ipcMain.handle(CHANNELS.GET_EYE_COLORS, async () =>
-    clientReferenceService.loadEyeColors(),
   );
   ipcMain.handle(CHANNELS.GET_ADMIN_EYE_COLORS, async () =>
     clientReferenceService.loadEyeColorsForAdmin(),
@@ -49,8 +40,5 @@ export const registerClientHandlers = () => {
     CHANNELS.DEACTIVATE_EYE_COLOR,
     async (_event: IpcMainInvokeEvent, color: string) =>
       clientReferenceService.deactivateEyeColor(color),
-  );
-  ipcMain.handle(CHANNELS.GET_ID_TYPES, async () =>
-    clientReferenceService.loadIdTypes(),
   );
 };

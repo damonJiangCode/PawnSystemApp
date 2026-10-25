@@ -1,8 +1,5 @@
 const CHANNELS = {
-  GET_CITIES: "get-cities",
-  GET_HAIR_COLORS: "get-hair-colors",
   GET_ADMIN_HAIR_COLORS: "get-admin-hair-colors",
-  GET_EYE_COLORS: "get-eye-colors",
   GET_ADMIN_EYE_COLORS: "get-admin-eye-colors",
   ADD_HAIR_COLOR: "add-hair-color",
   ACTIVATE_HAIR_COLOR: "activate-hair-color",
@@ -10,7 +7,6 @@ const CHANNELS = {
   ADD_EYE_COLOR: "add-eye-color",
   ACTIVATE_EYE_COLOR: "activate-eye-color",
   DEACTIVATE_EYE_COLOR: "deactivate-eye-color",
-  GET_ID_TYPES: "get-id-types",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",

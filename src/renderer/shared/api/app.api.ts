@@ -4,6 +4,7 @@ import {
   searchClientsByDobHttp,
   createClientHttp,
   updateClientHttp,
+  loadClientReferenceHttp,
 } from "./client.http.ts";
 
 type DesktopApi = Omit<AppApi, "client"> & {
@@ -14,6 +15,10 @@ type DesktopApi = Omit<AppApi, "client"> & {
     | "createClient"
     | "updateClient"
     | "setHoldUntil"
+    | "loadCities"
+    | "loadIdTypes"
+    | "loadHairColors"
+    | "loadEyeColors"
   >;
 };
 
@@ -30,6 +35,26 @@ export const getAppApi = (): AppApi | undefined => {
     ...desktop,
     client: {
       ...desktop.client,
+      loadCities: () =>
+        loadClientReferenceHttp(
+          "cities",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadIdTypes: () =>
+        loadClientReferenceHttp(
+          "id-types",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadHairColors: () =>
+        loadClientReferenceHttp(
+          "hair-colors",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadEyeColors: () =>
+        loadClientReferenceHttp(
+          "eye-colors",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
       setHoldUntil: (clientNumber, holdUntil, employeePassword) =>
         updateClientHttp(
           {

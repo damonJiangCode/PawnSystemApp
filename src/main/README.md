@@ -72,8 +72,8 @@ focuses its existing window; closing it removes that entry from the map.
 
 ### clients
 
-Keeps reference data, city/color lookups, and legacy client readers used by ticket
-operations. Client search and writes use the NestJS HTTP server. Clients are
+Keeps color administration and legacy client readers used by ticket
+operations. Reference dropdown queries use the NestJS ReferenceModule. Client search and writes use the NestJS HTTP server. Clients are
 deactivated/reactivated rather than deleted.
 
 Start here:

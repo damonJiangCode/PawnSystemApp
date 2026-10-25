@@ -1,10 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  GET_CITIES: "get-cities",
-  GET_HAIR_COLORS: "get-hair-colors",
   GET_ADMIN_HAIR_COLORS: "get-admin-hair-colors",
-  GET_EYE_COLORS: "get-eye-colors",
   GET_ADMIN_EYE_COLORS: "get-admin-eye-colors",
   ADD_HAIR_COLOR: "add-hair-color",
   ACTIVATE_HAIR_COLOR: "activate-hair-color",
@@ -12,7 +9,6 @@ const CHANNELS = {
   ADD_EYE_COLOR: "add-eye-color",
   ACTIVATE_EYE_COLOR: "activate-eye-color",
   DEACTIVATE_EYE_COLOR: "deactivate-eye-color",
-  GET_ID_TYPES: "get-id-types",
   GET_LOCATIONS: "get-locations",
   GET_ADMIN_LOCATIONS: "get-admin-locations",
   ADD_LOCATION: "add-location",
@@ -67,10 +63,7 @@ const CHANNELS = {
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 
 const clientApi = {
-  loadCities: () => invoke(CHANNELS.GET_CITIES),
-  loadHairColors: () => invoke(CHANNELS.GET_HAIR_COLORS),
   loadHairColorsForAdmin: () => invoke(CHANNELS.GET_ADMIN_HAIR_COLORS),
-  loadEyeColors: () => invoke(CHANNELS.GET_EYE_COLORS),
   loadEyeColorsForAdmin: () => invoke(CHANNELS.GET_ADMIN_EYE_COLORS),
   addHairColor: (color) => invoke(CHANNELS.ADD_HAIR_COLOR, color),
   activateHairColor: (color) => invoke(CHANNELS.ACTIVATE_HAIR_COLOR, color),
@@ -78,7 +71,6 @@ const clientApi = {
   addEyeColor: (color) => invoke(CHANNELS.ADD_EYE_COLOR, color),
   activateEyeColor: (color) => invoke(CHANNELS.ACTIVATE_EYE_COLOR, color),
   deactivateEyeColor: (color) => invoke(CHANNELS.DEACTIVATE_EYE_COLOR, color),
-  loadIdTypes: () => invoke(CHANNELS.GET_ID_TYPES),
 };
 
 const ticketApi = {

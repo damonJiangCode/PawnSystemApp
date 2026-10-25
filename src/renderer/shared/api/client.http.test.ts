@@ -5,8 +5,46 @@ import {
   searchClientsByDobHttp,
   createClientHttp,
   updateClientHttp,
+  loadClientReferenceHttp,
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
+
+test("reference HTTP preserves the city response and uses the configured base URL", async (t) => {
+  const data = { provinces: ["SK"], citiesByProvince: { SK: ["Saskatoon"] } };
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(
+      url.toString(),
+      "http://store-server:3000/client/reference/cities",
+    );
+    assert.equal(init.method, undefined); // fetch defaults to GET.
+    assert.equal(init.body, undefined);
+    return Response.json(data);
+  });
+  assert.deepEqual(
+    await loadClientReferenceHttp("cities", "http://store-server:3000/"),
+    data,
+  );
+});
+
+for (const resource of ["id-types", "hair-colors", "eye-colors"] as const) {
+  test(`reference HTTP loads ${resource} as strings`, async (t) => {
+    t.mock.method(globalThis, "fetch", async (url: URL) => {
+      assert.equal(url.pathname, `/client/reference/${resource}`);
+      return Response.json(["TEST"]);
+    });
+    assert.deepEqual(await loadClientReferenceHttp(resource), ["TEST"]);
+  });
+}
+
+test("reference HTTP surfaces server failures so the dropdown can show an error", async (t) => {
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({ message: "Internal server error" }, { status: 500 }),
+  );
+  await assert.rejects(
+    () => loadClientReferenceHttp("id-types"),
+    /Internal server error/,
+  );
+});
 
 test("activation PATCH sends the boolean and employee password without overwriting notes", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {

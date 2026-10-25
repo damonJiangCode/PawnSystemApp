@@ -1,6 +1,6 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client core operations use HTTP; reference data and ticket
+NestJS backend. Client core operations use HTTP; reference administration and ticket
 operations are not fully converted yet. The default URL is `http://localhost:3000`.
 
 ## Development
@@ -57,6 +57,25 @@ handle business rules and transactions. `ClientRepository` methods in
 client operations to HTTP. Detailed local parameter notes remain in
 `src/client/README.local.md` (intentionally Git-ignored).
 
+### Reference queries (implemented)
+
+`ReferenceController` in [reference.controller.ts](src/reference/reference.controller.ts)
+exposes four read-only routes with no required parameters:
+
+| Endpoint                          | Response                                                            | Repository method  |
+| --------------------------------- | ------------------------------------------------------------------- | ------------------ |
+| GET /client/reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities         |
+| GET /client/reference/id-types    | string[]                                                            | loadIdTypes        |
+| GET /client/reference/hair-colors | string[] of active colors                                           | loadColors('hair') |
+| GET /client/reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
+
+`ReferenceRepository` in [reference.repository.ts](src/reference/reference.repository.ts)
+queries existing PostgreSQL tables in sorted order. No seeds or writes run here.
+`ReferenceModule` imports the database pool. The controller calls the repository
+directly because these reads need no business-rule service or input DTO.
+`getAppApi` routes the existing loadCities/loadIdTypes/loadHairColors/loadEyeColors
+contract to `loadClientReferenceHttp`; old query IPC handlers were removed.
+
 ### Rules
 
 - POST requires client details, 2–20 identifications and a photo. Age must be at
@@ -89,11 +108,10 @@ in [ticket.service.ts](../src/main/modules/tickets/ticket.service.ts).
 
 ### Remaining work
 
-| Area                                    | Current implementation                                                                                              |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Cities and ID types                     | No Nest routes; clientReferenceService.loadCities/loadIdTypes                                                       |
-| Hair/eye color lists and administration | No Nest routes; load/add/activate/deactivate methods on clientReferenceService                                      |
-| Imported legacy photo display           | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
+| Area                          | Current implementation                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Hair/eye color administration | No Nest routes; load-all/add/activate/deactivate methods on clientReferenceService                                  |
+| Imported legacy photo display | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
 
 Sources: `registerClientHandlers` in
 [client.handlers.ts](../src/main/modules/clients/client.handlers.ts),
@@ -108,13 +126,16 @@ boundary is not yet HTTP-only.
 Run from `server/`:
 
 ```bash
-npm test -- src/client
+npm test -- src/client src/reference
 npm run build
 ```
 
-Client HTTP tests run real Nest routing/DTOs/services/repositories with a mocked
+Client and reference HTTP tests run real Nest routes and implementation code with a mocked
 PostgreSQL connection; they are not live-database integration tests. See
 `describe` in [client.http.spec.ts](src/client/client.http.spec.ts).
+`ReferenceController` / `ReferenceRepository` tests in
+[src/reference/reference.http.spec.ts](src/reference/reference.http.spec.ts) cover
+response shapes, SQL ordering and active-color filtering, empty results, and database failures.
 `ClientService`, repository and image service tests cover isolated behavior.
 The root `scripts/clientActivation.test.cjs` also checks ticket restrictions.
 

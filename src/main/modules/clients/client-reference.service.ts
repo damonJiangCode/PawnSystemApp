@@ -4,14 +4,6 @@ import { clientReferenceRepo } from "./client-reference.repo.ts";
 import { clientInput } from "./client.input.ts";
 
 export const clientReferenceService = {
-  loadCities: async () => {
-    return clientReferenceRepo.loadCities();
-  },
-
-  loadHairColors: async () => {
-    return clientReferenceRepo.loadHairColors();
-  },
-
   loadHairColorsForAdmin: async (): Promise<HairColor[]> => {
     return clientReferenceRepo.loadHairColorsForAdmin();
   },
@@ -56,10 +48,6 @@ export const clientReferenceService = {
     return activatedColor;
   },
 
-  loadEyeColors: async () => {
-    return clientReferenceRepo.loadEyeColors();
-  },
-
   loadEyeColorsForAdmin: async (): Promise<EyeColor[]> => {
     return clientReferenceRepo.loadEyeColorsForAdmin();
   },
@@ -102,9 +90,5 @@ export const clientReferenceService = {
     }
 
     return activatedColor;
-  },
-
-  loadIdTypes: async () => {
-    return clientReferenceRepo.loadIdTypes();
   },
 };

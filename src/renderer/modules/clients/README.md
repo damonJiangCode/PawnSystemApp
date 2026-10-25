@@ -52,7 +52,7 @@ Changing status appends a signed note; an unchanged status does not. Deactivated
 clients remain searchable and editable. Pawn, Sell, Convert, Transfer (either
 party), and Repawn are disabled and rejected by the ticket backend. Existing
 ticket handling stays available. Client deletion is not supported. Reference
-data lookups still use the desktop API.
+data lookups use HTTP; color administration still uses the desktop API.
 
 ## Client Images
 

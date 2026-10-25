@@ -1,5 +1,4 @@
 import { connect } from "../../database/connection.ts";
-import type { CitiesResponse } from "../../../shared/payload-contracts/client.contract.ts";
 import type { EyeColor } from "../../../shared/models/eye-color.model.ts";
 import type { HairColor } from "../../../shared/models/hair-color.model.ts";
 
@@ -9,23 +8,6 @@ const mapColorOptionRow = (row: Record<string, unknown>): ColorOption => ({
   color: String(row.color),
   is_active: Boolean(row.is_active),
 });
-
-const loadActiveColors = async (tableName: "eye_color" | "hair_color") => {
-  const client = await connect();
-  const query = `
-    SELECT UPPER(color) AS color
-    FROM ${tableName}
-    WHERE is_active = TRUE
-    ORDER BY color ASC
-  `;
-
-  try {
-    const result = await client.query(query);
-    return result.rows.map((row) => row.color);
-  } finally {
-    client.release();
-  }
-};
 
 const loadColorsForAdmin = async (
   tableName: "eye_color" | "hair_color",
@@ -45,7 +27,10 @@ const loadColorsForAdmin = async (
   }
 };
 
-const addColor = async (tableName: "eye_color" | "hair_color", color: string) => {
+const addColor = async (
+  tableName: "eye_color" | "hair_color",
+  color: string,
+) => {
   const client = await connect();
   const query = `
     INSERT INTO ${tableName} (color, is_active)
@@ -87,36 +72,6 @@ const setColorActive = async (
 };
 
 export const clientReferenceRepo = {
-  loadCities: async (): Promise<CitiesResponse> => {
-    const client = await connect();
-    const provincesQuery =
-      "SELECT DISTINCT province FROM city ORDER BY province ASC";
-    const citiesQuery =
-      "SELECT DISTINCT city, province FROM city ORDER BY province ASC, city ASC";
-
-    try {
-      const provincesResult = await client.query(provincesQuery);
-      const citiesResult = await client.query(citiesQuery);
-
-      const provinces = provincesResult.rows.map((row) => row.province);
-      const citiesByProvince: Record<string, string[]> = {};
-
-      for (const row of citiesResult.rows) {
-        if (!citiesByProvince[row.province]) {
-          citiesByProvince[row.province] = [];
-        }
-
-        citiesByProvince[row.province].push(row.city);
-      }
-
-      return { provinces, citiesByProvince };
-    } finally {
-      client.release();
-    }
-  },
-
-  loadHairColors: (): Promise<string[]> => loadActiveColors("hair_color"),
-
   loadHairColorsForAdmin: (): Promise<HairColor[]> =>
     loadColorsForAdmin("hair_color") as Promise<HairColor[]>,
 
@@ -129,8 +84,6 @@ export const clientReferenceRepo = {
   activateHairColor: (color: string): Promise<HairColor | null> =>
     setColorActive("hair_color", color, true) as Promise<HairColor | null>,
 
-  loadEyeColors: (): Promise<string[]> => loadActiveColors("eye_color"),
-
   loadEyeColorsForAdmin: (): Promise<EyeColor[]> =>
     loadColorsForAdmin("eye_color") as Promise<EyeColor[]>,
 
@@ -142,16 +95,4 @@ export const clientReferenceRepo = {
 
   activateEyeColor: (color: string): Promise<EyeColor | null> =>
     setColorActive("eye_color", color, true) as Promise<EyeColor | null>,
-
-  loadIdTypes: async (): Promise<string[]> => {
-    const client = await connect();
-    const query = "SELECT type FROM id_type ORDER BY type ASC";
-
-    try {
-      const result = await client.query(query);
-      return result.rows.map((row) => row.type);
-    } finally {
-      client.release();
-    }
-  },
 };
