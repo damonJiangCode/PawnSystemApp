@@ -112,7 +112,10 @@ export default function DateField({
       error={showError}
       disabled={disabled}
       required={required}
-      sx={sx}
+      sx={[
+        { typography: "body1", minWidth: "11em" },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <InputLabel
         id={`${id}-label`}
@@ -153,7 +156,7 @@ export default function DateField({
         {keys.map((key, index) => (
           <React.Fragment key={key}>
             {index > 0 && (
-              <Box component="span" aria-hidden="true">
+              <Box component="span" aria-hidden="true" sx={{ flexShrink: 0 }}>
                 -
               </Box>
             )}
@@ -252,7 +255,9 @@ export default function DateField({
                 background: "transparent",
                 border: 0,
                 outline: 0,
-                width: `${key.length + 0.2}ch`,
+                // Uppercase placeholders are wider than digits in proportional fonts.
+                width: `${key.length * 0.8 + 0.2}em`,
+                flexShrink: 0,
                 minWidth: 0,
                 p: 0,
                 textAlign: "center",
@@ -270,7 +275,7 @@ export default function DateField({
           disabled={disabled}
           tabIndex={-1}
           aria-label={`Choose ${label.toLowerCase()}`}
-          sx={{ ml: "auto", p: 0.25 }}
+          sx={{ ml: "auto", p: 0.25, flexShrink: 0 }}
           onClick={() => picker.current?.showPicker()}
         >
           <CalendarMonthIcon fontSize="small" />
