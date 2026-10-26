@@ -71,15 +71,14 @@ focuses its existing window; closing it removes that entry from the map.
 
 ### clients
 
-Keeps color administration and legacy client readers used by ticket
-operations. Reference dropdown queries use the NestJS ReferenceModule. Client search and writes use the NestJS HTTP server. Clients are
-deactivated/reactivated rather than deleted.
+Keeps legacy client readers used by ticket operations. Client CRUD-style updates,
+reference queries and color administration use the NestJS HTTP server. Clients
+are deactivated/reactivated rather than deleted. No client IPC handlers remain.
 
 Start here:
 
-- `modules/clients/client.handlers.ts`
-- `modules/clients/client-reference.service.ts`
 - `modules/clients/client.repo.ts`
+- `modules/clients/client.mapper.ts`
 
 ### tickets
 

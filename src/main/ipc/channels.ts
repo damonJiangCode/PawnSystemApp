@@ -1,12 +1,4 @@
 const CHANNELS = {
-  GET_ADMIN_HAIR_COLORS: "get-admin-hair-colors",
-  GET_ADMIN_EYE_COLORS: "get-admin-eye-colors",
-  ADD_HAIR_COLOR: "add-hair-color",
-  ACTIVATE_HAIR_COLOR: "activate-hair-color",
-  DEACTIVATE_HAIR_COLOR: "deactivate-hair-color",
-  ADD_EYE_COLOR: "add-eye-color",
-  ACTIVATE_EYE_COLOR: "activate-eye-color",
-  DEACTIVATE_EYE_COLOR: "deactivate-eye-color",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",

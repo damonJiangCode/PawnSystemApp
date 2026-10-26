@@ -108,9 +108,9 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     );
   });
 
-  it('does not expose a color write endpoint', async () => {
+  it('does not expose a color delete endpoint', async () => {
     const response = await fetch(`${baseUrl}/client/reference/hair-colors`, {
-      method: 'POST',
+      method: 'DELETE',
     });
     expect(response.status).toBe(404);
     expect(pool.query).not.toHaveBeenCalled();

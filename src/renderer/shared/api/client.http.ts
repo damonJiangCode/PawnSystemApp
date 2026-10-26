@@ -5,6 +5,53 @@ import type {
   CitiesResponse,
 } from "../../../shared/payload-contracts/client.contract.ts";
 import { formatIsoDate } from "../utils/formatters.ts";
+import type { HairColor } from "../../../shared/models/hair-color.model.ts";
+import type { EyeColor } from "../../../shared/models/eye-color.model.ts";
+
+export async function loadColorsForAdminHttp(
+  kind: "hair" | "eye",
+  baseUrl = "http://localhost:3000",
+): Promise<(HairColor | EyeColor)[]> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors/all`,
+    ),
+  );
+}
+
+export async function addClientColorHttp(
+  kind: "hair" | "eye",
+  color: string,
+  baseUrl = "http://localhost:3000",
+): Promise<string> {
+  const result = await requestJson<{ color: string }>(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors`),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ color }),
+    },
+  );
+  return result.color;
+}
+
+export async function setClientColorActiveHttp(
+  kind: "hair" | "eye",
+  color: string,
+  isActive: boolean,
+  baseUrl = "http://localhost:3000",
+): Promise<HairColor | EyeColor> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors/${isActive ? "activate" : "deactivate"}`,
+    ),
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ color }),
+    },
+  );
+}
 
 export async function loadClientReferenceHttp(
   resource: "cities",

@@ -5,22 +5,12 @@ import {
   createClientHttp,
   updateClientHttp,
   loadClientReferenceHttp,
+  loadColorsForAdminHttp,
+  addClientColorHttp,
+  setClientColorActiveHttp,
 } from "./client.http.ts";
 
-type DesktopApi = Omit<AppApi, "client"> & {
-  client: Omit<
-    AppApi["client"],
-    | "searchClients"
-    | "searchClientsByDob"
-    | "createClient"
-    | "updateClient"
-    | "setHoldUntil"
-    | "loadCities"
-    | "loadIdTypes"
-    | "loadHairColors"
-    | "loadEyeColors"
-  >;
-};
+type DesktopApi = Omit<AppApi, "client">;
 
 declare global {
   interface Window {
@@ -34,7 +24,57 @@ export const getAppApi = (): AppApi | undefined => {
   return {
     ...desktop,
     client: {
-      ...desktop.client,
+      loadHairColorsForAdmin: () =>
+        loadColorsForAdminHttp(
+          "hair",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addHairColor: (color) =>
+        addClientColorHttp(
+          "hair",
+          color,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      activateHairColor: (color) =>
+        setClientColorActiveHttp(
+          "hair",
+          color,
+          true,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      deactivateHairColor: (color) =>
+        setClientColorActiveHttp(
+          "hair",
+          color,
+          false,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadEyeColorsForAdmin: () =>
+        loadColorsForAdminHttp(
+          "eye",
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addEyeColor: (color) =>
+        addClientColorHttp(
+          "eye",
+          color,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      activateEyeColor: (color) =>
+        setClientColorActiveHttp(
+          "eye",
+          color,
+          true,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      deactivateEyeColor: (color) =>
+        setClientColorActiveHttp(
+          "eye",
+          color,
+          false,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+
       loadCities: () =>
         loadClientReferenceHttp(
           "cities",

@@ -6,8 +6,64 @@ import {
   createClientHttp,
   updateClientHttp,
   loadClientReferenceHttp,
+  loadColorsForAdminHttp,
+  addClientColorHttp,
+  setClientColorActiveHttp,
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
+
+for (const kind of ["hair", "eye"] as const) {
+  test(`${kind} admin HTTP loads full state and preserves the appAPI return shapes`, async (t) => {
+    t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+      assert.equal(url.origin, "http://store-server:3000");
+      if (url.pathname.endsWith("/all"))
+        return Response.json([{ color: "BLUE", is_active: false }]);
+      assert.equal(
+        init.headers &&
+          (init.headers as Record<string, string>)["Content-Type"],
+        "application/json",
+      );
+      assert.deepEqual(JSON.parse(init.body as string), { color: "blue" });
+      if (init.method === "POST") {
+        assert.equal(url.pathname, `/client/reference/${kind}-colors`);
+        return Response.json({ color: "BLUE" }, { status: 201 });
+      }
+      assert.equal(init.method, "PATCH");
+      const active = url.pathname.endsWith("/activate");
+      assert.equal(
+        url.pathname,
+        `/client/reference/${kind}-colors/${active ? "activate" : "deactivate"}`,
+      );
+      return Response.json({ color: "BLUE", is_active: active });
+    });
+    const base = "http://store-server:3000/";
+    assert.deepEqual(await loadColorsForAdminHttp(kind, base), [
+      { color: "BLUE", is_active: false },
+    ]);
+    assert.equal(await addClientColorHttp(kind, "blue", base), "BLUE");
+    assert.deepEqual(
+      await setClientColorActiveHttp(kind, "blue", false, base),
+      { color: "BLUE", is_active: false },
+    );
+    assert.deepEqual(await setClientColorActiveHttp(kind, "blue", true, base), {
+      color: "BLUE",
+      is_active: true,
+    });
+  });
+}
+
+test("color HTTP errors preserve the backend message for existing admin dialogs", async (t) => {
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { message: "That hair color already exists." },
+      { status: 409 },
+    ),
+  );
+  await assert.rejects(
+    () => addClientColorHttp("hair", "BLUE"),
+    /That hair color already exists/,
+  );
+});
 
 test("reference HTTP preserves the city response and uses the configured base URL", async (t) => {
   const data = { provinces: ["SK"], citiesByProvince: { SK: ["Saskatoon"] } };

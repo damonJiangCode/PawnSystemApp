@@ -26,12 +26,8 @@ business domain.
 ## Main Flow
 
 ```text
-admin window
-  -> client.api / ticket.api
-  -> preload
-  -> client reference handlers or ticket admin handlers
-  -> service
-  -> repo
+Color windows -> client.api -> HTTP -> ReferenceController -> ReferenceService -> ReferenceRepository
+Holiday/location windows -> ticket.api -> preload -> ticket admin handlers -> service -> repo
 ```
 
 ## Review Notes

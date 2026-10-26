@@ -1,7 +1,7 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client core operations use HTTP; reference administration and ticket
-operations are not fully converted yet. The default URL is `http://localhost:3000`.
+NestJS backend. Client operations, reference queries and color administration use
+HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
 
 ## Development
 
@@ -70,9 +70,11 @@ exposes four read-only routes with no required parameters:
 | GET /client/reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
 
 `ReferenceRepository` in [reference.repository.ts](src/reference/reference.repository.ts)
-queries existing PostgreSQL tables in sorted order. No seeds or writes run here.
-`ReferenceModule` imports the database pool. The controller calls the repository
-directly because these reads need no business-rule service or input DTO.
+reads existing tables for dropdowns and writes color changes for administration.
+No seed data is created by these endpoints.
+`ReferenceModule` imports the database pool. Every reference endpoint uses
+`ReferenceController` → `ReferenceService` → `ReferenceRepository`; see the
+[Reference README](src/reference/README.md) for GET /all, POST and PATCH routes.
 `getAppApi` routes the existing loadCities/loadIdTypes/loadHairColors/loadEyeColors
 contract to `loadClientReferenceHttp`; old query IPC handlers were removed.
 
@@ -110,16 +112,11 @@ in [ticket.service.ts](../src/main/modules/tickets/ticket.service.ts).
 
 | Area                          | Current implementation                                                                                              |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Hair/eye color administration | No Nest routes; load-all/add/activate/deactivate methods on clientReferenceService                                  |
 | Imported legacy photo display | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
 
-Sources: `registerClientHandlers` in
-[client.handlers.ts](../src/main/modules/clients/client.handlers.ts),
-`clientReferenceService` in
-[client-reference.service.ts](../src/main/modules/clients/client-reference.service.ts),
-and `getImageUrl` in [imageUrl.ts](../src/renderer/shared/utils/imageUrl.ts).
-Thus core Client APIs are implemented, but the entire Client/reference/image
-boundary is not yet HTTP-only.
+Source: `getImageUrl` in [imageUrl.ts](../src/renderer/shared/utils/imageUrl.ts).
+Client/reference APIs now use HTTP; imported legacy photo display remains on the
+Electron image protocol.
 
 ## Verification
 

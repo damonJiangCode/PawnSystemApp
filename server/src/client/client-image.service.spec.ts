@@ -3,6 +3,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  realpath,
   rm,
   symlink,
   writeFile,
@@ -47,7 +48,7 @@ describe('ClientImageService', () => {
     await mkdir(base, { recursive: true });
     await writeFile(path.join(base, 'client.jpg'), Buffer.from(png, 'base64'));
     expect(await service.resolve(`${prefix}client.jpg`)).toBe(
-      path.join(base, 'client.jpg'),
+      await realpath(path.join(base, 'client.jpg')),
     );
     await expect(service.resolve(`${prefix}../outside.jpg`)).rejects.toThrow();
   });

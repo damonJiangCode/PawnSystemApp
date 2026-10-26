@@ -1,36 +1,54 @@
 # Reference API
 
-Read-only dropdown data from existing PostgreSQL tables. No seed data is written.
-
-C = `ReferenceController` ([controller](reference.controller.ts)),
-R = `ReferenceRepository` ([repository](reference.repository.ts)).
-No service layer: these queries have no separate business rules.
+- C: [ReferenceController](reference.controller.ts) for all reference routes.
+- S: [ReferenceService](reference.service.ts), used by every reference endpoint.
+- R: [ReferenceRepository](reference.repository.ts), injected with the shared pool.
 
 ## Endpoints
 
-All endpoints take no parameters and return HTTP 200 on success.
+All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`.
 
-| Endpoint                          | Response                                                            | C → R (S omitted)                   |
-| --------------------------------- | ------------------------------------------------------------------- | ----------------------------------- |
-| GET /client/reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities → loadCities             |
-| GET /client/reference/id-types    | string[]                                                            | loadIdTypes → loadIdTypes           |
-| GET /client/reference/hair-colors | string[]                                                            | loadHairColors → loadColors('hair') |
-| GET /client/reference/eye-colors  | string[]                                                            | loadEyeColors → loadColors('eye')   |
+| Method + path                 | Params | C → S → R                                                                         |
+| ----------------------------- | ------ | --------------------------------------------------------------------------------- |
+| GET /cities                   | None   | loadCities → S.loadCities → R.loadCities                                          |
+| GET /id-types                 | None   | loadIdTypes → S.loadIdTypes → R.loadIdTypes                                       |
+| GET /hair-colors              | None   | loadHairColors → S.loadColors('hair') → R.loadColors('hair')                      |
+| GET /eye-colors               | None   | loadEyeColors → S.loadColors('eye') → R.loadColors('eye')                         |
+| GET /hair-colors/all          | None   | loadHairColorsForAdmin → S.loadAllColors('hair') → R.loadAllColors('hair')        |
+| GET /eye-colors/all           | None   | loadEyeColorsForAdmin → S.loadAllColors('eye') → R.loadAllColors('eye')           |
+| POST /hair-colors             | Body   | addHairColor → S.addColor → R.addColor                                            |
+| POST /eye-colors              | Body   | addEyeColor → S.addColor → R.addColor                                             |
+| PATCH /hair-colors/activate   | Body   | activateHairColor → S.setColorActive → R.setColorActive; R.findColor on failure   |
+| PATCH /hair-colors/deactivate | Body   | deactivateHairColor → S.setColorActive → R.setColorActive; R.findColor on failure |
+| PATCH /eye-colors/activate    | Body   | activateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure    |
+| PATCH /eye-colors/deactivate  | Body   | deactivateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure  |
 
-`ReferenceRepository.loadCities` returns distinct cities grouped by province.
-loadIdTypes reads id_type; loadColors reads hair_color or eye_color and includes
-only is_active=true options. All queries are sorted. No results produce empty
-arrays (and an empty citiesByProvince object for cities); database errors return
-500 rather than a successful empty list. `ReferenceModule` in
-[reference.module.ts](reference.module.ts) imports the shared database pool.
+## Behavior
 
-Color administration (list all/add/activate/deactivate) is outside this module.
+- GET returns 200: cities use `{ provinces, citiesByProvince }`; ID types and active
+  colors use `string[]`; color `/all` uses `{ color, is_active }[]`, active first.
+- POST returns 201 with `{ color }`; PATCH returns 200 with `{ color, is_active }`.
+  The renderer adapter keeps the existing appAPI.addHairColor/addEyeColor string result.
+- `ColorDto` in [color.dto.ts](dto/color.dto.ts) requires a non-empty string up to
+  500 characters and rejects unknown fields. S trims and uppercases colors.
+- Duplicate colors (including inactive ones): 409. Missing colors: 404.
+  Already active/inactive: 409. Invalid input: 400. Database errors: 500.
+- R.addColor uses `ON CONFLICT DO NOTHING` to handle concurrent duplicate inserts.
+  R.setColorActive atomically updates only the opposite state. User values are SQL parameters;
+  table names come only from internal hair/eye choices. No DELETE or rename route.
+- Existing table data, customer references and seed definitions are preserved.
+  Inactive colors remain visible in admin lists but disappear from new dropdown queries.
+- All client/reference appAPI methods now use HTTP; their old preload/main handlers are removed.
 
 ## Tests
 
-Run from `server/`: `npm test -- src/reference`.
-
-[reference.http.spec.ts](reference.http.spec.ts) exercises real Nest routes and
-repository code with mocked PostgreSQL: city grouping, ID lists, active-color
-SQL filters, sorting, empty results, database failures and absent write routes.
-It does not query or modify the live database.
+- From `server/`: `npm test -- src/reference`.
+- [reference.http.spec.ts](reference.http.spec.ts): dropdown shapes, ordering,
+  active-color filters, empty results, database errors and absent DELETE routes.
+- [reference.service.spec.ts](reference.service.spec.ts): normalization, duplicates,
+  state errors and database failure propagation.
+- [color.http.spec.ts](color.http.spec.ts): both color types through real Nest routes,
+  DTOs, service and repository with mocked PostgreSQL; add/deactivate/reactivate,
+  duplicate inactive colors, 400/404/409 responses and parameterized SQL.
+- Renderer `client.http.test.ts`: HTTP paths, JSON payloads, preserved appAPI return
+  shapes and error messages. No test writes to the live database.
