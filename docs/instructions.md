@@ -4,16 +4,17 @@
 
 - Install Node.js 22, Git, and Docker Desktop.
 - Start Docker Desktop with Linux containers.
-- Place `superpawnconv.mdb` and `Pictureconv.mdb` in `migration/source/`.
+- Place `superpawnconv.mdb` and `Pictureconv.mdb` in `database/migration/source/`.
 
 ## First Run
 
 Run these commands one at a time in PowerShell from the project root. Continue only if the previous command succeeds.
 
-For the first import, close the app and use a fresh development database with an empty `migration/exports/` folder.
+For the first import, close the app and use a fresh development database with an empty `database/migration/exports/` folder.
 
 ```powershell
 npm ci
+npm --prefix server ci
 npm run migration:prepare
 docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
 npm run migration:execute
@@ -22,7 +23,7 @@ npm run dev
 
 `migration:prepare` checks requirements and creates `.env` with a generated password if missing. `migration:execute` backs up the database, creates tables, imports Access data and photos, and checks the results. Mapping files are included in the repository.
 
-If migration fails, stop and check `migration/reports/` before retrying; some data may already be imported. Backups are in `migration/backups/`.
+If migration fails, stop and check `database/migration/reports/` before retrying; some data may already be imported. Backups are in `database/migration/backups/`.
 
 ## Next Time
 

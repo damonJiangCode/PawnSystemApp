@@ -3,10 +3,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends mdbtools postgr
 WORKDIR /app
 ENV ELECTRON_SKIP_BINARY_DOWNLOAD=1
 COPY package.json package-lock.json ./
-RUN npm ci
-COPY tsconfig.json tsconfig.main.json ./
+RUN npm ci --no-audit --no-fund
+COPY tsconfig.json ./
+COPY electron/tsconfig.json ./electron/tsconfig.json
 COPY scripts ./scripts
-COPY src ./src
+COPY electron/src ./electron/src
+COPY shared ./shared
 COPY database ./database
 RUN npm run build:main
 ENTRYPOINT ["node"]

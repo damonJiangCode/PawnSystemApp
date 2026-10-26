@@ -9,5 +9,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/main", "src/shared", "database"]
+  "include": ["electron/src/main", "shared", "database"]
 }

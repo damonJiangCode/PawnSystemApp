@@ -363,7 +363,7 @@ const executeDevMigration = async ({
     await command("compile-backend", process.execPath, [
       tsc,
       "-p",
-      "tsconfig.main.json",
+      "electron/tsconfig.json",
     ]);
     await assertEmptyDatabase(client);
     writesStarted = true;

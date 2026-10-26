@@ -20,7 +20,7 @@ and `DB_PASSWORD`; start PostgreSQL separately. `PORT` defaults to 3000.
 The combined root launcher assumes Vite 5173 and backend 3000.
 
 New images default to `../images/clients` (`CLIENT_IMAGE_DIR`); imported images
-can be served from `../migration/exports/client-photos`
+can be served from `../database/migration/exports/client-photos`
 (`CLIENT_MIGRATION_IMAGE_DIR`). Relative storage paths resolve from the server
 working directory. Do not commit credentials or customer photos.
 
@@ -53,7 +53,7 @@ POST/PATCH. Search and write results include client details and identifications.
 handle business rules and transactions. `ClientRepository` methods in
 [client.repository.ts](src/client/client.repository.ts) handle parameterized SQL;
 `mapRowToClient` in [client.mapper.ts](src/client/client.mapper.ts) creates responses.
-`getAppApi` in [app.api.ts](../src/renderer/shared/api/app.api.ts) connects renderer
+`getAppApi` in [app.api.ts](../frontend/src/shared/api/app.api.ts) connects renderer
 client operations to HTTP. Concise module references:
 [Client](src/client/README.md) and [Reference](src/reference/README.md).
 
@@ -104,9 +104,9 @@ Sources: `CreateClientDto` / `UpdateClientDto` in [dto/](src/client/dto/),
 `ClientService.create/update`, `EmployeeRepository.findActiveByPassword` in
 [employee.repository.ts](src/employees/employee.repository.ts),
 `ClientImageService.save`, `ClientHoldDialog.save` in
-[ClientHoldDialog.tsx](../src/renderer/modules/clients/components/ClientHoldDialog.tsx),
+[ClientHoldDialog.tsx](../frontend/src/modules/clients/components/ClientHoldDialog.tsx),
 and `ticketService.createPawnTicket/createSellTicket/convertTicket/transferTicket`
-in [ticket.service.ts](../src/main/modules/tickets/ticket.service.ts).
+in [ticket.service.ts](../electron/src/main/modules/tickets/ticket.service.ts).
 
 ### Remaining work
 
@@ -114,7 +114,7 @@ in [ticket.service.ts](../src/main/modules/tickets/ticket.service.ts).
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | Imported legacy photo display | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
 
-Source: `getImageUrl` in [imageUrl.ts](../src/renderer/shared/utils/imageUrl.ts).
+Source: `getImageUrl` in [imageUrl.ts](../frontend/src/shared/utils/imageUrl.ts).
 Client/reference APIs now use HTTP; imported legacy photo display remains on the
 Electron image protocol.
 

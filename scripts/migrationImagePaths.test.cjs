@@ -10,7 +10,7 @@ test("Electron resolves old and new migration photo paths after moving the folde
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "migration-image-paths-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const source = fs.readFileSync(
-    path.join(__dirname, "../src/main/shared/imageStorage.ts"),
+    path.join(__dirname, "../electron/src/main/shared/imageStorage.ts"),
     "utf8",
   );
   const code = ts.transpileModule(source, {

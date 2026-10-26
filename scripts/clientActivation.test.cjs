@@ -50,17 +50,20 @@ function fixture(inactive = []) {
     },
     release: () => calls.push({ sql: "release" }),
   };
-  const mapper = load("src/main/modules/clients/client.mapper.ts");
-  const { clientRepo } = load("src/main/modules/clients/client.repo.ts", {
-    "../../../../database/connection.ts": {
-      connect: () => {
-        throw new Error("Unexpected extra connection");
+  const mapper = load("electron/src/main/modules/clients/client.mapper.ts");
+  const { clientRepo } = load(
+    "electron/src/main/modules/clients/client.repo.ts",
+    {
+      "../../../../../database/connection.ts": {
+        connect: () => {
+          throw new Error("Unexpected extra connection");
+        },
       },
+      "./client.mapper.ts": mapper,
     },
-    "./client.mapper.ts": mapper,
-  });
-  const transaction = load("src/main/shared/runInTransaction.ts", {
-    "../../../database/connection.ts": { connect: async () => connection },
+  );
+  const transaction = load("electron/src/main/shared/runInTransaction.ts", {
+    "../../../../database/connection.ts": { connect: async () => connection },
   });
   const ticket = { ticket_number: 100, client_number: 11, status: "pawned" };
   const ticketRepo = {
@@ -81,36 +84,39 @@ function fixture(inactive = []) {
       return ticket;
     },
   };
-  const { ticketService } = load("src/main/modules/tickets/ticket.service.ts", {
-    "../clients/client.repo.ts": { clientRepo },
-    "./ticket.repo.ts": { ticketRepo },
-    "../../shared/runInTransaction.ts": transaction,
-    "../../shared/createFieldError.ts": load(
-      "src/main/shared/createFieldError.ts",
-    ),
-    "../employees/employee.service.ts": {
-      employeeService: {
-        getEmployeeDisplayNameByPassword: async () => "STAFF",
-      },
-    },
-    "./ticket.input.ts": {
-      ticketInput: Object.fromEntries(
-        [
-          "normalizeCreatePawnTicket",
-          "normalizeCreateSellTicket",
-          "normalizeConvertTicket",
-          "normalizeTransferTicket",
-        ].map((name) => [name, (value) => value]),
+  const { ticketService } = load(
+    "electron/src/main/modules/tickets/ticket.service.ts",
+    {
+      "../clients/client.repo.ts": { clientRepo },
+      "./ticket.repo.ts": { ticketRepo },
+      "../../shared/runInTransaction.ts": transaction,
+      "../../shared/createFieldError.ts": load(
+        "electron/src/main/shared/createFieldError.ts",
       ),
-    },
-    "../../../shared/utils/calculation.ts": {
-      calculation: {
-        getCurrentDatetime: () => new Date(),
-        getDueDatetime: () => new Date(),
-        getSellDueDatetime: () => new Date(),
+      "../employees/employee.service.ts": {
+        employeeService: {
+          getEmployeeDisplayNameByPassword: async () => "STAFF",
+        },
+      },
+      "./ticket.input.ts": {
+        ticketInput: Object.fromEntries(
+          [
+            "normalizeCreatePawnTicket",
+            "normalizeCreateSellTicket",
+            "normalizeConvertTicket",
+            "normalizeTransferTicket",
+          ].map((name) => [name, (value) => value]),
+        ),
+      },
+      "../../../../../shared/utils/calculation.ts": {
+        calculation: {
+          getCurrentDatetime: () => new Date(),
+          getDueDatetime: () => new Date(),
+          getSellDueDatetime: () => new Date(),
+        },
       },
     },
-  });
+  );
   return { calls, clientRepo, ticketService, connection };
 }
 
@@ -216,7 +222,7 @@ test("deactivation disables ticket issuance buttons while preserving existing-ti
     react: { default: require("react") },
     "../shared/TicketActionsLayout": { default: () => null },
     "../../../history/history.helpers": load(
-      "src/renderer/modules/history/history.helpers.ts",
+      "frontend/src/modules/history/history.helpers.ts",
     ),
   };
   for (const icon of [
@@ -233,11 +239,11 @@ test("deactivation disables ticket issuance buttons while preserving existing-ti
     dependencies[`@mui/icons-material/${icon}`] = { default: () => null };
   }
   const Transaction = load(
-    "src/renderer/modules/tickets/components/transaction/TransactionTicketActions.tsx",
+    "frontend/src/modules/tickets/components/transaction/TransactionTicketActions.tsx",
     dependencies,
   ).default;
   const History = load(
-    "src/renderer/modules/tickets/components/history/HistoryTicketActions.tsx",
+    "frontend/src/modules/tickets/components/history/HistoryTicketActions.tsx",
     dependencies,
   ).default;
   const transactionActions = Transaction({

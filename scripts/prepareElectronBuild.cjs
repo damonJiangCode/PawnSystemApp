@@ -12,7 +12,7 @@ fs.writeFileSync(
     {
       name: "pawnsystemsub-electron-build",
       private: true,
-      main: "src/main/index.js",
+      main: "electron/src/main/index.js",
       type: "commonjs",
     },
     null,
