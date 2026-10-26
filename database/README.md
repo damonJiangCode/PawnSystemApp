@@ -1,25 +1,22 @@
-# Database code
+# Database
 
-This root-level folder owns the PostgreSQL schema, reference seeds, SQL functions,
-views, environment loader, connection pool used by Electron, and initializer.
-Nest retains its dependency-injection connection provider in server/src/database.
-Both processes use the private root .env; environment variables take precedence.
+- This README is a developer guide, not a runtime input.
+- `schema/`: PostgreSQL table and index definitions.
+- `seed/`: initial reference data, including city data.
+- `functions/` and `views/`: database functions and views.
+- `env.ts` → `loadEnv`: reads the private root `.env`.
+- `connection.ts` → `connect`: provides Electron's PostgreSQL connections.
+- `initialize.ts` → `initializeDatabase`: creates schema and reference data.
+- NestJS uses its own pool provider in `server/src/database/database.module.ts`.
+- `migration/`: imports legacy Access data; see [migration guide](migration/README.md).
 
-Run commands from the project root:
+## Commands
 
-```powershell
-npm run build:main
-# Initialize schema/reference data only when setting up or upgrading a database:
-npm run db:init
-```
-
-Build output is `.electron-build/database/`. Electron's compiled entry point is
-`.electron-build/src/main/index.js`. The build preparation script copies
-seed/canadacities.csv beside the compiled seed module. The migration runner and
-Docker migration image use this layout too.
-
-Moving this code does not require recreating PostgreSQL, changing .env, running
-db:init on an already initialized database, or reimporting Access records.
-Restart npm run dev after the refactor. Rebuild the migration image before the
-next new import; migration:execute performs that build automatically. Do not
-rerun an import against an already populated database.
+- Run commands from the project root with PostgreSQL running and `.env` configured.
+- `npm run build:main`: compiles Electron/database code into `.electron-build/`.
+- `npm run db:init`: builds and initializes the database; it does not import Access records.
+- `npm run migration:execute`: initializes the schema automatically before importing;
+  no separate `db:init` is needed for this workflow.
+- Build output: `.electron-build/database/`; Electron entry: `.electron-build/src/main/index.js`.
+- Changing a CREATE TABLE definition does not alter existing tables; existing
+  databases need the corresponding SQL applied separately.

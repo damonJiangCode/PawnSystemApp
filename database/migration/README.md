@@ -1,50 +1,41 @@
-# Migration inputs and outputs
+# Access migration
 
-This folder is `database/migration/` at the repository root. Run the existing
-`npm run migration:prepare` and `npm run migration:execute` commands from the
-project root. After moving files, stage or commit the mapping inputs at their new
-paths before preparation; preparation requires tracked mapping files.
+- This README explains the workflow; scripts read Access files and JSON rules.
+- Run every command from the project root.
+- Install dependencies with `npm ci`, start Docker Desktop, and keep the app closed.
 
-Fresh photo exports store paths under `database/migration/exports/`. Electron and
-the Nest client-image service also accept older `migration/exports/` paths and
-resolve them to the new folders. No database photo-path rewrite or Access reimport
-is required solely for this folder move.
+## Run in this order
 
-Tracked inputs:
+- **Inputs:** put both files in `database/migration/source/`:
+  `superpawnconv.mdb` and `Pictureconv.mdb`.
+- **Prepare:** `npm run migration:prepare` creates missing local directories and
+  `.env` with a generated password, then checks inputs, dependencies and Docker.
+- **Start PostgreSQL:**
 
-- `scripts/`: reusable migration code.
-- `mappings/category-mapping.json`: required category conversion rules.
-- `mappings/location-mapping.json`: required location-code conversion rules.
+  ```bash
+  docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+  ```
 
-Mapping files are executable JSON inputs, read directly with `JSON.parse`:
+- **Import:** `npm run migration:execute` initializes the schema, imports records,
+  exports photos, creates backups and validates the result.
+- **Review:** inspect the generated reports before running `npm run dev`.
 
-- Category: `subcategoryRules` and `parentRules` arrays of `{ source, category, subcategory }`. Sources are normalized lookup keys. Specific subcategory rules take priority over parent rules; legacy codes `7777` and `7779` explicitly map to `OTHER / other`. See [category notes](category-notes.md) for rationale.
-- Location: an array of `{ legacy_location, mapped_location }`. Unresolved locations use `UNKNOWN`.
+## Files
 
-Readers reject malformed or empty rules, unexpected fields, and conflicting normalized sources. Preparation checks that both JSON inputs exist and are tracked; execution records their hashes in its input manifest and verifies they have not changed.
+- `scripts/`: migration code.
+- `mappings/`: required, Git-tracked category and location JSON rules.
+- `source/`: private Access inputs.
+- `exports/`: generated customer/item photos.
+- `reports/`: per-run results, execution manifest and validation logs.
+- `backups/`: per-run database and photo backups.
+- `source/`, `exports/`, `reports/` and `backups/` are Git-ignored.
 
-Mapping files contain conversion rules only and are included in a Git clone. Keep them; they are not generated reports. The mapping directory is mounted read-only during migration. Markdown files are explanatory documentation, not runtime inputs.
+## Behavior
 
-Client migration omits `hold_until` from its batch INSERT, including for the
-fallback client. The nullable DATE column has no database default, so imported
-clients start with NULL (no hold). There is no client initialization mapping or
-fixed baseline date. Users can set or clear a hold later. The fresh-database
-CREATE TABLE definition includes the column; existing databases must be updated
-with separate SQL before importing.
-
-Client migration explicitly inserts `is_active = TRUE` for every imported client,
-including the fallback client. The CREATE TABLE definition also defaults new
-clients to active. Existing databases need this column added separately before
-importing; the migration does not alter the schema. Clients can be deactivated
-later by the application without deleting their records or tickets.
-
-Private local data (ignored by Git and Docker builds):
-
-- `source/`: original Access databases; supply these privately on a new computer.
-- `reports/`: generated migration results and diagnostics.
-- `exports/`: exported client and item photos.
-- `backups/`: database and photo backups.
-
-Do not put customer records, credentials, source usage statistics, or generated reports in `mappings/`.
-
-Run `npm run migration:prepare`, start the Compose database, then explicitly run `npm run migration:execute`. Keep the app closed during import. Each execution uses its own private report and backup directory; it refuses populated targets and never automatically clears or resumes them.
+- `prepareDevMigration` in [prepareDevMigration.cjs](../../scripts/prepareDevMigration.cjs)
+  checks readiness; it does not start PostgreSQL or import records.
+- `executeDevMigration` in [executeDevMigration.cjs](../../scripts/executeDevMigration.cjs)
+  writes to PostgreSQL and requires an empty target and clean photo exports.
+- Imported clients start active with no hold: `is_active=true`, `hold_until=NULL`.
+- Failed imports are not automatically erased or resumed; inspect the report
+  before deciding how to retry.
