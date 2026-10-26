@@ -1,3 +1,4 @@
+import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import React from "react";
 import {
   Alert,
@@ -36,6 +37,7 @@ const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
   deactivateColor,
 }) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const [pending, setPending] = React.useState<EyeColor | null>(null);
   const [searchInput, setSearchInput] = React.useState("");
   const [searchedColor, setSearchedColor] = React.useState("");
   const [allColors, setAllColors] = React.useState<EyeColor[]>([]);
@@ -104,14 +106,6 @@ const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
   };
 
   const handleDeactivate = async (color: EyeColor) => {
-    if (
-      !window.confirm(
-        `Deactivate ${color.color}? It will no longer appear when selecting an ${colorType.toLowerCase()} color for clients.`,
-      )
-    ) {
-      return;
-    }
-
     setUpdatingColor(color.color);
     setError("");
     setMessage("");
@@ -287,7 +281,7 @@ const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
                     disabled={busy}
                     onClick={() =>
                       void (color.is_active
-                        ? handleDeactivate(color)
+                        ? setPending(color)
                         : handleActivate(color))
                     }
                   >
@@ -324,6 +318,22 @@ const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
           }}
         />
       </Stack>
+      <ConfirmDialog
+        open={Boolean(pending)}
+        title="Deactivate color"
+        message={
+          pending
+            ? `Deactivate ${pending.color}? It will no longer appear when selecting a color for clients.`
+            : ""
+        }
+        confirmLabel="Deactivate"
+        onCancel={() => setPending(null)}
+        onConfirm={() => {
+          if (!pending) return;
+          void handleDeactivate(pending);
+          setPending(null);
+        }}
+      />
     </WindowLayout>
   );
 };

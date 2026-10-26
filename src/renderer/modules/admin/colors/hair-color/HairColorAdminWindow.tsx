@@ -1,3 +1,4 @@
+import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import React from "react";
 import {
   Alert,
@@ -24,6 +25,7 @@ const sortHairColors = (colors: HairColor[]) =>
 
 const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const [pending, setPending] = React.useState<HairColor | null>(null);
   const [searchInput, setSearchInput] = React.useState("");
   const [searchedColor, setSearchedColor] = React.useState("");
   const [allColors, setAllColors] = React.useState<HairColor[]>([]);
@@ -90,22 +92,12 @@ const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
   };
 
   const handleDeactivate = async (hairColor: HairColor) => {
-    if (
-      !window.confirm(
-        `Deactivate ${hairColor.color}? It will no longer appear when selecting a hair color for clients.`,
-      )
-    ) {
-      return;
-    }
-
     setUpdatingColor(hairColor.color);
     setError("");
     setMessage("");
 
     try {
-      const deactivated = await clientApi.deactivateHairColor(
-        hairColor.color,
-      );
+      const deactivated = await clientApi.deactivateHairColor(hairColor.color);
       const updateColor = (existingColor: HairColor) =>
         existingColor.color === deactivated.color ? deactivated : existingColor;
 
@@ -262,7 +254,7 @@ const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
                     disabled={busy}
                     onClick={() =>
                       void (hairColor.is_active
-                        ? handleDeactivate(hairColor)
+                        ? setPending(hairColor)
                         : handleActivate(hairColor))
                     }
                   >
@@ -299,6 +291,22 @@ const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
           }}
         />
       </Stack>
+      <ConfirmDialog
+        open={Boolean(pending)}
+        title="Deactivate hair color"
+        message={
+          pending
+            ? `Deactivate ${pending.color}? It will no longer appear when selecting a hair color for clients.`
+            : ""
+        }
+        confirmLabel="Deactivate"
+        onCancel={() => setPending(null)}
+        onConfirm={() => {
+          if (!pending) return;
+          void handleDeactivate(pending);
+          setPending(null);
+        }}
+      />
     </WindowLayout>
   );
 };

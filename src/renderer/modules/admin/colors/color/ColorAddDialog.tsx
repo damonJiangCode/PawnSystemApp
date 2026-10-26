@@ -102,9 +102,6 @@ const ColorAddDialog: React.FC<ColorAddDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={saving}>
-          Close
-        </Button>
         <Button
           variant="contained"
           color="success"
@@ -112,6 +109,9 @@ const ColorAddDialog: React.FC<ColorAddDialogProps> = ({
           disabled={saving}
         >
           {saving ? "Adding..." : "Add"}
+        </Button>
+        <Button onClick={onClose} disabled={saving}>
+          Close
         </Button>
       </DialogActions>
     </Dialog>

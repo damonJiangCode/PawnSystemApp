@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import PrintIcon from "@mui/icons-material/Print";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {
@@ -12,7 +13,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
@@ -126,28 +126,26 @@ const DailyReportWindow: React.FC<WindowScreenProps> = () => {
           className="no-print"
           sx={{ displayPrint: "none" }}
         >
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="From"
-            type="date"
             size="small"
             value={fromDate}
-            onChange={(event) => {
-              setFromDate(event.target.value);
+            onValueChange={(value) => {
+              setFromDate(value);
               resetGeneratedReport();
             }}
-            slotProps={{ inputLabel: { shrink: true } }}
             sx={{ width: 180 }}
           />
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="To"
-            type="date"
             size="small"
             value={toDate}
-            onChange={(event) => {
-              setToDate(event.target.value);
+            onValueChange={(value) => {
+              setToDate(value);
               resetGeneratedReport();
             }}
-            slotProps={{ inputLabel: { shrink: true } }}
             sx={{ width: 180 }}
           />
           <Button

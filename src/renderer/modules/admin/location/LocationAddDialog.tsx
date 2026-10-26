@@ -143,9 +143,6 @@ const LocationAddDialog: React.FC<LocationAddDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={saving}>
-          Close
-        </Button>
         <Button
           variant="contained"
           color="success"
@@ -153,6 +150,9 @@ const LocationAddDialog: React.FC<LocationAddDialogProps> = ({
           disabled={saving}
         >
           {saving ? "Adding..." : "Add"}
+        </Button>
+        <Button onClick={onClose} disabled={saving}>
+          Close
         </Button>
       </DialogActions>
     </Dialog>

@@ -411,6 +411,16 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                   hairColorError={validationErrors.hair_color}
                   eyeColorError={validationErrors.eye_color}
                   onChange={handleInputChange}
+                  onDateOfBirthChange={(value) => {
+                    setClient((prev) => ({
+                      ...prev,
+                      date_of_birth: value
+                        ? new Date(`${value}T00:00:00`)
+                        : new Date(NaN),
+                    }));
+                    clearValidationError("date_of_birth");
+                    setSubmitError("");
+                  }}
                   onDateOfBirthBlur={handleDateOfBirthBlur}
                 />
 
@@ -616,21 +626,21 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
         >
           <Button
             style={{ textTransform: "none" }}
-            type="button"
-            onClick={handleClose}
-            disabled={savingClient}
-            sx={{ mr: 1 }}
-          >
-            Cancel
-          </Button>
-          <Button
-            style={{ textTransform: "none" }}
             form={formId}
             type="submit"
             variant="contained"
             disabled={savingClient}
           >
             {isEditMode ? "Update" : "Add"}
+          </Button>
+          <Button
+            style={{ textTransform: "none" }}
+            type="button"
+            onClick={handleClose}
+            disabled={savingClient}
+            sx={{ ml: 1 }}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

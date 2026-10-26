@@ -43,10 +43,10 @@ const PickupHoldDialog: React.FC<PickupHoldDialogProps> = ({
       </List>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
       <Button variant="contained" color="error" onClick={onContinue}>
         Continue
       </Button>
+      <Button onClick={onClose}>Cancel</Button>
     </DialogActions>
   </Dialog>
 );

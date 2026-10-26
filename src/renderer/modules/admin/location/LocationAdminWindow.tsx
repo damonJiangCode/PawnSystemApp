@@ -1,3 +1,4 @@
+import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import React from "react";
 import {
   Alert,
@@ -24,6 +25,7 @@ const sortLocations = (locations: Location[]) =>
 
 const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const [pending, setPending] = React.useState<Location | null>(null);
   const [searchInput, setSearchInput] = React.useState("");
   const [searchedCode, setSearchedCode] = React.useState("");
   const [allLocations, setAllLocations] = React.useState<Location[]>([]);
@@ -94,22 +96,12 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
   };
 
   const handleDeactivate = async (location: Location) => {
-    if (
-      !window.confirm(
-        `Deactivate ${location.location}? It will no longer appear when selecting a location for new tickets.`,
-      )
-    ) {
-      return;
-    }
-
     setDeactivatingCode(location.location);
     setError("");
     setMessage("");
 
     try {
-      const deactivated = await ticketApi.deactivateLocation(
-        location.location,
-      );
+      const deactivated = await ticketApi.deactivateLocation(location.location);
       const updateLocation = (existingLocation: Location) =>
         existingLocation.location === deactivated.location
           ? deactivated
@@ -262,7 +254,7 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
                       color="error"
                       disabled={busy}
                       sx={{ minWidth: 92, justifySelf: "end" }}
-                      onClick={() => void handleDeactivate(location)}
+                      onClick={() => setPending(location)}
                     >
                       {deactivatingCode === location.location
                         ? "Deactivating..."
@@ -290,6 +282,22 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
           }}
         />
       </Stack>
+      <ConfirmDialog
+        open={Boolean(pending)}
+        title="Deactivate location"
+        message={
+          pending
+            ? `Deactivate ${pending.location}? It will no longer appear when selecting a location for tickets.`
+            : ""
+        }
+        confirmLabel="Deactivate"
+        onCancel={() => setPending(null)}
+        onConfirm={() => {
+          if (!pending) return;
+          void handleDeactivate(pending);
+          setPending(null);
+        }}
+      />
     </WindowLayout>
   );
 };

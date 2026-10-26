@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import PreviewIcon from "@mui/icons-material/Preview";
 import SendIcon from "@mui/icons-material/Send";
@@ -13,7 +14,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -148,30 +148,28 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
     >
       <Stack spacing={1.5} sx={{ minHeight: "100%" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="From"
-            type="date"
             size="small"
             value={fromDate}
-            onChange={(event) => {
-              setFromDate(event.target.value);
+            onValueChange={(value) => {
+              setFromDate(value);
               setPreview(undefined);
               setSubmissionResult(undefined);
             }}
-            slotProps={{ inputLabel: { shrink: true } }}
             sx={{ width: 180 }}
           />
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="To"
-            type="date"
             size="small"
             value={toDate}
-            onChange={(event) => {
-              setToDate(event.target.value);
+            onValueChange={(value) => {
+              setToDate(value);
               setPreview(undefined);
               setSubmissionResult(undefined);
             }}
-            slotProps={{ inputLabel: { shrink: true } }}
             sx={{ width: 180 }}
           />
           <Button

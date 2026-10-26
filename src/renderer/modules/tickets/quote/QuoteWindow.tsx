@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import PrintIcon from "@mui/icons-material/Print";
 import {
   Alert,
@@ -12,7 +13,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -67,16 +67,13 @@ const QuoteWindow: React.FC<WindowScreenProps> = () => {
           className="no-print"
           sx={{ displayPrint: "none" }}
         >
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="Quote Date"
-            type="date"
             size="small"
             value={quoteDate}
-            onChange={(event) => actions.setQuoteDate(event.target.value)}
-            slotProps={{
-              inputLabel: { shrink: true },
-              htmlInput: { min: today },
-            }}
+            onValueChange={actions.setQuoteDate}
+            min={today}
             sx={{ width: 190 }}
           />
           <Button

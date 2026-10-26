@@ -1,3 +1,4 @@
+import DateField from "../../../../../shared/components/DateField";
 import React, { useEffect, useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import { clientApi } from "../../../client.api";
@@ -19,6 +20,7 @@ interface DobGenderColorProps {
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
+  onDateOfBirthChange: (value: string) => void;
   onDateOfBirthBlur?: () => void;
 }
 
@@ -33,6 +35,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
   eyeColorError,
   onChange,
   onDateOfBirthBlur,
+  onDateOfBirthChange,
 }) => {
   const [hairColors, setHairColors] = useState<string[]>([]);
   const [eyeColors, setEyeColors] = useState<string[]>([]);
@@ -71,12 +74,11 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
 
   return (
     <Box sx={{ display: "flex", gap: 2 }}>
-      <TextField
+      <DateField
         fullWidth
         required
-        type="date"
         name="date_of_birth"
-        label="Date of birth"
+        label="DoB (MM-DD-YYYY)"
         value={
           typeof date_of_birth === "string"
             ? date_of_birth
@@ -84,10 +86,9 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
               ? formatLocalIsoDatePart(resolveDate(date_of_birth) as Date)
               : ""
         }
-        onChange={onChange}
+        onValueChange={onDateOfBirthChange}
         onBlur={onDateOfBirthBlur}
         size="small"
-        slotProps={{ inputLabel: { shrink: true } }}
         error={Boolean(dateOfBirthError)}
         helperText={dateOfBirthError || " "}
       />

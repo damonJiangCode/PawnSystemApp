@@ -1,5 +1,17 @@
 const dateOnlyPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
 
+// Convert a displayed calendar date to the API date without timezone conversion.
+export const parseMonthDayYear = (value: string): string | null => {
+  const parts = /^(\d{2})-(\d{2})-(\d{4})$/.exec(value.trim());
+  if (!parts) return null;
+  const iso = `${parts[3]}-${parts[1]}-${parts[2]}`;
+  const parsed = new Date(`${iso}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) &&
+    parsed.toISOString().slice(0, 10) === iso
+    ? iso
+    : null;
+};
+
 export const formatLocalIsoDatePart = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -28,10 +40,7 @@ export const resolveDate = (value?: string | Date | null) => {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 };
 
-export const formatDisplayValue = (
-  value: unknown,
-  fallback = "-",
-): string => {
+export const formatDisplayValue = (value: unknown, fallback = "-"): string => {
   if (value === null || value === undefined || value === "") {
     return fallback;
   }

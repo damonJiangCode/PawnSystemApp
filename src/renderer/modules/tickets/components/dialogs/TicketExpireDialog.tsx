@@ -10,10 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { Ticket } from "../../../../../shared/models/ticket.model";
-import type {
-  ExpireTicketInput,
-  TicketFormError,
-} from "../../ticket.api";
+import type { ExpireTicketInput, TicketFormError } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 
 interface TicketExpireDialogProps {
@@ -169,9 +166,6 @@ const TicketExpireDialog: React.FC<TicketExpireDialogProps> = ({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} disabled={saving}>
-          Cancel
-        </Button>
         <Button
           onClick={handleSave}
           variant="contained"
@@ -179,6 +173,9 @@ const TicketExpireDialog: React.FC<TicketExpireDialogProps> = ({
           disabled={saving}
         >
           {saving ? "Saving..." : "Expire"}
+        </Button>
+        <Button onClick={onClose} disabled={saving}>
+          Cancel
         </Button>
       </DialogActions>
     </Dialog>

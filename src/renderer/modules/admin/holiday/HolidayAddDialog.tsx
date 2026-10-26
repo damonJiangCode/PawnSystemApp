@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import React from "react";
 import {
   Alert,
@@ -99,19 +100,21 @@ const HolidayAddDialog: React.FC<HolidayAddDialogProps> = ({
       <DialogContent dividers>
         <Stack spacing={1.25} sx={{ pt: 0.5 }}>
           {submitError && <Alert severity="error">{submitError}</Alert>}
-          <TextField
+          <DateField
             inputRef={dateInputRef}
             name="holiday_date"
-            type="date"
             label="Holiday Date"
             value={input.holiday_date}
-            onChange={handleChange}
+            onValueChange={(value) => {
+              setInput((prev) => ({ ...prev, holiday_date: value }));
+              setDateError("");
+              setSubmitError("");
+            }}
             error={Boolean(dateError)}
             helperText={dateError || " "}
             required
             fullWidth
             size="small"
-            slotProps={{ inputLabel: { shrink: true } }}
           />
           <TextField
             name="name"
@@ -127,9 +130,6 @@ const HolidayAddDialog: React.FC<HolidayAddDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={saving}>
-          Close
-        </Button>
         <Button
           variant="contained"
           color="success"
@@ -137,6 +137,9 @@ const HolidayAddDialog: React.FC<HolidayAddDialogProps> = ({
           disabled={saving}
         >
           {saving ? "Adding..." : "Add"}
+        </Button>
+        <Button onClick={onClose} disabled={saving}>
+          Close
         </Button>
       </DialogActions>
     </Dialog>

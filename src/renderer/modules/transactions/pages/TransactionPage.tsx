@@ -311,15 +311,15 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => actions.setRemoveItemTarget(null)}>
-            Cancel
-          </Button>
           <Button
             variant="contained"
             color="error"
             onClick={() => void actions.handleConfirmRemoveItem()}
           >
             Confirm
+          </Button>
+          <Button onClick={() => actions.setRemoveItemTarget(null)}>
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

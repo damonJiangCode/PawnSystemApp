@@ -1,3 +1,4 @@
+import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import React from "react";
 import {
   Alert,
@@ -30,6 +31,7 @@ const normalizeYear = (value: string) => value.trim();
 const isValidYear = (value: string) => /^\d{4}$/.test(value);
 
 const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
+  const [pending, setPending] = React.useState<HolidayDate | null>(null);
   const currentYear = String(new Date().getFullYear());
   const yearInputRef = React.useRef<HTMLInputElement>(null);
   const [yearInput, setYearInput] = React.useState(currentYear);
@@ -104,14 +106,6 @@ const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
   };
 
   const handleRemoveHoliday = async (holiday: HolidayDate) => {
-    if (
-      !window.confirm(
-        `Remove ${formatHolidayDate(holiday.holiday_date)} from holidays?`,
-      )
-    ) {
-      return;
-    }
-
     setRemovingDate(holiday.holiday_date);
     setError("");
     setMessage("");
@@ -251,7 +245,7 @@ const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
                     color="error"
                     disabled={busy}
                     sx={{ minWidth: 76, justifySelf: "end" }}
-                    onClick={() => void handleRemoveHoliday(holiday)}
+                    onClick={() => setPending(holiday)}
                   >
                     {removingDate === holiday.holiday_date
                       ? "Removing..."
@@ -284,6 +278,22 @@ const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
           }}
         />
       </Stack>
+      <ConfirmDialog
+        open={Boolean(pending)}
+        title="Remove holiday"
+        message={
+          pending
+            ? `Remove ${formatHolidayDate(pending.holiday_date)}? This date will be removed from the holiday calendar.`
+            : ""
+        }
+        confirmLabel="Remove"
+        onCancel={() => setPending(null)}
+        onConfirm={() => {
+          if (!pending) return;
+          void handleRemoveHoliday(pending);
+          setPending(null);
+        }}
+      />
     </WindowLayout>
   );
 };

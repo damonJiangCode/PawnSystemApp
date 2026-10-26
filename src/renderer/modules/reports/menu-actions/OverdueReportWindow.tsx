@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import PrintIcon from "@mui/icons-material/Print";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -197,16 +198,15 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
           className="no-print"
           sx={{ displayPrint: "none" }}
         >
-          <TextField
+          <DateField
+            format="YYYY-MM-DD"
             label="Due On or Before"
-            type="date"
             size="small"
             value={dueOnOrBefore}
-            onChange={(event) => {
-              setDueOnOrBefore(event.target.value);
+            onValueChange={(value) => {
+              setDueOnOrBefore(value);
               clearReport();
             }}
-            slotProps={{ inputLabel: { shrink: true } }}
             sx={{ width: 190 }}
           />
           <Autocomplete

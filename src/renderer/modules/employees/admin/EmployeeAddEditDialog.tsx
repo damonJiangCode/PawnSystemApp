@@ -1,3 +1,4 @@
+import DateField from "../../../shared/components/DateField";
 import React from "react";
 import {
   Alert,
@@ -314,18 +315,21 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
           />
 
           <Stack direction="row" spacing={1}>
-            <TextField
+            <DateField
               name="date_of_birth"
-              type="date"
               label="Date of Birth"
               value={employee.date_of_birth}
-              onChange={handleChange}
+              onValueChange={(value) => {
+                setEmployee((prev) => ({ ...prev, date_of_birth: value }));
+                setErrors((prev) => ({ ...prev, date_of_birth: "" }));
+                setMessage("");
+                setSubmitError("");
+              }}
               error={Boolean(errors.date_of_birth)}
               helperText={errors.date_of_birth || " "}
               required
               fullWidth
               size="small"
-              slotProps={{ inputLabel: { shrink: true } }}
             />
             <TextField
               select
@@ -433,15 +437,15 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={saving}>
-          Close
-        </Button>
         <Button
           variant="contained"
           onClick={() => void handleSave()}
           disabled={saving}
         >
           {saving ? "Saving..." : saveLabel}
+        </Button>
+        <Button onClick={onClose} disabled={saving}>
+          Close
         </Button>
       </DialogActions>
     </Dialog>

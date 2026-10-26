@@ -388,19 +388,19 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
             >
               <Button
                 type="button"
-                onClick={onClose}
-                disabled={saving}
-                sx={{ mr: 1 }}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
                 variant="contained"
                 disabled={saving}
                 onClick={handleSave}
               >
                 {mode === "add" ? "Add" : "Save"}
+              </Button>
+              <Button
+                type="button"
+                onClick={onClose}
+                disabled={saving}
+                sx={{ ml: 1 }}
+              >
+                Cancel
               </Button>
             </Box>
           </Box>

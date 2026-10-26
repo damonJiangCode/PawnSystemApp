@@ -1,3 +1,4 @@
+import DateField from "../../shared/components/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -96,16 +97,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const handleBirthdaySearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!birthday) {
+    const dateOfBirth = birthday;
+    if (!dateOfBirth) {
       validationTargetRef.current = "birthday";
-      setValidationMessage("Please enter a birthday to search.");
+      setValidationMessage("Please enter a valid birthday using MM-DD-YYYY.");
       return;
     }
 
     setFirstName("");
     setLastName("");
     setBirthdayDialogOpen(false);
-    onBirthdaySearch?.({ dateOfBirth: birthday });
+    onBirthdaySearch?.({ dateOfBirth });
   };
 
   const closeValidationDialog = () => {
@@ -206,7 +208,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <ListItemIcon>
             <CakeOutlinedIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Search by Birthday</ListItemText>
+          <ListItemText>Birthday</ListItemText>
         </MenuItem>
       </Menu>
 
@@ -217,26 +219,19 @@ const SearchBar: React.FC<SearchBarProps> = ({
         maxWidth="xs"
       >
         <form onSubmit={handleBirthdaySearch}>
-          <DialogTitle>Search by Birthday</DialogTitle>
+          <DialogTitle>Birthday</DialogTitle>
           <DialogContent>
-            <TextField
+            <DateField
               inputRef={birthdayInputRef}
-              type="date"
               label="Birthday"
               value={birthday}
+              onValueChange={setBirthday}
               fullWidth
               margin="dense"
-              onChange={(event) => setBirthday(event.target.value)}
-              slotProps={{ inputLabel: { shrink: true } }}
+              autoFocus
             />
           </DialogContent>
           <DialogActions>
-            <Button
-              style={{ textTransform: "none" }}
-              onClick={() => setBirthdayDialogOpen(false)}
-            >
-              Cancel
-            </Button>
             <Button
               style={{ textTransform: "none" }}
               type="submit"
@@ -244,6 +239,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
               startIcon={<SearchIcon />}
             >
               Search
+            </Button>
+            <Button
+              style={{ textTransform: "none" }}
+              onClick={() => setBirthdayDialogOpen(false)}
+            >
+              Cancel
             </Button>
           </DialogActions>
         </form>
@@ -262,6 +263,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             style={{ textTransform: "none" }}
             variant="contained"
             onClick={closeValidationDialog}
+            autoFocus
           >
             OK
           </Button>

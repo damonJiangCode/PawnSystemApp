@@ -100,6 +100,7 @@ export const useQuoteWindow = () => {
   }, [input.clientNumber]);
 
   const rows = useMemo<QuoteRow[]>(() => {
+    if (!quoteDate) return [];
     const asOf = toLocalDate(quoteDate);
 
     return tickets.map((ticket) => ({
@@ -127,11 +128,13 @@ export const useQuoteWindow = () => {
     },
     actions: {
       setQuoteDate: (date: string) => {
-        if (date >= today) {
+        if (!date || date >= today) {
           setQuoteDate(date);
         }
       },
-      print: () => window.print(),
+      print: () => {
+        if (quoteDate) window.print();
+      },
     },
   };
 };

@@ -58,18 +58,18 @@ const EmployeePasswordDialog: React.FC<EmployeePasswordDialogProps> = ({
     <DialogActions>
       <Button
         style={{ textTransform: "none" }}
-        onClick={onCancel}
-        disabled={savingClient}
-      >
-        Cancel
-      </Button>
-      <Button
-        style={{ textTransform: "none" }}
         onClick={onConfirm}
         variant="contained"
         disabled={savingClient}
       >
         {savingClient ? "Saving..." : "Confirm"}
+      </Button>
+      <Button
+        style={{ textTransform: "none" }}
+        onClick={onCancel}
+        disabled={savingClient}
+      >
+        Cancel
       </Button>
     </DialogActions>
   </Dialog>

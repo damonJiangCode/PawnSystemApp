@@ -424,18 +424,18 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
         <DialogActions>
           <Button
             style={{ textTransform: "none" }}
-            onClick={() => setShowNoteForm(false)}
-            disabled={savingNotes}
-          >
-            Cancel
-          </Button>
-          <Button
-            style={{ textTransform: "none" }}
             onClick={handleRequestSaveNote}
             variant="contained"
             disabled={savingNotes}
           >
             Save
+          </Button>
+          <Button
+            style={{ textTransform: "none" }}
+            onClick={() => setShowNoteForm(false)}
+            disabled={savingNotes}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -483,6 +483,16 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
           <Button
             style={{ textTransform: "none" }}
             onClick={() => {
+              void handleSaveNotes();
+            }}
+            variant="contained"
+            disabled={savingNotes}
+          >
+            Confirm
+          </Button>
+          <Button
+            style={{ textTransform: "none" }}
+            onClick={() => {
               setShowPasswordForm(false);
               setShowNoteForm(true);
               setEmployeePasswordError("");
@@ -490,16 +500,6 @@ const ClientProfile: React.FC<ClientProfileProps> = ({
             disabled={savingNotes}
           >
             Cancel
-          </Button>
-          <Button
-            style={{ textTransform: "none" }}
-            onClick={() => {
-              void handleSaveNotes();
-            }}
-            variant="contained"
-            disabled={savingNotes}
-          >
-            Confirm
           </Button>
         </DialogActions>
       </Dialog>

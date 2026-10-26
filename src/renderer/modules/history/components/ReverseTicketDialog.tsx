@@ -102,11 +102,11 @@ const ReverseTicketDialog: React.FC<ReverseTicketDialogProps> = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={processing}>
-          Cancel
-        </Button>
         <Button onClick={onConfirm} variant="contained" disabled={processing}>
           {processing ? "Reversing..." : "Reverse"}
+        </Button>
+        <Button onClick={onClose} disabled={processing}>
+          Cancel
         </Button>
       </DialogActions>
     </Dialog>
