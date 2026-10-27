@@ -1,10 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  GET_LOCATIONS: "get-locations",
-  GET_ADMIN_LOCATIONS: "get-admin-locations",
-  ADD_LOCATION: "add-location",
-  DEACTIVATE_LOCATION: "deactivate-location",
   ADD_EMPLOYEE: "add-employee",
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",
@@ -61,11 +57,6 @@ const ticketApi = {
   addHolidayDate: (input) => invoke(CHANNELS.ADD_HOLIDAY_DATE, input),
   deleteHolidayDate: (holidayDate) =>
     invoke(CHANNELS.DELETE_HOLIDAY_DATE, holidayDate),
-  loadLocations: () => invoke(CHANNELS.GET_LOCATIONS),
-  loadLocationsForAdmin: () => invoke(CHANNELS.GET_ADMIN_LOCATIONS),
-  addLocation: (input) => invoke(CHANNELS.ADD_LOCATION, input),
-  deactivateLocation: (location) =>
-    invoke(CHANNELS.DEACTIVATE_LOCATION, location),
   searchTicketByNumber: (ticketNumber) =>
     invoke(CHANNELS.SEARCH_TICKET, ticketNumber),
   searchPaymentTicketByNumber: (ticketNumber) =>

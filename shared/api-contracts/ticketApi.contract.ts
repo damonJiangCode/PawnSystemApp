@@ -41,8 +41,9 @@ export type TicketApi = {
   addHolidayDate: (input: SaveHolidayInput) => Promise<HolidayDate>;
   deleteHolidayDate: (holidayDate: string) => Promise<HolidayDate>;
   loadLocations: () => Promise<string[]>;
-  loadLocationsForAdmin: () => Promise<Location[]>;
+  loadAllLocations: () => Promise<Location[]>;
   addLocation: (input: SaveLocationInput) => Promise<Location>;
+  activateLocation: (location: string) => Promise<Location>;
   deactivateLocation: (location: string) => Promise<Location>;
   searchTicketByNumber: (
     ticketNumber: number,

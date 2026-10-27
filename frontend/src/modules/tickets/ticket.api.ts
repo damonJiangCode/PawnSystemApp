@@ -127,14 +127,14 @@ export const ticketApi = {
     return api.loadLocations();
   },
 
-  loadLocationsForAdmin: async (): Promise<Location[]> => {
+  loadAllLocations: async (): Promise<Location[]> => {
     const api = getAppApi()?.ticket;
 
     if (!api) {
       throw new Error("Location API is unavailable.");
     }
 
-    return api.loadLocationsForAdmin();
+    return api.loadAllLocations();
   },
 
   addLocation: async (input: SaveLocationInput): Promise<Location> => {
@@ -148,6 +148,12 @@ export const ticketApi = {
       location: input.location.trim().toUpperCase(),
       description: input.description.trim(),
     });
+  },
+
+  activateLocation: async (location: string): Promise<Location> => {
+    const api = getAppApi()?.ticket;
+    if (!api) throw new Error("Location API is unavailable.");
+    return api.activateLocation(location.trim().toUpperCase());
   },
 
   deactivateLocation: async (location: string): Promise<Location> => {

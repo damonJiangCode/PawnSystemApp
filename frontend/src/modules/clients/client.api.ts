@@ -137,14 +137,14 @@ export const clientApi = {
     return api.loadHairColors();
   },
 
-  loadHairColorsForAdmin: async (): Promise<HairColor[]> => {
+  loadAllHairColors: async (): Promise<HairColor[]> => {
     const api = getAppApi()?.client;
 
     if (!api) {
       throw new Error("Hair color API is unavailable.");
     }
 
-    return api.loadHairColorsForAdmin();
+    return api.loadAllHairColors();
   },
 
   addHairColor: async (color: string): Promise<string> => {
@@ -186,14 +186,14 @@ export const clientApi = {
     return api.loadEyeColors();
   },
 
-  loadEyeColorsForAdmin: async (): Promise<EyeColor[]> => {
+  loadAllEyeColors: async (): Promise<EyeColor[]> => {
     const api = getAppApi()?.client;
 
     if (!api) {
       throw new Error("Eye color API is unavailable.");
     }
 
-    return api.loadEyeColorsForAdmin();
+    return api.loadAllEyeColors();
   },
 
   addEyeColor: async (color: string): Promise<string> => {

@@ -72,7 +72,7 @@ focuses its existing window; closing it removes that entry from the map.
 ### clients
 
 Keeps legacy client readers used by ticket operations. Client CRUD-style updates,
-reference queries and color administration use the NestJS HTTP server. Clients
+reference queries and color reference operations use the NestJS HTTP server. Clients
 are deactivated/reactivated rather than deleted. No client IPC handlers remain.
 
 Start here:
@@ -83,14 +83,15 @@ Start here:
 ### tickets
 
 Owns pawn/sell ticket creation, ticket update, expire, pickup, transfer,
-payment, location and holiday reference data.
+payment and holiday reference data. Location administration now uses the
+NestJS Reference module.
 
 Start here:
 
 - `modules/tickets/ticket.handlers.ts`
 - `modules/tickets/ticket.service.ts`
 - `modules/tickets/ticket-payment.service.ts`
-- `modules/tickets/ticket-admin.service.ts`
+- `modules/tickets/ticket-reference.service.ts`
 - `modules/tickets/ticket.repo.ts`
 
 ### items

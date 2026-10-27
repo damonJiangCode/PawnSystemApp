@@ -3,17 +3,18 @@ import { lazy, type ComponentType } from "react";
 const EmployeeAdminWindow = lazy(
   () => import("../modules/employees/admin/EmployeeAdminWindow"),
 );
-const EyeColorAdminWindow = lazy(
-  () => import("../modules/admin/colors/eye-color/EyeColorAdminWindow"),
+const EyeColorReferenceWindow = lazy(
+  () => import("../modules/reference/colors/eye-color/EyeColorReferenceWindow"),
 );
-const HairColorAdminWindow = lazy(
-  () => import("../modules/admin/colors/hair-color/HairColorAdminWindow"),
+const HairColorReferenceWindow = lazy(
+  () =>
+    import("../modules/reference/colors/hair-color/HairColorReferenceWindow"),
 );
-const HolidayAdminWindow = lazy(
-  () => import("../modules/admin/holiday/HolidayAdminWindow"),
+const HolidayReferenceWindow = lazy(
+  () => import("../modules/reference/holiday/HolidayReferenceWindow"),
 );
-const LocationAdminWindow = lazy(
-  () => import("../modules/admin/location/LocationAdminWindow"),
+const LocationReferenceWindow = lazy(
+  () => import("../modules/reference/location/LocationReferenceWindow"),
 );
 const ItemSearchWindow = lazy(
   () =>
@@ -68,8 +69,8 @@ export const windowRegistry: Record<
   "report-overdue": OverdueReportWindow,
   "report-xml": XmlReportWindow,
   "admin-employee": EmployeeAdminWindow,
-  "admin-hair-color": HairColorAdminWindow,
-  "admin-eye-color": EyeColorAdminWindow,
-  "admin-holiday": HolidayAdminWindow,
-  "admin-location": LocationAdminWindow,
+  "reference-hair-color": HairColorReferenceWindow,
+  "reference-eye-color": EyeColorReferenceWindow,
+  "reference-holiday": HolidayReferenceWindow,
+  "reference-location": LocationReferenceWindow,
 };

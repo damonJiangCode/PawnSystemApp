@@ -33,10 +33,6 @@ const CHANNELS = {
   GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
   NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
     "notify-item-search-window-input-updated",
-  GET_LOCATIONS: "get-locations",
-  GET_ADMIN_LOCATIONS: "get-admin-locations",
-  ADD_LOCATION: "add-location",
-  DEACTIVATE_LOCATION: "deactivate-location",
   ADD_PAWN_TICKET: "add-pawn-ticket",
   ADD_SELL_TICKET: "add-sell-ticket",
   UPDATE_TICKET: "update-ticket",

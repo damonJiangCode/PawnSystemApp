@@ -30,7 +30,7 @@ const normalizeYear = (value: string) => value.trim();
 
 const isValidYear = (value: string) => /^\d{4}$/.test(value);
 
-const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
+const HolidayReferenceWindow: React.FC<WindowScreenProps> = () => {
   const [pending, setPending] = React.useState<HolidayDate | null>(null);
   const currentYear = String(new Date().getFullYear());
   const yearInputRef = React.useRef<HTMLInputElement>(null);
@@ -298,4 +298,4 @@ const HolidayAdminWindow: React.FC<WindowScreenProps> = () => {
   );
 };
 
-export default HolidayAdminWindow;
+export default HolidayReferenceWindow;

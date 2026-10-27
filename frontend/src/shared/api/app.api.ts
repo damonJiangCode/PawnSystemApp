@@ -1,16 +1,28 @@
 import type { AppApi } from "../../../../shared/api-contracts/appApi.contract";
 import {
+  loadLocationsHttp,
+  loadAllLocationsHttp,
+  addLocationHttp,
+  setLocationActiveHttp,
   searchClientsHttp,
   searchClientsByDobHttp,
   createClientHttp,
   updateClientHttp,
   loadClientReferenceHttp,
-  loadColorsForAdminHttp,
+  loadAllColorsHttp,
   addClientColorHttp,
   setClientColorActiveHttp,
 } from "./client.http.ts";
 
-type DesktopApi = Omit<AppApi, "client">;
+type LocationMethods =
+  | "loadLocations"
+  | "loadAllLocations"
+  | "addLocation"
+  | "deactivateLocation"
+  | "activateLocation";
+type DesktopApi = Omit<AppApi, "client" | "ticket"> & {
+  ticket: Omit<AppApi["ticket"], LocationMethods>;
+};
 
 declare global {
   interface Window {
@@ -23,9 +35,37 @@ export const getAppApi = (): AppApi | undefined => {
   if (!desktop) return undefined;
   return {
     ...desktop,
+    ticket: {
+      ...desktop.ticket,
+      loadLocations: () =>
+        loadLocationsHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadAllLocations: () =>
+        loadAllLocationsHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addLocation: (input) =>
+        addLocationHttp(
+          input,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      activateLocation: (location) =>
+        setLocationActiveHttp(
+          location,
+          true,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      deactivateLocation: (location) =>
+        setLocationActiveHttp(
+          location,
+          false,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+    },
     client: {
-      loadHairColorsForAdmin: () =>
-        loadColorsForAdminHttp(
+      loadAllHairColors: () =>
+        loadAllColorsHttp(
           "hair",
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),
@@ -49,8 +89,8 @@ export const getAppApi = (): AppApi | undefined => {
           false,
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),
-      loadEyeColorsForAdmin: () =>
-        loadColorsForAdminHttp(
+      loadAllEyeColors: () =>
+        loadAllColorsHttp(
           "eye",
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),

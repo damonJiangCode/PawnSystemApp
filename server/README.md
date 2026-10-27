@@ -1,6 +1,6 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client operations, reference queries and color administration use
+NestJS backend. Client operations, reference queries, color and location reference operations use
 HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
 
 ## Development
@@ -70,7 +70,7 @@ exposes four read-only routes with no required parameters:
 | GET /client/reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
 
 `ReferenceRepository` in [reference.repository.ts](src/reference/reference.repository.ts)
-reads existing tables for dropdowns and writes color changes for administration.
+reads existing tables for dropdowns and writes color changes for reference editing.
 No seed data is created by these endpoints.
 `ReferenceModule` imports the database pool. Every reference endpoint uses
 `ReferenceController` → `ReferenceService` → `ReferenceRepository`; see the

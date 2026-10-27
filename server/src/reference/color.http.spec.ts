@@ -12,7 +12,7 @@ import {
 } from 'vitest';
 import { ReferenceModule } from './reference.module.js';
 
-describe('Color administration HTTP (mock PostgreSQL)', () => {
+describe('Color reference operations HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
   let baseUrl: string;
   const pool = { query: vi.fn() };

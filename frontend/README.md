@@ -26,7 +26,7 @@ frontend/
 - `items`: item search, records, categories, images and dialogs.
 - `history`: ticket history and related actions.
 - `reports`: daily, buyback, interest, overdue and XML report screens.
-- `employees` and `admin`: employee and reference-data administration.
+- `employees`: employee records; `reference`: colors, holidays and locations.
 
 ## Boundaries
 

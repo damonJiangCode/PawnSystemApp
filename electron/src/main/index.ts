@@ -126,7 +126,7 @@ const createAppMenu = () => {
       ],
     },
     {
-      label: "Admin",
+      label: "Employee",
       submenu: [
         {
           label: "Employee",
@@ -139,11 +139,16 @@ const createAppMenu = () => {
               height: 820,
             }),
         },
+      ],
+    },
+    {
+      label: "Reference",
+      submenu: [
         {
           label: "Holiday",
           click: () =>
             openMenuActionWindow({
-              id: "admin-holiday",
+              id: "reference-holiday",
               title: "Holiday",
               description: "Manage business-day holidays.",
               width: 960,
@@ -154,7 +159,7 @@ const createAppMenu = () => {
           label: "Hair Color",
           click: () =>
             openMenuActionWindow({
-              id: "admin-hair-color",
+              id: "reference-hair-color",
               title: "Hair Color",
               description: "Manage hair color options.",
               width: 960,
@@ -165,7 +170,7 @@ const createAppMenu = () => {
           label: "Eye Color",
           click: () =>
             openMenuActionWindow({
-              id: "admin-eye-color",
+              id: "reference-eye-color",
               title: "Eye Color",
               description: "Manage eye color options.",
               width: 960,
@@ -176,7 +181,7 @@ const createAppMenu = () => {
           label: "Location",
           click: () =>
             openMenuActionWindow({
-              id: "admin-location",
+              id: "reference-location",
               title: "Location",
               description: "Manage pawn locations.",
               width: 960,

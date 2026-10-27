@@ -14,8 +14,8 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
 | GET /id-types                 | None   | loadIdTypes → S.loadIdTypes → R.loadIdTypes                                       |
 | GET /hair-colors              | None   | loadHairColors → S.loadColors('hair') → R.loadColors('hair')                      |
 | GET /eye-colors               | None   | loadEyeColors → S.loadColors('eye') → R.loadColors('eye')                         |
-| GET /hair-colors/all          | None   | loadHairColorsForAdmin → S.loadAllColors('hair') → R.loadAllColors('hair')        |
-| GET /eye-colors/all           | None   | loadEyeColorsForAdmin → S.loadAllColors('eye') → R.loadAllColors('eye')           |
+| GET /hair-colors/all          | None   | loadAllHairColors → S.loadAllColors('hair') → R.loadAllColors('hair')             |
+| GET /eye-colors/all           | None   | loadAllEyeColors → S.loadAllColors('eye') → R.loadAllColors('eye')                |
 | POST /hair-colors             | Body   | addHairColor → S.addColor → R.addColor                                            |
 | POST /eye-colors              | Body   | addEyeColor → S.addColor → R.addColor                                             |
 | PATCH /hair-colors/activate   | Body   | activateHairColor → S.setColorActive → R.setColorActive; R.findColor on failure   |
@@ -23,7 +23,36 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
 | PATCH /eye-colors/activate    | Body   | activateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure    |
 | PATCH /eye-colors/deactivate  | Body   | deactivateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure  |
 
-## Behavior
+## Locations
+
+These routes also live in ReferenceController under `/client/reference`.
+
+| Method + path               | Params                          | C → S → R                                                                                  |
+| --------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
+| GET /locations              | None                            | loadLocations → loadLocations → loadLocations                                              |
+| GET /locations/all          | None                            | loadAllLocations → loadAllLocations → loadAllLocations                                     |
+| POST /locations             | body: { location, description } | addLocation → addLocation → addLocation                                                    |
+| PATCH /locations/deactivate | body: { location }              | deactivateLocation → setLocationActive(false) → setLocationActive; findLocation on failure |
+| PATCH /locations/activate   | body: { location }              | activateLocation → setLocationActive(true) → setLocationActive; findLocation on failure    |
+
+- GET `/locations` returns active codes (`string[]`), sorted by code. `/all`
+  returns `{ location, description, is_active }[]`, active first, then by code.
+- POST returns 201 with the saved record; PATCH returns 200 with the updated record.
+- `CreateLocationDto` in [location.dto.ts](dto/location.dto.ts) requires a
+  two-letter/two-digit code (AB12) and a string description (empty is allowed,
+  max 1000 characters after trimming). The service uppercases codes and trims text.
+- `LocationDto` validates a non-empty code for activation/deactivation, allowing existing
+  special codes such as UNKNOWN. Unknown body properties are rejected.
+- Duplicate codes, including inactive ones: 409. Missing code: 404. Already
+  in the requested state: 409. Invalid input: 400. Database failure: 500.
+- Inserts use `ON CONFLICT DO NOTHING`; state changes atomically update rows in the opposite state only. SQL values are parameters. No delete or rename route.
+  Deactivation retains existing ticket references and descriptions.
+- `appAPI.ticket.activateLocation/deactivateLocation` use HTTP through `getAppApi()`.
+  Inactive rows offer Activate; saved state and list ordering update after success.
+  Deactivation retains its confirmation dialog. Old location preload methods,
+  IPC handlers/channels, Electron service methods and repository are removed.
+
+## Color and dropdown behavior
 
 - GET returns 200: cities use `{ provinces, citiesByProvince }`; ID types and active
   colors use `string[]`; color `/all` uses `{ color, is_active }[]`, active first.
@@ -37,7 +66,7 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
   R.setColorActive atomically updates only the opposite state. User values are SQL parameters;
   table names come only from internal hair/eye choices. No DELETE or rename route.
 - Existing table data, customer references and seed definitions are preserved.
-  Inactive colors remain visible in admin lists but disappear from new dropdown queries.
+  Inactive colors remain visible in complete reference lists but disappear from new dropdown queries.
 - All client/reference appAPI methods now use HTTP; their old preload/main handlers are removed.
 
 ## Tests
@@ -52,3 +81,10 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
   duplicate inactive colors, 400/404/409 responses and parameterized SQL.
 - Renderer `client.http.test.ts`: HTTP paths, JSON payloads, preserved appAPI return
   shapes and error messages. No test writes to the live database.
+- [location.http.spec.ts](location.http.spec.ts): real Reference routes, DTOs,
+  service and repository with mocked PostgreSQL; normalization, SQL parameters,
+  lists, activation/deactivation, legacy codes, validation and 400/404/409/500 responses.
+- `reference.service.spec.ts` also checks location normalization, duplicates,
+  state distinctions and database failure propagation.
+- Frontend `location.http.test.ts`: HTTP paths, methods, payloads, errors and
+  actual `getAppApi()` binding while preserving other desktop ticket methods.

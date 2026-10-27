@@ -23,7 +23,7 @@ const sortHairColors = (colors: HairColor[]) =>
       a.color.localeCompare(b.color),
   );
 
-const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
+const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [pending, setPending] = React.useState<HairColor | null>(null);
   const [searchInput, setSearchInput] = React.useState("");
@@ -46,7 +46,7 @@ const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
     setError("");
 
     try {
-      const results = sortHairColors(await clientApi.loadHairColorsForAdmin());
+      const results = sortHairColors(await clientApi.loadAllHairColors());
       setAllColors(results);
       setColors(results);
       setSearchInput("");
@@ -311,4 +311,4 @@ const HairColorAdminWindow: React.FC<WindowScreenProps> = () => {
   );
 };
 
-export default HairColorAdminWindow;
+export default HairColorReferenceWindow;

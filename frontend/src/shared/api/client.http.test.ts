@@ -6,14 +6,14 @@ import {
   createClientHttp,
   updateClientHttp,
   loadClientReferenceHttp,
-  loadColorsForAdminHttp,
+  loadAllColorsHttp,
   addClientColorHttp,
   setClientColorActiveHttp,
 } from "./client.http.ts";
 import defaultClient from "../../modules/clients/data/defaultClient.ts";
 
 for (const kind of ["hair", "eye"] as const) {
-  test(`${kind} admin HTTP loads full state and preserves the appAPI return shapes`, async (t) => {
+  test(`${kind} reference HTTP loads full state and preserves the appAPI return shapes`, async (t) => {
     t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
       assert.equal(url.origin, "http://store-server:3000");
       if (url.pathname.endsWith("/all"))
@@ -37,7 +37,7 @@ for (const kind of ["hair", "eye"] as const) {
       return Response.json({ color: "BLUE", is_active: active });
     });
     const base = "http://store-server:3000/";
-    assert.deepEqual(await loadColorsForAdminHttp(kind, base), [
+    assert.deepEqual(await loadAllColorsHttp(kind, base), [
       { color: "BLUE", is_active: false },
     ]);
     assert.equal(await addClientColorHttp(kind, "blue", base), "BLUE");
@@ -52,7 +52,7 @@ for (const kind of ["hair", "eye"] as const) {
   });
 }
 
-test("color HTTP errors preserve the backend message for existing admin dialogs", async (t) => {
+test("color HTTP errors preserve the backend message for existing reference dialogs", async (t) => {
   t.mock.method(globalThis, "fetch", async () =>
     Response.json(
       { message: "That hair color already exists." },

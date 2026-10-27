@@ -23,7 +23,7 @@ const sortLocations = (locations: Location[]) =>
       a.location.localeCompare(b.location),
   );
 
-const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
+const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [pending, setPending] = React.useState<Location | null>(null);
   const [searchInput, setSearchInput] = React.useState("");
@@ -32,7 +32,7 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
   const [locations, setLocations] = React.useState<Location[]>([]);
   const [addDialogOpen, setAddDialogOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [deactivatingCode, setDeactivatingCode] = React.useState("");
+  const [updatingCode, setUpdatingCode] = React.useState("");
   const [error, setError] = React.useState("");
   const [message, setMessage] = React.useState("");
 
@@ -49,7 +49,7 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
     setError("");
 
     try {
-      const results = sortLocations(await ticketApi.loadLocationsForAdmin());
+      const results = sortLocations(await ticketApi.loadAllLocations());
       setAllLocations(results);
       setLocations(results);
       setSearchInput("");
@@ -95,38 +95,44 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
     requestAnimationFrame(() => searchInputRef.current?.focus());
   };
 
-  const handleDeactivate = async (location: Location) => {
-    setDeactivatingCode(location.location);
+  const handleSetActive = async (location: Location, isActive: boolean) => {
+    setUpdatingCode(location.location);
     setError("");
     setMessage("");
 
     try {
-      const deactivated = await ticketApi.deactivateLocation(location.location);
+      const updated = await (isActive
+        ? ticketApi.activateLocation(location.location)
+        : ticketApi.deactivateLocation(location.location));
       const updateLocation = (existingLocation: Location) =>
-        existingLocation.location === deactivated.location
-          ? deactivated
+        existingLocation.location === updated.location
+          ? updated
           : existingLocation;
 
       setAllLocations((prev) => sortLocations(prev.map(updateLocation)));
       setLocations((prev) => sortLocations(prev.map(updateLocation)));
-      setMessage(`${deactivated.location} was deactivated.`);
+      setMessage(
+        `${updated.location} was ${isActive ? "activated" : "deactivated"}.`,
+      );
     } catch (err) {
       console.error(err);
       setError(
-        err instanceof Error ? err.message : "Unable to deactivate location.",
+        err instanceof Error
+          ? err.message
+          : "Unable to update location status.",
       );
     } finally {
-      setDeactivatingCode("");
+      setUpdatingCode("");
     }
   };
 
-  const busy = loading || Boolean(deactivatingCode);
+  const busy = loading || Boolean(updatingCode);
   const activeCount = locations.filter((location) => location.is_active).length;
 
   return (
     <WindowLayout
       title="Location"
-      description="Add storage locations and deactivate locations that should no longer be selected."
+      description="Add storage locations and activate or deactivate available locations."
     >
       <Stack spacing={1.25} sx={{ height: "100%", minHeight: 0, pt: 0.5 }}>
         <Stack spacing={1} sx={{ flexShrink: 0 }}>
@@ -247,20 +253,25 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
                       {location.description || "No description."}
                     </Typography>
                   </Box>
-                  {location.is_active && (
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      color="error"
-                      disabled={busy}
-                      sx={{ minWidth: 92, justifySelf: "end" }}
-                      onClick={() => setPending(location)}
-                    >
-                      {deactivatingCode === location.location
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color={location.is_active ? "error" : "success"}
+                    disabled={busy}
+                    sx={{ minWidth: 92, justifySelf: "end" }}
+                    onClick={() => {
+                      if (location.is_active) setPending(location);
+                      else void handleSetActive(location, true);
+                    }}
+                  >
+                    {updatingCode === location.location
+                      ? location.is_active
                         ? "Deactivating..."
-                        : "Deactivate"}
-                    </Button>
-                  )}
+                        : "Activating..."
+                      : location.is_active
+                        ? "Deactivate"
+                        : "Activate"}
+                  </Button>
                 </Paper>
               ))}
             </Stack>
@@ -294,7 +305,7 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
         onCancel={() => setPending(null)}
         onConfirm={() => {
           if (!pending) return;
-          void handleDeactivate(pending);
+          void handleSetActive(pending, false);
           setPending(null);
         }}
       />
@@ -302,4 +313,4 @@ const LocationAdminWindow: React.FC<WindowScreenProps> = () => {
   );
 };
 
-export default LocationAdminWindow;
+export default LocationReferenceWindow;

@@ -14,7 +14,7 @@ import type { EyeColor } from "../../../../../../shared/models/eye-color.model";
 import WindowLayout from "../../../../windows/WindowLayout";
 import ColorAddDialog from "./ColorAddDialog";
 
-type ColorAdminWindowProps = {
+type ColorReferenceWindowProps = {
   colorType: string;
   loadColors: () => Promise<EyeColor[]>;
   addColor: (color: string) => Promise<string>;
@@ -29,7 +29,7 @@ const sortColors = (colors: EyeColor[]) =>
       a.color.localeCompare(b.color),
   );
 
-const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
+const ColorReferenceWindow: React.FC<ColorReferenceWindowProps> = ({
   colorType,
   loadColors,
   addColor,
@@ -338,4 +338,4 @@ const ColorAdminWindow: React.FC<ColorAdminWindowProps> = ({
   );
 };
 
-export default ColorAdminWindow;
+export default ColorReferenceWindow;

@@ -1,3 +1,5 @@
+import type { Location } from "../../../../shared/models/location.model.ts";
+import type { SaveLocationInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
 import type { Client } from "../../../../shared/models/client.model.ts";
 import type {
   CreateClientInput,
@@ -8,7 +10,57 @@ import { formatIsoDate } from "../utils/formatters.ts";
 import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
 import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
 
-export async function loadColorsForAdminHttp(
+export async function loadLocationsHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<string[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations`),
+  );
+}
+
+export async function loadAllLocationsHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<Location[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations/all`),
+  );
+}
+
+export async function addLocationHttp(
+  input: SaveLocationInput,
+  baseUrl = "http://localhost:3000",
+): Promise<Location> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations`),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        location: input.location,
+        description: input.description,
+      }),
+    },
+  );
+}
+
+export async function setLocationActiveHttp(
+  location: string,
+  isActive: boolean,
+  baseUrl = "http://localhost:3000",
+): Promise<Location> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/locations/${isActive ? "activate" : "deactivate"}`,
+    ),
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ location }),
+    },
+  );
+}
+
+export async function loadAllColorsHttp(
   kind: "hair" | "eye",
   baseUrl = "http://localhost:3000",
 ): Promise<(HairColor | EyeColor)[]> {

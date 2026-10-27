@@ -18,11 +18,8 @@ import type {
   TicketMutationResult,
 } from "../../../../../shared/api-contracts/ticketApi.contract.ts";
 import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
-import type {
-  SaveHolidayInput,
-  SaveLocationInput,
-} from "../../../../../shared/payload-contracts/ticket.contract.ts";
-import { ticketAdminService } from "./ticket-admin.service.ts";
+import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/ticket.contract.ts";
+import { ticketReferenceService } from "./ticket-reference.service.ts";
 import { ticketPaymentService } from "./ticket-payment.service.ts";
 import { ticketService } from "./ticket.service.ts";
 import { ticketReversalService } from "./ticket-reversal.service.ts";
@@ -75,34 +72,18 @@ const runTicketMutation = async (
 };
 
 export const registerTicketHandlers = () => {
-  ipcMain.handle(CHANNELS.GET_LOCATIONS, async () =>
-    ticketAdminService.loadLocations(),
-  );
-  ipcMain.handle(CHANNELS.GET_ADMIN_LOCATIONS, async () =>
-    ticketAdminService.loadLocationsForAdmin(),
-  );
-  ipcMain.handle(
-    CHANNELS.ADD_LOCATION,
-    async (_event: IpcMainInvokeEvent, input: SaveLocationInput) =>
-      ticketAdminService.addLocation(input),
-  );
-  ipcMain.handle(
-    CHANNELS.DEACTIVATE_LOCATION,
-    async (_event: IpcMainInvokeEvent, location: string) =>
-      ticketAdminService.deactivateLocation(location),
-  );
   ipcMain.handle(CHANNELS.GET_HOLIDAY_DATES, async () =>
-    ticketAdminService.loadHolidayDates(),
+    ticketReferenceService.loadHolidayDates(),
   );
   ipcMain.handle(
     CHANNELS.ADD_HOLIDAY_DATE,
     async (_event: IpcMainInvokeEvent, input: SaveHolidayInput) =>
-      ticketAdminService.addHolidayDate(input),
+      ticketReferenceService.addHolidayDate(input),
   );
   ipcMain.handle(
     CHANNELS.DELETE_HOLIDAY_DATE,
     async (_event: IpcMainInvokeEvent, holidayDate: string) =>
-      ticketAdminService.deleteHolidayDate(holidayDate),
+      ticketReferenceService.deleteHolidayDate(holidayDate),
   );
   ipcMain.handle(
     CHANNELS.GET_TICKETS,

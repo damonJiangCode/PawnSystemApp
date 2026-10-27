@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ReferenceService } from './reference.service.js';
 import { ColorDto } from './dto/color.dto.js';
+import { CreateLocationDto, LocationDto } from './dto/location.dto.js';
 
 @Controller('client/reference')
 @UsePipes(
@@ -42,12 +43,12 @@ export class ReferenceController {
   }
 
   @Get('hair-colors/all')
-  loadHairColorsForAdmin() {
+  loadAllHairColors() {
     return this.service.loadAllColors('hair');
   }
 
   @Get('eye-colors/all')
-  loadEyeColorsForAdmin() {
+  loadAllEyeColors() {
     return this.service.loadAllColors('eye');
   }
 
@@ -79,5 +80,30 @@ export class ReferenceController {
   @Patch('eye-colors/deactivate')
   deactivateEyeColor(@Body() input: ColorDto) {
     return this.service.setColorActive('eye', input.color, false);
+  }
+
+  @Get('locations')
+  loadLocations() {
+    return this.service.loadLocations();
+  }
+
+  @Get('locations/all')
+  loadAllLocations() {
+    return this.service.loadAllLocations();
+  }
+
+  @Post('locations')
+  addLocation(@Body() input: CreateLocationDto) {
+    return this.service.addLocation(input.location, input.description);
+  }
+
+  @Patch('locations/deactivate')
+  deactivateLocation(@Body() input: LocationDto) {
+    return this.service.setLocationActive(input.location, false);
+  }
+
+  @Patch('locations/activate')
+  activateLocation(@Body() input: LocationDto) {
+    return this.service.setLocationActive(input.location, true);
   }
 }

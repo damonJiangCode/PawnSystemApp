@@ -15,7 +15,7 @@ Access data.
 - **Items:** search, categories, ticket links, photos and printable tickets.
 - **Reports:** daily, buyback, interest and overdue reports, plus optional
   LeadsOnline XML validation and submission.
-- **Administration:** employees, locations, holidays and hair/eye colors.
+- **Employees and reference data:** employee records, locations, holidays and hair/eye colors.
 - **Legacy data import:** Access records and photos mapped into PostgreSQL,
   with previews, backups and post-import validation.
 
@@ -38,7 +38,8 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
     └── preload bridge ── Electron windows and native menus
 ```
 
-Client APIs, reference reads and color administration already use HTTP. Other
+Client APIs, reference reads, color reference operations and location reference operations
+already use HTTP. Other
 business workflows still run through Electron services/repositories while their
 HTTP endpoints are developed. The desktop app currently requires Vite; building
 assets does not yet provide a standalone installer.
