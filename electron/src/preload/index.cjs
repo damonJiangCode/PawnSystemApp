@@ -5,9 +5,6 @@ const CHANNELS = {
   SEARCH_EMPLOYEES: "search-employees",
   UPDATE_EMPLOYEE: "update-employee",
   GET_TICKETS: "get-tickets",
-  GET_HOLIDAY_DATES: "get-holiday-dates",
-  ADD_HOLIDAY_DATE: "add-holiday-date",
-  DELETE_HOLIDAY_DATE: "delete-holiday-date",
   SEARCH_TICKET: "search-ticket",
   SEARCH_PAYMENT_TICKET: "search-payment-ticket",
   LOAD_BUYBACK_REPORT: "load-buyback-report",
@@ -53,10 +50,6 @@ const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 const ticketApi = {
   loadTicketsByClient: (clientNumber) =>
     invoke(CHANNELS.GET_TICKETS, clientNumber),
-  loadHolidayDates: () => invoke(CHANNELS.GET_HOLIDAY_DATES),
-  addHolidayDate: (input) => invoke(CHANNELS.ADD_HOLIDAY_DATE, input),
-  deleteHolidayDate: (holidayDate) =>
-    invoke(CHANNELS.DELETE_HOLIDAY_DATE, holidayDate),
   searchTicketByNumber: (ticketNumber) =>
     invoke(CHANNELS.SEARCH_TICKET, ticketNumber),
   searchPaymentTicketByNumber: (ticketNumber) =>

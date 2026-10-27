@@ -19,7 +19,6 @@ import type {
 } from "../../../../../shared/api-contracts/ticketApi.contract.ts";
 import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
 import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/ticket.contract.ts";
-import { ticketReferenceService } from "./ticket-reference.service.ts";
 import { ticketPaymentService } from "./ticket-payment.service.ts";
 import { ticketService } from "./ticket.service.ts";
 import { ticketReversalService } from "./ticket-reversal.service.ts";
@@ -72,19 +71,6 @@ const runTicketMutation = async (
 };
 
 export const registerTicketHandlers = () => {
-  ipcMain.handle(CHANNELS.GET_HOLIDAY_DATES, async () =>
-    ticketReferenceService.loadHolidayDates(),
-  );
-  ipcMain.handle(
-    CHANNELS.ADD_HOLIDAY_DATE,
-    async (_event: IpcMainInvokeEvent, input: SaveHolidayInput) =>
-      ticketReferenceService.addHolidayDate(input),
-  );
-  ipcMain.handle(
-    CHANNELS.DELETE_HOLIDAY_DATE,
-    async (_event: IpcMainInvokeEvent, holidayDate: string) =>
-      ticketReferenceService.deleteHolidayDate(holidayDate),
-  );
   ipcMain.handle(
     CHANNELS.GET_TICKETS,
     async (_event: IpcMainInvokeEvent, clientNumber: number) => {

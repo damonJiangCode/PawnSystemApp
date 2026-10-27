@@ -1,6 +1,6 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client operations, reference queries, color and location reference operations use
+NestJS backend. Client operations, reference queries, color, location and holiday reference operations use
 HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
 
 ## Development

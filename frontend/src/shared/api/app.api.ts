@@ -1,5 +1,8 @@
 import type { AppApi } from "../../../../shared/api-contracts/appApi.contract";
 import {
+  loadHolidayDatesHttp,
+  addHolidayDateHttp,
+  deleteHolidayDateHttp,
   loadLocationsHttp,
   loadAllLocationsHttp,
   addLocationHttp,
@@ -14,14 +17,17 @@ import {
   setClientColorActiveHttp,
 } from "./client.http.ts";
 
-type LocationMethods =
+type ReferenceTicketMethods =
+  | "loadHolidayDates"
+  | "addHolidayDate"
+  | "deleteHolidayDate"
   | "loadLocations"
   | "loadAllLocations"
   | "addLocation"
   | "deactivateLocation"
   | "activateLocation";
 type DesktopApi = Omit<AppApi, "client" | "ticket"> & {
-  ticket: Omit<AppApi["ticket"], LocationMethods>;
+  ticket: Omit<AppApi["ticket"], ReferenceTicketMethods>;
 };
 
 declare global {
@@ -37,6 +43,20 @@ export const getAppApi = (): AppApi | undefined => {
     ...desktop,
     ticket: {
       ...desktop.ticket,
+      loadHolidayDates: () =>
+        loadHolidayDatesHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addHolidayDate: (input) =>
+        addHolidayDateHttp(
+          input,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      deleteHolidayDate: (holidayDate) =>
+        deleteHolidayDateHttp(
+          holidayDate,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
       loadLocations: () =>
         loadLocationsHttp(
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",

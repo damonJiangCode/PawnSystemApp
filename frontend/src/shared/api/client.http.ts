@@ -1,4 +1,6 @@
 import type { Location } from "../../../../shared/models/location.model.ts";
+import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
+import type { SaveHolidayInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
 import type { SaveLocationInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
 import type { Client } from "../../../../shared/models/client.model.ts";
 import type {
@@ -9,6 +11,43 @@ import type {
 import { formatIsoDate } from "../utils/formatters.ts";
 import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
 import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
+
+export async function loadHolidayDatesHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<HolidayDate[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/holidays`),
+  );
+}
+
+export async function addHolidayDateHttp(
+  input: SaveHolidayInput,
+  baseUrl = "http://localhost:3000",
+): Promise<HolidayDate> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/holidays`),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        holiday_date: input.holiday_date,
+        name: input.name,
+      }),
+    },
+  );
+}
+
+export async function deleteHolidayDateHttp(
+  holidayDate: string,
+  baseUrl = "http://localhost:3000",
+): Promise<HolidayDate> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/holidays/${encodeURIComponent(holidayDate)}`,
+    ),
+    { method: "DELETE" },
+  );
+}
 
 export async function loadLocationsHttp(
   baseUrl = "http://localhost:3000",

@@ -83,15 +83,14 @@ Start here:
 ### tickets
 
 Owns pawn/sell ticket creation, ticket update, expire, pickup, transfer,
-payment and holiday reference data. Location administration now uses the
-NestJS Reference module.
+payment workflows. Location and holiday reference operations use the NestJS
+Reference module.
 
 Start here:
 
 - `modules/tickets/ticket.handlers.ts`
 - `modules/tickets/ticket.service.ts`
 - `modules/tickets/ticket-payment.service.ts`
-- `modules/tickets/ticket-reference.service.ts`
 - `modules/tickets/ticket.repo.ts`
 
 ### items

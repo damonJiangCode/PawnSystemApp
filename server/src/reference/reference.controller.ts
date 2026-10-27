@@ -1,6 +1,9 @@
+import { CreateHolidayDto, HolidayDateParamsDto } from './dto/holiday.dto.js';
 import {
   Body,
   Controller,
+  Delete,
+  Param,
   Get,
   Patch,
   Post,
@@ -105,5 +108,20 @@ export class ReferenceController {
   @Patch('locations/activate')
   activateLocation(@Body() input: LocationDto) {
     return this.service.setLocationActive(input.location, true);
+  }
+
+  @Get('holidays')
+  loadHolidayDates() {
+    return this.service.loadHolidayDates();
+  }
+
+  @Post('holidays')
+  addHolidayDate(@Body() input: CreateHolidayDto) {
+    return this.service.addHolidayDate(input.holiday_date, input.name);
+  }
+
+  @Delete('holidays/:holidayDate')
+  deleteHolidayDate(@Param() params: HolidayDateParamsDto) {
+    return this.service.deleteHolidayDate(params.holidayDate);
   }
 }

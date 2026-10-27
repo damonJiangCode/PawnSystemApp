@@ -52,6 +52,32 @@ These routes also live in ReferenceController under `/client/reference`.
   Deactivation retains its confirmation dialog. Old location preload methods,
   IPC handlers/channels, Electron service methods and repository are removed.
 
+## Holidays
+
+Routes use the same `/client/reference` prefix and Reference C → S → R classes.
+
+| Method + path                 | Parameters                               | C → S → R                                                 |
+| ----------------------------- | ---------------------------------------- | --------------------------------------------------------- |
+| GET /holidays                 | None                                     | loadHolidayDates → loadHolidayDates → loadHolidayDates    |
+| POST /holidays                | body: { holiday_date: YYYY-MM-DD, name } | addHolidayDate → addHolidayDate → addHolidayDate          |
+| DELETE /holidays/:holidayDate | path: YYYY-MM-DD                         | deleteHolidayDate → deleteHolidayDate → deleteHolidayDate |
+
+- GET returns 200 with all `{ holiday_date, name }` records sorted by date.
+  Dates remain calendar strings, with no timezone conversion. The existing UI
+  continues filtering by year.
+- POST returns 201 with the saved record. DTOs in [holiday.dto.ts](dto/holiday.dto.ts)
+  trim inputs, require a real YYYY-MM-DD date (year 0001–9999), a non-empty string
+  name, and reject unknown body fields. Past dates are allowed.
+- Duplicate dates: 409, even with a different name; identical names on different
+  dates are allowed. Inserts use `ON CONFLICT DO NOTHING`.
+- DELETE returns 200 with the removed record; a missing date returns 404.
+  This is a real deletion, matching the existing behavior, with frontend confirmation.
+- Invalid inputs: 400; database failures: 500. SQL values are parameters and date
+  results use `holiday_date::text`. No update or activation endpoints.
+- Existing `appAPI.ticket.loadHolidayDates/addHolidayDate/deleteHolidayDate` now
+  use HTTP. The old Electron Holiday service, repository, preload methods and
+  IPC handlers/channels are removed. CORS allows DELETE requests from configured origins.
+
 ## Color and dropdown behavior
 
 - GET returns 200: cities use `{ provinces, citiesByProvince }`; ID types and active
@@ -88,3 +114,11 @@ These routes also live in ReferenceController under `/client/reference`.
   state distinctions and database failure propagation.
 - Frontend `location.http.test.ts`: HTTP paths, methods, payloads, errors and
   actual `getAppApi()` binding while preserving other desktop ticket methods.
+
+- [holiday.http.spec.ts](holiday.http.spec.ts): real Reference routes and DTOs with
+  mocked PostgreSQL; date-only responses, ordering, create/delete, duplicate dates,
+  leap years, invalid fields/dates and 400/404/409/500 responses.
+- `reference.service.spec.ts` also checks holiday normalization, duplicates,
+  missing records and database failure propagation.
+- Frontend `holiday.http.test.ts`: GET/POST/DELETE paths, payloads, safe path
+  encoding, date strings, errors and `getAppApi()` bindings.
