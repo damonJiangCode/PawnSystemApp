@@ -10,6 +10,9 @@ const HairColorReferenceWindow = lazy(
   () =>
     import("../modules/reference/colors/hair-color/HairColorReferenceWindow"),
 );
+const IdTypeReferenceWindow = lazy(
+  () => import("../modules/reference/id-types/IdTypeReferenceWindow"),
+);
 const HolidayReferenceWindow = lazy(
   () => import("../modules/reference/holiday/HolidayReferenceWindow"),
 );
@@ -72,5 +75,6 @@ export const windowRegistry: Record<
   "reference-hair-color": HairColorReferenceWindow,
   "reference-eye-color": EyeColorReferenceWindow,
   "reference-holiday": HolidayReferenceWindow,
+  "reference-id-types": IdTypeReferenceWindow,
   "reference-location": LocationReferenceWindow,
 };

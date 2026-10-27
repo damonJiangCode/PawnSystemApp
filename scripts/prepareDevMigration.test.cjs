@@ -28,16 +28,25 @@ const fixture = (t) => {
     "source/Pictureconv.mdb",
     "mappings/category-mapping.json",
     "mappings/location-mapping.json",
+    "mappings/id-type-mapping.json",
   ]) {
     const file = path.join(root, "database", "migration", input);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(
       file,
-      "Synthetic test input; not a real customer record.\n",
+      input.endsWith("id-type-mapping.json")
+        ? fs.readFileSync(
+            path.join(
+              __dirname,
+              "../database/migration/mappings/id-type-mapping.json",
+            ),
+          )
+        : "Synthetic test input; not a real customer record.\n",
     );
   }
   assert.equal(
-    spawnSync("git", ["add", "database/migration/mappings"], { cwd: root }).status,
+    spawnSync("git", ["add", "database/migration/mappings"], { cwd: root })
+      .status,
     0,
   );
   const logs = [];
@@ -72,7 +81,9 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
     "backups",
   ]) {
     assert.ok(
-      fs.statSync(path.join(f.root, "database", "migration", folder)).isDirectory(),
+      fs
+        .statSync(path.join(f.root, "database", "migration", folder))
+        .isDirectory(),
     );
   }
   assert.equal(prepareDevMigration(f.options), 0);
@@ -86,8 +97,12 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
 
 test("reports both missing mappings and a stopped Docker engine instead of declaring readiness", (t) => {
   const f = fixture(t);
-  fs.unlinkSync(path.join(f.root, "database/migration/mappings/category-mapping.json"));
-  fs.unlinkSync(path.join(f.root, "database/migration/mappings/location-mapping.json"));
+  fs.unlinkSync(
+    path.join(f.root, "database/migration/mappings/category-mapping.json"),
+  );
+  fs.unlinkSync(
+    path.join(f.root, "database/migration/mappings/location-mapping.json"),
+  );
   const run = (executable, args, options) =>
     args[0] === "info"
       ? { status: 1, stdout: "", stderr: "Docker is stopped" }

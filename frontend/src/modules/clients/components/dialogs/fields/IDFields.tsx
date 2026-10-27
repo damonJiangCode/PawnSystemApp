@@ -147,14 +147,18 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
                   size="small"
                   name="id_type"
                   label="ID type"
-                  value={
-                    idTypes.includes(element.id_type) ? element.id_type : ""
-                  }
+                  value={element.id_type || ""}
                   error={Boolean(typeError)}
                   helperText={typeError || " "}
                   onChange={(e) => handleUpdate(i, "id_type", e.target.value)}
                 >
                   <MenuItem value="">Select an ID type</MenuItem>
+                  {element.id_type && !idTypes.includes(element.id_type) && (
+                    <MenuItem value={element.id_type} disabled>
+                      {formatClientIdType(element.id_type)} (unavailable for new
+                      IDs)
+                    </MenuItem>
+                  )}
                   {idTypes.map((type, type_idx) => (
                     <MenuItem key={type_idx} value={type}>
                       {formatClientIdType(type)}

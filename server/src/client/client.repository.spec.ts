@@ -114,4 +114,20 @@ describe('ClientRepository.update', () => {
     expect(query.mock.calls[0][0]).toContain('FOR UPDATE');
     expect(query.mock.calls[0][1]).toEqual([42]);
   });
+  it('reads type states using parameters and share locks to serialize deactivation', async () => {
+    const query = vi
+      .fn()
+      .mockResolvedValue({
+        rows: [{ type: 'Legacy LIB: LIBRARY', is_active: false }],
+      });
+    const repository = new ClientRepository({} as Pool);
+    const result = await repository.loadIdTypeStates(['Legacy LIB: LIBRARY'], {
+      query,
+    } as unknown as PoolClient);
+    expect(query.mock.calls[0][0]).toContain(
+      'WHERE type = ANY($1::text[]) ORDER BY type FOR SHARE',
+    );
+    expect(query.mock.calls[0][1]).toEqual([['Legacy LIB: LIBRARY']]);
+    expect(result[0].is_active).toBe(false);
+  });
 });

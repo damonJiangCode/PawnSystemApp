@@ -19,6 +19,7 @@ describe('ClientService', () => {
     update: vi.fn(),
     deleteIds: vi.fn(),
     loadIds: vi.fn(),
+    loadIdTypeStates: vi.fn(),
   };
   const connection = { query: vi.fn(), release: vi.fn() };
   const pool = { query: vi.fn(), connect: vi.fn() };
@@ -29,6 +30,9 @@ describe('ClientService', () => {
   beforeEach(async () => {
     vi.resetAllMocks();
     pool.connect.mockResolvedValue(connection);
+    repository.loadIdTypeStates.mockResolvedValue([
+      { type: 'TEST', is_active: true },
+    ]);
     images.save.mockResolvedValue(imagePath);
     repository.loadForUpdate.mockResolvedValue({
       client_number: 42,
@@ -421,7 +425,7 @@ describe('ClientService', () => {
     await service.update(42, { identifications: ids });
     expect(repository.deleteIds).toHaveBeenCalledWith(42, connection);
     expect(repository.insertIds).toHaveBeenCalledWith(42, ids, connection);
-    expect(repository.loadIds).not.toHaveBeenCalled();
+    expect(repository.loadIds).toHaveBeenCalledWith(42, connection);
   });
 
   it('keeps the old image and cleans up only the new one on failure', async () => {
@@ -457,5 +461,81 @@ describe('ClientService', () => {
   it('rejects an empty update', async () => {
     await expect(service.update(42, {})).rejects.toThrow('at least one change');
     expect(pool.connect).not.toHaveBeenCalled();
+  });
+
+  it.each([{ states: [] }, { states: [{ type: 'TEST', is_active: false }] }])(
+    'rejects unknown/inactive types before creating a photo or client: %j',
+    async ({ states }) => {
+      repository.loadIdTypeStates.mockResolvedValue(states);
+      await expect(service.create(createInput())).rejects.toMatchObject({
+        status: 400,
+      });
+      expect(images.save).not.toHaveBeenCalled();
+      expect(repository.create).not.toHaveBeenCalled();
+      expect(repository.insertIds).not.toHaveBeenCalled();
+      expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    },
+  );
+
+  it('keeps an existing inactive ID unchanged while updating another ID', async () => {
+    const ids = [
+      { id_type: 'TEST', id_value: '1' },
+      { id_type: 'ACTIVE', id_value: '2' },
+    ];
+    repository.loadIdTypeStates.mockResolvedValue([
+      { type: 'TEST', is_active: false },
+      { type: 'ACTIVE', is_active: true },
+    ]);
+    repository.insertIds.mockResolvedValue(ids);
+    const result = await service.update(42, { identifications: ids });
+    expect(result.identifications).toEqual(ids);
+    expect(repository.loadIdTypeStates).toHaveBeenCalledWith(
+      ['TEST', 'ACTIVE'],
+      connection,
+    );
+    expect(repository.deleteIds).toHaveBeenCalledWith(42, connection);
+    expect(connection.query).toHaveBeenCalledWith('COMMIT');
+  });
+
+  it.each(
+    [
+      [
+        { id_type: 'TEST', id_value: 'changed' },
+        { id_type: 'ACTIVE', id_value: '2' },
+      ],
+      [
+        { id_type: 'TEST', id_value: '1' },
+        { id_type: 'TEST', id_value: '1' },
+      ],
+      [
+        { id_type: 'TEST', id_value: '1' },
+        { id_type: 'TEST', id_value: 'new' },
+      ],
+      [
+        { id_type: 'UNKNOWN', id_value: '1' },
+        { id_type: 'ACTIVE', id_value: '2' },
+      ],
+    ].map((ids) => ({ ids })),
+  )(
+    'rejects changed/new/duplicated inactive IDs and unknown types before writes: %j',
+    async ({ ids }) => {
+      repository.loadIdTypeStates.mockResolvedValue([
+        { type: 'TEST', is_active: false },
+        { type: 'ACTIVE', is_active: true },
+      ]);
+      await expect(
+        service.update(42, { identifications: ids }),
+      ).rejects.toMatchObject({ status: 400 });
+      expect(repository.update).not.toHaveBeenCalled();
+      expect(repository.deleteIds).not.toHaveBeenCalled();
+      expect(images.save).not.toHaveBeenCalled();
+      expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+    },
+  );
+
+  it('does not revalidate or replace omitted IDs on a partial update', async () => {
+    await service.update(42, { client: { phone: 'new' } });
+    expect(repository.loadIdTypeStates).not.toHaveBeenCalled();
+    expect(repository.deleteIds).not.toHaveBeenCalled();
   });
 });

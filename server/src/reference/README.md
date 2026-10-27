@@ -23,6 +23,35 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
 | PATCH /eye-colors/activate    | Body   | activateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure    |
 | PATCH /eye-colors/deactivate  | Body   | deactivateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure  |
 
+## ID types
+
+All paths use `/client/reference` and the existing Reference C → S → R classes.
+
+| Method + path              | Parameters              | C → S → R                                                                          |
+| -------------------------- | ----------------------- | ---------------------------------------------------------------------------------- |
+| GET /id-types              | None; active names only | loadIdTypes → loadIdTypes → loadIdTypes                                            |
+| GET /id-types/all          | None; names and states  | loadAllIdTypes → loadAllIdTypes → loadAllIdTypes                                   |
+| POST /id-types             | body: { type }          | addIdType → addIdType → addIdType                                                  |
+| PATCH /id-types/activate   | body: { type }          | activateIdType → setIdTypeActive(true) → setIdTypeActive; findIdType on failure    |
+| PATCH /id-types/deactivate | body: { type }          | deactivateIdType → setIdTypeActive(false) → setIdTypeActive; findIdType on failure |
+
+- GET `/id-types` returns `string[]`; `/all` returns `{ type, is_active }[]`,
+  active first then name. POST returns 201 with the active record; PATCH returns 200.
+- `IdTypeDto` trims names, requires a non-empty string up to 500 characters and
+  rejects unknown fields. Names retain their casing and punctuation.
+- Duplicate names are case-insensitive, including inactive types: 409. A unique
+  index on `LOWER(type)` handles concurrent duplicates; inserts use
+  `ON CONFLICT DO NOTHING`. State lookups are case-insensitive and return the stored label.
+- Invalid input: 400; missing type: 404; already in the requested state: 409;
+  database failure: 500. No delete or rename route. Existing client references remain.
+- Frontend Reference → ID Types lists/searches all types, adds new names, activates
+  inactive types and confirms deactivation. It uses the client appAPI HTTP adapter.
+- Client writes also enforce type states: new IDs require an active exact returned
+  type name; PATCH can retain an existing inactive `(id_type, id_value)` pair,
+  including its original multiplicity. New/changed/copied inactive IDs are rejected.
+  Omitted IDs remain untouched. Type rows use `FOR SHARE` locks in the client
+  transaction so deactivation cannot race the validation and subsequent inserts.
+
 ## Locations
 
 These routes also live in ReferenceController under `/client/reference`.
@@ -80,7 +109,7 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
 
 ## Color and dropdown behavior
 
-- GET returns 200: cities use `{ provinces, citiesByProvince }`; ID types and active
+- GET returns 200: cities use `{ provinces, citiesByProvince }`; active ID types and active
   colors use `string[]`; color `/all` uses `{ color, is_active }[]`, active first.
 - POST returns 201 with `{ color }`; PATCH returns 200 with `{ color, is_active }`.
   The renderer adapter keeps the existing appAPI.addHairColor/addEyeColor string result.
@@ -122,3 +151,15 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
   missing records and database failure propagation.
 - Frontend `holiday.http.test.ts`: GET/POST/DELETE paths, payloads, safe path
   encoding, date strings, errors and `getAppApi()` bindings.
+
+- ID type reads filter `is_active = TRUE`. Client edit retains an existing
+  unavailable type without offering it on new ID rows. Historical-only types stay
+  stored for old records.
+
+- [id-type.http.spec.ts](id-type.http.spec.ts): real Reference routes and DTOs with
+  mocked PostgreSQL, name preservation, case-insensitive conflicts, state changes,
+  unknown fields, Unicode, error responses and absent delete/rename routes.
+- Client service/HTTP tests cover new inactive/unknown IDs, historical inactive
+  preservation, changed/duplicated inactive IDs, rollback and unchanged partial PATCH.
+- Frontend `id-type.http.test.ts` checks requests, response shapes, errors and
+  appAPI bindings; no live database writes are made by these tests.

@@ -314,7 +314,11 @@ const executeDevMigration = async ({
       );
       saveManifest();
     }
-    for (const filename of ["category-mapping.json", "location-mapping.json"]) {
+    for (const filename of [
+      "category-mapping.json",
+      "location-mapping.json",
+      "id-type-mapping.json",
+    ]) {
       manifest.mappings[filename] = await hash(
         path.join(projectRoot, "database/migration/mappings", filename),
       );

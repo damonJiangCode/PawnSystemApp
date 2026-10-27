@@ -1,5 +1,8 @@
 import type { AppApi } from "../../../../shared/api-contracts/appApi.contract";
 import {
+  loadAllIdTypesHttp,
+  addIdTypeHttp,
+  setIdTypeActiveHttp,
   loadHolidayDatesHttp,
   addHolidayDateHttp,
   deleteHolidayDateHttp,
@@ -84,6 +87,27 @@ export const getAppApi = (): AppApi | undefined => {
         ),
     },
     client: {
+      loadAllIdTypes: () =>
+        loadAllIdTypesHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addIdType: (type) =>
+        addIdTypeHttp(
+          type,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      activateIdType: (type) =>
+        setIdTypeActiveHttp(
+          type,
+          true,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      deactivateIdType: (type) =>
+        setIdTypeActiveHttp(
+          type,
+          false,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
       loadAllHairColors: () =>
         loadAllColorsHttp(
           "hair",

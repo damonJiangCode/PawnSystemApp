@@ -1,3 +1,4 @@
+import { IdTypeDto } from './dto/id-type.dto.js';
 import { CreateHolidayDto, HolidayDateParamsDto } from './dto/holiday.dto.js';
 import {
   Body,
@@ -33,6 +34,26 @@ export class ReferenceController {
   @Get('id-types')
   loadIdTypes() {
     return this.service.loadIdTypes();
+  }
+
+  @Get('id-types/all')
+  loadAllIdTypes() {
+    return this.service.loadAllIdTypes();
+  }
+
+  @Post('id-types')
+  addIdType(@Body() input: IdTypeDto) {
+    return this.service.addIdType(input.type);
+  }
+
+  @Patch('id-types/activate')
+  activateIdType(@Body() input: IdTypeDto) {
+    return this.service.setIdTypeActive(input.type, true);
+  }
+
+  @Patch('id-types/deactivate')
+  deactivateIdType(@Body() input: IdTypeDto) {
+    return this.service.setIdTypeActive(input.type, false);
   }
 
   @Get('hair-colors')

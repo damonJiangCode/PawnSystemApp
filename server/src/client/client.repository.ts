@@ -83,6 +83,14 @@ export class ClientRepository {
     return result.rows[0] as Record<string, unknown>;
   }
 
+  async loadIdTypeStates(types: string[], connection: PoolClient) {
+    const result = await connection.query<{ type: string; is_active: boolean }>(
+      'SELECT type, is_active FROM id_type WHERE type = ANY($1::text[]) ORDER BY type FOR SHARE',
+      [types],
+    );
+    return result.rows;
+  }
+
   async loadIds(clientNumber: number, connection: PoolClient) {
     const result = await connection.query(
       'SELECT id, id_type, id_value, updated_at FROM client_id WHERE client_number = $1 ORDER BY id',

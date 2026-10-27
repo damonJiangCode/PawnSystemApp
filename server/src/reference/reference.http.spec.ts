@@ -63,7 +63,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(['LICENSE', 'PASSPORT']);
     expect(pool.query).toHaveBeenCalledExactlyOnceWith(
-      'SELECT type FROM id_type ORDER BY type ASC',
+      'SELECT type FROM id_type WHERE is_active = TRUE ORDER BY type ASC',
     );
   });
 

@@ -52,6 +52,17 @@ with a `Client`. Responses include identifications; `mapRowToClient` in
   client/image: 404. Password errors include field=employee_password.
 - No DELETE, PUT, separate hold/status route or standalone photo-upload route.
 
+## ID type availability
+
+- ClientService.create/update validate type availability through
+  ClientRepository.loadIdTypeStates on the same transaction connection.
+- New IDs need an active exact type name from the reference API. An update may
+  retain existing inactive type/number pairs unchanged, but cannot add, change or
+  duplicate them beyond their original count. Invalid IDs return 400 with
+  field=identifications, before photos or record writes.
+- Omitted IDs remain untouched. Type reads use FOR SHARE locks, preventing a
+  concurrent reference deactivation until the client transaction completes.
+
 ## Tests
 
 Run from `server/`: `npm test -- src/client`.

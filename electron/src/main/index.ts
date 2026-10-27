@@ -145,6 +145,17 @@ const createAppMenu = () => {
       label: "Reference",
       submenu: [
         {
+          label: "ID Types",
+          click: () =>
+            openMenuActionWindow({
+              id: "reference-id-types",
+              title: "ID Types",
+              description: "Manage identification types.",
+              width: 960,
+              height: 760,
+            }),
+        },
+        {
           label: "Holiday",
           click: () =>
             openMenuActionWindow({

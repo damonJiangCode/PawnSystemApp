@@ -150,7 +150,9 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     const trimmedDescription = description.trim();
     const trimmedLocation = location.trim();
     const trimmedPassword = employeePassword.trim();
-    const isValidLocation = locationList.includes(trimmedLocation);
+    const isValidLocation =
+      locationList.includes(trimmedLocation) ||
+      trimmedLocation === ticket.location?.trim();
     const nextDescriptionError =
       trimmedDescription.length === 0 ? "Description is required." : "";
     const nextLocationError =
@@ -338,7 +340,19 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
                 setLocationError("");
               }
             }}
-            options={locationList}
+            options={
+              ticket?.location && !locationList.includes(ticket.location)
+                ? [...locationList, ticket.location]
+                : locationList
+            }
+            getOptionDisabled={(option) => !locationList.includes(option)}
+            renderOption={(props, option) => (
+              <li {...props}>
+                {option}
+                {!locationList.includes(option) &&
+                  " (unavailable for new selections)"}
+              </li>
+            )}
             disabled={loading}
             onInputChange={(_event, inputValue, reason) => {
               if (reason === "input") {

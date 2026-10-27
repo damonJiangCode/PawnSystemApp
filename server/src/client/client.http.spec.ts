@@ -172,6 +172,8 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   it('creates client and IDs via POST and returns 201', async () => {
     connection.query.mockImplementation(
       async (sql: string, values: unknown[] = []) => {
+        if (sql.includes('FROM id_type'))
+          return { rows: [{ type: 'TEST', is_active: true }] };
         if (sql.includes('INSERT INTO client (')) {
           return {
             rows: [
@@ -263,6 +265,8 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   it('rolls back and removes the submitted photo when inserting IDs fails', async () => {
     const before = await readdir(imageRoot);
     connection.query.mockImplementation(async (sql: string) => {
+      if (sql.includes('FROM id_type'))
+        return { rows: [{ type: 'TEST', is_active: true }] };
       if (sql.includes('INSERT INTO client ('))
         return { rows: [{ ...validCreate.client, client_number: 1 }] };
       if (sql.includes('INSERT INTO client_id'))
@@ -307,6 +311,8 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     };
     connection.query.mockImplementation(
       async (sql: string, values: unknown[] = []) => {
+        if (sql.includes('FROM id_type'))
+          return { rows: [{ type: 'TEST', is_active: true }] };
         if (sql.includes('FROM employee'))
           return {
             rows:
@@ -594,4 +600,60 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       expect(pool.connect).not.toHaveBeenCalled();
     },
   );
+  it('rejects an inactive ID type on create before creating any image file', async () => {
+    const before = await readdir(imageRoot);
+    connection.query.mockImplementation(async (sql: string) => ({
+      rows: sql.includes('FROM id_type')
+        ? [{ type: 'TEST', is_active: false }]
+        : [],
+    }));
+    const response = await fetch(`${baseUrl}/client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validCreate),
+    });
+    expect(response.status).toBe(400);
+    expect((await response.json()).field).toBe('identifications');
+    expect(
+      connection.query.mock.calls.some(([sql]) => sql.startsWith('INSERT')),
+    ).toBe(false);
+    expect(await readdir(imageRoot)).toEqual(before);
+  });
+
+  it('keeps an existing inactive ID through PATCH, but rejects changing its number', async () => {
+    arrangeUpdate();
+    const previous = connection.query.getMockImplementation()!;
+    const ids = [
+      { id_type: 'TEST', id_value: 'original' },
+      { id_type: 'ACTIVE', id_value: 'new' },
+    ];
+    connection.query.mockImplementation(
+      async (sql: string, values: unknown[] = []) => {
+        if (sql.includes('FROM id_type'))
+          return {
+            rows: [
+              { type: 'TEST', is_active: false },
+              { type: 'ACTIVE', is_active: true },
+            ],
+          };
+        if (sql.includes('INSERT INTO client_id'))
+          return { rows: ids.map((id, i) => ({ ...id, id: i + 1 })) };
+        return previous(sql, values);
+      },
+    );
+    let response = await patch({ identifications: ids });
+    expect(response.status).toBe(200);
+    expect((await response.json()).identifications).toHaveLength(2);
+    connection.query.mockClear();
+    response = await patch({
+      identifications: [{ ...ids[0], id_value: 'changed' }, ids[1]],
+    });
+    expect(response.status).toBe(400);
+    expect(
+      connection.query.mock.calls.some(
+        ([sql]) => sql.startsWith('UPDATE') || sql.startsWith('DELETE'),
+      ),
+    ).toBe(false);
+    expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+  });
 });

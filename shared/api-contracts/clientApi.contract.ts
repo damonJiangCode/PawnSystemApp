@@ -1,3 +1,4 @@
+import type { IdType } from "../models/id-type.model.ts";
 import type { Client } from "../models/client.model.ts";
 import type { HairColor } from "../models/hair-color.model.ts";
 import type { EyeColor } from "../models/eye-color.model.ts";
@@ -27,6 +28,10 @@ export type ClientApi = {
   activateEyeColor: (color: string) => Promise<EyeColor>;
   deactivateEyeColor: (color: string) => Promise<EyeColor>;
   loadIdTypes: () => Promise<string[]>;
+  loadAllIdTypes: () => Promise<IdType[]>;
+  addIdType: (type: string) => Promise<IdType>;
+  activateIdType: (type: string) => Promise<IdType>;
+  deactivateIdType: (type: string) => Promise<IdType>;
   createClient: (input: CreateClientInput) => Promise<Client>;
   updateClient: (input: UpdateClientInput) => Promise<Client>;
 };

@@ -15,6 +15,7 @@ const REQUIRED_INPUTS = [
   "database/migration/source/Pictureconv.mdb",
   "database/migration/mappings/category-mapping.json",
   "database/migration/mappings/location-mapping.json",
+  "database/migration/mappings/id-type-mapping.json",
 ];
 
 const parseEnv = (content) => {
@@ -178,6 +179,16 @@ const prepareDevMigration = ({
         : "private source database";
       fail(`Provide a nonempty ${inputType}: ${relativePath}`);
     }
+  }
+  try {
+    require("../database/migration/scripts/id-type-mapping.cjs").loadIdTypeMapping(
+      path.join(
+        projectRoot,
+        "database/migration/mappings/id-type-mapping.json",
+      ),
+    );
+  } catch (error) {
+    fail(`Invalid ID type mapping: ${error.message}`);
   }
   for (const dependency of ["pg", "csv-parser", "electron"]) {
     try {

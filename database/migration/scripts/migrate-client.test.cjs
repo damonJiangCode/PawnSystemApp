@@ -14,7 +14,10 @@ const { insertClients } = vm.runInNewContext(
     __dirname,
     process: { env: {}, argv: [] },
     console,
-    require,
+    require: (name) =>
+      name === "./id-type-mapping.cjs"
+        ? require("./id-type-mapping.cjs")
+        : require(name),
   },
 );
 
@@ -41,10 +44,7 @@ test("migration starts ordinary and fallback clients active with no hold", async
   assert.equal((sql.match(/\$\d+/g) ?? []).length, values.length);
   // The database supplies NULL when this nullable, default-free column is omitted.
   const schema = fs.readFileSync(
-    path.join(
-      __dirname,
-      "../../schema/client/clientTable.ts",
-    ),
+    path.join(__dirname, "../../schema/client/clientTable.ts"),
     "utf8",
   );
   assert.match(schema, /hold_until DATE\s*,/);

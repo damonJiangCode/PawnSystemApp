@@ -9,7 +9,8 @@ const { Pool } = require("pg");
 const migrationRoot = path.resolve(__dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "static-migration.md");
 
 const dbConfig = {
@@ -38,35 +39,8 @@ const EYE_COLOR_MAPPING = {
   "DARK BROWN": "BROWN",
   "LIGHT BROWN": "BROWN",
 };
-const ID_TYPE_MAPPING = {
-  SIN: "Social Insurance Number",
-  DRL: "Driver's License",
-  MAN: "Driver's License",
-  ONT: "Driver's License",
-  BRI: "Driver's License",
-  NTD: "Driver's License",
-  NSD: "Driver's License",
-  HCD: "Health Card",
-  AHC: "Health Card",
-  TRD: "Indian Status Card",
-  FAC: "Firearms License",
-  BCD: "Birth Certificate",
-  PAS: "Canadian Passport",
-  CIT: "Citizenship Card",
-  SAI: "Provincial ID",
-  BCI: "Provincial ID",
-  ALI: "Provincial ID",
-  ALT: "Provincial ID",
-  OTH: "Other",
-  REM: "Other",
-  BAR: "Other",
-  "M/M": "Other",
-  CAS: "Other",
-  ROY: "Other",
-  CRE: "Other",
-  LIB: "Other",
-  CIB: "Other",
-};
+const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
+const idTypeMapping = loadIdTypeMapping();
 const mapHairColor = (value) => {
   const normalized = normalizeUpper(value);
   return HAIR_COLOR_MAPPING[normalized] || normalized;
@@ -76,8 +50,8 @@ const mapEyeColor = (value) => {
   return EYE_COLOR_MAPPING[normalized] || normalized;
 };
 const mapIdType = (code) => {
-  const normalized = normalizeUpper(code);
-  return ID_TYPE_MAPPING[normalized] || "";
+  const rule = resolveIdType(idTypeMapping, code);
+  return rule.action === "map" ? rule.mapped_type : "";
 };
 const getValue = (row, key) => {
   if (Object.prototype.hasOwnProperty.call(row, key)) {
@@ -104,16 +78,21 @@ const formatList = (values, limit = 20) => {
   const visible = sample(values, limit)
     .map((value) => `- ${value}`)
     .join("\n");
-  const extra = values.length > limit ? `\n- ... ${values.length - limit} more` : "";
+  const extra =
+    values.length > limit ? `\n- ... ${values.length - limit} more` : "";
   return `${visible}${extra}`;
 };
 
 const readAccessTable = (tableName) => {
   return new Promise((resolve, reject) => {
     const rows = [];
-    const child = spawn("mdb-export", ["-b", "strip", sourceDbPath, tableName], {
-      cwd: projectRoot,
-    });
+    const child = spawn(
+      "mdb-export",
+      ["-b", "strip", sourceDbPath, tableName],
+      {
+        cwd: projectRoot,
+      },
+    );
 
     child.stdout.pipe(csv()).on("data", (row) => rows.push(row));
 
@@ -155,8 +134,16 @@ const compareSets = (sourceValues, targetValues) => {
 
 const section = (title, body) => `## ${title}\n\n${body.trim()}\n\n`;
 
-const summarizeSimpleSet = ({ label, sourceRows, targetRows, sourceValues }) => {
-  const comparison = compareSets(sourceValues, targetRows.map((row) => row.value));
+const summarizeSimpleSet = ({
+  label,
+  sourceRows,
+  targetRows,
+  sourceValues,
+}) => {
+  const comparison = compareSets(
+    sourceValues,
+    targetRows.map((row) => row.value),
+  );
   return section(
     label,
     [
@@ -217,10 +204,22 @@ const main = async () => {
       targetEmployees,
     ] = await Promise.all([
       getTargetValues(pool, "SELECT type AS value FROM id_type ORDER BY type"),
-      getTargetValues(pool, "SELECT color AS value FROM hair_color ORDER BY color"),
-      getTargetValues(pool, "SELECT color AS value FROM eye_color ORDER BY color"),
-      getTargetValues(pool, "SELECT location AS value FROM location ORDER BY location"),
-      getTargetValues(pool, "SELECT name AS value FROM item_category ORDER BY name"),
+      getTargetValues(
+        pool,
+        "SELECT color AS value FROM hair_color ORDER BY color",
+      ),
+      getTargetValues(
+        pool,
+        "SELECT color AS value FROM eye_color ORDER BY color",
+      ),
+      getTargetValues(
+        pool,
+        "SELECT location AS value FROM location ORDER BY location",
+      ),
+      getTargetValues(
+        pool,
+        "SELECT name AS value FROM item_category ORDER BY name",
+      ),
       getTargetValues(
         pool,
         `
@@ -234,7 +233,10 @@ const main = async () => {
         pool,
         "SELECT city || ' / ' || province || ' / ' || country AS value FROM city ORDER BY city, province, country",
       ),
-      getTargetValues(pool, "SELECT employee_number::text AS value FROM employee ORDER BY employee_number"),
+      getTargetValues(
+        pool,
+        "SELECT employee_number::text AS value FROM employee ORDER BY employee_number",
+      ),
     ]);
 
     const provinceByCode = new Map(
@@ -272,12 +274,20 @@ const main = async () => {
       })
       .filter((value) => value !== "->");
 
-    const rawHairColors = hairRows.map((row) => normalizeUpper(getValue(row, "BW010HAIRCODE")));
-    const rawEyeColors = eyeRows.map((row) => normalizeUpper(getValue(row, "BW015EYECODE")));
+    const rawHairColors = hairRows.map((row) =>
+      normalizeUpper(getValue(row, "BW010HAIRCODE")),
+    );
+    const rawEyeColors = eyeRows.map((row) =>
+      normalizeUpper(getValue(row, "BW015EYECODE")),
+    );
     const hairColors = rawHairColors.map(mapHairColor);
     const eyeColors = rawEyeColors.map(mapEyeColor);
-    const locations = locationRows.map((row) => normalizeUpper(getValue(row, "WC450CODE")));
-    const categories = categoryRows.map((row) => normalizeUpper(getValue(row, "WC510DESCRIPTION")));
+    const locations = locationRows.map((row) =>
+      normalizeUpper(getValue(row, "WC450CODE")),
+    );
+    const categories = categoryRows.map((row) =>
+      normalizeUpper(getValue(row, "WC510DESCRIPTION")),
+    );
     const subcategories = subcategoryRows.map((row) => {
       const category =
         categoryByCode.get(normalizeText(getValue(row, "WC520CATEGORYCODE"))) ||
@@ -285,14 +295,18 @@ const main = async () => {
       return `${category} / ${normalizeText(getValue(row, "WC520DESC")).toLowerCase()}`;
     });
     const cities = cityRows.map((row) => {
-      const provinceInfo = provinceByCode.get(normalizeText(getValue(row, "MF100PROVINCENO")));
+      const provinceInfo = provinceByCode.get(
+        normalizeText(getValue(row, "MF100PROVINCENO")),
+      );
       const province =
         provinceInfo?.province ||
         normalizeText(getValue(row, "MF100PROVSHNAME")) ||
         "<UNKNOWN PROVINCE>";
       const country =
-        countryByCode.get(provinceInfo?.countryCode || normalizeText(getValue(row, "MF110COUNTRYCODE"))) ||
-        "<UNKNOWN COUNTRY>";
+        countryByCode.get(
+          provinceInfo?.countryCode ||
+            normalizeText(getValue(row, "MF110COUNTRYCODE")),
+        ) || "<UNKNOWN COUNTRY>";
       return `${normalizeText(getValue(row, "MF100NAME"))} / ${province} / ${country}`;
     });
 
@@ -305,8 +319,13 @@ const main = async () => {
     const employeeMissingNickname = employeeRows.filter((row) => {
       return !normalizeText(getValue(row, "EM200NICKNAME"));
     }).length;
-    const employeeNumbers = employeeRows.map((row) => normalizeText(getValue(row, "EM200EMPLOYEEID")));
-    const employeeComparison = compareSets(employeeNumbers, targetEmployees.map((row) => row.value));
+    const employeeNumbers = employeeRows.map((row) =>
+      normalizeText(getValue(row, "EM200EMPLOYEEID")),
+    );
+    const employeeComparison = compareSets(
+      employeeNumbers,
+      targetEmployees.map((row) => row.value),
+    );
 
     const sourceCounts = [
       ["AR400ID", idRows.length],
@@ -357,9 +376,9 @@ const main = async () => {
                 const mapped = mapIdType(row.code);
                 return mapped
                   ? `${row.code} (${row.description}) -> ${mapped}`
-                  : `${row.code} (${row.description}) -> skip`;
+                  : `${row.code || "<blank>"} (${row.description}) -> REVIEW REQUIRED: ${resolveIdType(idTypeMapping, row.code).reason}`;
               })
-              .filter((value) => !value.startsWith("PHO ") && !value.startsWith(" ->")),
+              .filter((value) => !value.startsWith(" ->")),
             40,
           ),
         ].join("\n"),

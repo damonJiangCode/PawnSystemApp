@@ -46,7 +46,7 @@
 ### Files
 
 - `migration/scripts/`: migration code.
-- `migration/mappings/`: required, Git-tracked category and location JSON rules.
+- `migration/mappings/`: required, Git-tracked category, location and ID type JSON rules.
 - `migration/source/`: private Access inputs.
 - `migration/exports/`: generated customer/item photos.
 - `migration/reports/`: per-run results, execution manifest and validation logs.
@@ -62,3 +62,34 @@
 - Imported clients start active with no hold: `is_active=true`, `hold_until=NULL`.
 - Failed imports are not automatically erased or resumed; inspect the report
   before deciding how to retry.
+
+### ID type mapping
+
+- `migration/mappings/id-type-mapping.json` is the shared runtime input for ID
+  seeds, static previews, client migration and the read-only audit.
+- Established document types retain their mappings. Eight legacy-specific entries
+  use distinct `Legacy CODE: DESCRIPTION` targets, initially inactive. Original
+  abbreviations are preserved without claiming they are valid documents for new use.
+- A number with no type is kept as `Other`; completely empty slots are ignored.
+- Populated PHO or unknown codes block client import for preservation review.
+  PHO means PHONE NO; the importer does not silently discard it or overwrite phones.
+- Missing numbers are reported and skipped; no identification numbers are invented.
+- Seed reruns insert missing targets and preserve all existing activation states.
+  Execution manifests record the mapping checksum; prepare rejects invalid rules.
+- Run from the project root:
+
+  ```bash
+  node --env-file=.env database/migration/scripts/audit-id-types.cjs
+  ```
+
+- Private reports: `migration/reports/id-type-audit-*/summary.json` and `summary.md`.
+  They include per-code counts, source/mapping checksums and ID-count distributions,
+  without customer names or actual identification/telephone numbers.
+- The audit never changes mappings or database data. Counts cover ID slots only,
+  not full client/ticket eligibility. New rules do not rewrite already-imported IDs;
+  historical reclassification needs a separate import or correction.
+
+- ID type names have an additional case-insensitive unique index on LOWER(type).
+  It prevents duplicate reference labels without changing existing names or their
+  case-sensitive foreign-key references. Existing databases need this index applied
+  separately, as with other CREATE definition changes.

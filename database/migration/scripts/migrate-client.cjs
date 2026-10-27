@@ -22,35 +22,8 @@ const dbConfig = {
   port: Number(process.env.DB_PORT || 5432),
 };
 
-const ID_TYPE_MAPPING = {
-  SIN: "Social Insurance Number",
-  DRL: "Driver's License",
-  MAN: "Driver's License",
-  ONT: "Driver's License",
-  BRI: "Driver's License",
-  NTD: "Driver's License",
-  NSD: "Driver's License",
-  HCD: "Health Card",
-  AHC: "Health Card",
-  TRD: "Indian Status Card",
-  FAC: "Firearms License",
-  BCD: "Birth Certificate",
-  PAS: "Canadian Passport",
-  CIT: "Citizenship Card",
-  SAI: "Provincial ID",
-  BCI: "Provincial ID",
-  ALI: "Provincial ID",
-  ALT: "Provincial ID",
-  OTH: "Other",
-  REM: "Other",
-  BAR: "Other",
-  "M/M": "Other",
-  CAS: "Other",
-  ROY: "Other",
-  CRE: "Other",
-  LIB: "Other",
-  CIB: "Other",
-};
+const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
+const idTypeMapping = loadIdTypeMapping();
 
 const HAIR_COLOR_MAPPING = {
   UNKNOWN: "OTHER",
@@ -261,11 +234,8 @@ const mapColor = (rawValue, lookup, extraMapping) => {
 };
 
 const mapIdType = (code) => {
-  const normalized = normalizeUpper(code);
-  if (!normalized) {
-    return "Other";
-  }
-  return ID_TYPE_MAPPING[normalized] || "";
+  const rule = resolveIdType(idTypeMapping, code);
+  return rule.action === "map" ? rule.mapped_type : "";
 };
 
 const nonNegativeCounter = (value) => {
@@ -699,9 +669,10 @@ const main = async () => {
 
         const mappedType = mapIdType(code);
         if (!mappedType) {
-          if (code !== "PHO") {
-            rowWarnings.push(`skipped unmapped ID code ${code || "<blank>"}`);
-          }
+          const rule = resolveIdType(idTypeMapping, code);
+          rowBlockers.push(
+            `ID ${index} requires review (${code || "<blank>"}): ${rule.reason}`,
+          );
           continue;
         }
         if (!idTypeTargets.has(mappedType)) {
@@ -900,7 +871,7 @@ const main = async () => {
       "- Prefix `AR200APTNO` onto `address` as `APT {aptNo}`.",
       "- Import `AR200CLIENTMEMO` into `notes`.",
       "- Default negative legacy client counters to `0` so target check constraints pass.",
-      "- Import valid ID slots from `AR200ID_1` through `AR200ID_5`; skip `PHO`.",
+      "- Import valid ID slots from `AR200ID_1` through `AR200ID_5` using `id-type-mapping.json`; populated `PHO` or unknown codes block commit for review.",
       "- Leave `image_path` blank for now.",
       "- Leave hold_until unset (NULL), including the fallback client; holds are optional and set by users later.",
       "- Initialize is_active to TRUE for all imported clients, including the fallback client; deactivation is a later application action.",

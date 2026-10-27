@@ -1,3 +1,4 @@
+import type { IdType } from "../../../../shared/models/id-type.model";
 import type { Client } from "../../../../shared/models/client.model";
 import type { HairColor } from "../../../../shared/models/hair-color.model";
 import type { EyeColor } from "../../../../shared/models/eye-color.model";
@@ -224,6 +225,30 @@ export const clientApi = {
     }
 
     return api.activateEyeColor(color.trim().toUpperCase());
+  },
+
+  loadAllIdTypes: async (): Promise<IdType[]> => {
+    const api = getAppApi()?.client;
+    if (!api) throw new Error("ID type API is unavailable.");
+    return api.loadAllIdTypes();
+  },
+
+  addIdType: async (type: string): Promise<IdType> => {
+    const api = getAppApi()?.client;
+    if (!api) throw new Error("ID type API is unavailable.");
+    return api.addIdType(type.trim());
+  },
+
+  activateIdType: async (type: string): Promise<IdType> => {
+    const api = getAppApi()?.client;
+    if (!api) throw new Error("ID type API is unavailable.");
+    return api.activateIdType(type.trim());
+  },
+
+  deactivateIdType: async (type: string): Promise<IdType> => {
+    const api = getAppApi()?.client;
+    if (!api) throw new Error("ID type API is unavailable.");
+    return api.deactivateIdType(type.trim());
   },
 
   loadIdTypes: async (): Promise<string[]> => {

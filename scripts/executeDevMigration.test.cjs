@@ -38,13 +38,16 @@ const fixture = (t, options = {}) => {
     "reports",
     "backups",
   ]) {
-    fs.mkdirSync(path.join(root, "database", "migration", folder), { recursive: true });
+    fs.mkdirSync(path.join(root, "database", "migration", folder), {
+      recursive: true,
+    });
   }
   for (const name of [
     "source/superpawnconv.mdb",
     "source/Pictureconv.mdb",
     "mappings/category-mapping.json",
     "mappings/location-mapping.json",
+    "mappings/id-type-mapping.json",
   ]) {
     fs.writeFileSync(
       path.join(root, "database", "migration", name),
@@ -163,7 +166,9 @@ const fixture = (t, options = {}) => {
       fs.writeFileSync(args[1], "synthetic photo archive");
     if (args.some((arg) => arg.endsWith("/database/runInit.js")))
       initialized = true;
-    const script = args.find((arg) => arg.startsWith("database/migration/scripts/"));
+    const script = args.find((arg) =>
+      arg.startsWith("database/migration/scripts/"),
+    );
     if (script) {
       const reportRoot = path.join(
         root,
@@ -254,7 +259,9 @@ test("simulated execution imports in order, writes backups, and never starts/res
       args.some((arg) => ["up", "down", "stop", "start"].includes(arg)),
     ),
   );
-  const run = fs.readdirSync(path.join(f.root, "database/migration/reports"))[0];
+  const run = fs.readdirSync(
+    path.join(f.root, "database/migration/reports"),
+  )[0];
   const manifest = JSON.parse(
     fs.readFileSync(
       path.join(f.root, "database/migration/reports", run, "execution.json"),
@@ -264,6 +271,7 @@ test("simulated execution imports in order, writes backups, and never starts/res
   assert.equal(manifest.status, "completed");
   assert.deepEqual(Object.keys(manifest.mappings).sort(), [
     "category-mapping.json",
+    "id-type-mapping.json",
     "location-mapping.json",
   ]);
   for (const checksum of Object.values(manifest.mappings)) {
@@ -314,7 +322,9 @@ test("a zero-exit preview with blockers never reaches the corresponding commit",
 test("unresolved final validation saves backups but cannot declare success", async (t) => {
   const f = fixture(t, { invalidFinal: true });
   assert.equal(await executeDevMigration(f.options), 1);
-  const run = fs.readdirSync(path.join(f.root, "database/migration/reports"))[0];
+  const run = fs.readdirSync(
+    path.join(f.root, "database/migration/reports"),
+  )[0];
   const manifest = JSON.parse(
     fs.readFileSync(
       path.join(f.root, "database/migration/reports", run, "execution.json"),

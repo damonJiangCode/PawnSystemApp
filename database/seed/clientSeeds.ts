@@ -32,21 +32,6 @@ const EYE_COLORS = [
   "OTHER",
 ];
 
-const ID_TYPES = [
-  "Driver's License",
-  "Health Card",
-  "Indian Status Card",
-  "Birth Certificate",
-  "Social Insurance Number",
-  "Firearms License",
-  "Canadian Passport",
-  "Citizenship Card",
-  "Permanent Resident Card",
-  "Provincial ID",
-  "Military ID",
-  "Other",
-];
-
 const seedColors = async (
   client: DbClient,
   tableName: "hair_color" | "eye_color",
@@ -116,13 +101,21 @@ export const seedEyeColors = async (client: DbClient) => {
 };
 
 export const seedIdTypes = async (client: DbClient) => {
+  const { loadIdTypeMapping } =
+    require("../migration/scripts/id-type-mapping.cjs") as {
+      loadIdTypeMapping: () => {
+        targetTypes: { type: string; is_active: boolean }[];
+      };
+    };
+  const { targetTypes } = loadIdTypeMapping();
   await client.query(
-    `
-      INSERT INTO id_type (type)
-      SELECT seed.type
-      FROM UNNEST($1::text[]) AS seed(type)
-      ON CONFLICT (type) DO NOTHING
-    `,
-    [ID_TYPES],
+    `INSERT INTO id_type (type, is_active)
+     SELECT seed.type, seed.is_active
+     FROM UNNEST($1::text[], $2::boolean[]) AS seed(type, is_active)
+     ON CONFLICT (type) DO NOTHING`,
+    [
+      targetTypes.map((target) => target.type),
+      targetTypes.map((target) => target.is_active),
+    ],
   );
 };

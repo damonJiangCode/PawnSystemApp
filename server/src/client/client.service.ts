@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Pool, type PoolClient } from 'pg';
 import { ClientRepository, type ClientChanges } from './client.repository.js';
 import { EmployeeRepository } from '../employees/employee.repository.js';
 import { ClientImageService } from './client-image.service.js';
@@ -101,6 +101,18 @@ export class ClientService {
         connection,
       );
       if (!existing) throw new NotFoundException('Client not found.');
+
+      if (input.identifications !== undefined) {
+        const existingIds = await this.clientRepository.loadIds(
+          clientNumber,
+          connection,
+        );
+        await this.validateIdentifications(
+          input.identifications,
+          connection,
+          existingIds,
+        );
+      }
 
       const statusChanged =
         changes.is_active !== undefined &&
@@ -254,6 +266,7 @@ export class ClientService {
           notes = `${notes} (${employee.first_name}, ${date})`;
         }
       }
+      await this.validateIdentifications(input.identifications, connection);
       imagePath = await this.images.save(input.photo.base64);
       const row = await this.clientRepository.create(
         { ...input.client, image_path: imagePath },
@@ -310,5 +323,41 @@ export class ClientService {
     const date = dateOfBirth.trim();
     if (!date) return [];
     return this.clientRepository.searchByDob(date);
+  }
+
+  private async validateIdentifications(
+    ids: { id_type: string; id_value: string }[],
+    connection: PoolClient,
+    existingIds: { id_type: string; id_value: string }[] = [],
+  ) {
+    const types = [...new Set(ids.map((id) => id.id_type.trim()))];
+    const rows = await this.clientRepository.loadIdTypeStates(
+      types,
+      connection,
+    );
+    const states = new Map(rows.map((row) => [row.type, row.is_active]));
+    // Count old pairs so a caller cannot duplicate an inactive ID to bypass validation.
+    const old = new Map<string, number>();
+    for (const id of existingIds) {
+      const key = JSON.stringify([id.id_type.trim(), id.id_value.trim()]);
+      old.set(key, (old.get(key) ?? 0) + 1);
+    }
+    for (const id of ids) {
+      const type = id.id_type.trim();
+      if (!states.has(type))
+        throw new BadRequestException({
+          field: 'identifications',
+          message: `ID type "${type}" was not found. Choose an available type.`,
+        });
+      if (states.get(type)) continue;
+      const key = JSON.stringify([type, id.id_value.trim()]);
+      const remaining = old.get(key) ?? 0;
+      if (!remaining)
+        throw new BadRequestException({
+          field: 'identifications',
+          message: `ID type "${type}" is inactive. Existing IDs may be kept unchanged; new or changed IDs require an active type.`,
+        });
+      old.set(key, remaining - 1);
+    }
   }
 }

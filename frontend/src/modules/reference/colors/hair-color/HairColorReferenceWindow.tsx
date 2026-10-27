@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
   Paper,
   Stack,
   TextField,
@@ -240,12 +239,6 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
                     <Typography variant="body2" fontWeight={800}>
                       {hairColor.color}
                     </Typography>
-                    <Chip
-                      size="small"
-                      label={hairColor.is_active ? "Active" : "Inactive"}
-                      color={hairColor.is_active ? "success" : "default"}
-                      variant="outlined"
-                    />
                   </Stack>
                   <Button
                     size="small"

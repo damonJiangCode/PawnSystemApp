@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
   Paper,
   Stack,
   TextField,
@@ -267,12 +266,6 @@ const ColorReferenceWindow: React.FC<ColorReferenceWindowProps> = ({
                     <Typography variant="body2" fontWeight={800}>
                       {color.color}
                     </Typography>
-                    <Chip
-                      size="small"
-                      label={color.is_active ? "Active" : "Inactive"}
-                      color={color.is_active ? "success" : "default"}
-                      variant="outlined"
-                    />
                   </Stack>
                   <Button
                     size="small"

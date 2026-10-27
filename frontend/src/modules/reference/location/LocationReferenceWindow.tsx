@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
   Paper,
   Stack,
   TextField,
@@ -238,12 +237,6 @@ const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
                       <Typography variant="body2" fontWeight={800}>
                         {location.location}
                       </Typography>
-                      <Chip
-                        size="small"
-                        label={location.is_active ? "Active" : "Inactive"}
-                        color={location.is_active ? "success" : "default"}
-                        variant="outlined"
-                      />
                     </Stack>
                     <Typography
                       variant="caption"

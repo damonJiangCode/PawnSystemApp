@@ -69,6 +69,20 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
     };
   }, []);
 
+  const selectedHairColor =
+    hairColors.find(
+      (color) =>
+        color.trim().toUpperCase() === hair_color?.trim().toUpperCase(),
+    ) ??
+    hair_color ??
+    "";
+  const selectedEyeColor =
+    eyeColors.find(
+      (color) => color.trim().toUpperCase() === eye_color?.trim().toUpperCase(),
+    ) ??
+    eye_color ??
+    "";
+
   const isValidDate = (d: unknown) =>
     d instanceof Date && !Number.isNaN(d.getTime());
 
@@ -117,20 +131,18 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         required
         name="hair_color"
         label="Hair color"
-        value={
-          hairColors.some(
-            (c) =>
-              c.trim().toLowerCase() ===
-              (hair_color || "").trim().toLowerCase(),
-          )
-            ? hair_color
-            : ""
-        }
+        value={selectedHairColor}
         onChange={onChange}
         size="small"
         error={Boolean(hairColorError || colorLoadError)}
         helperText={hairColorError || colorLoadError || " "}
       >
+        <MenuItem value=""></MenuItem>
+        {selectedHairColor && !hairColors.includes(selectedHairColor) && (
+          <MenuItem value={selectedHairColor} disabled>
+            {formatClientOption(hair_color)} (unavailable for new selections)
+          </MenuItem>
+        )}
         {hairColors.map((color) => (
           <MenuItem key={color} value={color}>
             {formatClientOption(color)}
@@ -144,19 +156,18 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         required
         name="eye_color"
         label="Eye color"
-        value={
-          eyeColors.some(
-            (c) =>
-              c.trim().toLowerCase() === (eye_color || "").trim().toLowerCase(),
-          )
-            ? eye_color
-            : ""
-        }
+        value={selectedEyeColor}
         onChange={onChange}
         size="small"
         error={Boolean(eyeColorError || colorLoadError)}
         helperText={eyeColorError || colorLoadError || " "}
       >
+        <MenuItem value=""></MenuItem>
+        {selectedEyeColor && !eyeColors.includes(selectedEyeColor) && (
+          <MenuItem value={selectedEyeColor} disabled>
+            {formatClientOption(eye_color)} (unavailable for new selections)
+          </MenuItem>
+        )}
         {eyeColors.map((color) => (
           <MenuItem key={color} value={color}>
             {formatClientOption(color)}

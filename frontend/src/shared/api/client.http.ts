@@ -1,3 +1,4 @@
+import type { IdType } from "../../../../shared/models/id-type.model.ts";
 import type { Location } from "../../../../shared/models/location.model.ts";
 import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
 import type { SaveHolidayInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
@@ -11,6 +12,45 @@ import type {
 import { formatIsoDate } from "../utils/formatters.ts";
 import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
 import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
+
+export async function loadAllIdTypesHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<IdType[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/id-types/all`),
+  );
+}
+
+export async function addIdTypeHttp(
+  type: string,
+  baseUrl = "http://localhost:3000",
+): Promise<IdType> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/id-types`),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type }),
+    },
+  );
+}
+
+export async function setIdTypeActiveHttp(
+  type: string,
+  isActive: boolean,
+  baseUrl = "http://localhost:3000",
+): Promise<IdType> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/id-types/${isActive ? "activate" : "deactivate"}`,
+    ),
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type }),
+    },
+  );
+}
 
 export async function loadHolidayDatesHttp(
   baseUrl = "http://localhost:3000",
