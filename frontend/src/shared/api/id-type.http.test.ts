@@ -19,7 +19,7 @@ test("ID type HTTP uses JSON POST/PATCH and returns records with the original la
     );
     assert.deepEqual(JSON.parse(init.body as string), { type: item.type });
     if (init.method === "POST") {
-      assert.equal(url.pathname, "/client/reference/id-types");
+      assert.equal(url.pathname, "/reference/id-types");
       return Response.json(item, { status: 201 });
     }
     assert.equal(init.method, "PATCH");
@@ -40,10 +40,10 @@ test("ID type HTTP uses JSON POST/PATCH and returns records with the original la
     true,
   );
   assert.deepEqual(paths, [
-    "/client/reference/id-types/all",
-    "/client/reference/id-types",
-    "/client/reference/id-types/deactivate",
-    "/client/reference/id-types/activate",
+    "/reference/id-types/all",
+    "/reference/id-types",
+    "/reference/id-types/deactivate",
+    "/reference/id-types/activate",
   ]);
 });
 
@@ -105,10 +105,10 @@ test("getAppApi binds all ID type writes/reads to HTTP and preserves desktop met
   assert.equal((await api.client.deactivateIdType(item.type)).is_active, false);
   assert.equal((await api.client.activateIdType(item.type)).is_active, true);
   assert.deepEqual(calls, [
-    "GET /client/reference/id-types",
-    "GET /client/reference/id-types/all",
-    "POST /client/reference/id-types",
-    "PATCH /client/reference/id-types/deactivate",
-    "PATCH /client/reference/id-types/activate",
+    "GET /reference/id-types",
+    "GET /reference/id-types/all",
+    "POST /reference/id-types",
+    "PATCH /reference/id-types/deactivate",
+    "PATCH /reference/id-types/activate",
   ]);
 });

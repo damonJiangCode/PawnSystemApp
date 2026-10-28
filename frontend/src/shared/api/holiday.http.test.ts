@@ -13,7 +13,7 @@ test("holiday HTTP lists date strings without timezone conversion", async (t) =>
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     assert.equal(
       url.href,
-      "http://store-server:3000/client/reference/holidays",
+      "http://store-server:3000/reference/holidays",
     );
     return Response.json([holiday]);
   });
@@ -26,7 +26,7 @@ test("holiday HTTP sends POST details and DELETE path with no delete body", asyn
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
     assert.equal(url.origin, "http://store-server:3000");
     if (init.method === "POST") {
-      assert.equal(url.pathname, "/client/reference/holidays");
+      assert.equal(url.pathname, "/reference/holidays");
       assert.equal(
         (init.headers as Record<string, string>)["Content-Type"],
         "application/json",
@@ -34,7 +34,7 @@ test("holiday HTTP sends POST details and DELETE path with no delete body", asyn
       assert.deepEqual(JSON.parse(init.body as string), holiday);
     } else {
       assert.equal(init.method, "DELETE");
-      assert.equal(url.pathname, "/client/reference/holidays/2026-12-25");
+      assert.equal(url.pathname, "/reference/holidays/2026-12-25");
       assert.equal(init.body, undefined);
     }
     return Response.json(holiday);
@@ -48,7 +48,7 @@ test("holiday HTTP sends POST details and DELETE path with no delete body", asyn
 
 test("holiday HTTP safely encodes a supplied path segment", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) => {
-    assert.equal(url.pathname, "/client/reference/holidays/not%2Fa%3Fdate%23");
+    assert.equal(url.pathname, "/reference/holidays/not%2Fa%3Fdate%23");
     assert.equal(url.search, "");
     assert.equal(url.hash, "");
     return Response.json({ message: "Invalid date" }, { status: 400 });
@@ -133,8 +133,8 @@ test("getAppApi routes all existing holiday methods through HTTP and preserves t
     holiday,
   );
   assert.deepEqual(calls, [
-    "GET /client/reference/holidays",
-    "POST /client/reference/holidays",
-    "DELETE /client/reference/holidays/2026-12-25",
+    "GET /reference/holidays",
+    "POST /reference/holidays",
+    "DELETE /reference/holidays/2026-12-25",
   ]);
 });

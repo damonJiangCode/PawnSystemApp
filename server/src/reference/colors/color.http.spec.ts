@@ -10,7 +10,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { ReferenceModule } from './reference.module.js';
+import { ReferenceModule } from '../reference.module.js';
 
 describe('Color reference operations HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
@@ -86,7 +86,7 @@ describe('Color reference operations HTTP (mock PostgreSQL)', () => {
       });
   });
   const request = (kind: string, path = '', method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/client/reference/${kind}-colors${path}`, {
+    fetch(`${baseUrl}/reference/${kind}-colors${path}`, {
       method,
       ...(body === undefined
         ? {}

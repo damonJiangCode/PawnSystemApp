@@ -41,7 +41,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
         { province: 'SK', city: 'Saskatoon' },
       ],
     });
-    const response = await fetch(`${baseUrl}/client/reference/cities`);
+    const response = await fetch(`${baseUrl}/reference/cities`);
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
       provinces: ['AB', 'SK'],
@@ -71,7 +71,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
       },
     ];
     pool.query.mockResolvedValue({ rows });
-    const response = await fetch(`${baseUrl}/client/reference/item-categories`);
+    const response = await fetch(`${baseUrl}/reference/item-categories`);
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(rows);
     expect(pool.query).toHaveBeenCalledTimes(1);
@@ -83,7 +83,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
 
   it('does not expose private category database errors', async () => {
     pool.query.mockRejectedValue(new Error('Private category database error'));
-    const response = await fetch(`${baseUrl}/client/reference/item-categories`);
+    const response = await fetch(`${baseUrl}/reference/item-categories`);
     expect(response.status).toBe(500);
     expect(JSON.stringify(await response.json())).not.toContain(
       'Private category',
@@ -94,7 +94,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     pool.query.mockResolvedValue({
       rows: [{ type: 'LICENSE' }, { type: 'PASSPORT' }],
     });
-    const response = await fetch(`${baseUrl}/client/reference/id-types`);
+    const response = await fetch(`${baseUrl}/reference/id-types`);
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(['LICENSE', 'PASSPORT']);
     expect(pool.query).toHaveBeenCalledExactlyOnceWith(
@@ -108,9 +108,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
       pool.query.mockResolvedValue({
         rows: [{ color: 'BLACK' }, { color: 'BROWN' }],
       });
-      const response = await fetch(
-        `${baseUrl}/client/reference/${kind}-colors`,
-      );
+      const response = await fetch(`${baseUrl}/reference/${kind}-colors`);
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual(['BLACK', 'BROWN']);
       expect(pool.query).toHaveBeenCalledExactlyOnceWith(
@@ -127,7 +125,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     'item-categories',
   ])('handles empty %s without inventing seed data', async (resource) => {
     pool.query.mockResolvedValue({ rows: [] });
-    const response = await fetch(`${baseUrl}/client/reference/${resource}`);
+    const response = await fetch(`${baseUrl}/reference/${resource}`);
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(
       resource === 'cities' ? { provinces: [], citiesByProvince: {} } : [],
@@ -139,7 +137,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
 
   it('reports a database failure as HTTP 500, not a successful empty list', async () => {
     pool.query.mockRejectedValue(new Error('Private database error'));
-    const response = await fetch(`${baseUrl}/client/reference/id-types`);
+    const response = await fetch(`${baseUrl}/reference/id-types`);
     expect(response.status).toBe(500);
     expect(JSON.stringify(await response.json())).not.toContain(
       'Private database error',
@@ -147,7 +145,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
   });
 
   it('does not expose a color delete endpoint', async () => {
-    const response = await fetch(`${baseUrl}/client/reference/hair-colors`, {
+    const response = await fetch(`${baseUrl}/reference/hair-colors`, {
       method: 'DELETE',
     });
     expect(response.status).toBe(404);

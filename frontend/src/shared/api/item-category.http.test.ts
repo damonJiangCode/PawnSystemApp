@@ -48,7 +48,7 @@ test("item categories use HTTP while other item operations keep their implementa
   const api = (exports as { getAppApi: () => AppApi }).getAppApi();
   assert.equal(api.item.loadItemsByTicket, loadItemsByTicket);
   assert.deepEqual(await api.item.loadItemCategories(), categories);
-  assert.deepEqual(calls, ["/client/reference/item-categories"]);
+  assert.deepEqual(calls, ["/reference/item-categories"]);
 });
 
 test("item categories return empty lists and propagate HTTP and connection failures", async (t) => {
@@ -108,27 +108,27 @@ test("item category management uses the reference routes, methods and bodies", a
   );
   assert.deepEqual(calls, [
     {
-      path: "/client/reference/item-categories/all",
+      path: "/reference/item-categories/all",
       method: "GET",
       body: undefined,
     },
     {
-      path: "/client/reference/item-categories",
+      path: "/reference/item-categories",
       method: "POST",
       body: { category_name: "Tools" },
     },
     {
-      path: "/client/reference/item-subcategories",
+      path: "/reference/item-subcategories",
       method: "POST",
       body: { category_id: 1, subcategory_name: "Drills" },
     },
     {
-      path: "/client/reference/item-categories/1",
+      path: "/reference/item-categories/1",
       method: "PATCH",
       body: { is_active: false },
     },
     {
-      path: "/client/reference/item-subcategories/3",
+      path: "/reference/item-subcategories/3",
       method: "PATCH",
       body: { is_active: true },
     },

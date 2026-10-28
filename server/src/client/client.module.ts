@@ -3,17 +3,12 @@ import { ClientController } from './client.controller.js';
 import { ClientService } from './client.service.js';
 import { ClientRepository } from './client.repository.js';
 import { DatabaseModule } from '../database/database.module.js';
-import { EmployeeRepository } from '../employees/employee.repository.js';
+import { EmployeeModule } from '../employee/employee.module.js';
 import { ClientImageService } from './client-image.service.js';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, EmployeeModule],
   controllers: [ClientController],
-  providers: [
-    ClientService,
-    ClientRepository,
-    EmployeeRepository,
-    ClientImageService,
-  ],
+  providers: [ClientService, ClientRepository, ClientImageService],
 })
 export class ClientModule {}

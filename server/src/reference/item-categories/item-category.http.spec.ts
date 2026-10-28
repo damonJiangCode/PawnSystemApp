@@ -10,7 +10,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { ReferenceModule } from './reference.module.js';
+import { ReferenceModule } from '../reference.module.js';
 
 describe('Item category reference HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
@@ -39,7 +39,7 @@ describe('Item category reference HTTP (mock PostgreSQL)', () => {
     vi.resetAllMocks();
   });
   const request = (path: string, method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/client/reference/${path}`, {
+    fetch(`${baseUrl}/reference/${path}`, {
       method,
       ...(body === undefined
         ? {}

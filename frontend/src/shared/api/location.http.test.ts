@@ -19,8 +19,8 @@ test("location HTTP preserves active-code and complete-reference response shapes
   assert.deepEqual(await http.loadLocationsHttp(baseUrl), ["AB12"]);
   assert.deepEqual(await http.loadAllLocationsHttp(baseUrl), [location]);
   assert.deepEqual(paths, [
-    "/client/reference/locations",
-    "/client/reference/locations/all",
+    "/reference/locations",
+    "/reference/locations/all",
   ]);
 });
 
@@ -32,7 +32,7 @@ test("location mutations send only editable JSON fields using POST and PATCH", a
       "application/json",
     );
     if (init.method === "POST") {
-      assert.equal(url.pathname, "/client/reference/locations");
+      assert.equal(url.pathname, "/reference/locations");
       assert.deepEqual(JSON.parse(init.body as string), {
         location: "AB12",
         description: "Shelf A",
@@ -42,8 +42,8 @@ test("location mutations send only editable JSON fields using POST and PATCH", a
     assert.equal(init.method, "PATCH");
     assert.ok(
       [
-        "/client/reference/locations/deactivate",
-        "/client/reference/locations/activate",
+        "/reference/locations/deactivate",
+        "/reference/locations/activate",
       ].includes(url.pathname),
     );
     assert.deepEqual(JSON.parse(init.body as string), { location: "AB12" });
@@ -132,10 +132,10 @@ test("getAppApi routes all five location methods through HTTP and keeps other de
   assert.equal((await api.ticket.deactivateLocation("AB12")).is_active, false);
   assert.equal((await api.ticket.activateLocation("AB12")).is_active, true);
   assert.deepEqual(calls, [
-    "GET /client/reference/locations",
-    "GET /client/reference/locations/all",
-    "POST /client/reference/locations",
-    "PATCH /client/reference/locations/deactivate",
-    "PATCH /client/reference/locations/activate",
+    "GET /reference/locations",
+    "GET /reference/locations/all",
+    "POST /reference/locations",
+    "PATCH /reference/locations/deactivate",
+    "PATCH /reference/locations/activate",
   ]);
 });

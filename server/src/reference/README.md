@@ -1,12 +1,25 @@
 # Reference API
 
-- C: [ReferenceController](reference.controller.ts) for all reference routes.
-- S: [ReferenceService](reference.service.ts), used by every reference endpoint.
-- R: [ReferenceRepository](reference.repository.ts), injected with the shared pool.
+Lookup data shared by the business modules. All routes start with `/reference`.
+[ReferenceModule](reference.module.ts) registers one controller → service →
+repository set per resource, each in its own folder with its DTOs and specs:
 
-## Endpoints
+| Folder             | Classes                                       | Routes                                                        |
+| ------------------ | --------------------------------------------- | ------------------------------------------------------------- |
+| `cities/`          | `City{Controller,Service,Repository}`         | `/reference/cities`                                           |
+| `id-types/`        | `IdType{Controller,Service,Repository}`       | `/reference/id-types`                                         |
+| `colors/`          | `Color{Controller,Service,Repository}`        | `/reference/hair-colors`, `/reference/eye-colors`             |
+| `locations/`       | `Location{Controller,Service,Repository}`     | `/reference/locations`                                        |
+| `holidays/`        | `Holiday{Controller,Service,Repository}`      | `/reference/holidays`                                         |
+| `item-categories/` | `ItemCategory{Controller,Service,Repository}` | `/reference/item-categories`, `/reference/item-subcategories` |
 
-All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`.
+Controllers share `strictValidationPipe` from
+[src/common/strict-validation.pipe.ts](../common/strict-validation.pipe.ts):
+transform input, strip undecorated fields and reject unknown ones with 400.
+
+## Cities and colors
+
+Paths below are relative to `/reference`. Body means JSON `{ "color": "BROWN" }`.
 
 | Method + path                 | Params | C → S → R                                                                         |
 | ----------------------------- | ------ | --------------------------------------------------------------------------------- |
@@ -25,7 +38,7 @@ All paths start with `/client/reference`. Body means JSON `{ "color": "BROWN" }`
 
 ## ID types
 
-All paths use `/client/reference` and the existing Reference C → S → R classes.
+Paths are relative to `/reference`; classes live in `id-types/`.
 
 | Method + path              | Parameters              | C → S → R                                                                          |
 | -------------------------- | ----------------------- | ---------------------------------------------------------------------------------- |
@@ -54,7 +67,7 @@ All paths use `/client/reference` and the existing Reference C → S → R class
 
 ## Locations
 
-These routes also live in ReferenceController under `/client/reference`.
+Paths are relative to `/reference`; classes live in `locations/`.
 
 | Method + path               | Params                          | C → S → R                                                                                  |
 | --------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -67,7 +80,7 @@ These routes also live in ReferenceController under `/client/reference`.
 - GET `/locations` returns active codes (`string[]`), sorted by code. `/all`
   returns `{ location, description, is_active }[]`, active first, then by code.
 - POST returns 201 with the saved record; PATCH returns 200 with the updated record.
-- `CreateLocationDto` in [location.dto.ts](dto/location.dto.ts) requires a
+- `CreateLocationDto` in [location.dto.ts](locations/location.dto.ts) requires a
   two-letter/two-digit code (AB12) and a string description (empty is allowed,
   max 1000 characters after trimming). The service uppercases codes and trims text.
 - `LocationDto` validates a non-empty code for activation/deactivation, allowing existing
@@ -83,7 +96,7 @@ These routes also live in ReferenceController under `/client/reference`.
 
 ## Holidays
 
-Routes use the same `/client/reference` prefix and Reference C → S → R classes.
+Paths are relative to `/reference`; classes live in `holidays/`.
 
 | Method + path                 | Parameters                               | C → S → R                                                 |
 | ----------------------------- | ---------------------------------------- | --------------------------------------------------------- |
@@ -94,7 +107,7 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
 - GET returns 200 with all `{ holiday_date, name }` records sorted by date.
   Dates remain calendar strings, with no timezone conversion. The existing UI
   continues filtering by year.
-- POST returns 201 with the saved record. DTOs in [holiday.dto.ts](dto/holiday.dto.ts)
+- POST returns 201 with the saved record. DTOs in [holiday.dto.ts](holidays/holiday.dto.ts)
   trim inputs, require a real YYYY-MM-DD date (year 0001–9999), a non-empty string
   name, and reject unknown body fields. Past dates are allowed.
 - Duplicate dates: 409, even with a different name; identical names on different
@@ -113,7 +126,7 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
   colors use `string[]`; color `/all` uses `{ color, is_active }[]`, active first.
 - POST returns 201 with `{ color }`; PATCH returns 200 with `{ color, is_active }`.
   The renderer adapter keeps the existing appAPI.addHairColor/addEyeColor string result.
-- `ColorDto` in [color.dto.ts](dto/color.dto.ts) requires a non-empty string up to
+- `ColorDto` in [color.dto.ts](colors/color.dto.ts) requires a non-empty string up to
   500 characters and rejects unknown fields. S trims and uppercases colors.
 - Duplicate colors (including inactive ones): 409. Missing colors: 404.
   Already active/inactive: 409. Invalid input: 400. Database errors: 500.
@@ -122,32 +135,32 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
   table names come only from internal hair/eye choices. No DELETE or rename route.
 - Existing table data, customer references and seed definitions are preserved.
   Inactive colors remain visible in complete reference lists but disappear from new dropdown queries.
-- All client/reference appAPI methods now use HTTP; their old preload/main handlers are removed.
+- All reference appAPI methods now use HTTP; their old preload/main handlers are removed.
 
 ## Tests
 
 - From `server/`: `npm test -- src/reference`.
 - [reference.http.spec.ts](reference.http.spec.ts): dropdown shapes, ordering,
   active-color filters, empty results, database errors and absent DELETE routes.
-- [reference.service.spec.ts](reference.service.spec.ts): normalization, duplicates,
+- [color.service.spec.ts](colors/color.service.spec.ts): normalization, duplicates,
   state errors and database failure propagation.
-- [color.http.spec.ts](color.http.spec.ts): both color types through real Nest routes,
+- [color.http.spec.ts](colors/color.http.spec.ts): both color types through real Nest routes,
   DTOs, service and repository with mocked PostgreSQL; add/deactivate/reactivate,
   duplicate inactive colors, 400/404/409 responses and parameterized SQL.
 - Renderer `client.http.test.ts`: HTTP paths, JSON payloads, preserved appAPI return
   shapes and error messages. No test writes to the live database.
-- [location.http.spec.ts](location.http.spec.ts): real Reference routes, DTOs,
+- [location.http.spec.ts](locations/location.http.spec.ts): real reference routes, DTOs,
   service and repository with mocked PostgreSQL; normalization, SQL parameters,
   lists, activation/deactivation, legacy codes, validation and 400/404/409/500 responses.
-- `reference.service.spec.ts` also checks location normalization, duplicates,
+- [location.service.spec.ts](locations/location.service.spec.ts) checks location normalization, duplicates,
   state distinctions and database failure propagation.
 - Frontend `location.http.test.ts`: HTTP paths, methods, payloads, errors and
   actual `getAppApi()` binding while preserving other desktop ticket methods.
 
-- [holiday.http.spec.ts](holiday.http.spec.ts): real Reference routes and DTOs with
+- [holiday.http.spec.ts](holidays/holiday.http.spec.ts): real reference routes and DTOs with
   mocked PostgreSQL; date-only responses, ordering, create/delete, duplicate dates,
   leap years, invalid fields/dates and 400/404/409/500 responses.
-- `reference.service.spec.ts` also checks holiday normalization, duplicates,
+- [holiday.service.spec.ts](holidays/holiday.service.spec.ts) checks holiday normalization, duplicates,
   missing records and database failure propagation.
 - Frontend `holiday.http.test.ts`: GET/POST/DELETE paths, payloads, safe path
   encoding, date strings, errors and `getAppApi()` bindings.
@@ -156,7 +169,7 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
   unavailable type without offering it on new ID rows. Historical-only types stay
   stored for old records.
 
-- [id-type.http.spec.ts](id-type.http.spec.ts): real Reference routes and DTOs with
+- [id-type.http.spec.ts](id-types/id-type.http.spec.ts): real reference routes and DTOs with
   mocked PostgreSQL, name preservation, case-insensitive conflicts, state changes,
   unknown fields, Unicode, error responses and absent delete/rename routes.
 - Client service/HTTP tests cover new inactive/unknown IDs, historical inactive
@@ -166,7 +179,7 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
 
 ## Item categories
 
-All paths below start with `/client/reference`, using the existing Reference C → S → R.
+Paths are relative to `/reference`; classes live in `item-categories/`.
 
 | Method + path                            | Parameters                                | C → S → R                                                                      |
 | ---------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
@@ -199,7 +212,7 @@ subcategory_name }[]`, sorted by names. Both parent and child must be active.
   its parent remains inactive; it becomes selectable only when both are active.
 - Invalid input: 400; missing parent/record: 404; duplicates/inactive parent: 409;
   database failures: 500 without private details. No delete or rename endpoints.
-- Create, parameter and state DTOs live in `dto/item-category.dto.ts`.
+- Create, parameter and state DTOs live in [item-category.dto.ts](item-categories/item-category.dto.ts).
 - HTTP tests use a mocked pool to cover input checks, nested/full lists, errors
   and independent state updates. Both create statements were also run against the
   development database inside a rolled-back transaction (duplicates by case/space,

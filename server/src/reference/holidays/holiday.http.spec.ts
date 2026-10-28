@@ -10,7 +10,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { ReferenceModule } from './reference.module.js';
+import { ReferenceModule } from '../reference.module.js';
 
 describe('Holiday reference HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
@@ -57,7 +57,7 @@ describe('Holiday reference HTTP (mock PostgreSQL)', () => {
       });
   });
   const request = (path = '', method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/client/reference/holidays${path}`, {
+    fetch(`${baseUrl}/reference/holidays${path}`, {
       method,
       ...(body === undefined
         ? {}

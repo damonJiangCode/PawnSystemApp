@@ -47,7 +47,7 @@ with a `Client`. Responses include identifications; `mapRowToClient` in
   automatic entries use MM-DD-YYYY. New clients default to active with no hold.
 - `ClientService.create/update` save related records in one transaction;
   update locks the client row. Password checks use
-  `EmployeeRepository.findActiveByPassword` in [employee.repository.ts](../employees/employee.repository.ts)
+  `EmployeeRepository.findActiveByPassword` in [employee.repository.ts](../employee/employee.repository.ts)
   for attribution, not a login session. Invalid input/password: 400; missing
   client/image: 404. Password errors include field=employee_password.
 - No DELETE, PUT, separate hold/status route or standalone photo-upload route.

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Pool, type PoolClient } from 'pg';
 import { ClientRepository, type ClientChanges } from './client.repository.js';
-import { EmployeeRepository } from '../employees/employee.repository.js';
+import { EmployeeRepository } from '../employee/employee.repository.js';
 import { ClientImageService } from './client-image.service.js';
 import { CreateClientDto } from './dto/create-client.dto.js';
 import { mapRowToClient } from './client.mapper.js';

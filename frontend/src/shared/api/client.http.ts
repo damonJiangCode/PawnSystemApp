@@ -23,7 +23,7 @@ export async function loadItemCategoriesHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<ItemCategoryOption[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/item-categories`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/item-categories`),
   );
 }
 
@@ -32,7 +32,7 @@ export async function loadAllItemCategoriesHttp(
 ): Promise<ItemCategoryTree[]> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/item-categories/all`,
+      `${baseUrl.replace(/\/$/, "")}/reference/item-categories/all`,
     ),
   );
 }
@@ -42,7 +42,7 @@ export async function addItemCategoryHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<ItemCategory> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/item-categories`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/item-categories`),
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -58,7 +58,7 @@ export async function addItemSubcategoryHttp(
 ): Promise<ItemSubcategory> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/item-subcategories`,
+      `${baseUrl.replace(/\/$/, "")}/reference/item-subcategories`,
     ),
     {
       method: "POST",
@@ -75,7 +75,7 @@ export async function setItemCategoryActiveHttp(
 ): Promise<ItemCategory> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/item-categories/${categoryId}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/item-categories/${categoryId}`,
     ),
     {
       method: "PATCH",
@@ -92,7 +92,7 @@ export async function setItemSubcategoryActiveHttp(
 ): Promise<ItemSubcategory> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/item-subcategories/${subcategoryId}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/item-subcategories/${subcategoryId}`,
     ),
     {
       method: "PATCH",
@@ -106,7 +106,7 @@ export async function loadAllIdTypesHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<IdType[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/id-types/all`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/id-types/all`),
   );
 }
 
@@ -115,7 +115,7 @@ export async function addIdTypeHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<IdType> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/id-types`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/id-types`),
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -131,7 +131,7 @@ export async function setIdTypeActiveHttp(
 ): Promise<IdType> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/id-types/${isActive ? "activate" : "deactivate"}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/id-types/${isActive ? "activate" : "deactivate"}`,
     ),
     {
       method: "PATCH",
@@ -145,7 +145,7 @@ export async function loadHolidayDatesHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<HolidayDate[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/holidays`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/holidays`),
   );
 }
 
@@ -154,7 +154,7 @@ export async function addHolidayDateHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<HolidayDate> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/holidays`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/holidays`),
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -172,7 +172,7 @@ export async function deleteHolidayDateHttp(
 ): Promise<HolidayDate> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/holidays/${encodeURIComponent(holidayDate)}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/holidays/${encodeURIComponent(holidayDate)}`,
     ),
     { method: "DELETE" },
   );
@@ -182,7 +182,7 @@ export async function loadLocationsHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<string[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations`),
   );
 }
 
@@ -190,7 +190,7 @@ export async function loadAllLocationsHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<Location[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations/all`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations/all`),
   );
 }
 
@@ -199,7 +199,7 @@ export async function addLocationHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<Location> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/locations`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations`),
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -218,7 +218,7 @@ export async function setLocationActiveHttp(
 ): Promise<Location> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/locations/${isActive ? "activate" : "deactivate"}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/locations/${isActive ? "activate" : "deactivate"}`,
     ),
     {
       method: "PATCH",
@@ -234,7 +234,7 @@ export async function loadAllColorsHttp(
 ): Promise<(HairColor | EyeColor)[]> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors/all`,
+      `${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors/all`,
     ),
   );
 }
@@ -245,7 +245,7 @@ export async function addClientColorHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<string> {
   const result = await requestJson<{ color: string }>(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors`),
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -263,7 +263,7 @@ export async function setClientColorActiveHttp(
 ): Promise<HairColor | EyeColor> {
   return requestJson(
     new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/reference/${kind}-colors/${isActive ? "activate" : "deactivate"}`,
+      `${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors/${isActive ? "activate" : "deactivate"}`,
     ),
     {
       method: "PATCH",
@@ -286,7 +286,7 @@ export async function loadClientReferenceHttp(
   baseUrl = "http://localhost:3000",
 ): Promise<CitiesResponse | string[]> {
   return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/${resource}`),
+    new URL(`${baseUrl.replace(/\/$/, "")}/reference/${resource}`),
   );
 }
 

@@ -10,8 +10,8 @@ import {
   it,
   vi,
 } from 'vitest';
-import { ReferenceModule } from './reference.module.js';
-import type { LocationOption } from './reference.repository.js';
+import { ReferenceModule } from '../reference.module.js';
+import type { LocationOption } from './location.repository.js';
 
 describe('Location reference HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
@@ -81,7 +81,7 @@ describe('Location reference HTTP (mock PostgreSQL)', () => {
       });
   });
   const request = (path = '', method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/client/reference/locations${path}`, {
+    fetch(`${baseUrl}/reference/locations${path}`, {
       method,
       ...(body === undefined
         ? {}

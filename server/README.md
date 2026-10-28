@@ -57,24 +57,23 @@ handle business rules and transactions. `ClientRepository` methods in
 client operations to HTTP. Concise module references:
 [Client](src/client/README.md) and [Reference](src/reference/README.md).
 
-### Reference queries (implemented)
+### Reference data (implemented)
 
-`ReferenceController` in [reference.controller.ts](src/reference/reference.controller.ts)
-exposes four read-only routes with no required parameters:
+`ReferenceModule` in [src/reference/](src/reference/) serves all lookup data under
+`/reference` (cities, ID types, hair/eye colors, locations, holidays and item
+categories), with one controller → service → repository set per resource.
+Client dropdowns use these read-only routes:
 
-| Endpoint                          | Response                                                            | Repository method  |
-| --------------------------------- | ------------------------------------------------------------------- | ------------------ |
-| GET /client/reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities         |
-| GET /client/reference/id-types    | string[]                                                            | loadIdTypes        |
-| GET /client/reference/hair-colors | string[] of active colors                                           | loadColors('hair') |
-| GET /client/reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
+| Endpoint                   | Response                                                            | Repository method  |
+| -------------------------- | ------------------------------------------------------------------- | ------------------ |
+| GET /reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities         |
+| GET /reference/id-types    | string[]                                                            | loadIdTypes        |
+| GET /reference/hair-colors | string[] of active colors                                           | loadColors('hair') |
+| GET /reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
 
-`ReferenceRepository` in [reference.repository.ts](src/reference/reference.repository.ts)
-reads existing tables for dropdowns and writes color changes for reference editing.
-No seed data is created by these endpoints.
-`ReferenceModule` imports the database pool. Every reference endpoint uses
-`ReferenceController` → `ReferenceService` → `ReferenceRepository`; see the
-[Reference README](src/reference/README.md) for GET /all, POST and PATCH routes.
+No seed data is created by these endpoints. `ReferenceModule` imports the
+database pool; see the [Reference README](src/reference/README.md) for the
+folder layout and all GET /all, POST, PATCH and DELETE routes.
 `getAppApi` routes the existing loadCities/loadIdTypes/loadHairColors/loadEyeColors
 contract to `loadClientReferenceHttp`; old query IPC handlers were removed.
 
@@ -102,7 +101,7 @@ contract to `loadClientReferenceHttp`; old query IPC handlers were removed.
 
 Sources: `CreateClientDto` / `UpdateClientDto` in [dto/](src/client/dto/),
 `ClientService.create/update`, `EmployeeRepository.findActiveByPassword` in
-[employee.repository.ts](src/employees/employee.repository.ts),
+[employee.repository.ts](src/employee/employee.repository.ts),
 `ClientImageService.save`, `ClientHoldDialog.save` in
 [ClientHoldDialog.tsx](../frontend/src/modules/clients/components/ClientHoldDialog.tsx),
 and `ticketService.createPawnTicket/createSellTicket/convertTicket/transferTicket`
@@ -130,7 +129,7 @@ npm run build
 Client and reference HTTP tests run real Nest routes and implementation code with a mocked
 PostgreSQL connection; they are not live-database integration tests. See
 `describe` in [client.http.spec.ts](src/client/client.http.spec.ts).
-`ReferenceController` / `ReferenceRepository` tests in
+Module-level reference tests in
 [src/reference/reference.http.spec.ts](src/reference/reference.http.spec.ts) cover
 response shapes, SQL ordering and active-color filtering, empty results, and database failures.
 `ClientService`, repository and image service tests cover isolated behavior.

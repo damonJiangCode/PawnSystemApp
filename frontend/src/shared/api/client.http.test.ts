@@ -25,14 +25,14 @@ for (const kind of ["hair", "eye"] as const) {
       );
       assert.deepEqual(JSON.parse(init.body as string), { color: "blue" });
       if (init.method === "POST") {
-        assert.equal(url.pathname, `/client/reference/${kind}-colors`);
+        assert.equal(url.pathname, `/reference/${kind}-colors`);
         return Response.json({ color: "BLUE" }, { status: 201 });
       }
       assert.equal(init.method, "PATCH");
       const active = url.pathname.endsWith("/activate");
       assert.equal(
         url.pathname,
-        `/client/reference/${kind}-colors/${active ? "activate" : "deactivate"}`,
+        `/reference/${kind}-colors/${active ? "activate" : "deactivate"}`,
       );
       return Response.json({ color: "BLUE", is_active: active });
     });
@@ -70,7 +70,7 @@ test("reference HTTP preserves the city response and uses the configured base UR
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
     assert.equal(
       url.toString(),
-      "http://store-server:3000/client/reference/cities",
+      "http://store-server:3000/reference/cities",
     );
     assert.equal(init.method, undefined); // fetch defaults to GET.
     assert.equal(init.body, undefined);
@@ -85,7 +85,7 @@ test("reference HTTP preserves the city response and uses the configured base UR
 for (const resource of ["id-types", "hair-colors", "eye-colors"] as const) {
   test(`reference HTTP loads ${resource} as strings`, async (t) => {
     t.mock.method(globalThis, "fetch", async (url: URL) => {
-      assert.equal(url.pathname, `/client/reference/${resource}`);
+      assert.equal(url.pathname, `/reference/${resource}`);
       return Response.json(["TEST"]);
     });
     assert.deepEqual(await loadClientReferenceHttp(resource), ["TEST"]);

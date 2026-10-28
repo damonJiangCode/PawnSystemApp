@@ -5,7 +5,7 @@ import { ClientRepository } from './client.repository.js';
 import { ClientService } from './client.service.js';
 import { mapRowToClient } from './client.mapper.js';
 import { ClientImageService } from './client-image.service.js';
-import { EmployeeRepository } from '../employees/employee.repository.js';
+import { EmployeeRepository } from '../employee/employee.repository.js';
 import type { CreateClientDto } from './dto/create-client.dto.js';
 
 describe('ClientService', () => {

@@ -9,7 +9,7 @@
   contain only active values where applicable. These names do not imply permissions.
 - Employees belong to the separate employee module.
 
-- Item category/subcategory options use `GET /client/reference/item-categories`
+- Item category/subcategory options use `GET /reference/item-categories`
   through `appAPI.item.loadItemCategories`. The item picker keeps its existing UI
   and preload cache. New selections contain active parents and children only.
 - Adapter tests cover HTTP routing, preserving other item methods, empty results

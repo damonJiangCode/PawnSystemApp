@@ -10,7 +10,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { ReferenceModule } from './reference.module.js';
+import { ReferenceModule } from '../reference.module.js';
 
 describe('ID type Reference HTTP (mock PostgreSQL)', () => {
   let app: INestApplication;
@@ -75,7 +75,7 @@ describe('ID type Reference HTTP (mock PostgreSQL)', () => {
       });
   });
   const request = (path = '', method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/client/reference/id-types${path}`, {
+    fetch(`${baseUrl}/reference/id-types${path}`, {
       method,
       ...(body === undefined
         ? {}
