@@ -15,7 +15,6 @@ const CHANNELS = {
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
   GET_ITEMS: "get-items",
-  GET_ITEM_CATEGORIES: "get-item-categories",
   SEARCH_ITEMS: "search-items",
   ADD_ITEM: "add-item",
   UPDATE_ITEM: "update-item",
@@ -81,7 +80,6 @@ const employeeApi = {
 
 const itemApi = {
   loadItemsByTicket: (ticketNumber) => invoke(CHANNELS.GET_ITEMS, ticketNumber),
-  loadItemCategories: () => invoke(CHANNELS.GET_ITEM_CATEGORIES),
   searchItems: (payload) => invoke(CHANNELS.SEARCH_ITEMS, payload),
   createItem: (payload) => invoke(CHANNELS.ADD_ITEM, payload),
   updateItem: (payload) => invoke(CHANNELS.UPDATE_ITEM, payload),

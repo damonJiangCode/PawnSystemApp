@@ -1,7 +1,6 @@
 import type { Item } from "../../../../../shared/models/item.model.ts";
 import type {
   ItemSearchInput,
-  ItemCategoryOption,
   SaveItemInput,
 } from "../../../../../shared/payload-contracts/item.contract.ts";
 import { itemRepo } from "./item.repo.ts";
@@ -16,10 +15,6 @@ export const itemService = {
     }
 
     return itemRepo.loadByTicketNumber(ticketNumber);
-  },
-
-  loadItemCategories: async (): Promise<ItemCategoryOption[]> => {
-    return itemRepo.loadCategories();
   },
 
   searchItems: async (input: ItemSearchInput): Promise<Item[]> => {

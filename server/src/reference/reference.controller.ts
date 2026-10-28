@@ -26,6 +26,11 @@ import { CreateLocationDto, LocationDto } from './dto/location.dto.js';
 export class ReferenceController {
   constructor(private readonly service: ReferenceService) {}
 
+  @Get('item-categories')
+  loadItemCategories() {
+    return this.service.loadItemCategories();
+  }
+
   @Get('cities')
   loadCities() {
     return this.service.loadCities();

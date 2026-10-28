@@ -1,7 +1,6 @@
 import { connect } from "../../../../../database/connection.ts";
 import type { DbClient } from "../../../../../database/connection.ts";
 import type {
-  ItemCategoryOption,
   ItemSearchInput,
   SaveItemInput,
 } from "../../../../../shared/payload-contracts/item.contract.ts";
@@ -51,40 +50,7 @@ const itemSelectColumns = `
   iws.image_path
 `;
 
-const mapItemCategoryRow = (
-  row: Record<string, unknown>,
-): ItemCategoryOption => ({
-  category_id: Number(row.category_id),
-  category_name: String(row.category_name),
-  subcategory_id: Number(row.subcategory_id),
-  subcategory_name: String(row.subcategory_name),
-});
-
 export const itemRepo = {
-  loadCategories: async (): Promise<ItemCategoryOption[]> => {
-    const client = await connect();
-    const query = `
-      SELECT
-        c.id AS category_id,
-        c.name AS category_name,
-        s.id AS subcategory_id,
-        s.name AS subcategory_name
-      FROM item_subcategory s
-      INNER JOIN item_category c
-        ON c.id = s.category_id
-      WHERE c.is_active = TRUE
-        AND s.is_active = TRUE
-      ORDER BY c.name ASC, s.name ASC
-    `;
-
-    try {
-      const result = await client.query(query);
-      return result.rows.map(mapItemCategoryRow);
-    } finally {
-      client.release();
-    }
-  },
-
   loadByTicketNumber: async (ticketNumber: number): Promise<Item[]> => {
     const client = await connect();
     const query = `

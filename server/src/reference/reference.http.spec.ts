@@ -55,6 +55,41 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     );
   });
 
+  it('returns category/subcategory pairs and queries only active parents and children', async () => {
+    const rows = [
+      {
+        category_id: 1,
+        category_name: 'Tools',
+        subcategory_id: 3,
+        subcategory_name: 'Drills',
+      },
+      {
+        category_id: 1,
+        category_name: 'Tools',
+        subcategory_id: 4,
+        subcategory_name: 'Saws',
+      },
+    ];
+    pool.query.mockResolvedValue({ rows });
+    const response = await fetch(`${baseUrl}/client/reference/item-categories`);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual(rows);
+    expect(pool.query).toHaveBeenCalledTimes(1);
+    const [sql] = pool.query.mock.calls[0]!;
+    expect(sql).toContain('INNER JOIN item_category c ON c.id = s.category_id');
+    expect(sql).toContain('WHERE c.is_active = TRUE AND s.is_active = TRUE');
+    expect(sql).toContain('ORDER BY c.name ASC, s.name ASC');
+  });
+
+  it('does not expose private category database errors', async () => {
+    pool.query.mockRejectedValue(new Error('Private category database error'));
+    const response = await fetch(`${baseUrl}/client/reference/item-categories`);
+    expect(response.status).toBe(500);
+    expect(JSON.stringify(await response.json())).not.toContain(
+      'Private category',
+    );
+  });
+
   it('returns ID types as an ordered string list', async () => {
     pool.query.mockResolvedValue({
       rows: [{ type: 'LICENSE' }, { type: 'PASSPORT' }],
@@ -84,20 +119,23 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
     },
   );
 
-  it.each(['cities', 'id-types', 'hair-colors', 'eye-colors'])(
-    'handles empty %s without inventing seed data',
-    async (resource) => {
-      pool.query.mockResolvedValue({ rows: [] });
-      const response = await fetch(`${baseUrl}/client/reference/${resource}`);
-      expect(response.status).toBe(200);
-      expect(await response.json()).toEqual(
-        resource === 'cities' ? { provinces: [], citiesByProvince: {} } : [],
-      );
-      expect(
-        pool.query.mock.calls.every(([sql]) => sql.startsWith('SELECT ')),
-      ).toBe(true);
-    },
-  );
+  it.each([
+    'cities',
+    'id-types',
+    'hair-colors',
+    'eye-colors',
+    'item-categories',
+  ])('handles empty %s without inventing seed data', async (resource) => {
+    pool.query.mockResolvedValue({ rows: [] });
+    const response = await fetch(`${baseUrl}/client/reference/${resource}`);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual(
+      resource === 'cities' ? { provinces: [], citiesByProvince: {} } : [],
+    );
+    expect(
+      pool.query.mock.calls.every(([sql]) => sql.startsWith('SELECT ')),
+    ).toBe(true);
+  });
 
   it('reports a database failure as HTTP 500, not a successful empty list', async () => {
     pool.query.mockRejectedValue(new Error('Private database error'));

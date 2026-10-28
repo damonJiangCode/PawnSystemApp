@@ -1,3 +1,4 @@
+import type { ItemCategoryOption } from "../../../../shared/payload-contracts/item.contract.ts";
 import type { IdType } from "../../../../shared/models/id-type.model.ts";
 import type { Location } from "../../../../shared/models/location.model.ts";
 import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
@@ -12,6 +13,14 @@ import type {
 import { formatIsoDate } from "../utils/formatters.ts";
 import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
 import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
+
+export async function loadItemCategoriesHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<ItemCategoryOption[]> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/item-categories`),
+  );
+}
 
 export async function loadAllIdTypesHttp(
   baseUrl = "http://localhost:3000",

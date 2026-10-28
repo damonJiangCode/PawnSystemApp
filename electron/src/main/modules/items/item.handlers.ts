@@ -16,10 +16,6 @@ export const registerItemHandlers = () => {
     },
   );
 
-  ipcMain.handle(CHANNELS.GET_ITEM_CATEGORIES, async () => {
-    return itemService.loadItemCategories();
-  });
-
   ipcMain.handle(
     CHANNELS.SEARCH_ITEMS,
     async (_event: IpcMainInvokeEvent, payload: ItemSearchInput) => {

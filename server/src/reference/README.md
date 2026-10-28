@@ -163,3 +163,13 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
   preservation, changed/duplicated inactive IDs, rollback and unchanged partial PATCH.
 - Frontend `id-type.http.test.ts` checks requests, response shapes, errors and
   appAPI bindings; no live database writes are made by these tests.
+
+## Item categories
+
+- `GET /client/reference/item-categories`; no parameters.
+- C.loadItemCategories → S.loadItemCategories → R.loadItemCategories.
+- Returns `{ category_id, category_name, subcategory_id, subcategory_name }[]`,
+  sorted by category then subcategory name. Both must be active; empty results return `[]`.
+- Database failures return HTTP 500. No create/update endpoints in this step.
+- HTTP tests cover response shape, active-query conditions, ordering, empty results and errors
+  with a mocked PostgreSQL pool; they do not validate SQL against a live database.

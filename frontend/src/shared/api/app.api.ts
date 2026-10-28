@@ -1,6 +1,7 @@
 import type { AppApi } from "../../../../shared/api-contracts/appApi.contract";
 import {
   loadAllIdTypesHttp,
+  loadItemCategoriesHttp,
   addIdTypeHttp,
   setIdTypeActiveHttp,
   loadHolidayDatesHttp,
@@ -29,8 +30,9 @@ type ReferenceTicketMethods =
   | "addLocation"
   | "deactivateLocation"
   | "activateLocation";
-type DesktopApi = Omit<AppApi, "client" | "ticket"> & {
+type DesktopApi = Omit<AppApi, "client" | "ticket" | "item"> & {
   ticket: Omit<AppApi["ticket"], ReferenceTicketMethods>;
+  item: Omit<AppApi["item"], "loadItemCategories">;
 };
 
 declare global {
@@ -44,6 +46,13 @@ export const getAppApi = (): AppApi | undefined => {
   if (!desktop) return undefined;
   return {
     ...desktop,
+    item: {
+      ...desktop.item,
+      loadItemCategories: () =>
+        loadItemCategoriesHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+    },
     ticket: {
       ...desktop.ticket,
       loadHolidayDates: () =>

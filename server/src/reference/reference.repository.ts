@@ -18,6 +18,21 @@ export type ColorOption = { color: string; is_active: boolean };
 export class ReferenceRepository {
   constructor(private readonly pool: Pool) {}
 
+  async loadItemCategories() {
+    const result = await this.pool.query<{
+      category_id: number;
+      category_name: string;
+      subcategory_id: number;
+      subcategory_name: string;
+    }>(`SELECT c.id AS category_id, c.name AS category_name,
+               s.id AS subcategory_id, s.name AS subcategory_name
+        FROM item_subcategory s
+        INNER JOIN item_category c ON c.id = s.category_id
+        WHERE c.is_active = TRUE AND s.is_active = TRUE
+        ORDER BY c.name ASC, s.name ASC`);
+    return result.rows;
+  }
+
   async loadCities() {
     const result = await this.pool.query<{ city: string; province: string }>(
       'SELECT DISTINCT city, province FROM city ORDER BY province ASC, city ASC',

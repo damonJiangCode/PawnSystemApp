@@ -9,6 +9,10 @@ import { ReferenceRepository, type ColorKind } from './reference.repository.js';
 export class ReferenceService {
   constructor(private readonly repository: ReferenceRepository) {}
 
+  loadItemCategories() {
+    return this.repository.loadItemCategories();
+  }
+
   loadCities() {
     return this.repository.loadCities();
   }
