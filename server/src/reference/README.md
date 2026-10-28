@@ -166,10 +166,57 @@ Routes use the same `/client/reference` prefix and Reference C → S → R class
 
 ## Item categories
 
-- `GET /client/reference/item-categories`; no parameters.
-- C.loadItemCategories → S.loadItemCategories → R.loadItemCategories.
-- Returns `{ category_id, category_name, subcategory_id, subcategory_name }[]`,
-  sorted by category then subcategory name. Both must be active; empty results return `[]`.
-- Database failures return HTTP 500. No create/update endpoints in this step.
-- HTTP tests cover response shape, active-query conditions, ordering, empty results and errors
-  with a mocked PostgreSQL pool; they do not validate SQL against a live database.
+All paths below start with `/client/reference`, using the existing Reference C → S → R.
+
+| Method + path                            | Parameters                                | C → S → R                                                                      |
+| ---------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| GET /item-categories                     | None                                      | loadItemCategories → loadItemCategories → loadItemCategories                   |
+| GET /item-categories/all                 | None                                      | loadAllItemCategories → loadAllItemCategories → loadAllItemCategories          |
+| POST /item-categories                    | body: `{ category_name }`                 | addItemCategory → addItemCategory → addItemCategory                            |
+| POST /item-subcategories                 | body: `{ category_id, subcategory_name }` | addItemSubcategory → addItemSubcategory → addItemSubcategory                   |
+| PATCH /item-categories/:categoryId       | body: `{ is_active: boolean }`            | setItemCategoryActive → setItemCategoryActive → setItemCategoryActive          |
+| PATCH /item-subcategories/:subcategoryId | body: `{ is_active: boolean }`            | setItemSubcategoryActive → setItemSubcategoryActive → setItemSubcategoryActive |
+
+- Ordinary GET returns flat `{ category_id, category_name, subcategory_id,
+subcategory_name }[]`, sorted by names. Both parent and child must be active.
+- `/all` returns `{ category_id, category_name, is_active, subcategories: [...] }[]`.
+  Each child has `{ subcategory_id, category_id, subcategory_name, is_active }`.
+  Includes inactive records and categories without children; empty results are `[]`.
+- POST `/item-categories` creates only a category and returns 201 with
+  `{ category_id, category_name, is_active }`. It has no subcategories until one is added.
+- POST `/item-subcategories` creates only a subcategory under an existing, active
+  category ID and returns 201 with the subcategory record. The parent check and
+  insert are one `INSERT ... SELECT ... WHERE is_active` statement; when it inserts
+  nothing, a follow-up read distinguishes missing parent (404), inactive parent
+  (409) and duplicate name (409).
+- Names are trimmed, non-empty strings up to 500 characters; casing is preserved.
+  Unique indexes reject case/outer-space variants of category names, or child
+  names within the same parent, including inactive records. Select an existing
+  category by ID rather than submitting its name as a new category.
+- PATCH returns the changed record (200), including repeated requests for the
+  same state. Parent changes never update child flags. Reactivating a parent
+  therefore preserves previously inactive children. A child can be enabled while
+  its parent remains inactive; it becomes selectable only when both are active.
+- Invalid input: 400; missing parent/record: 404; duplicates/inactive parent: 409;
+  database failures: 500 without private details. No delete or rename endpoints.
+- Create, parameter and state DTOs live in `dto/item-category.dto.ts`.
+- HTTP tests use a mocked pool to cover input checks, nested/full lists, errors
+  and independent state updates. Both create statements were also run against the
+  development database inside a rolled-back transaction (duplicates by case/space,
+  inactive and missing parents).
+
+Database setup includes these indexes. They were also applied to the existing
+Docker development database using `docker exec pawnsystemcontainer sh -c` and
+`psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c '<SQL>'`:
+
+```sql
+CREATE UNIQUE INDEX IF NOT EXISTS item_category_name_normalized_idx
+  ON item_category (LOWER(BTRIM(name)));
+CREATE UNIQUE INDEX IF NOT EXISTS item_subcategory_name_normalized_idx
+  ON item_subcategory (category_id, LOWER(BTRIM(name)));
+```
+
+- Existing names were checked for normalized duplicates before applying indexes;
+  none were found. No existing category or subcategory values were changed.
+- The Reference → Item Categories window uses these endpoints. Item-write state
+  enforcement is separate follow-up work. The item picker reads the active list over HTTP.

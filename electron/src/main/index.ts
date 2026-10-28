@@ -156,6 +156,17 @@ const createAppMenu = () => {
             }),
         },
         {
+          label: "Item Categories",
+          click: () =>
+            openMenuActionWindow({
+              id: "reference-item-categories",
+              title: "Item Categories",
+              description: "Manage item categories and subcategories.",
+              width: 960,
+              height: 760,
+            }),
+        },
+        {
           label: "Holiday",
           click: () =>
             openMenuActionWindow({

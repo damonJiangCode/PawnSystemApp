@@ -65,3 +65,85 @@ test("item categories return empty lists and propagate HTTP and connection failu
   });
   await assert.rejects(http.loadItemCategoriesHttp());
 });
+
+test("item category management uses the reference routes, methods and bodies", async (t) => {
+  const calls: { path: string; method: string; body: unknown }[] = [];
+  const category = { category_id: 1, category_name: "Tools", is_active: true };
+  const subcategory = {
+    subcategory_id: 3,
+    category_id: 1,
+    subcategory_name: "Drills",
+    is_active: true,
+  };
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (url: URL, init: RequestInit = {}) => {
+      const method = init.method ?? "GET";
+      calls.push({
+        path: url.pathname,
+        method,
+        body: init.body ? JSON.parse(String(init.body)) : undefined,
+      });
+      if (method === "GET")
+        return Response.json([{ ...category, subcategories: [subcategory] }]);
+      if (method === "POST")
+        return Response.json(
+          url.pathname.includes("subcategories") ? subcategory : category,
+        );
+      return Response.json(
+        url.pathname.includes("subcategories") ? subcategory : category,
+      );
+    },
+  );
+  assert.deepEqual(await http.loadAllItemCategoriesHttp(), [
+    { ...category, subcategories: [subcategory] },
+  ]);
+  assert.deepEqual(await http.addItemCategoryHttp("Tools"), category);
+  assert.deepEqual(await http.addItemSubcategoryHttp(1, "Drills"), subcategory);
+  assert.deepEqual(await http.setItemCategoryActiveHttp(1, false), category);
+  assert.deepEqual(
+    await http.setItemSubcategoryActiveHttp(3, true),
+    subcategory,
+  );
+  assert.deepEqual(calls, [
+    {
+      path: "/client/reference/item-categories/all",
+      method: "GET",
+      body: undefined,
+    },
+    {
+      path: "/client/reference/item-categories",
+      method: "POST",
+      body: { category_name: "Tools" },
+    },
+    {
+      path: "/client/reference/item-subcategories",
+      method: "POST",
+      body: { category_id: 1, subcategory_name: "Drills" },
+    },
+    {
+      path: "/client/reference/item-categories/1",
+      method: "PATCH",
+      body: { is_active: false },
+    },
+    {
+      path: "/client/reference/item-subcategories/3",
+      method: "PATCH",
+      body: { is_active: true },
+    },
+  ]);
+});
+
+test("item category management surfaces server conflict messages", async (t) => {
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { message: "That subcategory already exists in this category." },
+      { status: 409 },
+    ),
+  );
+  await assert.rejects(
+    http.addItemSubcategoryHttp(1, "Drills"),
+    /already exists in this category/,
+  );
+});

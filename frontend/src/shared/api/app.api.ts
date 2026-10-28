@@ -2,6 +2,11 @@ import type { AppApi } from "../../../../shared/api-contracts/appApi.contract";
 import {
   loadAllIdTypesHttp,
   loadItemCategoriesHttp,
+  loadAllItemCategoriesHttp,
+  addItemCategoryHttp,
+  addItemSubcategoryHttp,
+  setItemCategoryActiveHttp,
+  setItemSubcategoryActiveHttp,
   addIdTypeHttp,
   setIdTypeActiveHttp,
   loadHolidayDatesHttp,
@@ -30,9 +35,16 @@ type ReferenceTicketMethods =
   | "addLocation"
   | "deactivateLocation"
   | "activateLocation";
+type ReferenceItemMethods =
+  | "loadItemCategories"
+  | "loadAllItemCategories"
+  | "addItemCategory"
+  | "addItemSubcategory"
+  | "setItemCategoryActive"
+  | "setItemSubcategoryActive";
 type DesktopApi = Omit<AppApi, "client" | "ticket" | "item"> & {
   ticket: Omit<AppApi["ticket"], ReferenceTicketMethods>;
-  item: Omit<AppApi["item"], "loadItemCategories">;
+  item: Omit<AppApi["item"], ReferenceItemMethods>;
 };
 
 declare global {
@@ -50,6 +62,33 @@ export const getAppApi = (): AppApi | undefined => {
       ...desktop.item,
       loadItemCategories: () =>
         loadItemCategoriesHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      loadAllItemCategories: () =>
+        loadAllItemCategoriesHttp(
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addItemCategory: (name) =>
+        addItemCategoryHttp(
+          name,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      addItemSubcategory: (categoryId, name) =>
+        addItemSubcategoryHttp(
+          categoryId,
+          name,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      setItemCategoryActive: (categoryId, isActive) =>
+        setItemCategoryActiveHttp(
+          categoryId,
+          isActive,
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+        ),
+      setItemSubcategoryActive: (subcategoryId, isActive) =>
+        setItemSubcategoryActiveHttp(
+          subcategoryId,
+          isActive,
           import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
         ),
     },

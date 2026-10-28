@@ -4,4 +4,5 @@ export const createItemCategoryTable = `
     name TEXT NOT NULL UNIQUE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE
   );
+  CREATE UNIQUE INDEX IF NOT EXISTS item_category_name_normalized_idx ON item_category (LOWER(BTRIM(name)));
 `;

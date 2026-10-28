@@ -1,4 +1,9 @@
 import type { ItemCategoryOption } from "../../../../shared/payload-contracts/item.contract.ts";
+import type {
+  ItemCategory,
+  ItemCategoryTree,
+  ItemSubcategory,
+} from "../../../../shared/models/item-category.model.ts";
 import type { IdType } from "../../../../shared/models/id-type.model.ts";
 import type { Location } from "../../../../shared/models/location.model.ts";
 import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
@@ -19,6 +24,81 @@ export async function loadItemCategoriesHttp(
 ): Promise<ItemCategoryOption[]> {
   return requestJson(
     new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/item-categories`),
+  );
+}
+
+export async function loadAllItemCategoriesHttp(
+  baseUrl = "http://localhost:3000",
+): Promise<ItemCategoryTree[]> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/item-categories/all`,
+    ),
+  );
+}
+
+export async function addItemCategoryHttp(
+  name: string,
+  baseUrl = "http://localhost:3000",
+): Promise<ItemCategory> {
+  return requestJson(
+    new URL(`${baseUrl.replace(/\/$/, "")}/client/reference/item-categories`),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category_name: name }),
+    },
+  );
+}
+
+export async function addItemSubcategoryHttp(
+  categoryId: number,
+  name: string,
+  baseUrl = "http://localhost:3000",
+): Promise<ItemSubcategory> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/item-subcategories`,
+    ),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category_id: categoryId, subcategory_name: name }),
+    },
+  );
+}
+
+export async function setItemCategoryActiveHttp(
+  categoryId: number,
+  isActive: boolean,
+  baseUrl = "http://localhost:3000",
+): Promise<ItemCategory> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/item-categories/${categoryId}`,
+    ),
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_active: isActive }),
+    },
+  );
+}
+
+export async function setItemSubcategoryActiveHttp(
+  subcategoryId: number,
+  isActive: boolean,
+  baseUrl = "http://localhost:3000",
+): Promise<ItemSubcategory> {
+  return requestJson(
+    new URL(
+      `${baseUrl.replace(/\/$/, "")}/client/reference/item-subcategories/${subcategoryId}`,
+    ),
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_active: isActive }),
+    },
   );
 }
 

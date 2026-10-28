@@ -6,4 +6,5 @@ export const createItemSubcategoryTable = `
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT item_subcategory_category_name_unique UNIQUE (category_id, name)
   );
+  CREATE UNIQUE INDEX IF NOT EXISTS item_subcategory_name_normalized_idx ON item_subcategory (category_id, LOWER(BTRIM(name)));
 `;

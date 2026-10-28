@@ -1,5 +1,10 @@
 import type { Item } from "../../../../shared/models/item.model";
 import type {
+  ItemCategory,
+  ItemCategoryTree,
+  ItemSubcategory,
+} from "../../../../shared/models/item-category.model";
+import type {
   ItemSearchInput,
   ItemCategoryOption,
   SaveItemInput,
@@ -48,6 +53,45 @@ export const itemApi = {
       });
 
     return categoryPromise;
+  },
+
+  loadAllCategories: async (): Promise<ItemCategoryTree[]> => {
+    const api = getAppApi()?.item;
+    if (!api) throw new Error("Item category API is unavailable.");
+    return api.loadAllItemCategories();
+  },
+
+  addCategory: async (name: string): Promise<ItemCategory> => {
+    const api = getAppApi()?.item;
+    if (!api) throw new Error("Item category API is unavailable.");
+    return api.addItemCategory(name.trim());
+  },
+
+  addSubcategory: async (
+    categoryId: number,
+    name: string,
+  ): Promise<ItemSubcategory> => {
+    const api = getAppApi()?.item;
+    if (!api) throw new Error("Item category API is unavailable.");
+    return api.addItemSubcategory(categoryId, name.trim());
+  },
+
+  setCategoryActive: async (
+    categoryId: number,
+    isActive: boolean,
+  ): Promise<ItemCategory> => {
+    const api = getAppApi()?.item;
+    if (!api) throw new Error("Item category API is unavailable.");
+    return api.setItemCategoryActive(categoryId, isActive);
+  },
+
+  setSubcategoryActive: async (
+    subcategoryId: number,
+    isActive: boolean,
+  ): Promise<ItemSubcategory> => {
+    const api = getAppApi()?.item;
+    if (!api) throw new Error("Item category API is unavailable.");
+    return api.setItemSubcategoryActive(subcategoryId, isActive);
   },
 
   searchItems: async (input: ItemSearchInput): Promise<Item[]> => {
