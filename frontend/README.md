@@ -26,14 +26,20 @@ frontend/
 - `items`: item search, records, categories, images and dialogs.
 - `history`: ticket history and related actions.
 - `reports`: daily, buyback, interest, overdue and XML report screens.
-- `employees`: employee records; `reference`: colors, holidays and locations.
+- `employees`: employee records; `reference`: cities, ID types, colors,
+  locations, holidays and item categories (screens and the `referenceApi` wrapper).
 
 ## Boundaries
 
 - Components/hooks manage display state, form feedback and user interactions.
 - Feature `*.api.ts` files provide the calls used by screens. HTTP implementation
-  lives in `src/shared/api/`; `getAppApi()` currently combines HTTP client/reference
-  operations with the remaining desktop bridge methods.
+  lives in `src/shared/api/`: `http.ts` (base URL, `requestJson`), one
+  `<domain>.http.ts` per backend module, each with a `create<Domain>HttpApi()`
+  factory. `getAppApi()` returns the HTTP `client` and `reference` domains plus the
+  remaining desktop bridge domains (ticket, item, employee, window, xmlReport).
+- Lookup data (cities, ID types, colors, locations, holidays, item categories) is
+  always read through `referenceApi` in `modules/reference/reference.api.ts`, also
+  by client, ticket, payment, report and item screens.
 - The backend owns authoritative validation, signatures, transactions and SQL.
   Frontend validation improves feedback; it does not replace backend checks.
 - Root `shared/` contains cross-part models, payload contracts and pure helpers.

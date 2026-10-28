@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { IdType } from "../../../../../shared/models/id-type.model";
-import { clientApi } from "../../clients/client.api";
+import { referenceApi } from "../reference.api";
 
 type Props = {
   open: boolean;
@@ -39,7 +39,7 @@ export default function IdTypeAddDialog({ open, onClose, onSave }: Props) {
     setSaving(true);
     setError("");
     try {
-      onSave(await clientApi.addIdType(name));
+      onSave(await referenceApi.addIdType(name));
       onClose();
     } catch (error) {
       setError(

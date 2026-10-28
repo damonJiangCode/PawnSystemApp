@@ -28,6 +28,7 @@ import { formatIsoDate } from "../../../shared/utils/formatters";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
 import ReportDocument from "../components/ReportDocument";
+import { referenceApi } from "../../reference/reference.api";
 
 const valueOrDash = (value: string) => value || "---";
 
@@ -74,7 +75,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
       setLocationsLoading(true);
 
       try {
-        const nextLocations = await ticketApi.loadLocations();
+        const nextLocations = await referenceApi.loadLocations();
 
         if (active) {
           setLocations(nextLocations);

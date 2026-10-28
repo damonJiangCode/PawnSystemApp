@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Item } from "../../../../../shared/models/item.model";
 import type { Ticket } from "../../../../../shared/models/ticket.model";
-import { itemApi, type ItemCategoryOption } from "../../items/item.api";
+import { itemApi } from "../../items/item.api";
+import type { ItemCategoryOption } from "../../../../../shared/payload-contracts/reference.contract";
 import {
   ticketApi,
   type CreatePawnTicketInput,
@@ -11,6 +12,7 @@ import {
 import type { PrintClient } from "../../tickets/print/ticketPrintTemplate";
 import { getAppApi } from "../../../shared/api/app.api";
 import { canRepawnTicket, sortHistoryTickets } from "../history.helpers";
+import { referenceApi } from "../../reference/reference.api";
 
 interface UseHistoryPageParams {
   isActive?: boolean;
@@ -92,8 +94,8 @@ export const useHistoryPage = ({
 
     let active = true;
 
-    itemApi
-      .preloadCategories()
+    referenceApi
+      .preloadItemCategories()
       .then((categories) => {
         if (active) {
           setItemCategories(categories);

@@ -1,20 +1,20 @@
 import assert from "node:assert/strict";
-import test from "node:test";
-import fs from "node:fs";
-import vm from "node:vm";
-import ts from "typescript";
-import type { AppApi } from "../../../../shared/api-contracts/appApi.contract.ts";
-import * as http from "./client.http.ts";
+import test, { type TestContext } from "node:test";
+import { getAppApi } from "./app.api.ts";
+import * as http from "./reference.http.ts";
+
+const setWindow = (t: TestContext, appAPI: unknown) => {
+  const host = globalThis as { window?: unknown };
+  host.window = { appAPI };
+  t.after(() => delete host.window);
+};
 
 const baseUrl = "http://store-server:3000/";
 const holiday = { holiday_date: "2026-12-25", name: "Christmas" };
 
 test("holiday HTTP lists date strings without timezone conversion", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) => {
-    assert.equal(
-      url.href,
-      "http://store-server:3000/reference/holidays",
-    );
+    assert.equal(url.href, "http://store-server:3000/reference/holidays");
     return Response.json([holiday]);
   });
   const result = await http.loadHolidayDatesHttp(baseUrl);
@@ -99,37 +99,18 @@ test("holiday HTTP preserves validation, duplicate, missing-date and network err
 test("getAppApi routes all existing holiday methods through HTTP and preserves ticket methods", async (t) => {
   const calls: string[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.origin, "http://store-server:3000");
+    assert.equal(url.origin, "http://localhost:3000");
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     return Response.json(!init.method ? [holiday] : holiday);
   });
   const loadTicketsByClient = () => Promise.resolve([]);
-  const source = fs
-    .readFileSync(new URL("./app.api.ts", import.meta.url), "utf8")
-    .replaceAll(
-      "import.meta.env.VITE_API_BASE_URL",
-      '"http://store-server:3000"',
-    );
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.CommonJS },
-    }).outputText,
-    {
-      exports,
-      window: { appAPI: { ticket: { loadTicketsByClient } } },
-      require: (name: string) => {
-        assert.equal(name, "./client.http.ts");
-        return http;
-      },
-    },
-  );
-  const api = (exports as { getAppApi: () => AppApi }).getAppApi();
+  setWindow(t, { ticket: { loadTicketsByClient } });
+  const api = getAppApi()!;
   assert.equal(api.ticket.loadTicketsByClient, loadTicketsByClient);
-  assert.deepEqual(await api.ticket.loadHolidayDates(), [holiday]);
-  assert.deepEqual(await api.ticket.addHolidayDate(holiday), holiday);
+  assert.deepEqual(await api.reference.loadHolidayDates(), [holiday]);
+  assert.deepEqual(await api.reference.addHolidayDate(holiday), holiday);
   assert.deepEqual(
-    await api.ticket.deleteHolidayDate(holiday.holiday_date),
+    await api.reference.deleteHolidayDate(holiday.holiday_date),
     holiday,
   );
   assert.deepEqual(calls, [

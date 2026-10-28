@@ -11,10 +11,10 @@ import {
   TextField,
 } from "@mui/material";
 import type { CreateSellTicketInput, TicketFormError } from "../../ticket.api";
-import { ticketApi } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
+import { referenceApi } from "../../../reference/reference.api";
 
 const DEFAULT_SELL_LOCATION = "BIWK";
 
@@ -71,7 +71,7 @@ const TicketSellDialog: React.FC<TicketSellDialogProps> = (props) => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const locations = await ticketApi.loadLocations();
+        const locations = await referenceApi.loadLocations();
 
         if (!active) {
           return;

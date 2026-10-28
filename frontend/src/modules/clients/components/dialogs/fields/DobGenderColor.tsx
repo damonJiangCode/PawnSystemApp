@@ -1,12 +1,12 @@
 import DateField from "../../../../../shared/components/DateField";
 import React, { useEffect, useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
-import { clientApi } from "../../../client.api";
 import { formatClientOption } from "../../../utils/clientDisplay.ts";
 import {
   formatLocalIsoDatePart,
   resolveDate,
 } from "../../../../../shared/utils/formatters";
+import { referenceApi } from "../../../../reference/reference.api";
 
 interface DobGenderColorProps {
   date_of_birth?: Date | string;
@@ -47,8 +47,8 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
     const fetchColors = async () => {
       try {
         const [hair, eye] = await Promise.all([
-          clientApi.loadHairColors(),
-          clientApi.loadEyeColors(),
+          referenceApi.loadHairColors(),
+          referenceApi.loadEyeColors(),
         ]);
         if (!active) return;
         setHairColors(hair);

@@ -9,11 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import type { Item } from "../../../../../../shared/models/item.model";
-import {
-  itemApi,
-  type ItemCategoryOption,
-  type SaveItemInput,
-} from "../../item.api";
+import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
+import { itemApi, type SaveItemInput } from "../../item.api";
 import ItemCategoryDialog from "./ItemCategoryDialog";
 import ItemPhotoCapture from "./ItemPhotoCapture";
 

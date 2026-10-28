@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { itemApi } from "../modules/items/item.api";
 import WorkspaceLayout from "./WorkspaceLayout";
+import { referenceApi } from "../modules/reference/reference.api";
 
 const WorkspaceApp: React.FC = () => {
   useEffect(() => {
-    itemApi.preloadCategories().catch((err) => {
+    referenceApi.preloadItemCategories().catch((err) => {
       console.error("Failed to preload item categories", err);
     });
   }, []);

@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import type { Location } from "../../../../../shared/models/location.model";
-import { ticketApi } from "../../tickets/ticket.api";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
 import LocationAddDialog from "./LocationAddDialog";
+import { referenceApi } from "../reference.api";
 
 const sortLocations = (locations: Location[]) =>
   [...locations].sort(
@@ -48,7 +48,7 @@ const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
     setError("");
 
     try {
-      const results = sortLocations(await ticketApi.loadAllLocations());
+      const results = sortLocations(await referenceApi.loadAllLocations());
       setAllLocations(results);
       setLocations(results);
       setSearchInput("");
@@ -101,8 +101,8 @@ const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
 
     try {
       const updated = await (isActive
-        ? ticketApi.activateLocation(location.location)
-        : ticketApi.deactivateLocation(location.location));
+        ? referenceApi.activateLocation(location.location)
+        : referenceApi.deactivateLocation(location.location));
       const updateLocation = (existingLocation: Location) =>
         existingLocation.location === updated.location
           ? updated

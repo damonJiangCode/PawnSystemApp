@@ -1,298 +1,15 @@
-import type { ItemCategoryOption } from "../../../../shared/payload-contracts/item.contract.ts";
-import type {
-  ItemCategory,
-  ItemCategoryTree,
-  ItemSubcategory,
-} from "../../../../shared/models/item-category.model.ts";
-import type { IdType } from "../../../../shared/models/id-type.model.ts";
-import type { Location } from "../../../../shared/models/location.model.ts";
-import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
-import type { SaveHolidayInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
-import type { SaveLocationInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
+import type { ClientApi } from "../../../../shared/api-contracts/clientApi.contract.ts";
 import type { Client } from "../../../../shared/models/client.model.ts";
 import type {
   CreateClientInput,
   UpdateClientInput,
-  CitiesResponse,
 } from "../../../../shared/payload-contracts/client.contract.ts";
 import { formatIsoDate } from "../utils/formatters.ts";
-import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
-import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
-
-export async function loadItemCategoriesHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<ItemCategoryOption[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/item-categories`),
-  );
-}
-
-export async function loadAllItemCategoriesHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<ItemCategoryTree[]> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/item-categories/all`,
-    ),
-  );
-}
-
-export async function addItemCategoryHttp(
-  name: string,
-  baseUrl = "http://localhost:3000",
-): Promise<ItemCategory> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/item-categories`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category_name: name }),
-    },
-  );
-}
-
-export async function addItemSubcategoryHttp(
-  categoryId: number,
-  name: string,
-  baseUrl = "http://localhost:3000",
-): Promise<ItemSubcategory> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/item-subcategories`,
-    ),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category_id: categoryId, subcategory_name: name }),
-    },
-  );
-}
-
-export async function setItemCategoryActiveHttp(
-  categoryId: number,
-  isActive: boolean,
-  baseUrl = "http://localhost:3000",
-): Promise<ItemCategory> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/item-categories/${categoryId}`,
-    ),
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_active: isActive }),
-    },
-  );
-}
-
-export async function setItemSubcategoryActiveHttp(
-  subcategoryId: number,
-  isActive: boolean,
-  baseUrl = "http://localhost:3000",
-): Promise<ItemSubcategory> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/item-subcategories/${subcategoryId}`,
-    ),
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_active: isActive }),
-    },
-  );
-}
-
-export async function loadAllIdTypesHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<IdType[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/id-types/all`),
-  );
-}
-
-export async function addIdTypeHttp(
-  type: string,
-  baseUrl = "http://localhost:3000",
-): Promise<IdType> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/id-types`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type }),
-    },
-  );
-}
-
-export async function setIdTypeActiveHttp(
-  type: string,
-  isActive: boolean,
-  baseUrl = "http://localhost:3000",
-): Promise<IdType> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/id-types/${isActive ? "activate" : "deactivate"}`,
-    ),
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type }),
-    },
-  );
-}
-
-export async function loadHolidayDatesHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<HolidayDate[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/holidays`),
-  );
-}
-
-export async function addHolidayDateHttp(
-  input: SaveHolidayInput,
-  baseUrl = "http://localhost:3000",
-): Promise<HolidayDate> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/holidays`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        holiday_date: input.holiday_date,
-        name: input.name,
-      }),
-    },
-  );
-}
-
-export async function deleteHolidayDateHttp(
-  holidayDate: string,
-  baseUrl = "http://localhost:3000",
-): Promise<HolidayDate> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/holidays/${encodeURIComponent(holidayDate)}`,
-    ),
-    { method: "DELETE" },
-  );
-}
-
-export async function loadLocationsHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<string[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations`),
-  );
-}
-
-export async function loadAllLocationsHttp(
-  baseUrl = "http://localhost:3000",
-): Promise<Location[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations/all`),
-  );
-}
-
-export async function addLocationHttp(
-  input: SaveLocationInput,
-  baseUrl = "http://localhost:3000",
-): Promise<Location> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/locations`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        location: input.location,
-        description: input.description,
-      }),
-    },
-  );
-}
-
-export async function setLocationActiveHttp(
-  location: string,
-  isActive: boolean,
-  baseUrl = "http://localhost:3000",
-): Promise<Location> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/locations/${isActive ? "activate" : "deactivate"}`,
-    ),
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ location }),
-    },
-  );
-}
-
-export async function loadAllColorsHttp(
-  kind: "hair" | "eye",
-  baseUrl = "http://localhost:3000",
-): Promise<(HairColor | EyeColor)[]> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors/all`,
-    ),
-  );
-}
-
-export async function addClientColorHttp(
-  kind: "hair" | "eye",
-  color: string,
-  baseUrl = "http://localhost:3000",
-): Promise<string> {
-  const result = await requestJson<{ color: string }>(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ color }),
-    },
-  );
-  return result.color;
-}
-
-export async function setClientColorActiveHttp(
-  kind: "hair" | "eye",
-  color: string,
-  isActive: boolean,
-  baseUrl = "http://localhost:3000",
-): Promise<HairColor | EyeColor> {
-  return requestJson(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/reference/${kind}-colors/${isActive ? "activate" : "deactivate"}`,
-    ),
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ color }),
-    },
-  );
-}
-
-export async function loadClientReferenceHttp(
-  resource: "cities",
-  baseUrl?: string,
-): Promise<CitiesResponse>;
-export async function loadClientReferenceHttp(
-  resource: "id-types" | "hair-colors" | "eye-colors",
-  baseUrl?: string,
-): Promise<string[]>;
-export async function loadClientReferenceHttp(
-  resource: "cities" | "id-types" | "hair-colors" | "eye-colors",
-  baseUrl = "http://localhost:3000",
-): Promise<CitiesResponse | string[]> {
-  return requestJson(
-    new URL(`${baseUrl.replace(/\/$/, "")}/reference/${resource}`),
-  );
-}
+import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
 
 export async function createClientHttp(
   input: CreateClientInput,
-  baseUrl = "http://localhost:3000",
+  baseUrl = API_BASE_URL,
 ): Promise<Client> {
   const source = input.client;
   // Only editable fields cross the write boundary; IDs, statistics and timestamps are server-owned.
@@ -316,29 +33,26 @@ export async function createClientHttp(
     notes: source.notes,
     pickup_self_only: source.pickup_self_only,
   };
-  const result = await requestJson<Client>(
-    new URL(`${baseUrl.replace(/\/$/, "")}/client`),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        client,
-        identifications: input.identifications.map((id) => ({
-          id_type: id.id_type,
-          id_value: id.id_value,
-        })),
-        employee_password: input.employee_password,
-        notes_action: input.notes_action,
-        photo: input.photo,
-      }),
-    },
-  );
+  const result = await requestJson<Client>(apiUrl(`/client`, baseUrl), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      client,
+      identifications: input.identifications.map((id) => ({
+        id_type: id.id_type,
+        id_value: id.id_value,
+      })),
+      employee_password: input.employee_password,
+      notes_action: input.notes_action,
+      photo: input.photo,
+    }),
+  });
   return restoreClientDates(result);
 }
 
 export async function updateClientHttp(
   input: UpdateClientInput,
-  baseUrl = "http://localhost:3000",
+  baseUrl = API_BASE_URL,
 ): Promise<Client> {
   const client: Record<string, unknown> = {};
   const fields = [
@@ -370,9 +84,7 @@ export async function updateClientHttp(
         field === "date_of_birth" ? formatIsoDate(value as Date) : value;
   }
   const result = await requestJson<Client>(
-    new URL(
-      `${baseUrl.replace(/\/$/, "")}/client/${input.client.client_number}`,
-    ),
+    apiUrl(`/client/${input.client.client_number}`, baseUrl),
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -394,9 +106,9 @@ export async function updateClientHttp(
 export async function searchClientsHttp(
   firstName: string,
   lastName: string,
-  baseUrl = "http://localhost:3000",
+  baseUrl = API_BASE_URL,
 ): Promise<Client[]> {
-  const url = new URL(`${baseUrl.replace(/\/$/, "")}/client`);
+  const url = apiUrl(`/client`, baseUrl);
   url.search = new URLSearchParams({ firstName, lastName }).toString();
 
   return requestClients(url);
@@ -404,9 +116,9 @@ export async function searchClientsHttp(
 
 export async function searchClientsByDobHttp(
   dateOfBirth: string,
-  baseUrl = "http://localhost:3000",
+  baseUrl = API_BASE_URL,
 ): Promise<Client[]> {
-  const url = new URL(`${baseUrl.replace(/\/$/, "")}/client/by-dob`);
+  const url = apiUrl(`/client/by-dob`, baseUrl);
   url.search = new URLSearchParams({ dateOfBirth }).toString();
   return requestClients(url);
 }
@@ -415,37 +127,6 @@ export async function searchClientsByDobHttp(
 async function requestClients(url: URL): Promise<Client[]> {
   const clients = await requestJson<Client[]>(url);
   return clients.map(restoreClientDates);
-}
-
-async function requestJson<T>(url: URL, init: RequestInit = {}): Promise<T> {
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      ...init,
-      signal: AbortSignal.timeout(15000),
-    });
-  } catch {
-    throw new Error(
-      "Unable to reach the server. Check the backend connection.",
-    );
-  }
-  if (!response.ok) {
-    const body = await response.json().catch(() => null);
-    const message = body?.message;
-    const error = new Error(
-      Array.isArray(message)
-        ? message.join("; ")
-        : typeof message === "string"
-          ? message
-          : "Unable to complete the client request.",
-    );
-    if (typeof body?.field === "string") {
-      Object.assign(error, { field: body.field });
-    }
-    throw error;
-  }
-
-  return response.json() as Promise<T>;
 }
 
 function restoreClientDates(client: Client): Client {
@@ -462,3 +143,20 @@ function restoreClientDates(client: Client): Client {
     })),
   };
 }
+
+export const createClientHttpApi = (baseUrl = API_BASE_URL): ClientApi => ({
+  searchClients: (firstName, lastName) =>
+    searchClientsHttp(firstName, lastName, baseUrl),
+  searchClientsByDob: (dateOfBirth) =>
+    searchClientsByDobHttp(dateOfBirth, baseUrl),
+  createClient: (input) => createClientHttp(input, baseUrl),
+  updateClient: (input) => updateClientHttp(input, baseUrl),
+  setHoldUntil: (clientNumber, holdUntil, employeePassword) =>
+    updateClientHttp(
+      {
+        client: { client_number: clientNumber, hold_until: holdUntil },
+        ...(holdUntil !== null ? { employee_password: employeePassword } : {}),
+      },
+      baseUrl,
+    ),
+});

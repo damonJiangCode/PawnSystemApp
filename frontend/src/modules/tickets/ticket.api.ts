@@ -1,7 +1,5 @@
 import type { Ticket } from "../../../../shared/models/ticket.model";
 import type { TicketMutationResult } from "../../../../shared/api-contracts/ticketApi.contract";
-import type { HolidayDate } from "../../../../shared/models/holiday-date.model";
-import type { Location } from "../../../../shared/models/location.model";
 import type {
   ConvertTicketInput,
   BuybackReportResult,
@@ -22,8 +20,6 @@ import type {
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
-  SaveHolidayInput,
-  SaveLocationInput,
 } from "../../../../shared/payload-contracts/ticket.contract";
 import { getAppApi } from "../../shared/api/app.api";
 import {
@@ -84,86 +80,6 @@ export const ticketApi = {
     }
 
     return api.loadTicketsByClient(clientNumber);
-  },
-
-  loadHolidayDates: async (): Promise<HolidayDate[]> => {
-    const api = getAppApi()?.ticket;
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    return api.loadHolidayDates();
-  },
-
-  addHolidayDate: async (input: SaveHolidayInput): Promise<HolidayDate> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Holiday API is unavailable.");
-    }
-
-    return api.addHolidayDate({
-      holiday_date: input.holiday_date.trim(),
-      name: input.name.trim(),
-    });
-  },
-
-  deleteHolidayDate: async (holidayDate: string): Promise<HolidayDate> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Holiday API is unavailable.");
-    }
-
-    return api.deleteHolidayDate(holidayDate.trim());
-  },
-
-  loadLocations: async (): Promise<string[]> => {
-    const api = getAppApi()?.ticket;
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    return api.loadLocations();
-  },
-
-  loadAllLocations: async (): Promise<Location[]> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Location API is unavailable.");
-    }
-
-    return api.loadAllLocations();
-  },
-
-  addLocation: async (input: SaveLocationInput): Promise<Location> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Location API is unavailable.");
-    }
-
-    return api.addLocation({
-      location: input.location.trim().toUpperCase(),
-      description: input.description.trim(),
-    });
-  },
-
-  activateLocation: async (location: string): Promise<Location> => {
-    const api = getAppApi()?.ticket;
-    if (!api) throw new Error("Location API is unavailable.");
-    return api.activateLocation(location.trim().toUpperCase());
-  },
-
-  deactivateLocation: async (location: string): Promise<Location> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Location API is unavailable.");
-    }
-
-    return api.deactivateLocation(location.trim().toUpperCase());
   },
 
   searchPaymentTicketByNumber: async (

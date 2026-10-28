@@ -89,7 +89,7 @@ Paths are relative to `/reference`; classes live in `locations/`.
   in the requested state: 409. Invalid input: 400. Database failure: 500.
 - Inserts use `ON CONFLICT DO NOTHING`; state changes atomically update rows in the opposite state only. SQL values are parameters. No delete or rename route.
   Deactivation retains existing ticket references and descriptions.
-- `appAPI.ticket.activateLocation/deactivateLocation` use HTTP through `getAppApi()`.
+- `referenceApi.activateLocation/deactivateLocation` use HTTP through `getAppApi().reference`.
   Inactive rows offer Activate; saved state and list ordering update after success.
   Deactivation retains its confirmation dialog. Old location preload methods,
   IPC handlers/channels, Electron service methods and repository are removed.
@@ -116,8 +116,8 @@ Paths are relative to `/reference`; classes live in `holidays/`.
   This is a real deletion, matching the existing behavior, with frontend confirmation.
 - Invalid inputs: 400; database failures: 500. SQL values are parameters and date
   results use `holiday_date::text`. No update or activation endpoints.
-- Existing `appAPI.ticket.loadHolidayDates/addHolidayDate/deleteHolidayDate` now
-  use HTTP. The old Electron Holiday service, repository, preload methods and
+- `referenceApi.loadHolidayDates/addHolidayDate/deleteHolidayDate` use HTTP
+  through `getAppApi().reference`. The old Electron Holiday service, repository, preload methods and
   IPC handlers/channels are removed. CORS allows DELETE requests from configured origins.
 
 ## Color and dropdown behavior
@@ -147,7 +147,7 @@ Paths are relative to `/reference`; classes live in `holidays/`.
 - [color.http.spec.ts](colors/color.http.spec.ts): both color types through real Nest routes,
   DTOs, service and repository with mocked PostgreSQL; add/deactivate/reactivate,
   duplicate inactive colors, 400/404/409 responses and parameterized SQL.
-- Renderer `client.http.test.ts`: HTTP paths, JSON payloads, preserved appAPI return
+- Renderer `reference.http.test.ts`: HTTP paths, JSON payloads, preserved appAPI return
   shapes and error messages. No test writes to the live database.
 - [location.http.spec.ts](locations/location.http.spec.ts): real reference routes, DTOs,
   service and repository with mocked PostgreSQL; normalization, SQL parameters,

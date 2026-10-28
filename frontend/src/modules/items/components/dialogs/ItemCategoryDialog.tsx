@@ -11,7 +11,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import type { ItemCategoryOption } from "../../item.api";
+import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
 
 interface ItemCategoryDialogProps {
   open: boolean;
@@ -71,7 +71,9 @@ const ItemCategoryDialog: React.FC<ItemCategoryDialogProps> = ({
           fullWidth
           sx={{ mt: 1, mb: 1 }}
         />
-        <TableContainer sx={{ maxHeight: 360, border: "1px solid", borderColor: "divider" }}>
+        <TableContainer
+          sx={{ maxHeight: 360, border: "1px solid", borderColor: "divider" }}
+        >
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
@@ -87,7 +89,9 @@ const ItemCategoryDialog: React.FC<ItemCategoryDialogProps> = ({
                   onClick={() => onSelect(category)}
                   sx={{ cursor: "pointer" }}
                 >
-                  <TableCell>{category.subcategory_name.toLowerCase()}</TableCell>
+                  <TableCell>
+                    {category.subcategory_name.toLowerCase()}
+                  </TableCell>
                   <TableCell>{category.category_name.toUpperCase()}</TableCell>
                 </TableRow>
               ))}

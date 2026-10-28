@@ -73,7 +73,10 @@ const HistoryItemsPanel: React.FC<HistoryItemsPanelProps> = ({
             p: 0.75,
           }}
         >
-          <TransactionItemImage selectedItem={selectedItem ?? undefined} loading={loading} />
+          <TransactionItemImage
+            selectedItem={selectedItem ?? undefined}
+            loading={loading}
+          />
           <HistoryItemActions
             selectedItem={selectedItem ?? undefined}
             onEdit={onEditItem}

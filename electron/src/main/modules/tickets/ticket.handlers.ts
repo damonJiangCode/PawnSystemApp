@@ -18,7 +18,6 @@ import type {
   TicketMutationResult,
 } from "../../../../../shared/api-contracts/ticketApi.contract.ts";
 import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
-import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/ticket.contract.ts";
 import { ticketPaymentService } from "./ticket-payment.service.ts";
 import { ticketService } from "./ticket.service.ts";
 import { ticketReversalService } from "./ticket-reversal.service.ts";

@@ -265,5 +265,4 @@ describe("calculation", () => {
     assert.equal(dueTodayActual, false);
     assert.equal(yesterdayActual, true);
   });
-
 });

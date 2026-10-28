@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
-import test from "node:test";
-import fs from "node:fs";
-import vm from "node:vm";
-import ts from "typescript";
-import type { AppApi } from "../../../../shared/api-contracts/appApi.contract.ts";
-import * as http from "./client.http.ts";
+import test, { type TestContext } from "node:test";
+import { getAppApi } from "./app.api.ts";
+import * as http from "./reference.http.ts";
+
+const setWindow = (t: TestContext, appAPI: unknown) => {
+  const host = globalThis as { window?: unknown };
+  host.window = { appAPI };
+  t.after(() => delete host.window);
+};
 
 const categories = [
   {
@@ -22,32 +25,16 @@ test("item categories use HTTP while other item operations keep their implementa
     "fetch",
     async (url: URL, init: RequestInit = {}) => {
       calls.push(url.pathname);
-      assert.equal(url.origin, "http://store-server:3000");
+      assert.equal(url.origin, "http://localhost:3000");
       assert.equal(init.method ?? "GET", "GET");
       return Response.json(categories);
     },
   );
-  const source = fs
-    .readFileSync(new URL("./app.api.ts", import.meta.url), "utf8")
-    .replaceAll(
-      "import.meta.env.VITE_API_BASE_URL",
-      '"http://store-server:3000/"',
-    );
   const loadItemsByTicket = async () => [];
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.CommonJS },
-    }).outputText,
-    {
-      exports,
-      window: { appAPI: { item: { loadItemsByTicket } } },
-      require: () => http,
-    },
-  );
-  const api = (exports as { getAppApi: () => AppApi }).getAppApi();
+  setWindow(t, { item: { loadItemsByTicket } });
+  const api = getAppApi()!;
   assert.equal(api.item.loadItemsByTicket, loadItemsByTicket);
-  assert.deepEqual(await api.item.loadItemCategories(), categories);
+  assert.deepEqual(await api.reference.loadItemCategories(), categories);
   assert.deepEqual(calls, ["/reference/item-categories"]);
 });
 

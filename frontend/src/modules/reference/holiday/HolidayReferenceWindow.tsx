@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import type { HolidayDate } from "../../../../../shared/models/holiday-date.model";
-import { ticketApi } from "../../tickets/ticket.api";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
 import HolidayAddDialog from "./HolidayAddDialog";
+import { referenceApi } from "../reference.api";
 
 const formatHolidayDate = (dateKey: string) => {
   const [year, month, day] = dateKey.split("-").map(Number);
@@ -58,7 +58,7 @@ const HolidayReferenceWindow: React.FC<WindowScreenProps> = () => {
       setMessage("");
 
       try {
-        const results = await ticketApi.loadHolidayDates();
+        const results = await referenceApi.loadHolidayDates();
         const yearHolidays = results.filter((holiday) =>
           holiday.holiday_date.startsWith(`${year}-`),
         );
@@ -111,7 +111,7 @@ const HolidayReferenceWindow: React.FC<WindowScreenProps> = () => {
     setMessage("");
 
     try {
-      await ticketApi.deleteHolidayDate(holiday.holiday_date);
+      await referenceApi.deleteHolidayDate(holiday.holiday_date);
       setHolidays((prev) =>
         prev.filter(
           (existingHoliday) =>

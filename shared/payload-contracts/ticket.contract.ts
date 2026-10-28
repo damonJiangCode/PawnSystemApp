@@ -195,13 +195,3 @@ export type ExtensionTicketPaymentInput = {
 export type ExtendTicketsInput = {
   extensions: ExtensionTicketPaymentInput[];
 };
-
-export type SaveHolidayInput = {
-  holiday_date: string;
-  name: string;
-};
-
-export type SaveLocationInput = {
-  location: string;
-  description: string;
-};

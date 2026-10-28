@@ -3,7 +3,6 @@ import type {
   GridPaginationModel,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/item.contract";
 import type { Item } from "../../../../../../shared/models/item.model";
 import { getAppApi } from "../../../../shared/api/app.api";
 import { itemApi } from "../../item.api";
@@ -18,6 +17,8 @@ import {
   type ItemSearchWindowMode,
   type ItemSearchWindowTargetStatus,
 } from "./itemSearchWindow.helpers";
+import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
+import { referenceApi } from "../../../reference/reference.api";
 
 type ItemSearchAddToTicketResultEvent = {
   type: "item-search-add-to-ticket-result";
@@ -224,7 +225,7 @@ export const useItemSearchWindow = () => {
 
     const loadCategories = async () => {
       try {
-        const loadedCategories = await itemApi.preloadCategories();
+        const loadedCategories = await referenceApi.preloadItemCategories();
 
         if (active) {
           setCategories(loadedCategories);

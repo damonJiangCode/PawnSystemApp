@@ -1,9 +1,5 @@
-import type { IdType } from "../../../../shared/models/id-type.model";
 import type { Client } from "../../../../shared/models/client.model";
-import type { HairColor } from "../../../../shared/models/hair-color.model";
-import type { EyeColor } from "../../../../shared/models/eye-color.model";
 import type {
-  CitiesResponse,
   ClientNotesAction,
   SaveClientInput,
   CreateClientInput,
@@ -120,146 +116,6 @@ export const clientApi = {
     return api.searchClientsByDob(normalizedDob);
   },
 
-  loadCities: async (): Promise<CitiesResponse> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("Client API is unavailable.");
-    }
-
-    return api.loadCities();
-  },
-
-  loadHairColors: async (): Promise<string[]> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("Client API is unavailable.");
-    }
-
-    return api.loadHairColors();
-  },
-
-  loadAllHairColors: async (): Promise<HairColor[]> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Hair color API is unavailable.");
-    }
-
-    return api.loadAllHairColors();
-  },
-
-  addHairColor: async (color: string): Promise<string> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Hair color API is unavailable.");
-    }
-
-    return api.addHairColor(color.trim().toUpperCase());
-  },
-
-  deactivateHairColor: async (color: string): Promise<HairColor> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Hair color API is unavailable.");
-    }
-
-    return api.deactivateHairColor(color.trim().toUpperCase());
-  },
-
-  activateHairColor: async (color: string): Promise<HairColor> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Hair color API is unavailable.");
-    }
-
-    return api.activateHairColor(color.trim().toUpperCase());
-  },
-
-  loadEyeColors: async (): Promise<string[]> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("Client API is unavailable.");
-    }
-
-    return api.loadEyeColors();
-  },
-
-  loadAllEyeColors: async (): Promise<EyeColor[]> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Eye color API is unavailable.");
-    }
-
-    return api.loadAllEyeColors();
-  },
-
-  addEyeColor: async (color: string): Promise<string> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Eye color API is unavailable.");
-    }
-
-    return api.addEyeColor(color.trim().toUpperCase());
-  },
-
-  deactivateEyeColor: async (color: string): Promise<EyeColor> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Eye color API is unavailable.");
-    }
-
-    return api.deactivateEyeColor(color.trim().toUpperCase());
-  },
-
-  activateEyeColor: async (color: string): Promise<EyeColor> => {
-    const api = getAppApi()?.client;
-
-    if (!api) {
-      throw new Error("Eye color API is unavailable.");
-    }
-
-    return api.activateEyeColor(color.trim().toUpperCase());
-  },
-
-  loadAllIdTypes: async (): Promise<IdType[]> => {
-    const api = getAppApi()?.client;
-    if (!api) throw new Error("ID type API is unavailable.");
-    return api.loadAllIdTypes();
-  },
-
-  addIdType: async (type: string): Promise<IdType> => {
-    const api = getAppApi()?.client;
-    if (!api) throw new Error("ID type API is unavailable.");
-    return api.addIdType(type.trim());
-  },
-
-  activateIdType: async (type: string): Promise<IdType> => {
-    const api = getAppApi()?.client;
-    if (!api) throw new Error("ID type API is unavailable.");
-    return api.activateIdType(type.trim());
-  },
-
-  deactivateIdType: async (type: string): Promise<IdType> => {
-    const api = getAppApi()?.client;
-    if (!api) throw new Error("ID type API is unavailable.");
-    return api.deactivateIdType(type.trim());
-  },
-
-  loadIdTypes: async (): Promise<string[]> => {
-    const api = getAppApi()?.client;
-    if (!api) {
-      throw new Error("Client API is unavailable.");
-    }
-
-    return api.loadIdTypes();
-  },
-
   createClient: async (input: CreateClientInput): Promise<Client> => {
     const api = getAppApi()?.client;
     if (!api) {
@@ -290,4 +146,4 @@ export const clientApi = {
   },
 };
 
-export type { CitiesResponse, ClientNotesAction, SaveClientInput };
+export type { ClientNotesAction, SaveClientInput };

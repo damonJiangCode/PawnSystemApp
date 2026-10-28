@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import type { HairColor } from "../../../../../../shared/models/hair-color.model";
-import { clientApi } from "../../../clients/client.api";
 import WindowLayout from "../../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../../windows/windowRegistry";
 import ColorAddDialog from "../color/ColorAddDialog";
+import { referenceApi } from "../../reference.api";
 
 const sortHairColors = (colors: HairColor[]) =>
   [...colors].sort(
@@ -45,7 +45,7 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
     setError("");
 
     try {
-      const results = sortHairColors(await clientApi.loadAllHairColors());
+      const results = sortHairColors(await referenceApi.loadAllHairColors());
       setAllColors(results);
       setColors(results);
       setSearchInput("");
@@ -96,7 +96,9 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
     setMessage("");
 
     try {
-      const deactivated = await clientApi.deactivateHairColor(hairColor.color);
+      const deactivated = await referenceApi.deactivateHairColor(
+        hairColor.color,
+      );
       const updateColor = (existingColor: HairColor) =>
         existingColor.color === deactivated.color ? deactivated : existingColor;
 
@@ -119,7 +121,7 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
     setMessage("");
 
     try {
-      const activated = await clientApi.activateHairColor(hairColor.color);
+      const activated = await referenceApi.activateHairColor(hairColor.color);
       const updateColor = (existingColor: HairColor) =>
         existingColor.color === activated.color ? activated : existingColor;
 
@@ -270,7 +272,7 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
           colorType="Hair"
           uppercase
           onClose={() => setAddDialogOpen(false)}
-          onAdd={clientApi.addHairColor}
+          onAdd={referenceApi.addHairColor}
           onSave={(color) => {
             const hairColor = { color, is_active: true };
             setAllColors((prev) => sortHairColors([...prev, hairColor]));

@@ -1,10 +1,3 @@
-export type ItemCategoryOption = {
-  category_id: number;
-  category_name: string;
-  subcategory_id: number;
-  subcategory_name: string;
-};
-
 export type SaveItemInput = {
   item_number?: number;
   ticket_number: number;

@@ -34,23 +34,23 @@ const HeightWeightFields: React.FC<HeightWeightFieldsProps> = ({
 
   useEffect(() => {
     setHeightCmInput(
-      height_cm !== undefined ? String(Number(height_cm).toFixed(1)) : ""
+      height_cm !== undefined ? String(Number(height_cm).toFixed(1)) : "",
     );
     setHeightFtInput(
       height_cm !== undefined
         ? String(Number(cmToFt(height_cm)).toFixed(1))
-        : ""
+        : "",
     );
   }, [height_cm]);
 
   useEffect(() => {
     setWeightKgInput(
-      weight_kg !== undefined ? String(Number(weight_kg).toFixed(1)) : ""
+      weight_kg !== undefined ? String(Number(weight_kg).toFixed(1)) : "",
     );
     setWeightLbInput(
       weight_kg !== undefined
         ? String(Number(kgToLb(weight_kg)).toFixed(1))
-        : ""
+        : "",
     );
   }, [weight_kg]);
 

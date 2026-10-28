@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
-import test from "node:test";
-import fs from "node:fs";
-import vm from "node:vm";
-import ts from "typescript";
-import type { AppApi } from "../../../../shared/api-contracts/appApi.contract.ts";
-import * as http from "./client.http.ts";
+import test, { type TestContext } from "node:test";
+import { getAppApi } from "./app.api.ts";
+import * as http from "./reference.http.ts";
+
+const setWindow = (t: TestContext, appAPI: unknown) => {
+  const host = globalThis as { window?: unknown };
+  host.window = { appAPI };
+  t.after(() => delete host.window);
+};
 const item = { type: "Driver's License", is_active: true };
 
 test("ID type HTTP uses JSON POST/PATCH and returns records with the original label", async (t) => {
@@ -65,7 +68,7 @@ test("ID type HTTP forwards server validation/conflict errors and connection fai
 test("getAppApi binds all ID type writes/reads to HTTP and preserves desktop methods", async (t) => {
   const calls: string[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.origin, "http://store-server:3000");
+    assert.equal(url.origin, "http://localhost:3000");
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     if (!init.method)
       return Response.json(
@@ -76,34 +79,18 @@ test("getAppApi binds all ID type writes/reads to HTTP and preserves desktop met
       is_active: !url.pathname.endsWith("/deactivate"),
     });
   });
-  const source = fs
-    .readFileSync(new URL("./app.api.ts", import.meta.url), "utf8")
-    .replaceAll(
-      "import.meta.env.VITE_API_BASE_URL",
-      '"http://store-server:3000"',
-    );
   const loadTicketsByClient = () => Promise.resolve([]);
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.CommonJS },
-    }).outputText,
-    {
-      exports,
-      window: { appAPI: { ticket: { loadTicketsByClient } } },
-      require: (name: string) => {
-        assert.equal(name, "./client.http.ts");
-        return http;
-      },
-    },
-  );
-  const api = (exports as { getAppApi: () => AppApi }).getAppApi();
+  setWindow(t, { ticket: { loadTicketsByClient } });
+  const api = getAppApi()!;
   assert.equal(api.ticket.loadTicketsByClient, loadTicketsByClient);
-  assert.deepEqual(await api.client.loadIdTypes(), [item.type]);
-  assert.deepEqual(await api.client.loadAllIdTypes(), [item]);
-  assert.deepEqual(await api.client.addIdType(item.type), item);
-  assert.equal((await api.client.deactivateIdType(item.type)).is_active, false);
-  assert.equal((await api.client.activateIdType(item.type)).is_active, true);
+  assert.deepEqual(await api.reference.loadIdTypes(), [item.type]);
+  assert.deepEqual(await api.reference.loadAllIdTypes(), [item]);
+  assert.deepEqual(await api.reference.addIdType(item.type), item);
+  assert.equal(
+    (await api.reference.deactivateIdType(item.type)).is_active,
+    false,
+  );
+  assert.equal((await api.reference.activateIdType(item.type)).is_active, true);
   assert.deepEqual(calls, [
     "GET /reference/id-types",
     "GET /reference/id-types/all",

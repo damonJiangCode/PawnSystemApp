@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
-import test from "node:test";
-import fs from "node:fs";
-import vm from "node:vm";
-import ts from "typescript";
-import type { AppApi } from "../../../../shared/api-contracts/appApi.contract.ts";
-import * as http from "./client.http.ts";
+import test, { type TestContext } from "node:test";
+import { getAppApi } from "./app.api.ts";
+import * as http from "./reference.http.ts";
+
+const setWindow = (t: TestContext, appAPI: unknown) => {
+  const host = globalThis as { window?: unknown };
+  host.window = { appAPI };
+  t.after(() => delete host.window);
+};
 
 const baseUrl = "http://store-server:3000/";
 const location = { location: "AB12", description: "Shelf A", is_active: true };
@@ -18,10 +21,7 @@ test("location HTTP preserves active-code and complete-reference response shapes
   });
   assert.deepEqual(await http.loadLocationsHttp(baseUrl), ["AB12"]);
   assert.deepEqual(await http.loadAllLocationsHttp(baseUrl), [location]);
-  assert.deepEqual(paths, [
-    "/reference/locations",
-    "/reference/locations/all",
-  ]);
+  assert.deepEqual(paths, ["/reference/locations", "/reference/locations/all"]);
 });
 
 test("location mutations send only editable JSON fields using POST and PATCH", async (t) => {
@@ -93,7 +93,7 @@ test("location HTTP surfaces server validation/state errors and connection failu
 test("getAppApi routes all five location methods through HTTP and keeps other desktop methods", async (t) => {
   const calls: string[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.origin, "http://store-server:3000");
+    assert.equal(url.origin, "http://localhost:3000");
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     if (url.pathname.endsWith("/all")) return Response.json([location]);
     if (!init.method) return Response.json(["AB12"]);
@@ -104,33 +104,17 @@ test("getAppApi routes all five location methods through HTTP and keeps other de
     );
   });
   const loadTicketsByClient = () => Promise.resolve([]);
-  const source = fs
-    .readFileSync(new URL("./app.api.ts", import.meta.url), "utf8")
-    .replaceAll(
-      "import.meta.env.VITE_API_BASE_URL",
-      '"http://store-server:3000"',
-    );
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(source, {
-      compilerOptions: { module: ts.ModuleKind.CommonJS },
-    }).outputText,
-    {
-      exports,
-      window: { appAPI: { ticket: { loadTicketsByClient } } },
-      require: (name: string) => {
-        assert.equal(name, "./client.http.ts");
-        return http;
-      },
-    },
-  );
-  const api = (exports as { getAppApi: () => AppApi }).getAppApi();
+  setWindow(t, { ticket: { loadTicketsByClient } });
+  const api = getAppApi()!;
   assert.equal(api.ticket.loadTicketsByClient, loadTicketsByClient);
-  assert.deepEqual(await api.ticket.loadLocations(), ["AB12"]);
-  assert.deepEqual(await api.ticket.loadAllLocations(), [location]);
-  assert.deepEqual(await api.ticket.addLocation(location), location);
-  assert.equal((await api.ticket.deactivateLocation("AB12")).is_active, false);
-  assert.equal((await api.ticket.activateLocation("AB12")).is_active, true);
+  assert.deepEqual(await api.reference.loadLocations(), ["AB12"]);
+  assert.deepEqual(await api.reference.loadAllLocations(), [location]);
+  assert.deepEqual(await api.reference.addLocation(location), location);
+  assert.equal(
+    (await api.reference.deactivateLocation("AB12")).is_active,
+    false,
+  );
+  assert.equal((await api.reference.activateLocation("AB12")).is_active, true);
   assert.deepEqual(calls, [
     "GET /reference/locations",
     "GET /reference/locations/all",

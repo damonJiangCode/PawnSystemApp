@@ -4,7 +4,10 @@ import type { GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import type { Client } from "../../../../../../shared/models/client.model";
 import CellTooltip from "../../../../shared/components/CellTooltip";
-import { formatShortDate, formatUppercase } from "../../../../shared/utils/formatters";
+import {
+  formatShortDate,
+  formatUppercase,
+} from "../../../../shared/utils/formatters";
 
 interface ClientsTableProps {
   clients: Client[];

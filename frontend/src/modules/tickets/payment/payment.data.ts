@@ -5,6 +5,7 @@ import type {
   PaymentTicketRow,
 } from "./payment.types";
 import { getOppositeMode, mapTicketToPaymentRow } from "./payment.helpers";
+import { referenceApi } from "../../reference/reference.api";
 
 type LoadPaymentRowsInput = {
   clientNumber: number;
@@ -19,7 +20,7 @@ export const loadAvailablePaymentRows = async ({
 }: LoadPaymentRowsInput) => {
   const [tickets, holidays] = await Promise.all([
     ticketApi.loadTickets(clientNumber),
-    ticketApi.loadHolidayDates(),
+    referenceApi.loadHolidayDates(),
   ]);
   const holidayDateKeys = holidays.map((holiday) => holiday.holiday_date);
   const oppositeSelectedTicketNumbers = new Set(

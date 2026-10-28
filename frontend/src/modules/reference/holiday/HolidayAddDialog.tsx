@@ -11,8 +11,8 @@ import {
   TextField,
 } from "@mui/material";
 import type { HolidayDate } from "../../../../../shared/models/holiday-date.model";
-import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/ticket.contract";
-import { ticketApi } from "../../tickets/ticket.api";
+import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/reference.contract";
+import { referenceApi } from "../reference.api";
 
 type HolidayAddDialogProps = {
   open: boolean;
@@ -81,7 +81,7 @@ const HolidayAddDialog: React.FC<HolidayAddDialogProps> = ({
     setSubmitError("");
 
     try {
-      const holiday = await ticketApi.addHolidayDate(input);
+      const holiday = await referenceApi.addHolidayDate(input);
       onSave(holiday);
       onClose();
     } catch (err) {

@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import type { Location } from "../../../../../shared/models/location.model";
-import type { SaveLocationInput } from "../../../../../shared/payload-contracts/ticket.contract";
-import { ticketApi } from "../../tickets/ticket.api";
+import type { SaveLocationInput } from "../../../../../shared/payload-contracts/reference.contract";
+import { referenceApi } from "../reference.api";
 
 type LocationAddDialogProps = {
   open: boolean;
@@ -93,7 +93,7 @@ const LocationAddDialog: React.FC<LocationAddDialogProps> = ({
     setSubmitError("");
 
     try {
-      const location = await ticketApi.addLocation(input);
+      const location = await referenceApi.addLocation(input);
       onSave(location);
       onClose();
     } catch (err) {

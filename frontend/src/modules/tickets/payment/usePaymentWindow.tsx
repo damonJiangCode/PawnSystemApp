@@ -25,6 +25,7 @@ import type {
   PaymentStatusSeverity,
   PaymentTicketRow,
 } from "./payment.types";
+import { referenceApi } from "../../reference/reference.api";
 
 export type { PaymentMode } from "./payment.types";
 
@@ -227,7 +228,7 @@ export const usePaymentWindow = () => {
         return;
       }
 
-      const holidays = await ticketApi.loadHolidayDates();
+      const holidays = await referenceApi.loadHolidayDates();
       const nextHolidayDateKeys = holidays.map(
         (holiday) => holiday.holiday_date,
       );

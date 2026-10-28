@@ -17,10 +17,10 @@ import type {
   ItemCategoryTree,
   ItemSubcategory,
 } from "../../../../../shared/models/item-category.model";
-import { itemApi } from "../../items/item.api";
 import WindowLayout from "../../../windows/WindowLayout";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import ItemCategoryAddDialog from "./ItemCategoryAddDialog";
+import { referenceApi } from "../reference.api";
 
 const byStateThenName =
   <T extends { is_active: boolean }>(name: (item: T) => string) =>
@@ -61,8 +61,8 @@ export default function ItemCategoryReferenceWindow() {
     });
   useEffect(() => {
     let active = true;
-    itemApi
-      .loadAllCategories()
+    referenceApi
+      .loadAllItemCategories()
       .then((result) => {
         if (active) setCategories(sortCategories(result));
       })
@@ -102,7 +102,7 @@ export default function ItemCategoryReferenceWindow() {
   };
   const setCategoryActive = (record: ItemCategory, isActive: boolean) =>
     run(`c${record.category_id}`, async () => {
-      const saved = await itemApi.setCategoryActive(
+      const saved = await referenceApi.setItemCategoryActive(
         record.category_id,
         isActive,
       );
@@ -119,7 +119,7 @@ export default function ItemCategoryReferenceWindow() {
     });
   const setSubcategoryActive = (record: ItemSubcategory, isActive: boolean) =>
     run(`s${record.subcategory_id}`, async () => {
-      const saved = await itemApi.setSubcategoryActive(
+      const saved = await referenceApi.setItemSubcategoryActive(
         record.subcategory_id,
         isActive,
       );

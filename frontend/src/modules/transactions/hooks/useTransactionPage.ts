@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Item } from "../../../../../shared/models/item.model";
 import type { Ticket } from "../../../../../shared/models/ticket.model";
-import { itemApi, type ItemCategoryOption } from "../../items/item.api";
+import { itemApi } from "../../items/item.api";
+import type { ItemCategoryOption } from "../../../../../shared/payload-contracts/reference.contract";
 import { ticketApi } from "../../tickets/ticket.api";
 import {
   filterVisibleTickets,
@@ -10,6 +11,7 @@ import {
 import type { Client } from "../../../../../shared/models/client.model";
 import { createTransactionItemHandlers } from "../handlers/transactionItemHandlers";
 import { createTransactionTicketHandlers } from "../handlers/transactionTicketHandlers";
+import { referenceApi } from "../../reference/reference.api";
 
 interface UseTransactionPageParams {
   isActive?: boolean;
@@ -211,8 +213,8 @@ export const useTransactionPage = ({
 
     let active = true;
 
-    itemApi
-      .preloadCategories()
+    referenceApi
+      .preloadItemCategories()
       .then((categories) => {
         if (active) {
           setItemCategories(categories);

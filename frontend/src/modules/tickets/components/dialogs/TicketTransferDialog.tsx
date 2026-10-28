@@ -9,10 +9,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type {
-  TicketFormError,
-  TransferTicketPreview,
-} from "../../ticket.api";
+import type { TicketFormError, TransferTicketPreview } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 
 interface TicketTransferDialogProps {

@@ -63,9 +63,7 @@ export const transactionItemColumns: GridColDef[] = [
     renderCell: (params) => (
       <CellTooltip
         value={
-          params.value != null && params.value !== ""
-            ? `$${params.value}`
-            : ""
+          params.value != null && params.value !== "" ? `$${params.value}` : ""
         }
       />
     ),
@@ -124,9 +122,7 @@ const TransactionItemsTable: React.FC<TransactionItemsTableProps> = ({
         columns={transactionItemColumns}
         getRowId={getTransactionItemRowId}
         rowSelectionModel={
-          selectedItem
-            ? [getTransactionItemRowId(selectedItem)]
-            : []
+          selectedItem ? [getTransactionItemRowId(selectedItem)] : []
         }
         onRowClick={(params) => {
           const selectedItem = items.find(

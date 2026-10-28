@@ -32,7 +32,8 @@ const TransactionTicketsTable: React.FC<TransactionTicketsTableProps> = ({
     }
 
     const targetTicketNumber =
-      selectedTicket?.ticket_number ?? tickets[tickets.length - 1].ticket_number;
+      selectedTicket?.ticket_number ??
+      tickets[tickets.length - 1].ticket_number;
     const targetRowIndex = tickets.findIndex(
       (ticket) => ticket.ticket_number === targetTicketNumber,
     );

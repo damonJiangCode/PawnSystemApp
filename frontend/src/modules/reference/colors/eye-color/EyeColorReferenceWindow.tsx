@@ -1,15 +1,15 @@
 import React from "react";
-import { clientApi } from "../../../clients/client.api";
 import type { WindowScreenProps } from "../../../../windows/windowRegistry";
 import ColorReferenceWindow from "../color/ColorReferenceWindow";
+import { referenceApi } from "../../reference.api";
 
 const EyeColorReferenceWindow: React.FC<WindowScreenProps> = () => (
   <ColorReferenceWindow
     colorType="Eye"
-    loadColors={clientApi.loadAllEyeColors}
-    addColor={clientApi.addEyeColor}
-    activateColor={clientApi.activateEyeColor}
-    deactivateColor={clientApi.deactivateEyeColor}
+    loadColors={referenceApi.loadAllEyeColors}
+    addColor={referenceApi.addEyeColor}
+    activateColor={referenceApi.activateEyeColor}
+    deactivateColor={referenceApi.deactivateEyeColor}
   />
 );
 

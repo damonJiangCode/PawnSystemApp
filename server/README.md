@@ -74,8 +74,9 @@ Client dropdowns use these read-only routes:
 No seed data is created by these endpoints. `ReferenceModule` imports the
 database pool; see the [Reference README](src/reference/README.md) for the
 folder layout and all GET /all, POST, PATCH and DELETE routes.
-`getAppApi` routes the existing loadCities/loadIdTypes/loadHairColors/loadEyeColors
-contract to `loadClientReferenceHttp`; old query IPC handlers were removed.
+The renderer reaches them through `getAppApi().reference`
+([reference.http.ts](../frontend/src/shared/api/reference.http.ts)); old query
+IPC handlers were removed.
 
 ### Rules
 

@@ -1,6 +1,4 @@
 import type { Ticket } from "../models/ticket.model.ts";
-import type { HolidayDate } from "../models/holiday-date.model.ts";
-import type { Location } from "../models/location.model.ts";
 import type {
   ConvertTicketInput,
   BuybackReportResult,
@@ -23,8 +21,6 @@ import type {
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
-  SaveHolidayInput,
-  SaveLocationInput,
 } from "../payload-contracts/ticket.contract.ts";
 
 export type ReverseTicketMutationResult =
@@ -37,14 +33,6 @@ export type TicketMutationResult =
 
 export type TicketApi = {
   loadTicketsByClient: (clientNumber: number) => Promise<Ticket[]>;
-  loadHolidayDates: () => Promise<HolidayDate[]>;
-  addHolidayDate: (input: SaveHolidayInput) => Promise<HolidayDate>;
-  deleteHolidayDate: (holidayDate: string) => Promise<HolidayDate>;
-  loadLocations: () => Promise<string[]>;
-  loadAllLocations: () => Promise<Location[]>;
-  addLocation: (input: SaveLocationInput) => Promise<Location>;
-  activateLocation: (location: string) => Promise<Location>;
-  deactivateLocation: (location: string) => Promise<Location>;
   searchTicketByNumber: (
     ticketNumber: number,
   ) => Promise<TicketSearchResult | null>;

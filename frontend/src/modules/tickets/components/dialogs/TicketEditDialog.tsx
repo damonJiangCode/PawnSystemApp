@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import type { Ticket } from "../../../../../../shared/models/ticket.model";
 import type { TicketFormError, UpdateTicketInput } from "../../ticket.api";
-import { ticketApi } from "../../ticket.api";
 import { calculation } from "../../../../../../shared/utils/calculation";
 import Autocomplete from "@mui/material/Autocomplete";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
+import { referenceApi } from "../../../reference/reference.api";
 
 interface TicketEditDialogProps {
   open: boolean;
@@ -84,7 +84,7 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const locations = await ticketApi.loadLocations();
+        const locations = await referenceApi.loadLocations();
 
         if (active) {
           setLocationList(locations);

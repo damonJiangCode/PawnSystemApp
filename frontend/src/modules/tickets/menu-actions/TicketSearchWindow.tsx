@@ -47,7 +47,9 @@ const TicketSearchWindow: React.FC<WindowScreenProps> = () => {
     setError("");
 
     try {
-      const result = await ticketApi.searchTicketByNumber(normalizedTicketNumber);
+      const result = await ticketApi.searchTicketByNumber(
+        normalizedTicketNumber,
+      );
 
       if (!result) {
         setError("No ticket was found for that number.");

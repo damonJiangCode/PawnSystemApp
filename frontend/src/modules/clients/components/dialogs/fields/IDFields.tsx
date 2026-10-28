@@ -3,8 +3,8 @@ import { Box, Typography, Button, MenuItem, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { ID } from "../../../../../../../shared/models/client.model";
-import { clientApi } from "../../../client.api";
 import { formatClientIdType } from "../../../utils/clientDisplay.ts";
+import { referenceApi } from "../../../../reference/reference.api";
 
 export interface IDFieldsRef {
   getIDs: () => ID[];
@@ -32,7 +32,7 @@ const IDFields = forwardRef<IDFieldsRef, IDFieldsProps>(
 
       const fetchIdTypes = async () => {
         try {
-          const types = await clientApi.loadIdTypes();
+          const types = await referenceApi.loadIdTypes();
           if (active) {
             setIdTypes(types);
           }

@@ -9,10 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import type { IdType } from "../../../../../shared/models/id-type.model";
-import { clientApi } from "../../clients/client.api";
 import WindowLayout from "../../../windows/WindowLayout";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import IdTypeAddDialog from "./IdTypeAddDialog";
+import { referenceApi } from "../reference.api";
 
 const sortIdTypes = (types: IdType[]) =>
   [...types].sort(
@@ -31,7 +31,7 @@ export default function IdTypeReferenceWindow() {
   const [pending, setPending] = React.useState<IdType | null>(null);
   React.useEffect(() => {
     let active = true;
-    clientApi
+    referenceApi
       .loadAllIdTypes()
       .then((result) => {
         if (active) setTypes(sortIdTypes(result));
@@ -58,8 +58,8 @@ export default function IdTypeReferenceWindow() {
     setMessage("");
     try {
       const saved = await (isActive
-        ? clientApi.activateIdType(item.type)
-        : clientApi.deactivateIdType(item.type));
+        ? referenceApi.activateIdType(item.type)
+        : referenceApi.deactivateIdType(item.type));
       setTypes((prev) =>
         sortIdTypes(
           prev.map((type) => (type.type === saved.type ? saved : type)),

@@ -1,5 +1,8 @@
 import type { Client, ID } from "../../../../../../shared/models/client.model";
-import { formatLocalIsoDatePart, resolveDate } from "../../../../shared/utils/formatters";
+import {
+  formatLocalIsoDatePart,
+  resolveDate,
+} from "../../../../shared/utils/formatters";
 import type { ClientNotesAction } from "../../client.api";
 
 export interface PendingClientUpdate {

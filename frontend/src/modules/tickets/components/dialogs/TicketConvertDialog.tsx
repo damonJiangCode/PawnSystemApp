@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import type { Ticket } from "../../../../../../shared/models/ticket.model";
 import type { ConvertTicketInput, TicketFormError } from "../../ticket.api";
-import { ticketApi } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { calculation } from "../../../../../../shared/utils/calculation";
 import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
+import { referenceApi } from "../../../reference/reference.api";
 
 const DEFAULT_SELL_LOCATION = "BIWK";
 
@@ -82,7 +82,7 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const locations = await ticketApi.loadLocations();
+        const locations = await referenceApi.loadLocations();
 
         if (active) {
           setLocationList(locations);

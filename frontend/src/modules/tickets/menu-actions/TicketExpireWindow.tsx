@@ -23,7 +23,10 @@ import type { TicketSearchResult } from "../../../../../shared/payload-contracts
 import type { TicketFormError } from "../ticket.api";
 import { ticketApi } from "../ticket.api";
 import { calculation } from "../../../../../shared/utils/calculation";
-import { formatIsoDate, formatUppercase } from "../../../shared/utils/formatters";
+import {
+  formatIsoDate,
+  formatUppercase,
+} from "../../../shared/utils/formatters";
 
 const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
   const ticketInputRef = React.useRef<HTMLInputElement>(null);
@@ -88,7 +91,9 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
     setSearchResult(null);
 
     try {
-      const result = await ticketApi.searchTicketByNumber(normalizedTicketNumber);
+      const result = await ticketApi.searchTicketByNumber(
+        normalizedTicketNumber,
+      );
 
       if (!result) {
         setError("No ticket was found for that number.");

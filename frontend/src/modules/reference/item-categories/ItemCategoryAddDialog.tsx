@@ -12,7 +12,7 @@ import type {
   ItemCategory,
   ItemSubcategory,
 } from "../../../../../shared/models/item-category.model";
-import { itemApi } from "../../items/item.api";
+import { referenceApi } from "../reference.api";
 
 // A null parent adds a category; a parent adds a subcategory under it.
 type Props = {
@@ -54,9 +54,9 @@ export default function ItemCategoryAddDialog({
     try {
       if (parent)
         onSaveSubcategory(
-          await itemApi.addSubcategory(parent.category_id, name),
+          await referenceApi.addItemSubcategory(parent.category_id, name),
         );
-      else onSaveCategory(await itemApi.addCategory(name));
+      else onSaveCategory(await referenceApi.addItemCategory(name));
     } catch (error) {
       setError(
         error instanceof Error

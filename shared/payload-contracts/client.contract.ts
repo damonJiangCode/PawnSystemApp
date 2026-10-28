@@ -1,10 +1,5 @@
 import type { Client, ID } from "../models/client.model.ts";
 
-export type CitiesResponse = {
-  provinces: string[];
-  citiesByProvince: Record<string, string[]>;
-};
-
 export type ClientNotesAction = "keep" | "clear" | "append_signature";
 
 export type SaveClientInput = {

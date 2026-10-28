@@ -11,11 +11,11 @@ import {
   Alert,
 } from "@mui/material";
 import type { CreatePawnTicketInput, TicketFormError } from "../../ticket.api";
-import { ticketApi } from "../../ticket.api";
 import { calculation } from "../../../../../../shared/utils/calculation";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
+import { referenceApi } from "../../../reference/reference.api";
 
 interface TicketPawnDialogProps {
   open: boolean;
@@ -92,7 +92,7 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const locations = await ticketApi.loadLocations();
+        const locations = await referenceApi.loadLocations();
 
         if (active) {
           setLocationList(locations);
