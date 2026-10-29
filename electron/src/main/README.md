@@ -83,8 +83,8 @@ Start here:
 ### tickets
 
 Owns pawn/sell ticket creation, ticket update, expire, pickup, transfer,
-payment workflows. Location and holiday reference operations use the NestJS
-Reference module.
+payment workflows until their migration slices land. Ticket lookups (by client,
+by number) moved to the NestJS server (`GET /tickets`, `GET /tickets/:ticketNumber`).
 
 Start here:
 

@@ -85,7 +85,10 @@ Important files:
 - `payment/payment.types.ts`
 
 Payment behavior should be reviewed carefully because it touches money,
-interest, pickup, and extension flows.
+interest, pickup, and extension flows. The legal pickup hold
+(`isPickupAllowed`, `earliestPickupDate`) comes from the server's
+`pickup_allowed` / `earliest_pickup_date`; the window only warns and asks for
+confirmation before an early pickup.
 
 ## Reverse
 

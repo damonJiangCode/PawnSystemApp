@@ -12,18 +12,6 @@ const getCalendarDayDiff = (start: Date, end: Date) => {
   );
 };
 
-const getDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
-const isBusinessDay = (date: Date, holidayDates: Set<string>) => {
-  const day = date.getDay();
-  return day !== 0 && day !== 6 && !holidayDates.has(getDateKey(date));
-};
-
 export const calculation = {
   getEarlyAmt: (amt: number, otf: number) => {
     const regularInterest = calculation.getBaseIntAmt(amt) ?? 0;
@@ -80,42 +68,6 @@ export const calculation = {
 
     const monthsDue = Math.ceil(daysPastDue / 30);
     return Number((calculation.getBaseIntAmt(amt) * monthsDue).toFixed(2));
-  },
-
-  getEarliestPickupDatetime: (
-    transactionDatetime: Date,
-    holidayDateKeys: string[] = [],
-    holdBusinessDays = 2,
-  ) => {
-    const holidays = new Set(holidayDateKeys);
-    const cursor = getCalendarDate(transactionDatetime);
-    let countedBusinessDays = 0;
-
-    while (countedBusinessDays < holdBusinessDays) {
-      cursor.setDate(cursor.getDate() + 1);
-
-      if (isBusinessDay(cursor, holidays)) {
-        countedBusinessDays += 1;
-      }
-    }
-
-    cursor.setDate(cursor.getDate() + 1);
-    return cursor;
-  },
-
-  isPickupAllowed: (
-    transactionDatetime: Date,
-    holidayDateKeys: string[] = [],
-    asOf = new Date(),
-    holdBusinessDays = 2,
-  ) => {
-    const earliestPickupDatetime = calculation.getEarliestPickupDatetime(
-      transactionDatetime,
-      holidayDateKeys,
-      holdBusinessDays,
-    );
-
-    return getCalendarDate(asOf).getTime() >= earliestPickupDatetime.getTime();
   },
 
   isBeforeCalendarDate: (date: Date, asOf = new Date()) => {

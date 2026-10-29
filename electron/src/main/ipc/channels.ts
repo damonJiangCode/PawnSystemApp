@@ -1,7 +1,4 @@
 const CHANNELS = {
-  GET_TICKETS: "get-tickets",
-  SEARCH_TICKET: "search-ticket",
-  SEARCH_PAYMENT_TICKET: "search-payment-ticket",
   LOAD_BUYBACK_REPORT: "load-buyback-report",
   LOAD_DAILY_REPORT: "load-daily-report",
   LOAD_INTEREST_REPORT: "load-interest-report",

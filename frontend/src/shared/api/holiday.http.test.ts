@@ -103,10 +103,10 @@ test("getAppApi routes all existing holiday methods through HTTP and preserves t
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     return Response.json(!init.method ? [holiday] : holiday);
   });
-  const loadTicketsByClient = () => Promise.resolve([]);
-  setWindow(t, { ticket: { loadTicketsByClient } });
+  const expireTicket = () => Promise.resolve({ ok: true } as never);
+  setWindow(t, { ticket: { expireTicket } });
   const api = getAppApi()!;
-  assert.equal(api.ticket.loadTicketsByClient, loadTicketsByClient);
+  assert.equal(api.ticket.expireTicket, expireTicket);
   assert.deepEqual(await api.reference.loadHolidayDates(), [holiday]);
   assert.deepEqual(await api.reference.addHolidayDate(holiday), holiday);
   assert.deepEqual(

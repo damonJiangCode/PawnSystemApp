@@ -36,7 +36,9 @@ frontend/
   lives in `src/shared/api/`: `http.ts` (base URL, `requestJson`), one
   `<domain>.http.ts` per backend module, each with a `create<Domain>HttpApi()`
   factory. `getAppApi()` returns the HTTP `client`, `employee` and `reference` domains plus
-  the remaining desktop bridge domains (ticket, item, window, xmlReport).
+  the remaining desktop bridge domains (ticket, item, window, xmlReport). Tickets
+  are migrating slice by slice: `ticket.http.ts` methods (lookups so far) override
+  the bridge's ticket methods.
 - Lookup data (cities, ID types, colors, locations, holidays, item categories) is
   always read through `referenceApi` in `modules/reference/reference.api.ts`, also
   by client, ticket, payment, report and item screens.

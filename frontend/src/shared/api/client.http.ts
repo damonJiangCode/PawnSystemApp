@@ -129,7 +129,7 @@ async function requestClients(url: URL): Promise<Client[]> {
   return clients.map(restoreClientDates);
 }
 
-function restoreClientDates(client: Client): Client {
+export function restoreClientDates(client: Client): Client {
   return {
     ...client,
     date_of_birth: new Date(client.date_of_birth),

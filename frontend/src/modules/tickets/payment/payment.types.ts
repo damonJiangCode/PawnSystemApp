@@ -18,7 +18,7 @@ export type PaymentTicketRow = {
   extensionAmount: number;
   extensionMonths: number;
   isPickupAllowed: boolean;
-  earliestPickupDate: Date;
+  earliestPickupDate: string;
 };
 
 export type PaymentRowsByMode = Record<PaymentMode, PaymentTicketRow[]>;

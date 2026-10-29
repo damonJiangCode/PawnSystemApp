@@ -36,6 +36,7 @@ export async function requestJson<T>(
           ? message
           : "Unable to complete the request.",
     );
+    Object.assign(error, { status: response.status });
     if (typeof body?.field === "string") {
       Object.assign(error, { field: body.field });
     }

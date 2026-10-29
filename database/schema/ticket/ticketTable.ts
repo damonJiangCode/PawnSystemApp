@@ -28,4 +28,7 @@ export const createTicketIndexes = `
   CREATE INDEX IF NOT EXISTS idx_ticket_pawned_location_due_date
   ON ticket(location, due_date)
   WHERE status = 'pawned';
+
+  CREATE INDEX IF NOT EXISTS idx_ticket_client_number
+  ON ticket(client_number);
 `;

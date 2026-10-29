@@ -10,5 +10,6 @@ import { ClientImageService } from './client-image.service.js';
   imports: [DatabaseModule, EmployeeModule],
   controllers: [ClientController],
   providers: [ClientService, ClientRepository, ClientImageService],
+  exports: [ClientRepository],
 })
 export class ClientModule {}

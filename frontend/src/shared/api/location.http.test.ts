@@ -103,10 +103,10 @@ test("getAppApi routes all five location methods through HTTP and keeps other de
         : location,
     );
   });
-  const loadTicketsByClient = () => Promise.resolve([]);
-  setWindow(t, { ticket: { loadTicketsByClient } });
+  const expireTicket = () => Promise.resolve({ ok: true } as never);
+  setWindow(t, { ticket: { expireTicket } });
   const api = getAppApi()!;
-  assert.equal(api.ticket.loadTicketsByClient, loadTicketsByClient);
+  assert.equal(api.ticket.expireTicket, expireTicket);
   assert.deepEqual(await api.reference.loadLocations(), ["AB12"]);
   assert.deepEqual(await api.reference.loadAllLocations(), [location]);
   assert.deepEqual(await api.reference.addLocation(location), location);

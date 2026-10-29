@@ -26,4 +26,7 @@ export interface Ticket {
     | "sold_expired";
   status_updated_at: Date;
   client_number: number;
+  // Legal release hold computed by the server (shop calendar date, YYYY-MM-DD).
+  earliest_pickup_date?: string;
+  pickup_allowed?: boolean;
 }

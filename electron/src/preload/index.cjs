@@ -1,9 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  GET_TICKETS: "get-tickets",
-  SEARCH_TICKET: "search-ticket",
-  SEARCH_PAYMENT_TICKET: "search-payment-ticket",
   LOAD_BUYBACK_REPORT: "load-buyback-report",
   LOAD_DAILY_REPORT: "load-daily-report",
   LOAD_INTEREST_REPORT: "load-interest-report",
@@ -44,12 +41,6 @@ const CHANNELS = {
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 
 const ticketApi = {
-  loadTicketsByClient: (clientNumber) =>
-    invoke(CHANNELS.GET_TICKETS, clientNumber),
-  searchTicketByNumber: (ticketNumber) =>
-    invoke(CHANNELS.SEARCH_TICKET, ticketNumber),
-  searchPaymentTicketByNumber: (ticketNumber) =>
-    invoke(CHANNELS.SEARCH_PAYMENT_TICKET, ticketNumber),
   loadBuybackReport: (input) => invoke(CHANNELS.LOAD_BUYBACK_REPORT, input),
   loadDailyReport: (input) => invoke(CHANNELS.LOAD_DAILY_REPORT, input),
   loadInterestReport: (input) => invoke(CHANNELS.LOAD_INTEREST_REPORT, input),

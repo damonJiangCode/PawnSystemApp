@@ -110,6 +110,9 @@
   It locks `employee`, fills `pin_hash`, adds `NOT NULL` and `UNIQUE`, and drops
   `password` in one transaction. Applied to the dev database on 2026-10-28.
 
+- `idx_ticket_client_number` (added 2026-10-29, applied to the dev database)
+  turns the per-client ticket list into an index scan.
+
 - ID type names have an additional case-insensitive unique index on LOWER(type).
   It prevents duplicate reference labels without changing existing names or their
   case-sensitive foreign-key references. Existing databases need this index applied

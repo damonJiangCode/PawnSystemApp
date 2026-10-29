@@ -6,7 +6,6 @@ import type {
   MarkTicketStolenInput,
   CreatePawnTicketInput,
   CreateSellTicketInput,
-  TicketSearchResult,
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
@@ -19,47 +18,6 @@ import { createFieldError } from "../../shared/createFieldError.ts";
 import { runInTransaction } from "../../shared/runInTransaction.ts";
 
 export const ticketService = {
-  loadTickets: async (clientNumber: number): Promise<Ticket[]> => {
-    if (!clientNumber) {
-      return [];
-    }
-
-    return ticketRepo.loadByClientNumber(clientNumber);
-  },
-
-  searchTicketByNumber: async (
-    ticketNumber: number,
-  ): Promise<TicketSearchResult | null> => {
-    const normalizedTicketNumber = Number(ticketNumber);
-
-    if (
-      !Number.isFinite(normalizedTicketNumber) ||
-      normalizedTicketNumber <= 0
-    ) {
-      throw createFieldError("ticket_number", "Enter a valid ticket number.");
-    }
-
-    const ticket = await ticketRepo.loadByTicketNumber(normalizedTicketNumber);
-
-    if (!ticket) {
-      return null;
-    }
-
-    const client = await clientRepo.loadByNumber(ticket.client_number);
-
-    if (!client) {
-      return null;
-    }
-
-    return { ticket, client };
-  },
-
-  searchPaymentTicketByNumber: async (
-    ticketNumber: number,
-  ): Promise<TicketSearchResult | null> => {
-    return ticketService.searchTicketByNumber(ticketNumber);
-  },
-
   loadTransferTicketPreview: async (
     ticketNumber: number,
   ): Promise<TransferTicketPreview | null> => {

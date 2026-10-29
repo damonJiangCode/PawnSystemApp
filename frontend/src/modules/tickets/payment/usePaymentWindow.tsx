@@ -25,7 +25,6 @@ import type {
   PaymentStatusSeverity,
   PaymentTicketRow,
 } from "./payment.types";
-import { referenceApi } from "../../reference/reference.api";
 
 export type { PaymentMode } from "./payment.types";
 
@@ -55,7 +54,6 @@ export const usePaymentWindow = () => {
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [holidayDateKeys, setHolidayDateKeys] = useState<string[]>([]);
   const [ticketSearchValue, setTicketSearchValue] = useState("");
   const [ticketSearchPreview, setTicketSearchPreview] =
     useState<TicketSearchResult | null>(null);
@@ -162,12 +160,11 @@ export const usePaymentWindow = () => {
     setStatusSeverity("info");
 
     try {
-      const { holidayDateKeys, rows } = await loadAvailablePaymentRows({
+      const { rows } = await loadAvailablePaymentRows({
         clientNumber,
         mode,
         selectedRowsByMode,
       });
-      setHolidayDateKeys(holidayDateKeys);
       setAvailableRowsByMode((prev) => ({ ...prev, [mode]: rows }));
       setAvailableSelectionByMode((prev) => ({ ...prev, [mode]: [] }));
       const lostTicketCount =
@@ -228,15 +225,7 @@ export const usePaymentWindow = () => {
         return;
       }
 
-      const holidays = await referenceApi.loadHolidayDates();
-      const nextHolidayDateKeys = holidays.map(
-        (holiday) => holiday.holiday_date,
-      );
-      const searchedRow = mapTicketToPaymentRow(
-        preview.ticket,
-        nextHolidayDateKeys,
-      );
-      setHolidayDateKeys(nextHolidayDateKeys);
+      const searchedRow = mapTicketToPaymentRow(preview.ticket);
 
       if (searchedRow && !preview.ticket.is_stolen) {
         const oppositeSelectedTicketNumbers = new Set(
@@ -299,10 +288,7 @@ export const usePaymentWindow = () => {
       return;
     }
 
-    const searchedRow = mapTicketToPaymentRow(
-      ticketSearchPreview.ticket,
-      holidayDateKeys,
-    );
+    const searchedRow = mapTicketToPaymentRow(ticketSearchPreview.ticket);
 
     if (!searchedRow) {
       setStatusSeverity("warning");
@@ -477,7 +463,6 @@ export const usePaymentWindow = () => {
         await processPaymentRows({
           pickupRows,
           extensionRows,
-          holidayDateKeys,
         });
 
       setSelectedRowsByMode((prev) => ({

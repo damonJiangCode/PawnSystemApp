@@ -13,6 +13,24 @@ export type ClientChanges = Partial<CreateClientDetailsDto> & {
   is_active?: boolean;
 };
 
+const clientWithIdentifications = `SELECT
+    c.*,
+    COALESCE(ci.identifications, '[]') AS identifications
+  FROM client c
+  LEFT JOIN LATERAL (
+    SELECT json_agg(
+      jsonb_build_object(
+        'id', client_id.id,
+        'id_type', client_id.id_type,
+        'id_value', client_id.id_value,
+        'updated_at', client_id.updated_at
+      )
+      ORDER BY client_id.id
+    ) AS identifications
+    FROM client_id
+    WHERE client_id.client_number = c.client_number
+  ) ci ON TRUE`;
+
 @Injectable()
 export class ClientRepository {
   constructor(private readonly pool: Pool) {}
@@ -176,23 +194,7 @@ export class ClientRepository {
     const firstPrefix = firstName.replace(/[!%_]/g, '!$&');
     const lastPrefix = lastName.replace(/[!%_]/g, '!$&');
     const result = await this.pool.query(
-      `SELECT
-    c.*,
-    COALESCE(ci.identifications, '[]') AS identifications
-  FROM client c
-  LEFT JOIN LATERAL (
-    SELECT json_agg(
-      jsonb_build_object(
-        'id', client_id.id,
-        'id_type', client_id.id_type,
-        'id_value', client_id.id_value,
-        'updated_at', client_id.updated_at
-      )
-      ORDER BY client_id.id
-    ) AS identifications
-    FROM client_id
-    WHERE client_id.client_number = c.client_number
-  ) ci ON TRUE
+      `${clientWithIdentifications}
        WHERE ($1 = '' OR c.first_name ILIKE ($1 || '%') ESCAPE '!')
          AND ($2 = '' OR c.last_name ILIKE ($2 || '%') ESCAPE '!')
        ORDER BY c.last_name, c.first_name, c.client_number`,
@@ -202,25 +204,18 @@ export class ClientRepository {
     return result.rows.map(mapRowToClient);
   }
 
+  async loadByNumber(clientNumber: number) {
+    const result = await this.pool.query(
+      `${clientWithIdentifications}
+       WHERE c.client_number = $1`,
+      [clientNumber],
+    );
+    return result.rows[0] ? mapRowToClient(result.rows[0]) : null;
+  }
+
   async searchByDob(dateOfBirth: string) {
     const result = await this.pool.query(
-      `SELECT
-    c.*,
-    COALESCE(ci.identifications, '[]') AS identifications
-  FROM client c
-  LEFT JOIN LATERAL (
-    SELECT json_agg(
-      jsonb_build_object(
-        'id', client_id.id,
-        'id_type', client_id.id_type,
-        'id_value', client_id.id_value,
-        'updated_at', client_id.updated_at
-      )
-      ORDER BY client_id.id
-    ) AS identifications
-    FROM client_id
-    WHERE client_id.client_number = c.client_number
-  ) ci ON TRUE
+      `${clientWithIdentifications}
        WHERE c.date_of_birth = $1::date
        ORDER BY c.last_name, c.first_name, c.client_number`,
       [dateOfBirth],

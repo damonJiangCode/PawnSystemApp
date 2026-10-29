@@ -91,8 +91,9 @@ frontend/src/modules/items/item.api.ts
 
 Examples:
 
-- interest and ticket amount calculations
-- holiday-aware date calculation
+- interest and ticket amount calculations (display previews; the server's
+  `server/src/ticket/ticket-finance.ts` is authoritative)
+- the legal earliest-pickup hold is server-only and not in `utils/`
 
 Rules:
 

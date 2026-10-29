@@ -42,26 +42,6 @@ const attachInterestPaymentSummaries = async (
 };
 
 export const ticketRepo = {
-  loadByClientNumber: async (clientNumber: number): Promise<Ticket[]> => {
-    const client = await connect();
-    const query = `
-      SELECT ${ticketSelectColumns}
-      FROM ticket
-      WHERE client_number = $1
-      ORDER BY transaction_datetime ASC, ticket_number ASC
-    `;
-
-    try {
-      const result = await client.query(query, [clientNumber]);
-      return attachInterestPaymentSummaries(
-        result.rows.map(mapTicketRow),
-        client,
-      );
-    } finally {
-      client.release();
-    }
-  },
-
   loadByTicketNumber: async (
     ticketNumber: number,
     dbClient?: DbClient,

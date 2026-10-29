@@ -10,7 +10,6 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { formatIsoDate } from "../../../shared/utils/formatters";
 import type { PaymentTicketRow } from "./payment.types";
 
 type PickupHoldDialogProps = {
@@ -35,7 +34,7 @@ const PickupHoldDialog: React.FC<PickupHoldDialogProps> = ({
           <ListItem key={row.ticketNumber} disableGutters>
             <ListItemText
               primary={`Ticket #${row.ticketNumber}`}
-              secondary={`Earliest pickup: ${formatIsoDate(row.earliestPickupDate)}`}
+              secondary={`Earliest pickup: ${row.earliestPickupDate}`}
               slotProps={{ primary: { fontWeight: 800 } }}
             />
           </ListItem>

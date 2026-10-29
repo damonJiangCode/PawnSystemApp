@@ -5,7 +5,6 @@ import type {
   PaymentTicketRow,
 } from "./payment.types";
 import { getOppositeMode, mapTicketToPaymentRow } from "./payment.helpers";
-import { referenceApi } from "../../reference/reference.api";
 
 type LoadPaymentRowsInput = {
   clientNumber: number;
@@ -18,11 +17,7 @@ export const loadAvailablePaymentRows = async ({
   mode,
   selectedRowsByMode,
 }: LoadPaymentRowsInput) => {
-  const [tickets, holidays] = await Promise.all([
-    ticketApi.loadTickets(clientNumber),
-    referenceApi.loadHolidayDates(),
-  ]);
-  const holidayDateKeys = holidays.map((holiday) => holiday.holiday_date);
+  const tickets = await ticketApi.loadTickets(clientNumber);
   const oppositeSelectedTicketNumbers = new Set(
     selectedRowsByMode[getOppositeMode(mode)].map((row) => row.ticketNumber),
   );
@@ -33,7 +28,7 @@ export const loadAvailablePaymentRows = async ({
   );
   const rows = tickets
     .filter((ticket) => ticket.status === "pawned" && !ticket.is_stolen)
-    .map((ticket) => mapTicketToPaymentRow(ticket, holidayDateKeys))
+    .map((ticket) => mapTicketToPaymentRow(ticket))
     .filter((row): row is PaymentTicketRow => Boolean(row))
     .filter(
       (row) =>
@@ -41,19 +36,17 @@ export const loadAvailablePaymentRows = async ({
         !oppositeSelectedTicketNumbers.has(row.ticketNumber),
     );
 
-  return { holidayDateKeys, rows };
+  return { rows };
 };
 
 type ProcessPaymentRowsInput = {
   pickupRows: PaymentTicketRow[];
   extensionRows: PaymentTicketRow[];
-  holidayDateKeys: string[];
 };
 
 export const processPaymentRows = async ({
   pickupRows,
   extensionRows,
-  holidayDateKeys,
 }: ProcessPaymentRowsInput) => {
   const extensionMonthCounts = extensionRows.reduce<Map<number, number>>(
     (counts, row) => {
@@ -104,7 +97,7 @@ export const processPaymentRows = async ({
   );
   const extendedRowByTicketNumber = new Map(
     extendedTickets
-      .map((ticket) => mapTicketToPaymentRow(ticket, holidayDateKeys))
+      .map((ticket) => mapTicketToPaymentRow(ticket))
       .filter((row): row is PaymentTicketRow => Boolean(row))
       .map((row) => [row.ticketNumber, row]),
   );
@@ -114,7 +107,17 @@ export const processPaymentRows = async ({
     pickedUpCounts: [...pickedUpCountByClient.entries()].map(
       ([clientNumber, count]) => ({ clientNumber, count }),
     ),
-    replaceExtendedRow: (row: PaymentTicketRow) =>
-      extendedRowByTicketNumber.get(row.ticketNumber) ?? row,
+    // The legal hold depends only on the transaction date, so an extended
+    // ticket keeps the hold the server reported for the original row.
+    replaceExtendedRow: (row: PaymentTicketRow) => {
+      const extendedRow = extendedRowByTicketNumber.get(row.ticketNumber);
+      return extendedRow
+        ? {
+            ...extendedRow,
+            isPickupAllowed: row.isPickupAllowed,
+            earliestPickupDate: row.earliestPickupDate,
+          }
+        : row;
+    },
   };
 };

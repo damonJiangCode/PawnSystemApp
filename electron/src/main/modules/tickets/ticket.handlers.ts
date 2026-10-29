@@ -71,24 +71,6 @@ const runTicketMutation = async (
 
 export const registerTicketHandlers = () => {
   ipcMain.handle(
-    CHANNELS.GET_TICKETS,
-    async (_event: IpcMainInvokeEvent, clientNumber: number) => {
-      return ticketService.loadTickets(clientNumber);
-    },
-  );
-  ipcMain.handle(
-    CHANNELS.SEARCH_PAYMENT_TICKET,
-    async (_event: IpcMainInvokeEvent, ticketNumber: number) => {
-      return ticketService.searchPaymentTicketByNumber(ticketNumber);
-    },
-  );
-  ipcMain.handle(
-    CHANNELS.SEARCH_TICKET,
-    async (_event: IpcMainInvokeEvent, ticketNumber: number) => {
-      return ticketService.searchTicketByNumber(ticketNumber);
-    },
-  );
-  ipcMain.handle(
     CHANNELS.ADD_PAWN_TICKET,
     async (_event: IpcMainInvokeEvent, payload: CreatePawnTicketInput) => {
       return runTicketMutation(() => ticketService.createPawnTicket(payload));

@@ -43,5 +43,6 @@ import { LocationService } from './locations/location.service.js';
     ItemCategoryRepository,
     ItemCategoryService,
   ],
+  exports: [HolidayRepository],
 })
 export class ReferenceModule {}

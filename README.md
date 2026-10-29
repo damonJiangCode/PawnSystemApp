@@ -38,8 +38,7 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
     └── preload bridge ── Electron windows and native menus
 ```
 
-Client APIs, reference reads, color, location, holiday and ID type reference operations
-already use HTTP. Other
+Client, employee and reference APIs and ticket lookups already use HTTP. Other
 business workflows still run through Electron services/repositories while their
 HTTP endpoints are developed. The desktop app currently requires Vite; building
 assets does not yet provide a standalone installer.

@@ -29,7 +29,6 @@ export const addThirtyDayPeriods = (date: Date, periods: number) => {
 
 export const mapTicketToPaymentRow = (
   ticket: Ticket,
-  holidayDateKeys: string[],
 ): PaymentTicketRow | null => {
   if (!ticket.ticket_number) {
     return null;
@@ -37,10 +36,6 @@ export const mapTicketToPaymentRow = (
 
   const pawnAmount = Number(ticket.amount ?? 0);
   const baseExtensionAmount = calculation.getBaseIntAmt(pawnAmount);
-  const earliestPickupDate = calculation.getEarliestPickupDatetime(
-    ticket.transaction_datetime,
-    holidayDateKeys,
-  );
 
   return {
     id: ticket.ticket_number,
@@ -51,11 +46,9 @@ export const mapTicketToPaymentRow = (
     description: ticket.description,
     dueDate: ticket.due_date,
     sourceDueDate: ticket.due_date,
-    isPickupAllowed: calculation.isPickupAllowed(
-      ticket.transaction_datetime,
-      holidayDateKeys,
-    ),
-    earliestPickupDate,
+    // Legal hold from the server; the UI only warns before an early pickup.
+    isPickupAllowed: ticket.pickup_allowed ?? false,
+    earliestPickupDate: ticket.earliest_pickup_date ?? "",
     pickupAmount: getTicketPickupAmount(ticket),
     baseExtensionAmount,
     extensionAmount: baseExtensionAmount,
