@@ -10,10 +10,14 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import type { CreatePawnTicketInput, TicketFormError } from "../../ticket.api";
+import type {
+  CreatePawnTicketInput,
+  TicketFormError,
+  TicketFormField,
+} from "../../ticket.api";
 import { calculation } from "../../../../../../shared/utils/calculation";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
-import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
+import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
 import { referenceApi } from "../../../reference/reference.api";
 
@@ -71,6 +75,7 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
   const [employeePasswordError, setEmployeePasswordError] = useState("");
   const [submitError, setSubmitError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [confirmZeroOpen, setConfirmZeroOpen] = useState(false);
   const compactFieldSx = {
     "& .MuiFormHelperText-root": {
       mt: 0.25,
@@ -143,6 +148,7 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
     setAmountError("");
     setOneTimeFeeError("");
     setEmployeePasswordError("");
+    setConfirmZeroOpen(false);
     setSubmitError("");
     setSaving(false);
   }, [open, initialValues]);
@@ -156,7 +162,8 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
   }, [amount, oneTimeFee]);
 
   // handle save button clicked
-  const handleSave = async () => {
+  // A $0 amount is valid only for special records, so it needs confirmation.
+  const handleSave = async (zeroAmountConfirmed = false) => {
     const trimmedDescription = description.trim();
     const trimmedLocation = location.trim();
     const trimmedPassword = employeePassword.trim();
@@ -201,7 +208,8 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
     }
 
     const normalizedAmount = amount as number;
-    if (!confirmZeroTicketAmount(normalizedAmount)) {
+    if (normalizedAmount === 0 && !zeroAmountConfirmed) {
+      setConfirmZeroOpen(true);
       return;
     }
 
@@ -230,7 +238,30 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
         return;
       }
 
-      setSubmitError("Couldn't pawn this ticket right now. Please try again.");
+      // Server field errors go under their input; other request errors keep
+      // the server's message, unexpected failures get a generic one.
+      const fieldErrorSetters: Partial<
+        Record<TicketFormField, (message: string) => void>
+      > = {
+        description: setDescriptionError,
+        location: setLocationError,
+        amount: setAmountError,
+        onetime_fee: setOneTimeFeeError,
+      };
+      const setFieldError = formError.field
+        ? fieldErrorSetters[formError.field]
+        : undefined;
+      if (setFieldError) {
+        setFieldError(formError.message);
+        return;
+      }
+
+      const status = (formError as { status?: number }).status;
+      setSubmitError(
+        status !== undefined && status < 500
+          ? formError.message
+          : "Couldn't pawn this ticket right now. Please try again.",
+      );
     } finally {
       setSaving(false);
     }
@@ -431,13 +462,29 @@ const TicketPawnDialog: React.FC<TicketPawnDialogProps> = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={handleSave} disabled={saving}>
+        <Button
+          variant="contained"
+          onClick={() => void handleSave()}
+          disabled={saving}
+        >
           {saveLabel}
         </Button>
         <Button onClick={onClose} disabled={saving}>
           Cancel
         </Button>
       </DialogActions>
+      <ConfirmDialog
+        open={confirmZeroOpen}
+        title="Pawn for $0?"
+        message="Ticket amount is 0. This is usually only for special records such as signature-only tickets. Continue?"
+        confirmLabel="Continue"
+        confirmColor="primary"
+        onCancel={() => setConfirmZeroOpen(false)}
+        onConfirm={() => {
+          setConfirmZeroOpen(false);
+          void handleSave(true);
+        }}
+      />
     </Dialog>
   );
 };

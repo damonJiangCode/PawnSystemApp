@@ -10,10 +10,10 @@ import type {
   SearchEmployeeDto,
   UpdateEmployeeDto,
 } from './employee.dto.js';
+import { inTransaction } from '../common/transaction.js';
 import {
   EmployeeRepository,
   type EmployeeDetails,
-  type EmployeeRecord,
 } from './employee.repository.js';
 
 const toDetails = (
@@ -52,7 +52,7 @@ export class EmployeeService {
   }
 
   create(input: CreateEmployeeDto) {
-    return this.inTransaction(async (connection) => {
+    return inTransaction(this.pool, async (connection) => {
       await this.authorizeManager(input.manager_password, connection);
       const result = await this.repository.create(
         toDetails(input),
@@ -65,7 +65,7 @@ export class EmployeeService {
   }
 
   update(employeeNumber: number, input: UpdateEmployeeDto) {
-    return this.inTransaction(async (connection) => {
+    return inTransaction(this.pool, async (connection) => {
       await this.authorizeManager(input.manager_password, connection);
       const activeManagers =
         await this.repository.lockActiveManagers(connection);
@@ -109,23 +109,6 @@ export class EmployeeService {
         field: 'manager_password',
         message: 'Manager password is incorrect.',
       });
-    }
-  }
-
-  private async inTransaction(
-    work: (connection: PoolClient) => Promise<EmployeeRecord>,
-  ) {
-    const connection = await this.pool.connect();
-    try {
-      await connection.query('BEGIN');
-      const value = await work(connection);
-      await connection.query('COMMIT');
-      return value;
-    } catch (error) {
-      await connection.query('ROLLBACK').catch(() => undefined);
-      throw error;
-    } finally {
-      connection.release();
     }
   }
 }

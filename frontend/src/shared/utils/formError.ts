@@ -162,6 +162,14 @@ export const resolveFormFieldError = (
     return null;
   }
 
+  // HTTP and form errors name their field explicitly; trust it over the text.
+  const errorField = (error as { field?: unknown }).field;
+  if (typeof errorField === "string") {
+    return errorField === field
+      ? resolveFormFieldMessage(field, error.message)
+      : null;
+  }
+
   const backendFieldError = extractBackendFieldError(error.message);
 
   if (backendFieldError?.field === field) {

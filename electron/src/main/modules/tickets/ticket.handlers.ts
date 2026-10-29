@@ -7,8 +7,6 @@ import type {
   PickupTicketsInput,
   ReverseTicketFormField,
   ReverseTicketInput,
-  CreatePawnTicketInput,
-  CreateSellTicketInput,
   TransferTicketInput,
   UpdateTicketInput,
   TicketFormField,
@@ -70,18 +68,6 @@ const runTicketMutation = async (
 };
 
 export const registerTicketHandlers = () => {
-  ipcMain.handle(
-    CHANNELS.ADD_PAWN_TICKET,
-    async (_event: IpcMainInvokeEvent, payload: CreatePawnTicketInput) => {
-      return runTicketMutation(() => ticketService.createPawnTicket(payload));
-    },
-  );
-  ipcMain.handle(
-    CHANNELS.ADD_SELL_TICKET,
-    async (_event: IpcMainInvokeEvent, payload: CreateSellTicketInput) => {
-      return runTicketMutation(() => ticketService.createSellTicket(payload));
-    },
-  );
   ipcMain.handle(
     CHANNELS.UPDATE_TICKET,
     async (_event: IpcMainInvokeEvent, payload: UpdateTicketInput) => {

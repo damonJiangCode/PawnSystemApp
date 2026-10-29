@@ -204,6 +204,25 @@ export class ClientRepository {
     return result.rows.map(mapRowToClient);
   }
 
+  // Locked so a concurrent deactivation cannot interleave with ticket issuing.
+  async lockForTicket(clientNumber: number, connection: PoolClient) {
+    const result = await connection.query<{ is_active: boolean }>(
+      'SELECT is_active FROM client WHERE client_number = $1 FOR UPDATE',
+      [clientNumber],
+    );
+    return result.rows[0] ?? null;
+  }
+
+  async incrementSellCount(clientNumber: number, connection: PoolClient) {
+    await connection.query(
+      `UPDATE client
+       SET sell_count = COALESCE(sell_count, 0) + 1,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE client_number = $1`,
+      [clientNumber],
+    );
+  }
+
   async loadByNumber(clientNumber: number) {
     const result = await this.pool.query(
       `${clientWithIdentifications}

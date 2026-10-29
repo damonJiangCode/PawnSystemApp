@@ -43,8 +43,9 @@ export class EmployeeRepository {
     const result = await connection.query<{
       employee_number: number;
       first_name: string;
+      nickname: string;
     }>(
-      `SELECT employee_number, first_name FROM employee
+      `SELECT employee_number, first_name, nickname FROM employee
        WHERE pin_hash = $1 AND is_terminated = FALSE LIMIT 1`,
       [this.pins.hash(password)],
     );

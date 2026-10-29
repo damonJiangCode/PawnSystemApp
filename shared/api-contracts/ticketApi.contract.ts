@@ -49,12 +49,10 @@ export type TicketApi = {
   loadOverdueReport: (
     input: OverdueReportInput,
   ) => Promise<OverdueReportResult>;
-  createPawnTicket: (
-    input: CreatePawnTicketInput,
-  ) => Promise<TicketMutationResult>;
-  createSellTicket: (
-    input: CreateSellTicketInput,
-  ) => Promise<TicketMutationResult>;
+  // HTTP methods reject with an Error carrying `field`/`status` instead of
+  // returning a TicketMutationResult.
+  createPawnTicket: (input: CreatePawnTicketInput) => Promise<Ticket>;
+  createSellTicket: (input: CreateSellTicketInput) => Promise<Ticket>;
   updateTicket: (input: UpdateTicketInput) => Promise<TicketMutationResult>;
   convertTicket: (input: ConvertTicketInput) => Promise<TicketMutationResult>;
   expireTicket: (input: ExpireTicketInput) => Promise<TicketMutationResult>;

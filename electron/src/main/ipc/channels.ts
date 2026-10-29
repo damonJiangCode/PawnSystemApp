@@ -23,8 +23,6 @@ const CHANNELS = {
   GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
   NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
     "notify-item-search-window-input-updated",
-  ADD_PAWN_TICKET: "add-pawn-ticket",
-  ADD_SELL_TICKET: "add-sell-ticket",
   UPDATE_TICKET: "update-ticket",
   CONVERT_TICKET: "convert-ticket",
   EXPIRE_TICKET: "expire-ticket",

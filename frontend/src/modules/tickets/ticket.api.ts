@@ -141,7 +141,7 @@ export const ticketApi = {
     }
 
     try {
-      return unwrapTicketMutation(await api.createPawnTicket(normalizedInput));
+      return await api.createPawnTicket(normalizedInput);
     } catch (error) {
       throw mapBackendError(error);
     }
@@ -158,7 +158,7 @@ export const ticketApi = {
     }
 
     try {
-      return unwrapTicketMutation(await api.createSellTicket(normalizedInput));
+      return await api.createSellTicket(normalizedInput);
     } catch (error) {
       throw mapBackendError(error);
     }

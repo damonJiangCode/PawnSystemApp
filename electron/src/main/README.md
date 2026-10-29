@@ -84,7 +84,7 @@ Start here:
 
 Owns pawn/sell ticket creation, ticket update, expire, pickup, transfer,
 payment workflows until their migration slices land. Ticket lookups (by client,
-by number) moved to the NestJS server (`GET /tickets`, `GET /tickets/:ticketNumber`).
+by number) and pawn/sell issuing moved to the NestJS server (`/tickets`).
 
 Start here:
 

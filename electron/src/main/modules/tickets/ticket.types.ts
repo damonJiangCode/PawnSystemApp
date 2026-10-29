@@ -3,19 +3,6 @@ import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
 
 export type DbClient = Awaited<ReturnType<typeof connect>>;
 
-export type AddTicketPayload = {
-  transaction_datetime: Date;
-  is_lost: boolean;
-  location: string;
-  description: string;
-  due_date: Date;
-  amount: number;
-  onetime_fee: number;
-  employee_name: string;
-  status: Ticket["status"];
-  client_number: number;
-};
-
 export type UpdateTicketPayload = {
   ticket_number: number;
   is_lost: boolean;

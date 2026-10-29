@@ -60,29 +60,6 @@ export const clientRepo = {
     }
   },
 
-  incrementSellCount: async (
-    clientNumber: number,
-    dbClient?: DbClient,
-  ): Promise<void> => {
-    const client = await getDbClient(dbClient);
-
-    try {
-      await client.query(
-        `
-          UPDATE client
-          SET sell_count = COALESCE(sell_count, 0) + 1,
-              updated_at = CURRENT_TIMESTAMP
-          WHERE client_number = $1
-        `,
-        [clientNumber],
-      );
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
-    }
-  },
-
   incrementExpireCount: async (
     clientNumber: number,
     dbClient?: DbClient,

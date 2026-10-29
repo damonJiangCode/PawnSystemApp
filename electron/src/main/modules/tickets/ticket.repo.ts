@@ -8,7 +8,6 @@ import {
   ticketSelectColumns,
 } from "./ticket.mapper.ts";
 import type {
-  AddTicketPayload,
   ConvertTicketPayload,
   DbClient,
   ExpireTicketPayload,
@@ -113,52 +112,6 @@ export const ticketRepo = {
         : null;
     } finally {
       client.release();
-    }
-  },
-
-  create: async (
-    payload: AddTicketPayload,
-    dbClient?: DbClient,
-  ): Promise<Ticket> => {
-    const client = dbClient ?? (await connect());
-    const query = `
-      INSERT INTO ticket (
-        transaction_datetime,
-        is_lost,
-        location,
-        description,
-        due_date,
-        amount,
-        onetime_fee,
-        employee_name,
-        status,
-        client_number
-      ) VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
-      )
-      RETURNING ${ticketSelectColumns}
-    `;
-
-    const values = [
-      payload.transaction_datetime,
-      payload.is_lost,
-      payload.location,
-      payload.description,
-      payload.due_date,
-      payload.amount,
-      payload.onetime_fee,
-      payload.employee_name,
-      payload.status,
-      payload.client_number,
-    ];
-
-    try {
-      const result = await client.query(query, values);
-      return mapTicketRow(result.rows[0]);
-    } finally {
-      if (!dbClient) {
-        client.release();
-      }
     }
   },
 

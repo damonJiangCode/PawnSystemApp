@@ -10,9 +10,12 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { CreateSellTicketInput, TicketFormError } from "../../ticket.api";
+import type {
+  CreateSellTicketInput,
+  TicketFormError,
+  TicketFormField,
+} from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
-import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
 import { referenceApi } from "../../../reference/reference.api";
 
@@ -149,8 +152,8 @@ const TicketSellDialog: React.FC<TicketSellDialogProps> = (props) => {
           ? "Select a valid location from the list."
           : "";
     const nextAmountError =
-      typeof amount !== "number" || !Number.isFinite(amount) || amount < 0
-        ? "Amount cannot be negative."
+      typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0
+        ? "Amount must be greater than 0."
         : "";
     const nextEmployeePasswordError =
       trimmedPassword.length === 0 ? "Enter employee password." : "";
@@ -174,9 +177,6 @@ const TicketSellDialog: React.FC<TicketSellDialogProps> = (props) => {
     }
 
     const normalizedAmount = amount as number;
-    if (!confirmZeroTicketAmount(normalizedAmount)) {
-      return;
-    }
 
     setSaving(true);
 
@@ -202,7 +202,29 @@ const TicketSellDialog: React.FC<TicketSellDialogProps> = (props) => {
         return;
       }
 
-      setSubmitError("Couldn't sell this ticket right now. Please try again.");
+      // Server field errors go under their input; other request errors keep
+      // the server's message, unexpected failures get a generic one.
+      const fieldErrorSetters: Partial<
+        Record<TicketFormField, (message: string) => void>
+      > = {
+        description: setDescriptionError,
+        location: setLocationError,
+        amount: setAmountError,
+      };
+      const setFieldError = formError.field
+        ? fieldErrorSetters[formError.field]
+        : undefined;
+      if (setFieldError) {
+        setFieldError(formError.message);
+        return;
+      }
+
+      const status = (formError as { status?: number }).status;
+      setSubmitError(
+        status !== undefined && status < 500
+          ? formError.message
+          : "Couldn't sell this ticket right now. Please try again.",
+      );
     } finally {
       setSaving(false);
     }

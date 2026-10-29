@@ -25,8 +25,6 @@ const CHANNELS = {
   GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
   NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
     "notify-item-search-window-input-updated",
-  ADD_PAWN_TICKET: "add-pawn-ticket",
-  ADD_SELL_TICKET: "add-sell-ticket",
   UPDATE_TICKET: "update-ticket",
   CONVERT_TICKET: "convert-ticket",
   EXPIRE_TICKET: "expire-ticket",
@@ -45,8 +43,6 @@ const ticketApi = {
   loadDailyReport: (input) => invoke(CHANNELS.LOAD_DAILY_REPORT, input),
   loadInterestReport: (input) => invoke(CHANNELS.LOAD_INTEREST_REPORT, input),
   loadOverdueReport: (input) => invoke(CHANNELS.LOAD_OVERDUE_REPORT, input),
-  createPawnTicket: (payload) => invoke(CHANNELS.ADD_PAWN_TICKET, payload),
-  createSellTicket: (payload) => invoke(CHANNELS.ADD_SELL_TICKET, payload),
   updateTicket: (payload) => invoke(CHANNELS.UPDATE_TICKET, payload),
   convertTicket: (payload) => invoke(CHANNELS.CONVERT_TICKET, payload),
   expireTicket: (payload) => invoke(CHANNELS.EXPIRE_TICKET, payload),

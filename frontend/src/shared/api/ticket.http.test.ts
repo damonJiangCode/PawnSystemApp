@@ -106,3 +106,44 @@ test("getAppApi serves ticket lookups over HTTP and keeps desktop ticket actions
   assert.equal(api.ticket.expireTicket, expireTicket);
   assert.deepEqual(await api.ticket.loadTicketsByClient(7), []);
 });
+
+const pawnInput = {
+  client_number: 7,
+  description: "RING",
+  location: "A1",
+  amount: 100.5,
+  onetime_fee: 5,
+  employee_password: "1234",
+};
+
+test("pawn and sell POST only the accepted fields and return the ticket", async (t) => {
+  const bodies: Record<string, unknown> = {};
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(init.method, "POST");
+    bodies[url.pathname] = JSON.parse(init.body as string);
+    return Response.json(ticketJson, { status: 201 });
+  });
+  const pawned = await http.createPawnTicketHttp(
+    { ...pawnInput, ticket_number: 1, status: "sold" } as never,
+    base,
+  );
+  const { onetime_fee: _fee, ...sellInput } = pawnInput;
+  await http.createSellTicketHttp(sellInput, base);
+  assert.ok(pawned.transaction_datetime instanceof Date);
+  assert.deepEqual(bodies["/tickets/pawn"], pawnInput);
+  assert.deepEqual(bodies["/tickets/sell"], sellInput);
+});
+
+test("pawn errors keep the server field and status for the dialog", async (t) => {
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { field: "location", message: "Select a valid location from the list." },
+      { status: 400 },
+    ),
+  );
+  await assert.rejects(http.createPawnTicketHttp(pawnInput, base), {
+    field: "location",
+    status: 400,
+    message: "Select a valid location from the list.",
+  });
+});

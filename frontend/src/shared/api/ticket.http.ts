@@ -1,16 +1,22 @@
 import type { TicketApi } from "../../../../shared/api-contracts/ticketApi.contract.ts";
 import type { Client } from "../../../../shared/models/client.model.ts";
 import type { Ticket } from "../../../../shared/models/ticket.model.ts";
-import type { TicketSearchResult } from "../../../../shared/payload-contracts/ticket.contract.ts";
+import type {
+  CreatePawnTicketInput,
+  CreateSellTicketInput,
+  TicketSearchResult,
+} from "../../../../shared/payload-contracts/ticket.contract.ts";
 import { restoreClientDates } from "./client.http.ts";
-import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 // Ticket operations served over HTTP so far; the rest still use the desktop
 // bridge until their migration slice lands.
 export type HttpTicketMethods =
   | "loadTicketsByClient"
   | "searchTicketByNumber"
-  | "searchPaymentTicketByNumber";
+  | "searchPaymentTicketByNumber"
+  | "createPawnTicket"
+  | "createSellTicket";
 
 type TicketResponse = Omit<
   Ticket,
@@ -78,6 +84,42 @@ export async function searchTicketByNumberHttp(
   }
 }
 
+// Only the fields the server accepts are sent; dates and names are server-owned.
+export async function createPawnTicketHttp(
+  input: CreatePawnTicketInput,
+  baseUrl = API_BASE_URL,
+) {
+  const ticket = await requestJson<TicketResponse>(
+    apiUrl("/tickets/pawn", baseUrl),
+    jsonBody("POST", {
+      client_number: input.client_number,
+      description: input.description,
+      location: input.location,
+      amount: input.amount,
+      onetime_fee: input.onetime_fee,
+      employee_password: input.employee_password,
+    }),
+  );
+  return toTicket(ticket);
+}
+
+export async function createSellTicketHttp(
+  input: CreateSellTicketInput,
+  baseUrl = API_BASE_URL,
+) {
+  const ticket = await requestJson<TicketResponse>(
+    apiUrl("/tickets/sell", baseUrl),
+    jsonBody("POST", {
+      client_number: input.client_number,
+      description: input.description,
+      location: input.location,
+      amount: input.amount,
+      employee_password: input.employee_password,
+    }),
+  );
+  return toTicket(ticket);
+}
+
 export const createTicketHttpApi = (
   baseUrl = API_BASE_URL,
 ): Pick<TicketApi, HttpTicketMethods> => ({
@@ -87,4 +129,6 @@ export const createTicketHttpApi = (
     searchTicketByNumberHttp(ticketNumber, baseUrl),
   searchPaymentTicketByNumber: (ticketNumber) =>
     searchTicketByNumberHttp(ticketNumber, baseUrl),
+  createPawnTicket: (input) => createPawnTicketHttp(input, baseUrl),
+  createSellTicket: (input) => createSellTicketHttp(input, baseUrl),
 });

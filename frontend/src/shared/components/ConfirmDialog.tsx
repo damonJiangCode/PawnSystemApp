@@ -1,5 +1,6 @@
 import {
   Button,
+  type ButtonProps,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,6 +13,7 @@ type Props = {
   title: string;
   message: string;
   confirmLabel: string;
+  confirmColor?: ButtonProps["color"];
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -21,6 +23,7 @@ export default function ConfirmDialog({
   title,
   message,
   confirmLabel,
+  confirmColor = "error",
   onConfirm,
   onCancel,
 }: Props) {
@@ -39,7 +42,7 @@ export default function ConfirmDialog({
         <Button
           autoFocus
           variant="contained"
-          color="error"
+          color={confirmColor}
           onClick={onConfirm}
           sx={{ textTransform: "none" }}
         >

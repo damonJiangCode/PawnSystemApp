@@ -4,8 +4,6 @@ import type {
   ConvertTicketInput,
   ExpireTicketInput,
   MarkTicketStolenInput,
-  CreatePawnTicketInput,
-  CreateSellTicketInput,
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
@@ -43,96 +41,6 @@ export const ticketService = {
         );
     }
     return preview;
-  },
-
-  createPawnTicket: async (input: CreatePawnTicketInput): Promise<Ticket> => {
-    const normalizedInput = ticketInput.normalizeCreatePawnTicket(input);
-
-    return runInTransaction("createPawnTicket", async (client) => {
-      await clientRepo.assertActiveForTicket(
-        [normalizedInput.client_number],
-        client,
-      );
-      const transactionDatetime = calculation.getCurrentDatetime();
-      const dueDate = calculation.getDueDatetime(transactionDatetime);
-      const employeeName =
-        await employeeService.getEmployeeDisplayNameByPassword(
-          normalizedInput.employee_password,
-          client,
-        );
-
-      if (!employeeName) {
-        throw createFieldError(
-          "employee_password",
-          "Employee password is incorrect.",
-        );
-      }
-
-      const newTicket = await ticketRepo.create(
-        {
-          transaction_datetime: transactionDatetime,
-          is_lost: false,
-          location: normalizedInput.location,
-          description: normalizedInput.description,
-          due_date: dueDate,
-          amount: normalizedInput.amount,
-          onetime_fee: normalizedInput.onetime_fee,
-          employee_name: employeeName,
-          status: "pawned",
-          client_number: normalizedInput.client_number,
-        },
-        client,
-      );
-
-      return newTicket;
-    });
-  },
-
-  createSellTicket: async (input: CreateSellTicketInput): Promise<Ticket> => {
-    const normalizedInput = ticketInput.normalizeCreateSellTicket(input);
-
-    return runInTransaction("createSellTicket", async (client) => {
-      await clientRepo.assertActiveForTicket(
-        [normalizedInput.client_number],
-        client,
-      );
-      const transactionDatetime = calculation.getCurrentDatetime();
-      const employeeName =
-        await employeeService.getEmployeeDisplayNameByPassword(
-          normalizedInput.employee_password,
-          client,
-        );
-
-      if (!employeeName) {
-        throw createFieldError(
-          "employee_password",
-          "Employee password is incorrect.",
-        );
-      }
-
-      const newTicket = await ticketRepo.create(
-        {
-          transaction_datetime: transactionDatetime,
-          is_lost: false,
-          location: normalizedInput.location,
-          description: normalizedInput.description,
-          due_date: calculation.getSellDueDatetime(transactionDatetime),
-          amount: normalizedInput.amount,
-          onetime_fee: 0,
-          employee_name: employeeName,
-          status: "sold",
-          client_number: normalizedInput.client_number,
-        },
-        client,
-      );
-
-      await clientRepo.incrementSellCount(
-        normalizedInput.client_number,
-        client,
-      );
-
-      return newTicket;
-    });
   },
 
   updateTicket: async (input: UpdateTicketInput): Promise<Ticket> => {

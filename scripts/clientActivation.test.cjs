@@ -71,10 +71,6 @@ function fixture(inactive = []) {
       calls.push({ sql: "lock-ticket" });
       return ticket;
     },
-    create: async () => {
-      calls.push({ sql: "create-ticket" });
-      return ticket;
-    },
     convert: async () => {
       calls.push({ sql: "convert-ticket" });
       return ticket;
@@ -120,11 +116,8 @@ function fixture(inactive = []) {
   return { calls, clientRepo, ticketService, connection };
 }
 
-for (const operation of [
-  "createPawnTicket",
-  "createSellTicket",
-  "convertTicket",
-]) {
+// Pawn and sell are covered by server/src/ticket/ticket-issue.http.spec.ts.
+for (const operation of ["convertTicket"]) {
   test(`${operation} rejects deactivated clients and rolls back before writing`, async () => {
     const { ticketService, calls } = fixture([11]);
     await assert.rejects(
@@ -143,9 +136,7 @@ for (const operation of [
     );
     assert.ok(calls.some((call) => call.sql === "ROLLBACK"));
     assert.ok(
-      !calls.some((call) =>
-        /^(create|convert|transfer)-ticket$/.test(call.sql),
-      ),
+      !calls.some((call) => /^(convert|transfer)-ticket$/.test(call.sql)),
     );
     assert.ok(!calls.some((call) => call.sql === "COMMIT"));
     assert.equal(calls.at(-1).sql, "release");
@@ -165,11 +156,8 @@ for (const inactive of [[11], [22]]) {
   });
 }
 
-for (const operation of [
-  "createPawnTicket",
-  "createSellTicket",
-  "convertTicket",
-]) {
+// Pawn and sell are covered by server/src/ticket/ticket-issue.http.spec.ts.
+for (const operation of ["convertTicket"]) {
   test(`${operation} still succeeds for active clients`, async () => {
     const { ticketService, calls } = fixture();
     await ticketService[operation]({
@@ -182,7 +170,7 @@ for (const operation of [
       location: "TEST",
       employee_password: "code",
     });
-    assert.ok(calls.some((call) => /^(create|convert)-ticket$/.test(call.sql)));
+    assert.ok(calls.some((call) => /^convert-ticket$/.test(call.sql)));
     assert.ok(calls.some((call) => call.sql === "COMMIT"));
   });
 }

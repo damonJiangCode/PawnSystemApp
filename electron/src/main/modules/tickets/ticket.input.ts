@@ -4,8 +4,6 @@ import type {
   ExpireTicketInput,
   MarkTicketStolenInput,
   PickupTicketsInput,
-  CreatePawnTicketInput,
-  CreateSellTicketInput,
   ReverseTicketInput,
   TransferTicketInput,
   UpdateTicketInput,
@@ -19,23 +17,6 @@ const toNonNegativeNumber = (value: unknown, fallback = 0) => {
   const numberValue = Number(value);
   return Number.isFinite(numberValue) ? Math.max(0, numberValue) : fallback;
 };
-
-const normalizeCreatePawnTicket = (input: CreatePawnTicketInput) => ({
-  description: trimText(input.description),
-  location: trimText(input.location),
-  amount: toNumber(input.amount),
-  onetime_fee: toNonNegativeNumber(input.onetime_fee),
-  employee_password: trimText(input.employee_password),
-  client_number: input.client_number,
-});
-
-const normalizeCreateSellTicket = (input: CreateSellTicketInput) => ({
-  description: trimText(input.description),
-  location: trimText(input.location),
-  amount: toNumber(input.amount),
-  employee_password: trimText(input.employee_password),
-  client_number: input.client_number,
-});
 
 const normalizeUpdateTicket = (input: UpdateTicketInput) => ({
   ticket_number: input.ticket_number,
@@ -134,8 +115,6 @@ const isValidDateKey = (value: string) => {
 };
 
 export const ticketInput = {
-  normalizeCreatePawnTicket,
-  normalizeCreateSellTicket,
   normalizeUpdateTicket,
   normalizeTransferTicket,
   normalizeConvertTicket,
