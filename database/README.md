@@ -32,7 +32,8 @@
 - **Inputs:** put both files in `database/migration/source/`:
   `superpawnconv.mdb` and `Pictureconv.mdb`.
 - **Prepare:** `npm run migration:prepare` creates missing local directories and
-  `.env` with a generated password, then checks inputs, dependencies and Docker.
+  `.env` with a generated database password and `EMPLOYEE_PIN_SECRET`, then
+  checks inputs, dependencies and Docker.
 - **Start PostgreSQL:**
 
   ```bash
@@ -88,6 +89,26 @@
 - The audit never changes mappings or database data. Counts cover ID slots only,
   not full client/ticket eligibility. New rules do not rewrite already-imported IDs;
   historical reclassification needs a separate import or correction.
+
+### Employee PINs
+
+- `employee.pin_hash` stores HMAC-SHA256(`EMPLOYEE_PIN_SECRET`, trimmed PIN) as
+  64 hex characters; plain-text passwords are never stored. The keyed hash keeps
+  PIN-only lookup and the `UNIQUE` constraint working, which a salted hash cannot.
+- [employee-pin.cjs](migration/scripts/employee-pin.cjs) is the shared helper;
+  `migrate-employee.cjs` uses it during import.
+- Back up `EMPLOYEE_PIN_SECRET` together with database backups. Changing or losing
+  it makes every stored PIN unverifiable.
+- Existing databases with the old `password` column: back up the table, then run
+  the one-time conversion (preview first; rerunning after conversion is a no-op):
+
+  ```bash
+  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs
+  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs --commit
+  ```
+
+  It locks `employee`, fills `pin_hash`, adds `NOT NULL` and `UNIQUE`, and drops
+  `password` in one transaction. Applied to the dev database on 2026-10-28.
 
 - ID type names have an additional case-insensitive unique index on LOWER(type).
   It prevents duplicate reference labels without changing existing names or their

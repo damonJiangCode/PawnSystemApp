@@ -35,8 +35,8 @@ frontend/
 - Feature `*.api.ts` files provide the calls used by screens. HTTP implementation
   lives in `src/shared/api/`: `http.ts` (base URL, `requestJson`), one
   `<domain>.http.ts` per backend module, each with a `create<Domain>HttpApi()`
-  factory. `getAppApi()` returns the HTTP `client` and `reference` domains plus the
-  remaining desktop bridge domains (ticket, item, employee, window, xmlReport).
+  factory. `getAppApi()` returns the HTTP `client`, `employee` and `reference` domains plus
+  the remaining desktop bridge domains (ticket, item, window, xmlReport).
 - Lookup data (cities, ID types, colors, locations, holidays, item categories) is
   always read through `referenceApi` in `modules/reference/reference.api.ts`, also
   by client, ticket, payment, report and item screens.

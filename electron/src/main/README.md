@@ -106,14 +106,14 @@ Start here:
 
 ### employees
 
-Owns employee search, create, update, password validation data, and employee
-admin.
+Employee search, create and update moved to the NestJS server (`/employees`); no
+employee IPC channels remain. Only the PIN lookup used by ticket attribution
+stays here until tickets are migrated: `employeeService.getEmployeeDisplayNameByPassword`
+matches `pin_hash` (HMAC-SHA256 with `EMPLOYEE_PIN_SECRET` from the root `.env`).
 
-Start here:
-
-- `modules/employees/employee.handlers.ts`
 - `modules/employees/employee.service.ts`
 - `modules/employees/employee.repo.ts`
+- `modules/employees/employee.pin.ts`
 
 ### reports
 

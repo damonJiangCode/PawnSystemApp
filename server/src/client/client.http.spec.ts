@@ -12,10 +12,15 @@ import {
 } from 'vitest';
 import { ClientModule } from './client.module.js';
 import { ClientImageService } from './client-image.service.js';
+import { EmployeePinHasher } from '../employee/employee-pin.hasher.js';
 import { ConfigService } from '@nestjs/config';
 import { mkdtemp, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+
+const pins = new EmployeePinHasher(
+  new ConfigService({ EMPLOYEE_PIN_SECRET: 'x'.repeat(32) }),
+);
 
 const photo = {
   fileName: 'test.png',
@@ -41,6 +46,8 @@ describe('Client HTTP search (database replaced with a mock)', () => {
           new ConfigService({ CLIENT_IMAGE_DIR: imageRoot }),
         ),
       )
+      .overrideProvider(EmployeePinHasher)
+      .useValue(pins)
       .compile();
     app = module.createNestApplication();
     await app.listen(0, '127.0.0.1');
@@ -316,7 +323,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
         if (sql.includes('FROM employee'))
           return {
             rows:
-              values[0] === 'valid-code'
+              values[0] === pins.hash('valid-code')
                 ? [{ employee_number: 7, first_name: 'STAFF' }]
                 : [],
           };

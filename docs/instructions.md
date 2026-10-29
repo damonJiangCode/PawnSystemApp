@@ -21,7 +21,7 @@ npm run migration:execute
 npm run dev
 ```
 
-`migration:prepare` checks requirements and creates `.env` with a generated password if missing. `migration:execute` backs up the database, creates tables, imports Access data and photos, and checks the results. Mapping files are included in the repository.
+`migration:prepare` checks requirements and creates `.env` with a generated database password and employee PIN secret if missing. `migration:execute` backs up the database, creates tables, imports Access data and photos, and checks the results. Mapping files are included in the repository.
 
 If migration fails, stop and check `database/migration/reports/` before retrying; some data may already be imported. Backups are in `database/migration/backups/`.
 

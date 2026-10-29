@@ -16,7 +16,7 @@ const fixture = (t) => {
   );
   fs.writeFileSync(
     path.join(root, ".env.example"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\n",
+    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\nEMPLOYEE_PIN_SECRET=\n",
   );
   for (const name of ["pg", "csv-parser", "electron"]) {
     const folder = path.join(root, "node_modules", name);
@@ -73,6 +73,9 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
   const password = content.match(/^DB_PASSWORD=(.+)$/m)[1];
   assert.match(password, /^[a-f0-9]{48}$/);
   assert.ok(!f.logs.join("\n").includes(password));
+  const pinSecret = content.match(/^EMPLOYEE_PIN_SECRET=(.+)$/m)[1];
+  assert.match(pinSecret, /^[a-f0-9]{64}$/);
+  assert.ok(!f.logs.join("\n").includes(pinSecret));
   for (const folder of [
     "source",
     "mappings",

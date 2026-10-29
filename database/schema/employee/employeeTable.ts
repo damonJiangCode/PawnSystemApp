@@ -6,7 +6,7 @@ export const createEmployeeTable = `
     nickname TEXT NOT NULL,
     date_of_birth DATE NOT NULL,
     gender TEXT NOT NULL,
-    password TEXT NOT NULL UNIQUE,
+    pin_hash TEXT NOT NULL UNIQUE,
     is_terminated BOOLEAN NOT NULL DEFAULT FALSE,
     is_manager BOOLEAN NOT NULL DEFAULT FALSE,
     address TEXT NOT NULL DEFAULT '',

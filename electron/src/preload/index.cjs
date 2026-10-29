@@ -1,9 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  ADD_EMPLOYEE: "add-employee",
-  SEARCH_EMPLOYEES: "search-employees",
-  UPDATE_EMPLOYEE: "update-employee",
   GET_TICKETS: "get-tickets",
   SEARCH_TICKET: "search-ticket",
   SEARCH_PAYMENT_TICKET: "search-payment-ticket",
@@ -71,13 +68,6 @@ const ticketApi = {
   reverseTicket: (payload) => invoke(CHANNELS.REVERSE_TICKET, payload),
 };
 
-const employeeApi = {
-  createEmployee: (payload) => invoke(CHANNELS.ADD_EMPLOYEE, payload),
-  searchEmployees: (payload) => invoke(CHANNELS.SEARCH_EMPLOYEES, payload),
-  updateEmployee: (employeeNumber, payload) =>
-    invoke(CHANNELS.UPDATE_EMPLOYEE, employeeNumber, payload),
-};
-
 const itemApi = {
   loadItemsByTicket: (ticketNumber) => invoke(CHANNELS.GET_ITEMS, ticketNumber),
   searchItems: (payload) => invoke(CHANNELS.SEARCH_ITEMS, payload),
@@ -135,7 +125,6 @@ const windowApi = {
 };
 
 contextBridge.exposeInMainWorld("appAPI", {
-  employee: employeeApi,
   ticket: ticketApi,
   item: itemApi,
   window: windowApi,

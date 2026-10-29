@@ -126,14 +126,14 @@ const createAppMenu = () => {
       ],
     },
     {
-      label: "Employee",
+      label: "Admin",
       submenu: [
         {
-          label: "Employee",
+          label: "Employees",
           click: () =>
             openMenuActionWindow({
               id: "admin-employee",
-              title: "Employee",
+              title: "Employees",
               description: "Manage employee information.",
               width: 1120,
               height: 820,

@@ -112,7 +112,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
   const [employee, setEmployee] =
     React.useState<CreateEmployeeInput>(emptyEmployeeInput());
   const [errors, setErrors] = React.useState<EmployeeFormErrors>(emptyErrors());
-  const [message, setMessage] = React.useState("");
   const [submitError, setSubmitError] = React.useState("");
   const [saving, setSaving] = React.useState(false);
 
@@ -127,7 +126,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
         : emptyEmployeeInput(),
     );
     setErrors(emptyErrors());
-    setMessage("");
     setSubmitError("");
     setSaving(false);
 
@@ -152,7 +150,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
           : value;
     setEmployee((prev) => ({ ...prev, [name]: nextValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
-    setMessage("");
     setSubmitError("");
   };
 
@@ -200,7 +197,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
 
     setSaving(true);
     setSubmitError("");
-    setMessage("");
 
     try {
       const savedEmployee =
@@ -211,30 +207,8 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
             )
           : await employeeApi.createEmployee(employee);
 
-      if (mode === "add") {
-        setEmployee(emptyEmployeeInput());
-      } else {
-        setEmployee((current) => ({
-          ...current,
-          password: "",
-          manager_password: "",
-        }));
-      }
-
-      setErrors(emptyErrors());
       onSave?.(savedEmployee);
-
-      if (mode === "edit") {
-        onClose();
-        return;
-      }
-
-      setMessage(
-        `Employee #${savedEmployee.employee_number} ${savedEmployee.first_name} ${savedEmployee.last_name} saved.`,
-      );
-      requestAnimationFrame(() => {
-        lastNameInputRef.current?.focus();
-      });
+      onClose();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Unable to save employee.";
@@ -275,7 +249,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
         <Stack spacing={1.25} sx={{ pt: 0.5 }}>
-          {message && <Alert severity="success">{message}</Alert>}
           {submitError && <Alert severity="error">{submitError}</Alert>}
 
           <Stack direction="row" spacing={1}>
@@ -322,7 +295,6 @@ const EmployeeAddEditDialog: React.FC<EmployeeAddEditDialogProps> = ({
               onValueChange={(value) => {
                 setEmployee((prev) => ({ ...prev, date_of_birth: value }));
                 setErrors((prev) => ({ ...prev, date_of_birth: "" }));
-                setMessage("");
                 setSubmitError("");
               }}
               error={Boolean(errors.date_of_birth)}

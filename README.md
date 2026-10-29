@@ -88,7 +88,8 @@ npm --prefix server ci
 cp .env.example .env
 ```
 
-Set your development database credentials in the ignored root `.env`.
+Set your development database credentials and `EMPLOYEE_PIN_SECRET` (at least
+32 random characters) in the ignored root `.env`.
 NestJS also supports a private `server/.env` override. The frontend reads
 `VITE_API_BASE_URL` from the root `.env` (default `http://localhost:3000`).
 

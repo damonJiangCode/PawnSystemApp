@@ -1,7 +1,6 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client operations, reference queries, color, location, holiday and ID type reference operations use
-HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
+NestJS backend. Client, employee and reference operations use HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
 
 ## Development
 
@@ -15,7 +14,8 @@ npm run dev
 ```
 
 Configure the private `server/.env` with `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`
-and `DB_PASSWORD`; start PostgreSQL separately. `PORT` defaults to 3000.
+and `DB_PASSWORD`, plus `EMPLOYEE_PIN_SECRET` (at least 32 characters; the server
+will not start without it); start PostgreSQL separately. `PORT` defaults to 3000.
 `CORS_ORIGINS` defaults to `http://localhost:5173` (comma-separated origins).
 The combined root launcher assumes Vite 5173 and backend 3000.
 
@@ -55,7 +55,8 @@ handle business rules and transactions. `ClientRepository` methods in
 `mapRowToClient` in [client.mapper.ts](src/client/client.mapper.ts) creates responses.
 `getAppApi` in [app.api.ts](../frontend/src/shared/api/app.api.ts) connects renderer
 client operations to HTTP. Concise module references:
-[Client](src/client/README.md) and [Reference](src/reference/README.md).
+[Client](src/client/README.md), [Employee](src/employee/README.md) and
+[Reference](src/reference/README.md).
 
 ### Reference data (implemented)
 
@@ -123,7 +124,7 @@ Electron image protocol.
 Run from `server/`:
 
 ```bash
-npm test -- src/client src/reference
+npm test -- src/client src/employee src/reference
 npm run build
 ```
 

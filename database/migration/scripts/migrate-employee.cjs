@@ -5,10 +5,15 @@ const path = require("path");
 const { spawn } = require("child_process");
 const csv = require("csv-parser");
 const { Pool } = require("pg");
+const {
+  readEmployeePinSecret,
+  hashEmployeePin,
+} = require("./employee-pin.cjs");
 
 const migrationRoot = path.resolve(__dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "employee-migration.md");
 const shouldCommit = process.argv.includes("--commit");
 
@@ -121,7 +126,7 @@ const buildInsert = (employees) => {
     "nickname",
     "date_of_birth",
     "gender",
-    "password",
+    "pin_hash",
     "is_terminated",
     "is_manager",
     "address",
@@ -203,6 +208,11 @@ const main = async () => {
     throw new Error("Set DB_PASSWORD in private environment configuration.");
   }
 
+  const pinSecret = readEmployeePinSecret();
+  for (const employee of employees) {
+    employee.pin_hash = hashEmployeePin(employee.password, pinSecret);
+  }
+
   const pool = new Pool(dbConfig);
   const client = await pool.connect();
 
@@ -277,6 +287,7 @@ Mode: ${shouldCommit ? "commit" : "preview"}
 - Set \`gender\` to \`unknown\` because the legacy employee table has no gender column.
 - Set missing or invalid birth dates to \`${DEFAULT_DOB}\`.
 - Map \`EM200Terminated = 1\` to \`is_terminated = true\`; terminated employee passwords cannot authorize app actions.
+- Store each legacy password only as \`pin_hash\` = HMAC-SHA256(\`EMPLOYEE_PIN_SECRET\`, trimmed password); plain-text passwords are not written.
 - Set employee \`${MANAGER_EMPLOYEE_NUMBER} / WEI FENG\` as manager.
 - No employee photo field is migrated because \`EM200PICTURE\` has no usable photo rows.
 - After commit, ticket \`employee_name\` placeholders are backfilled from migrated employee nicknames.

@@ -56,7 +56,7 @@ const fixture = (t, options = {}) => {
   }
   fs.writeFileSync(
     path.join(root, ".env"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\n",
+    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\nEMPLOYEE_PIN_SECRET=test-only-employee-pin-secret-0123456789\n",
   );
   const compiler = path.join(root, "node_modules/typescript/bin");
   fs.mkdirSync(compiler, { recursive: true });
@@ -142,6 +142,7 @@ const fixture = (t, options = {}) => {
                 DB_USER: "pawnsystem_dev",
                 DB_PASSWORD: "test-only-private-password",
                 DB_NAME: "pawnsystemdb",
+                EMPLOYEE_PIN_SECRET: "test-only-employee-pin-secret-0123456789",
               },
             },
           },

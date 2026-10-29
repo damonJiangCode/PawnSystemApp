@@ -1,7 +1,4 @@
 const CHANNELS = {
-  ADD_EMPLOYEE: "add-employee",
-  SEARCH_EMPLOYEES: "search-employees",
-  UPDATE_EMPLOYEE: "update-employee",
   GET_TICKETS: "get-tickets",
   SEARCH_TICKET: "search-ticket",
   SEARCH_PAYMENT_TICKET: "search-payment-ticket",

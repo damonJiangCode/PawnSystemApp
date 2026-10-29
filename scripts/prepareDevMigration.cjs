@@ -124,15 +124,27 @@ const prepareDevMigration = ({
       fail("Restore .env.example before preparing local configuration.");
     } else {
       const template = fs.readFileSync(templatePath, "utf8");
-      if (!/^DB_PASSWORD=.*$/m.test(template)) {
-        fail(".env.example must contain a DB_PASSWORD entry.");
-      } else {
-        const content = template.replace(
-          /^DB_PASSWORD=.*$/m,
-          `DB_PASSWORD=${crypto.randomBytes(24).toString("hex")}`,
+      if (
+        !/^DB_PASSWORD=.*$/m.test(template) ||
+        !/^EMPLOYEE_PIN_SECRET=.*$/m.test(template)
+      ) {
+        fail(
+          ".env.example must contain DB_PASSWORD and EMPLOYEE_PIN_SECRET entries.",
         );
+      } else {
+        const content = template
+          .replace(
+            /^DB_PASSWORD=.*$/m,
+            `DB_PASSWORD=${crypto.randomBytes(24).toString("hex")}`,
+          )
+          .replace(
+            /^EMPLOYEE_PIN_SECRET=.*$/m,
+            `EMPLOYEE_PIN_SECRET=${crypto.randomBytes(32).toString("hex")}`,
+          );
         fs.writeFileSync(envPath, content, { flag: "wx", mode: 0o600 });
-        log("Created private .env with a generated database password.");
+        log(
+          "Created private .env with a generated database password and employee PIN secret.",
+        );
       }
     }
   } else {
@@ -148,6 +160,7 @@ const prepareDevMigration = ({
       "DB_NAME",
       "DB_USER",
       "DB_PASSWORD",
+      "EMPLOYEE_PIN_SECRET",
     ]) {
       if (process.env[key] !== undefined) values[key] = process.env[key];
       if (!values[key]?.trim())

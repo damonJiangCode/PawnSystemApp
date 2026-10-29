@@ -135,6 +135,7 @@ const executeDevMigration = async ({
       "DB_NAME",
       "DB_USER",
       "DB_PASSWORD",
+      "EMPLOYEE_PIN_SECRET",
     ]) {
       if (process.env[key] !== undefined) values[key] = process.env[key];
       env[key] = values[key];
@@ -199,6 +200,7 @@ const executeDevMigration = async ({
       ["DB_USER", values.DB_USER],
       ["DB_PASSWORD", values.DB_PASSWORD],
       ["DB_NAME", values.DB_NAME],
+      ["EMPLOYEE_PIN_SECRET", values.EMPLOYEE_PIN_SECRET],
     ]) {
       if (migrationService.environment[key] !== value)
         throw new Error(

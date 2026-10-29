@@ -1,22 +1,17 @@
 import type { Employee } from "../models/employee.model.ts";
 import type {
   CreateEmployeeInput,
-  EmployeeFormField,
   EmployeeSearchInput,
   UpdateEmployeeInput,
 } from "../payload-contracts/employee.contract.ts";
 
-export type EmployeeMutationResult =
-  | { ok: true; employee: Employee }
-  | { ok: false; field: EmployeeFormField; message: string };
-
+// Failed saves reject with an Error whose `field` names the form field
+// (`password`, `manager_password` or `form`) when the server provides one.
 export type EmployeeApi = {
-  createEmployee: (
-    input: CreateEmployeeInput,
-  ) => Promise<EmployeeMutationResult>;
+  createEmployee: (input: CreateEmployeeInput) => Promise<Employee>;
   searchEmployees: (input: EmployeeSearchInput) => Promise<Employee[]>;
   updateEmployee: (
     employeeNumber: number,
     input: UpdateEmployeeInput,
-  ) => Promise<EmployeeMutationResult>;
+  ) => Promise<Employee>;
 };

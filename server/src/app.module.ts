@@ -4,6 +4,7 @@ import { AppService } from './app.service.js';
 import { ClientModule } from './client/client.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module.js';
+import { EmployeeModule } from './employee/employee.module.js';
 import { ReferenceModule } from './reference/reference.module.js';
 import { fileURLToPath } from 'node:url';
 
@@ -17,6 +18,7 @@ import { fileURLToPath } from 'node:url';
       ],
     }),
     ClientModule,
+    EmployeeModule,
     ReferenceModule,
     DatabaseModule,
   ],
