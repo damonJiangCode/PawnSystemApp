@@ -126,22 +126,6 @@ const createAppMenu = () => {
       ],
     },
     {
-      label: "Admin",
-      submenu: [
-        {
-          label: "Employees",
-          click: () =>
-            openMenuActionWindow({
-              id: "admin-employee",
-              title: "Employees",
-              description: "Manage employee information.",
-              width: 1120,
-              height: 820,
-            }),
-        },
-      ],
-    },
-    {
       label: "Reference",
       submenu: [
         {
@@ -208,6 +192,22 @@ const createAppMenu = () => {
               description: "Manage pawn locations.",
               width: 960,
               height: 760,
+            }),
+        },
+      ],
+    },
+    {
+      label: "Admin",
+      submenu: [
+        {
+          label: "Employees",
+          click: () =>
+            openMenuActionWindow({
+              id: "admin-employee",
+              title: "Employees",
+              description: "Manage employee information.",
+              width: 1120,
+              height: 820,
             }),
         },
       ],
