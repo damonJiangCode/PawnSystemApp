@@ -110,6 +110,17 @@
   It locks `employee`, fills `pin_hash`, adds `NOT NULL` and `UNIQUE`, and drops
   `password` in one transaction. Applied to the dev database on 2026-10-28.
 
+- The unused ticket partial-payment feature was removed (2026-10-30): the schema
+  no longer has `ticket.partial_payment` or `ticket.partial_payment_datetime`
+  (every row was 0/NULL). Applied to the dev database on 2026-10-30, after no code
+  read them. Other existing databases:
+
+  ```sql
+  ALTER TABLE ticket
+    DROP COLUMN IF EXISTS partial_payment,
+    DROP COLUMN IF EXISTS partial_payment_datetime;
+  ```
+
 - `idx_ticket_client_number` (added 2026-10-29, applied to the dev database)
   turns the per-client ticket list into an index scan.
 

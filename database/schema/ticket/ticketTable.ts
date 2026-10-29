@@ -11,8 +11,6 @@ export const createTicketTable = `
     amount NUMERIC(10, 1) NOT NULL CHECK (amount >= 0),
     onetime_fee NUMERIC(10, 1) NOT NULL DEFAULT 0 CHECK (onetime_fee >= 0),
     interest_paid_months INTEGER NOT NULL DEFAULT 0 CHECK (interest_paid_months >= 0),
-    partial_payment NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (partial_payment >= 0),
-    partial_payment_datetime TIMESTAMPTZ DEFAULT NULL,
     interested_datetime TIMESTAMPTZ DEFAULT NULL,
     employee_name TEXT NOT NULL,
     pickup_datetime TIMESTAMPTZ DEFAULT NULL,

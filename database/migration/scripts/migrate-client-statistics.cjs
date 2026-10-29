@@ -259,7 +259,7 @@ const main = async () => {
       "- `redeem_count`: count tickets with status `pawned_picked_up`.",
       "- `expire_count`: count tickets with status `pawned_expired` only.",
       "- `sell_count`: count tickets with status `sold` or `sold_expired`, plus any ticket whose location is `BIWK`.",
-      "- `partial_payment` and other ticket amounts do not affect these statistics.",
+      "- Ticket amounts do not affect these statistics.",
       "",
       "Summary:",
       "",
