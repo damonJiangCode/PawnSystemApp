@@ -8,7 +8,6 @@ export type BuybackReportSourceRow = {
   amount: number;
   onetime_fee: number;
   interest_paid_months: number;
-  partial_payment: number;
   description: string;
   client_name: string;
 };
@@ -75,7 +74,6 @@ const mapBuybackReportRow = (
   amount: Number(row.amount ?? 0),
   onetime_fee: Number(row.onetime_fee ?? 0),
   interest_paid_months: Number(row.interest_paid_months ?? 0),
-  partial_payment: Number(row.partial_payment ?? 0),
   description: row.description ? String(row.description) : "",
   client_name: row.client_name ? String(row.client_name) : "",
 });
@@ -241,7 +239,6 @@ export const reportRepo = {
         t.onetime_fee,
         t.transaction_datetime,
         t.interest_paid_months,
-        t.partial_payment,
         t.description,
         ${clientDisplayNameSql("c")} AS client_name
       FROM ticket t

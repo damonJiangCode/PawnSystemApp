@@ -23,15 +23,6 @@ const CHANNELS = {
   GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
   NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
     "notify-item-search-window-input-updated",
-  UPDATE_TICKET: "update-ticket",
-  CONVERT_TICKET: "convert-ticket",
-  EXPIRE_TICKET: "expire-ticket",
-  MARK_TICKET_STOLEN: "mark-ticket-stolen",
-  PICKUP_TICKETS: "pickup-tickets",
-  EXTEND_TICKETS: "extend-tickets",
-  GET_TRANSFER_TICKET_PREVIEW: "get-transfer-ticket-preview",
-  TRANSFER_TICKET: "transfer-ticket",
-  REVERSE_TICKET: "reverse-ticket",
 } as const;
 
 export { CHANNELS };

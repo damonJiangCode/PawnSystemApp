@@ -69,29 +69,9 @@ focuses its existing window; closing it removes that entry from the map.
 
 ## Modules
 
-### clients
-
-Keeps legacy client readers used by ticket operations. Client CRUD-style updates,
-reference queries and color reference operations use the NestJS HTTP server. Clients
-are deactivated/reactivated rather than deleted. No client IPC handlers remain.
-
-Start here:
-
-- `modules/clients/client.repo.ts`
-- `modules/clients/client.mapper.ts`
-
-### tickets
-
-Owns pawn/sell ticket creation, ticket update, expire, pickup, transfer,
-payment workflows until their migration slices land. Ticket lookups (by client,
-by number) and pawn/sell issuing moved to the NestJS server (`/tickets`).
-
-Start here:
-
-- `modules/tickets/ticket.handlers.ts`
-- `modules/tickets/ticket.service.ts`
-- `modules/tickets/ticket-payment.service.ts`
-- `modules/tickets/ticket.repo.ts`
+Clients, employees and tickets moved to the NestJS server (`/client`,
+`/employees`, `/tickets`); no client, employee or ticket IPC handlers remain, and
+Electron main no longer needs `EMPLOYEE_PIN_SECRET`.
 
 ### items
 
@@ -104,20 +84,11 @@ Start here:
 - `modules/items/item.service.ts`
 - `modules/items/item.repo.ts`
 
-### employees
-
-Employee search, create and update moved to the NestJS server (`/employees`); no
-employee IPC channels remain. Only the PIN lookup used by ticket attribution
-stays here until tickets are migrated: `employeeService.getEmployeeDisplayNameByPassword`
-matches `pin_hash` (HMAC-SHA256 with `EMPLOYEE_PIN_SECRET` from the root `.env`).
-
-- `modules/employees/employee.service.ts`
-- `modules/employees/employee.repo.ts`
-- `modules/employees/employee.pin.ts`
-
 ### reports
 
-Owns daily, interest, buyback, and XML Report data.
+Owns daily, interest, buyback, and XML Report data. The renderer reaches the four
+reports through the `report` preload domain (`reportApi` in
+`frontend/src/modules/reports/report.api.ts`).
 
 Start here:
 

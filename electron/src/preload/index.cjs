@@ -25,34 +25,16 @@ const CHANNELS = {
   GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
   NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
     "notify-item-search-window-input-updated",
-  UPDATE_TICKET: "update-ticket",
-  CONVERT_TICKET: "convert-ticket",
-  EXPIRE_TICKET: "expire-ticket",
-  MARK_TICKET_STOLEN: "mark-ticket-stolen",
-  PICKUP_TICKETS: "pickup-tickets",
-  EXTEND_TICKETS: "extend-tickets",
-  GET_TRANSFER_TICKET_PREVIEW: "get-transfer-ticket-preview",
-  TRANSFER_TICKET: "transfer-ticket",
-  REVERSE_TICKET: "reverse-ticket",
 };
 
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
 
-const ticketApi = {
+// Reports still run in Electron main; tickets moved to the HTTP server.
+const reportApi = {
   loadBuybackReport: (input) => invoke(CHANNELS.LOAD_BUYBACK_REPORT, input),
   loadDailyReport: (input) => invoke(CHANNELS.LOAD_DAILY_REPORT, input),
   loadInterestReport: (input) => invoke(CHANNELS.LOAD_INTEREST_REPORT, input),
   loadOverdueReport: (input) => invoke(CHANNELS.LOAD_OVERDUE_REPORT, input),
-  updateTicket: (payload) => invoke(CHANNELS.UPDATE_TICKET, payload),
-  convertTicket: (payload) => invoke(CHANNELS.CONVERT_TICKET, payload),
-  expireTicket: (payload) => invoke(CHANNELS.EXPIRE_TICKET, payload),
-  markTicketStolen: (payload) => invoke(CHANNELS.MARK_TICKET_STOLEN, payload),
-  pickupTickets: (payload) => invoke(CHANNELS.PICKUP_TICKETS, payload),
-  extendTickets: (payload) => invoke(CHANNELS.EXTEND_TICKETS, payload),
-  loadTransferTicketPreview: (ticketNumber) =>
-    invoke(CHANNELS.GET_TRANSFER_TICKET_PREVIEW, ticketNumber),
-  transferTicket: (payload) => invoke(CHANNELS.TRANSFER_TICKET, payload),
-  reverseTicket: (payload) => invoke(CHANNELS.REVERSE_TICKET, payload),
 };
 
 const itemApi = {
@@ -112,7 +94,7 @@ const windowApi = {
 };
 
 contextBridge.exposeInMainWorld("appAPI", {
-  ticket: ticketApi,
+  report: reportApi,
   item: itemApi,
   window: windowApi,
   xmlReport: xmlReportApi,

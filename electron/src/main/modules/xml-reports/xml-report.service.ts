@@ -1,5 +1,5 @@
 import type { ReportDateRangeInput } from "../../../../../shared/payload-contracts/ticket.contract.ts";
-import { ticketInput } from "../tickets/ticket.input.ts";
+import { isValidDateKey } from "../../shared/isValidDateKey.ts";
 import { loadXmlReportConfig } from "./xml-report.config.ts";
 import { mapXmlReportTicket } from "./xml-report.mapper.ts";
 import { xmlReportRepo } from "./xml-report.repo.ts";
@@ -31,10 +31,10 @@ const validateDateRange = (input: ReportDateRangeInput) => {
   const fromDate = input.from_date?.trim() ?? "";
   const toDate = input.to_date?.trim() ?? "";
 
-  if (!ticketInput.isValidDateKey(fromDate)) {
+  if (!isValidDateKey(fromDate)) {
     throw new Error("Enter a valid From date.");
   }
-  if (!ticketInput.isValidDateKey(toDate)) {
+  if (!isValidDateKey(toDate)) {
     throw new Error("Enter a valid To date.");
   }
   if (fromDate > toDate) {

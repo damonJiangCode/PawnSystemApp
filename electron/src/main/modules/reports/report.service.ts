@@ -10,7 +10,7 @@ import type {
 } from "../../../../../shared/payload-contracts/ticket.contract.ts";
 import { reportRepo } from "./report.repo.ts";
 import { createFieldError } from "../../shared/createFieldError.ts";
-import { ticketInput } from "../tickets/ticket.input.ts";
+import { isValidDateKey } from "../../shared/isValidDateKey.ts";
 import { INTEREST_REPORT_START_DATE } from "../../../../../shared/reportSettings.ts";
 
 const parseLocation = (
@@ -37,7 +37,7 @@ export const reportService = {
   ): Promise<OverdueReportResult> => {
     const dueOnOrBefore = input.due_on_or_before?.trim() ?? "";
 
-    if (!ticketInput.isValidDateKey(dueOnOrBefore)) {
+    if (!isValidDateKey(dueOnOrBefore)) {
       throw createFieldError(
         "due_on_or_before",
         "Enter a valid Due On or Before date.",
@@ -119,11 +119,11 @@ export const reportService = {
     const fromDate = input.from_date?.trim() ?? "";
     const toDate = input.to_date?.trim() ?? "";
 
-    if (!ticketInput.isValidDateKey(fromDate)) {
+    if (!isValidDateKey(fromDate)) {
       throw createFieldError("from_date", "Enter a valid From date.");
     }
 
-    if (!ticketInput.isValidDateKey(toDate)) {
+    if (!isValidDateKey(toDate)) {
       throw createFieldError("to_date", "Enter a valid To date.");
     }
 
@@ -196,11 +196,11 @@ export const reportService = {
     const fromDate = input.from_date?.trim() ?? "";
     const toDate = input.to_date?.trim() ?? "";
 
-    if (!ticketInput.isValidDateKey(fromDate)) {
+    if (!isValidDateKey(fromDate)) {
       throw createFieldError("from_date", "Enter a valid From date.");
     }
 
-    if (!ticketInput.isValidDateKey(toDate)) {
+    if (!isValidDateKey(toDate)) {
       throw createFieldError("to_date", "Enter a valid To date.");
     }
 
@@ -237,11 +237,11 @@ export const reportService = {
     const fromDate = input.from_date?.trim() ?? "";
     const toDate = input.to_date?.trim() ?? "";
 
-    if (!ticketInput.isValidDateKey(fromDate)) {
+    if (!isValidDateKey(fromDate)) {
       throw createFieldError("from_date", "Enter a valid From date.");
     }
 
-    if (!ticketInput.isValidDateKey(toDate)) {
+    if (!isValidDateKey(toDate)) {
       throw createFieldError("to_date", "Enter a valid To date.");
     }
 
