@@ -96,17 +96,17 @@ test("holiday HTTP preserves validation, duplicate, missing-date and network err
   );
 });
 
-test("getAppApi routes all existing holiday methods through HTTP and preserves ticket methods", async (t) => {
+test("getAppApi routes all existing holiday methods through HTTP and preserves desktop methods", async (t) => {
   const calls: string[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
     assert.equal(url.origin, "http://localhost:3000");
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     return Response.json(!init.method ? [holiday] : holiday);
   });
-  const expireTicket = () => Promise.resolve({ ok: true } as never);
-  setWindow(t, { ticket: { expireTicket } });
+  const loadDailyReport = () => Promise.resolve({} as never);
+  setWindow(t, { report: { loadDailyReport } });
   const api = getAppApi()!;
-  assert.equal(api.ticket.expireTicket, expireTicket);
+  assert.equal(api.report.loadDailyReport, loadDailyReport);
   assert.deepEqual(await api.reference.loadHolidayDates(), [holiday]);
   assert.deepEqual(await api.reference.addHolidayDate(holiday), holiday);
   assert.deepEqual(

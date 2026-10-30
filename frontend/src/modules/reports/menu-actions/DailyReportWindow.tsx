@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { ticketApi } from "../../tickets/ticket.api";
+import { reportApi } from "../report.api";
 import {
   formatCurrency,
   formatIsoDate,
@@ -39,7 +39,7 @@ const DailyReportWindow: React.FC<WindowScreenProps> = () => {
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
   const [report, setReport] =
-    useState<Awaited<ReturnType<typeof ticketApi.loadDailyReport>>>();
+    useState<Awaited<ReturnType<typeof reportApi.loadDailyReport>>>();
   const [missingTicketNumbers, setMissingTicketNumbers] = useState<number[]>(
     [],
   );
@@ -82,7 +82,7 @@ const DailyReportWindow: React.FC<WindowScreenProps> = () => {
     setMissingTicketNumbers([]);
 
     try {
-      const nextReport = await ticketApi.loadDailyReport({
+      const nextReport = await reportApi.loadDailyReport({
         from_date: fromDate,
         to_date: toDate,
       });

@@ -100,20 +100,15 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
         return;
       }
 
-      if (result.ticket.is_stolen) {
-        setError(
-          `Ticket #${result.ticket.ticket_number} is already marked stolen.`,
-        );
-        focusTicketField();
-        return;
-      }
-
+      // A stolen ticket opens in "mark not stolen" mode (no PIN needed).
       setSearchResult(result);
       setDetailsOpen(true);
       setEmployeePassword("");
-      requestAnimationFrame(() => {
-        passwordInputRef.current?.focus();
-      });
+      if (!result.ticket.is_stolen) {
+        requestAnimationFrame(() => {
+          passwordInputRef.current?.focus();
+        });
+      }
     } catch (err) {
       console.error(err);
       setError("Unable to search ticket right now.");
@@ -122,13 +117,15 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
     }
   };
 
+  const unmarking = Boolean(searchResult?.ticket.is_stolen);
+
   const handleMarkStolen = async () => {
     if (!searchResult?.ticket.ticket_number) {
       setError("Search a ticket before marking it stolen.");
       return;
     }
 
-    if (!employeePassword.trim()) {
+    if (!unmarking && !employeePassword.trim()) {
       setError("Enter employee password.");
       passwordInputRef.current?.focus();
       return;
@@ -139,27 +136,38 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
     setMessage("");
 
     try {
-      const stolenTicket = await ticketApi.markTicketStolen({
-        ticket_number: searchResult.ticket.ticket_number,
-        employee_password: employeePassword,
-      });
-      const stolenResult = {
-        ...searchResult,
-        ticket: stolenTicket,
-      };
+      const ticketNumber = searchResult.ticket.ticket_number;
+      const updatedTicket = unmarking
+        ? await ticketApi.unmarkTicketStolen(ticketNumber)
+        : await ticketApi.markTicketStolen({
+            ticket_number: ticketNumber,
+            employee_password: employeePassword,
+          });
+      // Marking signs the client's notes, so other windows get the fresh client.
+      const refreshed = unmarking
+        ? null
+        : await ticketApi.searchTicketByNumber(ticketNumber);
+      const client = refreshed?.client ?? searchResult.client;
 
-      setStolenTickets((prev) => [stolenResult, ...prev]);
+      if (!unmarking) {
+        setStolenTickets((prev) => [
+          { client, ticket: updatedTicket },
+          ...prev,
+        ]);
+      }
       setSearchResult(null);
       setDetailsOpen(false);
       setTicketNumber("");
       setEmployeePassword("");
-      setMessage(`Ticket #${stolenTicket.ticket_number} marked stolen.`);
+      setMessage(
+        `Ticket #${updatedTicket.ticket_number} marked ${unmarking ? "not stolen" : "stolen"}.`,
+      );
 
       const channel = new BroadcastChannel("menu-events");
       channel.postMessage({
         type: "ticket-stolen",
-        ticket: stolenTicket,
-        client: searchResult.client,
+        ticket: updatedTicket,
+        client,
       });
       channel.close();
 
@@ -176,7 +184,7 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
   return (
     <WindowLayout
       title="Mark Ticket Stolen"
-      description="Search a ticket, confirm the details, then mark it stolen."
+      description="Search a ticket, confirm the details, then mark it stolen or not stolen."
     >
       <Stack spacing={1} sx={{ height: "100%", minHeight: 0 }}>
         <Box
@@ -290,18 +298,22 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
                 disabled
                 fullWidth
               />
-              <TextField
-                inputRef={passwordInputRef}
-                size="small"
-                type="password"
-                label="Employee Password"
-                value={employeePassword}
-                onChange={(event) => {
-                  setEmployeePassword(event.target.value);
-                  setError("");
-                }}
-                fullWidth
-              />
+              {unmarking ? (
+                <Alert severity="warning">This ticket is marked stolen.</Alert>
+              ) : (
+                <TextField
+                  inputRef={passwordInputRef}
+                  size="small"
+                  type="password"
+                  label="Employee Password"
+                  value={employeePassword}
+                  onChange={(event) => {
+                    setEmployeePassword(event.target.value);
+                    setError("");
+                  }}
+                  fullWidth
+                />
+              )}
             </Stack>
           </DialogContent>
           <DialogActions>
@@ -311,7 +323,11 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
               disabled={marking}
               onClick={() => void handleMarkStolen()}
             >
-              {marking ? "Saving..." : "Mark Stolen"}
+              {marking
+                ? "Saving..."
+                : unmarking
+                  ? "Mark Not Stolen"
+                  : "Mark Stolen"}
             </Button>
             <Button onClick={() => setDetailsOpen(false)} disabled={marking}>
               Cancel

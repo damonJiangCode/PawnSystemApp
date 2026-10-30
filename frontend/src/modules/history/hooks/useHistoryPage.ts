@@ -361,7 +361,7 @@ export const useHistoryPage = ({
     setReverseTicket(selectedTicket);
   };
 
-  const handleReverseConfirm = async () => {
+  const handleReverseConfirm = async (employeePassword: string) => {
     if (!reverseTicket?.ticket_number || reverseProcessing) {
       return;
     }
@@ -372,6 +372,7 @@ export const useHistoryPage = ({
     try {
       const result = await ticketApi.reverseTicket({
         ticket_number: reverseTicket.ticket_number,
+        employee_password: employeePassword,
       });
       setTickets((prev) =>
         prev.filter(

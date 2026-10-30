@@ -32,7 +32,7 @@ interface TransactionPageProps {
   refreshKey?: number;
   incomingTicket?: Ticket | null;
   onSelectedTicketChange?: (ticket: Ticket | null) => void;
-  onClientSoldTicket?: () => void;
+  onClientSellCountChanged?: (delta: 1 | -1) => void;
   onClientHoldUpdated?: (client: Client) => void;
 }
 
@@ -44,7 +44,7 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
   refreshKey,
   incomingTicket,
   onSelectedTicketChange,
-  onClientSoldTicket,
+  onClientSellCountChanged,
   onClientHoldUpdated,
 }) => {
   const clientNumber = client?.client_number;
@@ -63,7 +63,7 @@ const TransactionPage: React.FC<TransactionPageProps> = ({
     refreshKey,
     incomingTicket,
     onSelectedTicketChange,
-    onClientSoldTicket,
+    onClientSellCountChanged,
   });
   const {
     tickets,

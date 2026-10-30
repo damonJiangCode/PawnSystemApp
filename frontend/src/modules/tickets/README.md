@@ -30,12 +30,17 @@ tickets/
 
 This module owns:
 
-- ticket renderer API wrapper
-- pawn/sell/edit/expire/convert/transfer dialogs
+- ticket renderer API wrapper: `ticket.api.ts` calls `getAppApi().ticket`, built by
+  `createTicketHttpApi()` in `src/shared/api/ticket.http.ts` (NestJS `/tickets`).
+  The server validates every request; errors carry its `field` and `status`, and
+  dialogs show field errors under the matching input.
+- pawn/sell/edit/convert/transfer dialogs ($0 pawns ask for confirmation in a
+  focused dialog; sells need an amount above 0)
 - transaction ticket table/actions
 - history ticket table/actions
 - ticket search window
-- stolen/expire menu windows
+- stolen/expire menu windows (expire needs no PIN; marking stolen needs a PIN and
+  signs the client's notes; a stolen ticket opens in "Mark Not Stolen" mode)
 - payment window
 - envelope ticket print template
 
@@ -88,12 +93,16 @@ Payment behavior should be reviewed carefully because it touches money,
 interest, pickup, and extension flows. The legal pickup hold
 (`isPickupAllowed`, `earliestPickupDate`) comes from the server's
 `pickup_allowed` / `earliest_pickup_date`; the window only warns and asks for
-confirmation before an early pickup.
+confirmation before an early pickup. Lost tickets warn "Lost ticket: only this
+client can pick up." On Done the window sends the pickup/extension amounts it
+showed; the server rejects the batch (409) if any differs, and the window asks
+to reopen Payment for current amounts.
 
 ## Reverse
 
-Reverse confirmation is owned by `history/components/ReverseTicketDialog.tsx`.
-The mutation remains in `ticket.api.ts` and the main ticket reversal service.
+Reverse confirmation is owned by `history/components/ReverseTicketDialog.tsx`,
+which asks for an employee PIN; the server signs the client's notes
+(`Ticket #N pickup|expiry reversed (NAME, date)`).
 
 Reverse changes `pawned_expired` or `pawned_picked_up` back to `pawned`. It
 writes an audit row, corrects the matching client statistic, and refuses

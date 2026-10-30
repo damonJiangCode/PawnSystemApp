@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { INTEREST_REPORT_START_DATE } from "../../../../../shared/reportSettings";
-import { ticketApi } from "../../tickets/ticket.api";
+import { reportApi } from "../report.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
@@ -29,7 +29,7 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
   const [report, setReport] =
-    useState<Awaited<ReturnType<typeof ticketApi.loadInterestReport>>>();
+    useState<Awaited<ReturnType<typeof reportApi.loadInterestReport>>>();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,7 +58,7 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
     setErrorMessage("");
 
     try {
-      const nextReport = await ticketApi.loadInterestReport({
+      const nextReport = await reportApi.loadInterestReport({
         from_date: fromDate,
         to_date: toDate,
       });

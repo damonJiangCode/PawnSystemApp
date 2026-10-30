@@ -21,7 +21,7 @@ interface UseTransactionPageParams {
   refreshKey?: number;
   incomingTicket?: Ticket | null;
   onSelectedTicketChange?: (ticket: Ticket | null) => void;
-  onClientSoldTicket?: () => void;
+  onClientSellCountChanged?: (delta: 1 | -1) => void;
 }
 
 export const useTransactionPage = ({
@@ -32,7 +32,7 @@ export const useTransactionPage = ({
   refreshKey = 0,
   incomingTicket,
   onSelectedTicketChange,
-  onClientSoldTicket,
+  onClientSellCountChanged,
 }: UseTransactionPageParams) => {
   const clientNumber = client?.client_number;
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -72,7 +72,7 @@ export const useTransactionPage = ({
     setOpenTicketConvertDialog,
     setOpenTicketTransferDialog,
     setStatusMessage,
-    onClientSoldTicket,
+    onClientSellCountChanged,
   });
   const itemHandlers = createTransactionItemHandlers({
     items,

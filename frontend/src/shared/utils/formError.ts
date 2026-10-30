@@ -44,7 +44,11 @@ const FIELD_MESSAGE_RESOLVERS: Record<string, FieldMessageResolver> = {
         message: "This ticket is overdue. Its amount cannot be changed.",
       },
       {
-        pattern: /negative|greater than 0|required|valid/i,
+        pattern: /greater than 0/i,
+        message: "Amount must be greater than 0.",
+      },
+      {
+        pattern: /negative|required|valid/i,
         message: "Amount cannot be negative.",
       },
     ],

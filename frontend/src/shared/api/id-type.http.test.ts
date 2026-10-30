@@ -79,10 +79,10 @@ test("getAppApi binds all ID type writes/reads to HTTP and preserves desktop met
       is_active: !url.pathname.endsWith("/deactivate"),
     });
   });
-  const expireTicket = () => Promise.resolve({ ok: true } as never);
-  setWindow(t, { ticket: { expireTicket } });
+  const loadDailyReport = () => Promise.resolve({} as never);
+  setWindow(t, { report: { loadDailyReport } });
   const api = getAppApi()!;
-  assert.equal(api.ticket.expireTicket, expireTicket);
+  assert.equal(api.report.loadDailyReport, loadDailyReport);
   assert.deepEqual(await api.reference.loadIdTypes(), [item.type]);
   assert.deepEqual(await api.reference.loadAllIdTypes(), [item]);
   assert.deepEqual(await api.reference.addIdType(item.type), item);

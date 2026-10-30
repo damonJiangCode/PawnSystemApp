@@ -12,11 +12,15 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import type { Ticket } from "../../../../../../shared/models/ticket.model";
-import type { TicketFormError, UpdateTicketInput } from "../../ticket.api";
+import type {
+  TicketFormError,
+  TicketFormField,
+  UpdateTicketInput,
+} from "../../ticket.api";
 import { calculation } from "../../../../../../shared/utils/calculation";
 import Autocomplete from "@mui/material/Autocomplete";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
-import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
+import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
 import { referenceApi } from "../../../reference/reference.api";
 
@@ -51,7 +55,6 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
   const [location, setLocation] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [oneTimeFee, setOneTimeFee] = useState<number | "">("");
-  const [partialPayment, setPartialPayment] = useState<number | "">("");
   const [employeePassword, setEmployeePassword] = useState("");
   const [locationList, setLocationList] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,10 +64,10 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
   const [locationError, setLocationError] = useState("");
   const [amountError, setAmountError] = useState("");
   const [oneTimeFeeError, setOneTimeFeeError] = useState("");
-  const [partialPaymentError, setPartialPaymentError] = useState("");
   const [employeePasswordError, setEmployeePasswordError] = useState("");
   const [submitError, setSubmitError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [confirmZeroOpen, setConfirmZeroOpen] = useState(false);
   const compactFieldSx = {
     "& .MuiFormHelperText-root": {
       mt: 0.25,
@@ -125,14 +128,13 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     setLocation(ticket.location || "");
     setAmount(ticket.amount ?? "");
     setOneTimeFee(ticket.onetime_fee ?? "");
-    setPartialPayment(ticket.partial_payment ?? "");
     setEmployeePassword("");
     setDescriptionError("");
     setLocationError("");
     setAmountError("");
     setOneTimeFeeError("");
-    setPartialPaymentError("");
     setEmployeePasswordError("");
+    setConfirmZeroOpen(false);
     setSubmitError("");
     setSaving(false);
   }, [open, ticket]);
@@ -144,7 +146,8 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     setPickupAmount(calculation.getBasePickupAmt(nextAmount, nextFee));
   }, [amount, oneTimeFee]);
 
-  const handleSave = async () => {
+  // A $0 pawn is valid only for special records, so it needs confirmation.
+  const handleSave = async (zeroAmountConfirmed = false) => {
     if (!ticket) return;
 
     const trimmedDescription = description.trim();
@@ -164,18 +167,14 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     const nextAmountError =
       typeof amount !== "number" || !Number.isFinite(amount) || amount < 0
         ? "Amount cannot be negative."
-        : "";
+        : !isPawnedTicket && amount === 0
+          ? "Amount must be greater than 0."
+          : "";
     const nextOneTimeFeeError =
       isPawnedTicket &&
       oneTimeFee !== "" &&
       (!Number.isFinite(oneTimeFee) || oneTimeFee < 0)
         ? "One Time Fee cannot be negative."
-        : "";
-    const nextPartialPaymentError =
-      isPawnedTicket &&
-      partialPayment !== "" &&
-      (!Number.isFinite(partialPayment) || partialPayment < 0)
-        ? "Partial Payment cannot be negative."
         : "";
     const nextEmployeePasswordError =
       trimmedPassword.length === 0 ? "Enter employee password." : "";
@@ -184,7 +183,6 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
     setLocationError(nextLocationError);
     setAmountError(nextAmountError);
     setOneTimeFeeError(nextOneTimeFeeError);
-    setPartialPaymentError(nextPartialPaymentError);
     setEmployeePasswordError(nextEmployeePasswordError);
     setSubmitError("");
 
@@ -193,14 +191,14 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
       nextLocationError ||
       nextAmountError ||
       nextOneTimeFeeError ||
-      nextPartialPaymentError ||
       nextEmployeePasswordError
     ) {
       return;
     }
 
     const normalizedAmount = amount as number;
-    if (!confirmZeroTicketAmount(normalizedAmount)) {
+    if (normalizedAmount === 0 && !zeroAmountConfirmed) {
+      setConfirmZeroOpen(true);
       return;
     }
     setSaving(true);
@@ -214,22 +212,11 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
         amount: normalizedAmount,
         onetime_fee:
           isPawnedTicket && typeof oneTimeFee === "number" ? oneTimeFee : 0,
-        partial_payment:
-          isPawnedTicket && typeof partialPayment === "number"
-            ? partialPayment
-            : 0,
         employee_password: trimmedPassword,
       });
     } catch (err) {
       console.error(err);
       const formError = err as TicketFormError;
-
-      const nextAmountError = resolveFormFieldError("amount", formError);
-
-      if (nextAmountError) {
-        setAmountError(nextAmountError);
-        return;
-      }
 
       const nextEmployeePasswordError = resolveFormFieldError(
         "employee_password",
@@ -241,8 +228,28 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
         return;
       }
 
+      // Server field errors go under their input; other request errors keep
+      // the server's message, unexpected failures get a generic one.
+      const fieldErrorSetters: Partial<
+        Record<TicketFormField, (message: string) => void>
+      > = {
+        description: setDescriptionError,
+        location: setLocationError,
+        amount: setAmountError,
+        onetime_fee: setOneTimeFeeError,
+      };
+      const setFieldError = formError.field
+        ? fieldErrorSetters[formError.field]
+        : undefined;
+      if (setFieldError) {
+        setFieldError(formError.message);
+        return;
+      }
+
       setSubmitError(
-        "Couldn't update this ticket right now. Please try again.",
+        formError.status !== undefined && formError.status < 500
+          ? formError.message
+          : "Couldn't update this ticket right now. Please try again.",
       );
     } finally {
       setSaving(false);
@@ -459,32 +466,6 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
                 helperText={oneTimeFeeError || undefined}
                 sx={compactFieldSx}
               />
-              <TextField
-                label="Partial Payment"
-                type="number"
-                value={partialPayment}
-                slotProps={{
-                  htmlInput: {
-                    tabIndex: -1,
-                    onWheel: preventNumberInputWheel,
-                  },
-                }}
-                onChange={(e) => {
-                  const nextValue = e.target.value;
-                  setPartialPayment(nextValue === "" ? "" : Number(nextValue));
-                  if (submitError) {
-                    setSubmitError("");
-                  }
-                  if (partialPaymentError) {
-                    setPartialPaymentError("");
-                  }
-                }}
-                fullWidth
-                size="small"
-                error={Boolean(partialPaymentError)}
-                helperText={partialPaymentError || undefined}
-                sx={compactFieldSx}
-              />
               <Box
                 sx={{
                   display: "grid",
@@ -516,7 +497,7 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
       <DialogActions>
         <Button
           variant="contained"
-          onClick={handleSave}
+          onClick={() => void handleSave()}
           disabled={!ticket || saving}
         >
           Update
@@ -525,6 +506,18 @@ const TicketEditDialog: React.FC<TicketEditDialogProps> = (props) => {
           Cancel
         </Button>
       </DialogActions>
+      <ConfirmDialog
+        open={confirmZeroOpen}
+        title="Save $0 pawn?"
+        message="Ticket amount is 0. This is usually only for special records such as signature-only tickets. Continue?"
+        confirmLabel="Continue"
+        confirmColor="primary"
+        onCancel={() => setConfirmZeroOpen(false)}
+        onConfirm={() => {
+          setConfirmZeroOpen(false);
+          void handleSave(true);
+        }}
+      />
     </Dialog>
   );
 };

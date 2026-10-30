@@ -1,19 +1,13 @@
+import type { TicketApi } from "../../../../shared/api-contracts/ticketApi.contract";
 import type { Ticket } from "../../../../shared/models/ticket.model";
-import type { TicketMutationResult } from "../../../../shared/api-contracts/ticketApi.contract";
 import type {
   ConvertTicketInput,
-  BuybackReportResult,
-  DailyReportResult,
-  ExtendTicketsInput,
-  ExpireTicketInput,
-  InterestReportResult,
-  OverdueReportInput,
-  OverdueReportResult,
-  MarkTicketStolenInput,
-  PickupTicketsInput,
   CreatePawnTicketInput,
   CreateSellTicketInput,
-  ReportDateRangeInput,
+  ExpireTicketInput,
+  ExtendTicketsInput,
+  MarkTicketStolenInput,
+  PickupTicketsInput,
   ReverseTicketInput,
   ReverseTicketResult,
   TicketSearchResult,
@@ -26,20 +20,15 @@ import {
   createEnvelopePrintHtml,
   type PrintClient,
 } from "./print/ticketPrintTemplate";
-import {
-  type TicketFormError,
-  mapBackendError,
-  normalizeConvertTicketInput,
-  normalizeCreatePawnTicketInput,
-  normalizeCreateSellTicketInput,
-  normalizeExpireTicketInput,
-  normalizeExtendTicketsInput,
-  normalizeMarkTicketStolenInput,
-  normalizePickupTicketsInput,
-  normalizeReverseTicketInput,
-  normalizeTransferTicketInput,
-  normalizeUpdateTicketInput,
-} from "./helpers/ticketApiUtils";
+
+const api = (): TicketApi => {
+  const ticket = getAppApi()?.ticket;
+  if (!ticket) throw new Error("Ticket API is unavailable.");
+  return ticket;
+};
+
+const isTicketNumber = (value: number) =>
+  Number.isInteger(value) && value > 0;
 
 const openPrintWindow = (html: string) => {
   const printWindow = window.open("", "_blank", "width=445,height=900");
@@ -54,381 +43,79 @@ const openPrintWindow = (html: string) => {
   printWindow.document.close();
 };
 
-const unwrapTicketMutation = (result: TicketMutationResult): Ticket => {
-  if (result.ok) {
-    return result.ticket;
-  }
-
-  const error = new Error(result.message) as TicketFormError;
-  error.field = result.field;
-  throw error;
-};
-
+// The server validates and normalizes every request; errors keep its
+// `field`/`status` so dialogs can show them under the right input.
 export const ticketApi = {
   printEnvelopeTicket: (ticket: Ticket, client?: PrintClient) => {
     openPrintWindow(createEnvelopePrintHtml(ticket, client));
   },
 
-  loadTickets: async (clientNumber?: number): Promise<Ticket[]> => {
-    if (!clientNumber) {
-      return [];
-    }
-
-    const api = getAppApi()?.ticket;
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    return api.loadTicketsByClient(clientNumber);
-  },
-
-  searchPaymentTicketByNumber: async (
-    ticketNumber: number,
-  ): Promise<TicketSearchResult | null> => {
-    const normalizedTicketNumber = Number(ticketNumber);
-    const api = getAppApi()?.ticket;
-
-    if (
-      !Number.isFinite(normalizedTicketNumber) ||
-      normalizedTicketNumber <= 0
-    ) {
-      return null;
-    }
-
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    try {
-      return await api.searchPaymentTicketByNumber(normalizedTicketNumber);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
+  loadTickets: async (clientNumber?: number): Promise<Ticket[]> =>
+    clientNumber ? api().loadTicketsByClient(clientNumber) : [],
 
   searchTicketByNumber: async (
     ticketNumber: number,
-  ): Promise<TicketSearchResult | null> => {
-    const normalizedTicketNumber = Number(ticketNumber);
-    const api = getAppApi()?.ticket;
+  ): Promise<TicketSearchResult | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? api().searchTicketByNumber(Number(ticketNumber))
+      : null,
 
-    if (
-      !Number.isFinite(normalizedTicketNumber) ||
-      normalizedTicketNumber <= 0
-    ) {
-      return null;
-    }
+  searchPaymentTicketByNumber: async (
+    ticketNumber: number,
+  ): Promise<TicketSearchResult | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? api().searchPaymentTicketByNumber(Number(ticketNumber))
+      : null,
 
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
+  createPawnTicket: (input: CreatePawnTicketInput): Promise<Ticket> =>
+    api().createPawnTicket(input),
 
-    try {
-      return await api.searchTicketByNumber(normalizedTicketNumber);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
+  createSellTicket: (input: CreateSellTicketInput): Promise<Ticket> =>
+    api().createSellTicket(input),
 
-  createPawnTicket: async (input: CreatePawnTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeCreatePawnTicketInput(input);
-    const api = getAppApi()?.ticket;
+  updateTicket: (input: UpdateTicketInput): Promise<Ticket> =>
+    api().updateTicket(input),
 
-    if (!api) {
-      throw new Error(
-        "[ticketApi] createPawnTicket(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return await api.createPawnTicket(normalizedInput);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  createSellTicket: async (input: CreateSellTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeCreateSellTicketInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] createSellTicket(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return await api.createSellTicket(normalizedInput);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  updateTicket: async (input: UpdateTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeUpdateTicketInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] updateTicket(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return unwrapTicketMutation(await api.updateTicket(normalizedInput));
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  convertTicket: async (input: ConvertTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeConvertTicketInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] convertTicket(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return unwrapTicketMutation(await api.convertTicket(normalizedInput));
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  expireTicket: async (input: ExpireTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeExpireTicketInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] expireTicket(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return unwrapTicketMutation(await api.expireTicket(normalizedInput));
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  markTicketStolen: async (input: MarkTicketStolenInput): Promise<Ticket> => {
-    const normalizedInput = normalizeMarkTicketStolenInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] markTicketStolen(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return unwrapTicketMutation(await api.markTicketStolen(normalizedInput));
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  pickupTickets: async (input: PickupTicketsInput): Promise<Ticket[]> => {
-    const normalizedInput = normalizePickupTicketsInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] pickupTickets(): Cannot get api from Electron",
-      );
-    }
-
-    if (!normalizedInput.tickets.length) {
-      return [];
-    }
-
-    try {
-      return await api.pickupTickets(normalizedInput);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  extendTickets: async (input: ExtendTicketsInput): Promise<Ticket[]> => {
-    const normalizedInput = normalizeExtendTicketsInput(input);
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] extendTickets(): Cannot get api from Electron",
-      );
-    }
-
-    if (!normalizedInput.extensions.length) {
-      return [];
-    }
-
-    try {
-      return await api.extendTickets(normalizedInput);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  loadBuybackReport: async (
-    input: ReportDateRangeInput,
-  ): Promise<BuybackReportResult> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] loadBuybackReport(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return await api.loadBuybackReport({
-        from_date: input.from_date.trim(),
-        to_date: input.to_date.trim(),
-      });
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  loadInterestReport: async (
-    input: ReportDateRangeInput,
-  ): Promise<InterestReportResult> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error(
-        "[ticketApi] loadInterestReport(): Cannot get api from Electron",
-      );
-    }
-
-    try {
-      return await api.loadInterestReport({
-        from_date: input.from_date.trim(),
-        to_date: input.to_date.trim(),
-      });
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  loadDailyReport: async (
-    input: ReportDateRangeInput,
-  ): Promise<DailyReportResult> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    try {
-      return await api.loadDailyReport({
-        from_date: input.from_date.trim(),
-        to_date: input.to_date.trim(),
-      });
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
-
-  loadOverdueReport: async (
-    input: OverdueReportInput,
-  ): Promise<OverdueReportResult> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    try {
-      return await api.loadOverdueReport({
-        due_on_or_before: input.due_on_or_before.trim(),
-        location_from: input.location_from.trim().toUpperCase(),
-        location_to: input.location_to.trim().toUpperCase(),
-      });
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
+  convertTicket: (input: ConvertTicketInput): Promise<Ticket> =>
+    api().convertTicket(input),
 
   loadTransferTicketPreview: async (
     ticketNumber: number,
-  ): Promise<TransferTicketPreview | null> => {
-    const normalizedTicketNumber = Number(ticketNumber);
-    const api = getAppApi()?.ticket;
+  ): Promise<TransferTicketPreview | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? api().loadTransferTicketPreview(Number(ticketNumber))
+      : null,
 
-    if (
-      !Number.isFinite(normalizedTicketNumber) ||
-      normalizedTicketNumber <= 0
-    ) {
-      return null;
-    }
+  transferTicket: (input: TransferTicketInput): Promise<Ticket> =>
+    api().transferTicket(input),
 
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
+  pickupTickets: async (input: PickupTicketsInput): Promise<Ticket[]> =>
+    input.tickets.length ? api().pickupTickets(input) : [],
 
-    try {
-      return await api.loadTransferTicketPreview(normalizedTicketNumber);
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
+  extendTickets: async (input: ExtendTicketsInput): Promise<Ticket[]> =>
+    input.extensions.length ? api().extendTickets(input) : [],
 
-  transferTicket: async (input: TransferTicketInput): Promise<Ticket> => {
-    const normalizedInput = normalizeTransferTicketInput(input);
-    const api = getAppApi()?.ticket;
+  expireTicket: (input: ExpireTicketInput): Promise<Ticket> =>
+    api().expireTicket(input),
 
-    if (!api) {
-      throw new Error(
-        "[ticketApi] transferTicket(): Cannot get api from Electron",
-      );
-    }
+  markTicketStolen: (input: MarkTicketStolenInput): Promise<Ticket> =>
+    api().markTicketStolen(input),
 
-    try {
-      return unwrapTicketMutation(await api.transferTicket(normalizedInput));
-    } catch (error) {
-      throw mapBackendError(error);
-    }
-  },
+  unmarkTicketStolen: (ticketNumber: number): Promise<Ticket> =>
+    api().unmarkTicketStolen(ticketNumber),
 
-  reverseTicket: async (
-    input: ReverseTicketInput,
-  ): Promise<ReverseTicketResult> => {
-    const api = getAppApi()?.ticket;
-
-    if (!api) {
-      throw new Error("Ticket API is unavailable.");
-    }
-
-    const result = await api.reverseTicket(normalizeReverseTicketInput(input));
-
-    if (!result.ok) {
-      const error = new Error(result.message) as TicketFormError;
-      error.field = result.field;
-      throw error;
-    }
-
-    return result.result;
-  },
+  reverseTicket: (input: ReverseTicketInput): Promise<ReverseTicketResult> =>
+    api().reverseTicket(input),
 };
 
 export type {
   ConvertTicketInput,
-  BuybackReportResult,
-  ExtendTicketsInput,
-  ExpireTicketInput,
-  InterestReportResult,
-  OverdueReportInput,
-  OverdueReportResult,
-  MarkTicketStolenInput,
-  PickupTicketsInput,
   CreatePawnTicketInput,
   CreateSellTicketInput,
+  ExpireTicketInput,
+  ExtendTicketsInput,
+  MarkTicketStolenInput,
+  PickupTicketsInput,
   ReverseTicketInput,
   ReverseTicketResult,
   TransferTicketInput,

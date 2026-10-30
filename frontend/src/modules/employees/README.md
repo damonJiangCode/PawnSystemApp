@@ -30,8 +30,7 @@ EmployeeAdminWindow / EmployeeAddEditDialog
   validation errors have no field and appear as the form message.
 - Every create/update needs a manager password. Employee PINs are stored only as
   `pin_hash`; see [server/src/employee/README.md](../../../../server/src/employee/README.md).
-- PIN checks used by client notes and holds run on the server; ticket PIN checks
-  still run in Electron main until tickets are migrated.
+- Every PIN check (client notes and holds, tickets) runs on the server.
 
 Tests: [employee.http.test.ts](../../shared/api/employee.http.test.ts) (query
 string, bodies, PUT/blank password, field errors, `getAppApi` binding).

@@ -38,9 +38,9 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
     └── preload bridge ── Electron windows and native menus
 ```
 
-Client, employee and reference APIs, ticket lookups and pawn/sell already use HTTP. Other
-business workflows still run through Electron services/repositories while their
-HTTP endpoints are developed. The desktop app currently requires Vite; building
+Client, employee, reference and ticket workflows use HTTP. Items, reports and XML
+reports still run through Electron services/repositories while their HTTP
+endpoints are developed. The desktop app currently requires Vite; building
 assets does not yet provide a standalone installer.
 
 Client writes validate inputs, enforce business rules and save related records

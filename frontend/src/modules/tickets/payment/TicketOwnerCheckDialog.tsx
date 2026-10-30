@@ -96,8 +96,12 @@ const TicketOwnerCheckDialog: React.FC<TicketOwnerCheckDialogProps> = ({
                   }}
                 >
                   {[
-                    selfPickupWarning ? "Only this client can pick up." : "",
-                    lostWarning ? "This ticket is marked as lost." : "",
+                    selfPickupWarning && !lostWarning
+                      ? "Only this client can pick up."
+                      : "",
+                    lostWarning
+                      ? "Lost ticket: only this client can pick up."
+                      : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}

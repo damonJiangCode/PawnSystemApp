@@ -190,7 +190,9 @@ const HistoryPage: React.FC<HistoryPageProps> = ({
           error={reverseError}
           processing={reverseProcessing}
           onClose={actions.closeReverseDialog}
-          onConfirm={() => void actions.handleReverseConfirm()}
+          onConfirm={(employeePassword) =>
+            void actions.handleReverseConfirm(employeePassword)
+          }
         />
       )}
 

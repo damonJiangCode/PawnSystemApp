@@ -22,6 +22,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import type { Ticket } from "../../../../../shared/models/ticket.model";
 import type { OverdueReportTicket } from "../../../../../shared/payload-contracts/ticket.contract";
+import { reportApi } from "../report.api";
 import { ticketApi } from "../../tickets/ticket.api";
 import { getAppApi } from "../../../shared/api/app.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
@@ -58,7 +59,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
   const [locations, setLocations] = useState<string[]>([]);
   const [locationsLoading, setLocationsLoading] = useState(true);
   const [report, setReport] =
-    useState<Awaited<ReturnType<typeof ticketApi.loadOverdueReport>>>();
+    useState<Awaited<ReturnType<typeof reportApi.loadOverdueReport>>>();
   const [loading, setLoading] = useState(false);
   const [openingTicketNumber, setOpeningTicketNumber] = useState<number>();
   const [errorMessage, setErrorMessage] = useState("");
@@ -118,7 +119,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
 
     try {
       setReport(
-        await ticketApi.loadOverdueReport({
+        await reportApi.loadOverdueReport({
           due_on_or_before: dueOnOrBefore,
           location_from: locationFrom,
           location_to: locationTo,

@@ -177,29 +177,6 @@ const TransactionTicketsTable: React.FC<TransactionTicketsTableProps> = ({
       ),
     },
     {
-      field: "partial_payment",
-      headerName: "PART",
-      width: 84,
-      renderCell: (params) =>
-        params.row.status === "sold" ? (
-          <CellTooltip value={null} fallback="---" />
-        ) : (
-          <CellTooltip value={formatCurrency(params.value)} fallback="---" />
-        ),
-    },
-    {
-      field: "partial_payment_datetime",
-      headerName: "PART DATE",
-      width: 110,
-      renderCell: (params) => (
-        <CellTooltip
-          value={params.value ? formatIsoDate(params.value) : null}
-          title={params.value ? formatIsoDateTime(params.value) : "---"}
-          fallback="---"
-        />
-      ),
-    },
-    {
       field: "employee_name",
       headerName: "EMP",
       width: 120,

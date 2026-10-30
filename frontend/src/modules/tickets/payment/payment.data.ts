@@ -48,16 +48,17 @@ export const processPaymentRows = async ({
   pickupRows,
   extensionRows,
 }: ProcessPaymentRowsInput) => {
-  const extensionMonthCounts = extensionRows.reduce<Map<number, number>>(
-    (counts, row) => {
-      counts.set(
-        row.ticketNumber,
-        (counts.get(row.ticketNumber) ?? 0) + row.extensionMonths,
-      );
-      return counts;
-    },
-    new Map<number, number>(),
-  );
+  // One line per ticket: months and the interest the window showed are summed.
+  const extensionTotals = extensionRows.reduce<
+    Map<number, { months: number; amount: number }>
+  >((totals, row) => {
+    const total = totals.get(row.ticketNumber) ?? { months: 0, amount: 0 };
+    totals.set(row.ticketNumber, {
+      months: total.months + row.extensionMonths,
+      amount: total.amount + row.extensionAmount,
+    });
+    return totals;
+  }, new Map());
   const [pickedUpTickets, extendedTickets] = await Promise.all([
     pickupRows.length
       ? ticketApi.pickupTickets({
@@ -67,12 +68,13 @@ export const processPaymentRows = async ({
           })),
         })
       : Promise.resolve([]),
-    extensionMonthCounts.size
+    extensionTotals.size
       ? ticketApi.extendTickets({
-          extensions: [...extensionMonthCounts.entries()].map(
-            ([ticketNumber, months]) => ({
+          extensions: [...extensionTotals.entries()].map(
+            ([ticketNumber, { months, amount }]) => ({
               ticket_number: ticketNumber,
               months,
+              amount,
             }),
           ),
         })

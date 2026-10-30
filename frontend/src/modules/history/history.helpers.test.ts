@@ -17,7 +17,6 @@ const createHistoryTicket = (
   amount: 100,
   onetime_fee: 0,
   interest_paid_months: 0,
-  partial_payment: 0,
   employee_name: "TEST",
   status: "pawned_expired",
   status_updated_at: new Date("2026-01-01T12:00:00Z"),

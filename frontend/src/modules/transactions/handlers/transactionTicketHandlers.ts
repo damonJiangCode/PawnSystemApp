@@ -30,7 +30,7 @@ type TransactionTicketHandlerDeps = {
   setOpenTicketConvertDialog: Dispatch<SetStateAction<boolean>>;
   setOpenTicketTransferDialog: Dispatch<SetStateAction<boolean>>;
   setStatusMessage: Dispatch<SetStateAction<string>>;
-  onClientSoldTicket?: () => void;
+  onClientSellCountChanged?: (delta: 1 | -1) => void;
 };
 
 export const createTransactionTicketHandlers = ({
@@ -46,7 +46,7 @@ export const createTransactionTicketHandlers = ({
   setOpenTicketConvertDialog,
   setOpenTicketTransferDialog,
   setStatusMessage,
-  onClientSoldTicket,
+  onClientSellCountChanged,
 }: TransactionTicketHandlerDeps) => {
   const clientNumber = client?.client_number;
 
@@ -112,7 +112,7 @@ export const createTransactionTicketHandlers = ({
     setItems([]);
     setSelectedItem(null);
     setOpenTicketSellDialog(false);
-    onClientSoldTicket?.();
+    onClientSellCountChanged?.(1);
     ticketApi.printEnvelopeTicket(newTicket, client);
     setStatusMessage(`Ticket #${newTicket.ticket_number} sold.`);
   };
@@ -162,6 +162,7 @@ export const createTransactionTicketHandlers = ({
       ),
     );
     setSelectedTicket(convertedTicket);
+    onClientSellCountChanged?.(convertedTicket.status === "sold" ? 1 : -1);
     const refreshedItems = convertedTicket.ticket_number
       ? await itemApi.loadItems(convertedTicket.ticket_number)
       : [];

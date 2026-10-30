@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { ticketApi } from "../../tickets/ticket.api";
+import { reportApi } from "../report.api";
 import {
   formatCurrency,
   formatIsoDate,
@@ -37,7 +37,7 @@ const BuybackReportWindow: React.FC<WindowScreenProps> = () => {
   const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState(today);
   const [report, setReport] =
-    useState<Awaited<ReturnType<typeof ticketApi.loadBuybackReport>>>();
+    useState<Awaited<ReturnType<typeof reportApi.loadBuybackReport>>>();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -56,7 +56,7 @@ const BuybackReportWindow: React.FC<WindowScreenProps> = () => {
     setErrorMessage("");
 
     try {
-      const nextReport = await ticketApi.loadBuybackReport({
+      const nextReport = await reportApi.loadBuybackReport({
         from_date: fromDate,
         to_date: toDate,
       });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Alert,
   Box,
@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
   Typography,
 } from "@mui/material";
 import type { Ticket } from "../../../../../shared/models/ticket.model";
@@ -22,7 +23,7 @@ interface ReverseTicketDialogProps {
   error: string;
   processing: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (employeePassword: string) => void;
 }
 
 const ReverseTicketDialog: React.FC<ReverseTicketDialogProps> = ({
@@ -36,6 +37,17 @@ const ReverseTicketDialog: React.FC<ReverseTicketDialogProps> = ({
   onConfirm,
 }) => {
   const pickupAmount = getTicketPickupAmount(ticket);
+  const [employeePassword, setEmployeePassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Reversing undoes a cash pickup, so it is signed with an employee PIN.
+  const confirm = () => {
+    if (!employeePassword.trim()) {
+      setPasswordError("Enter employee password.");
+      return;
+    }
+    onConfirm(employeePassword.trim());
+  };
 
   return (
     <Dialog
@@ -100,9 +112,26 @@ const ReverseTicketDialog: React.FC<ReverseTicketDialogProps> = ({
             {formatCurrency(pickupAmount)}
           </Typography>
         </Box>
+        <TextField
+          autoFocus
+          size="small"
+          type="password"
+          label="Employee Password"
+          value={employeePassword}
+          onChange={(event) => {
+            setEmployeePassword(event.target.value);
+            setPasswordError("");
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !processing) confirm();
+          }}
+          error={Boolean(passwordError)}
+          helperText={passwordError || " "}
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onConfirm} variant="contained" disabled={processing}>
+        <Button onClick={confirm} variant="contained" disabled={processing}>
           {processing ? "Reversing..." : "Reverse"}
         </Button>
         <Button onClick={onClose} disabled={processing}>

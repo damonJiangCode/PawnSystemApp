@@ -263,6 +263,13 @@ export const useWorkspaceLayout = () => {
             expire_count: Number(client.expire_count ?? 0) + 1,
             updated_at: new Date(),
           }));
+        } else {
+          // Marking stolen appends a signed entry to the client's notes.
+          const { client_number, notes } = event.data.client;
+          updateCurrentClient(client_number, (client) => ({
+            ...client,
+            notes,
+          }));
         }
 
         return;
@@ -367,10 +374,11 @@ export const useWorkspaceLayout = () => {
     void getAppApi()?.window.openItemSearchWindow();
   };
 
-  const handleClientSoldTicket = () => {
+  // Mirrors the server: sell +1, convert to sold +1, back to pawned -1 (min 0).
+  const handleClientSellCountChanged = (delta: 1 | -1) => {
     updateCurrentClient(selectedClient?.client_number, (client) => ({
       ...client,
-      sell_count: Number(client.sell_count ?? 0) + 1,
+      sell_count: Math.max(0, Number(client.sell_count ?? 0) + delta),
       updated_at: new Date(),
     }));
   };
@@ -433,7 +441,7 @@ export const useWorkspaceLayout = () => {
       handlePayment,
       handleOpenTicketSearch,
       handleOpenItemSearch,
-      handleClientSoldTicket,
+      handleClientSellCountChanged,
       handleClientHoldUpdated,
       requestHistoryRefresh,
       handleRepawnCreated,

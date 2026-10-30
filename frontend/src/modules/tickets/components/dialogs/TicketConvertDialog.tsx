@@ -14,7 +14,7 @@ import type { Ticket } from "../../../../../../shared/models/ticket.model";
 import type { ConvertTicketInput, TicketFormError } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { calculation } from "../../../../../../shared/utils/calculation";
-import { confirmZeroTicketAmount } from "./confirmZeroTicketAmount";
+import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import { referenceApi } from "../../../reference/reference.api";
 
 const DEFAULT_SELL_LOCATION = "BIWK";
@@ -57,6 +57,7 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
   const [employeePasswordError, setEmployeePasswordError] = useState("");
   const [submitError, setSubmitError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [confirmZeroOpen, setConfirmZeroOpen] = useState(false);
   const [earlyClaimAmount, setEarlyClaimAmount] = useState(0);
   const [pickupAmount, setPickupAmount] = useState(0);
 
@@ -141,6 +142,7 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
     setAmountError("");
     setOneTimeFeeError("");
     setEmployeePasswordError("");
+    setConfirmZeroOpen(false);
     setSubmitError("");
     setSaving(false);
   }, [locationList, open, targetStatus, ticket]);
@@ -152,7 +154,8 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
     setPickupAmount(calculation.getBasePickupAmt(nextAmount, nextFee));
   }, [amount, oneTimeFee]);
 
-  const handleSave = async () => {
+  // A $0 pawn is valid only for special records, so it needs confirmation.
+  const handleSave = async (zeroAmountConfirmed = false) => {
     if (!ticket || !targetStatus) {
       return;
     }
@@ -174,7 +177,9 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
     const nextAmountError =
       typeof amount !== "number" || !Number.isFinite(amount) || amount < 0
         ? "Amount cannot be negative."
-        : "";
+        : targetStatus === "sold" && amount === 0
+          ? "Amount must be greater than 0."
+          : "";
     const nextOneTimeFeeError =
       oneTimeFee !== "" && (!Number.isFinite(oneTimeFee) || oneTimeFee < 0)
         ? "One Time Fee cannot be negative."
@@ -198,7 +203,8 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
     }
 
     const normalizedAmount = amount as number;
-    if (!confirmZeroTicketAmount(normalizedAmount)) {
+    if (normalizedAmount === 0 && !zeroAmountConfirmed) {
+      setConfirmZeroOpen(true);
       return;
     }
 
@@ -267,7 +273,9 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
       }
 
       setSubmitError(
-        "Couldn't convert this ticket right now. Please try again.",
+        formError.status !== undefined && formError.status < 500
+          ? formError.message
+          : "Couldn't convert this ticket right now. Please try again.",
       );
     } finally {
       setSaving(false);
@@ -443,13 +451,29 @@ const TicketConvertDialog: React.FC<TicketConvertDialogProps> = ({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleSave} variant="contained" disabled={saving}>
+        <Button
+          onClick={() => void handleSave()}
+          variant="contained"
+          disabled={saving}
+        >
           {saving ? "Saving..." : "Convert"}
         </Button>
         <Button onClick={onClose} disabled={saving}>
           Cancel
         </Button>
       </DialogActions>
+      <ConfirmDialog
+        open={confirmZeroOpen}
+        title="Convert to a $0 pawn?"
+        message="Ticket amount is 0. This is usually only for special records such as signature-only tickets. Continue?"
+        confirmLabel="Continue"
+        confirmColor="primary"
+        onCancel={() => setConfirmZeroOpen(false)}
+        onConfirm={() => {
+          setConfirmZeroOpen(false);
+          void handleSave(true);
+        }}
+      />
     </Dialog>
   );
 };

@@ -30,9 +30,7 @@ import {
 
 const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
   const ticketInputRef = React.useRef<HTMLInputElement>(null);
-  const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const [ticketNumber, setTicketNumber] = React.useState("");
-  const [employeePassword, setEmployeePassword] = React.useState("");
   const [searchResult, setSearchResult] =
     React.useState<TicketSearchResult | null>(null);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
@@ -61,18 +59,6 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
 
     return () => cancelAnimationFrame(frame);
   }, []);
-
-  React.useEffect(() => {
-    if (!detailsOpen) {
-      return;
-    }
-
-    const frame = requestAnimationFrame(() => {
-      passwordInputRef.current?.focus();
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [detailsOpen]);
 
   const handleSearch = async () => {
     const normalizedTicketNumber = Number(ticketNumber);
@@ -121,10 +107,6 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
 
       setSearchResult(result);
       setDetailsOpen(true);
-      setEmployeePassword("");
-      requestAnimationFrame(() => {
-        passwordInputRef.current?.focus();
-      });
     } catch (err) {
       console.error(err);
       setError("Unable to search ticket right now.");
@@ -139,12 +121,6 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
       return;
     }
 
-    if (!employeePassword.trim()) {
-      setError("Enter employee password.");
-      passwordInputRef.current?.focus();
-      return;
-    }
-
     setExpiring(true);
     setError("");
     setMessage("");
@@ -152,7 +128,6 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
     try {
       const expiredTicket = await ticketApi.expireTicket({
         ticket_number: searchResult.ticket.ticket_number,
-        employee_password: employeePassword,
       });
       const expiredResult = {
         ...searchResult,
@@ -163,7 +138,6 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
       setSearchResult(null);
       setDetailsOpen(false);
       setTicketNumber("");
-      setEmployeePassword("");
       setMessage(`Ticket #${expiredTicket.ticket_number} expired.`);
 
       const channel = new BroadcastChannel("menu-events");
@@ -301,22 +275,11 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
                 disabled
                 fullWidth
               />
-              <TextField
-                inputRef={passwordInputRef}
-                size="small"
-                type="password"
-                label="Employee Password"
-                value={employeePassword}
-                onChange={(event) => {
-                  setEmployeePassword(event.target.value);
-                  setError("");
-                }}
-                fullWidth
-              />
             </Stack>
           </DialogContent>
           <DialogActions>
             <Button
+              autoFocus
               variant="contained"
               color="error"
               disabled={expiring}

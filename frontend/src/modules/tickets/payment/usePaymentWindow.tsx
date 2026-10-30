@@ -174,7 +174,7 @@ export const usePaymentWindow = () => {
       );
       setStatusMessage(
         lostTicketCount
-          ? `${rows.length} pawned ticket(s) loaded. ${lostTicketCount} marked as lost.`
+          ? `${rows.length} pawned ticket(s) loaded. ${lostTicketCount} lost (only this client can pick up).`
           : rows.length
             ? `${rows.length} pawned ticket(s) loaded.`
             : "No pawned tickets found.",
@@ -395,8 +395,8 @@ export const usePaymentWindow = () => {
     setStatusMessage(
       showLostWarning
         ? movingFromOppositeMode
-          ? `Ticket #${searchedRow.ticketNumber} moved from ${oppositeModeLabel} to ${currentModeLabel}. This ticket is marked as lost.`
-          : `Ticket #${searchedRow.ticketNumber} selected. This ticket is marked as lost.`
+          ? `Ticket #${searchedRow.ticketNumber} moved from ${oppositeModeLabel} to ${currentModeLabel}. Lost ticket: only this client can pick up.`
+          : `Ticket #${searchedRow.ticketNumber} selected. Lost ticket: only this client can pick up.`
         : movingFromOppositeMode
           ? `Ticket #${searchedRow.ticketNumber} moved from ${oppositeModeLabel} to ${currentModeLabel}.`
           : `Ticket #${searchedRow.ticketNumber} selected.`,
@@ -493,8 +493,14 @@ export const usePaymentWindow = () => {
     } catch (err) {
       console.error(err);
       setStatusSeverity("warning");
+      // 409: a ticket changed (e.g. its amount) since this window loaded it.
+      const conflict = (err as { status?: number }).status === 409;
       setStatusMessage(
-        err instanceof Error ? err.message : "Unable to process payment(s).",
+        err instanceof Error
+          ? conflict
+            ? `${err.message} Close and reopen Payment to load current amounts.`
+            : err.message
+          : "Unable to process payment(s).",
       );
     } finally {
       setProcessing(false);
