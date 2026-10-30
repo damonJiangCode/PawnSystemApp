@@ -15,12 +15,15 @@ const PREFERRED = [
   'isBoolean',
 ];
 
-const firstMessage = (error?: ValidationError) => {
+// Nested arrays (e.g. tickets[0].amount) report their first inner message.
+const firstMessage = (error?: ValidationError): string => {
   const constraints = error?.constraints ?? {};
   const key =
     PREFERRED.find((name) => name in constraints) ??
     Object.keys(constraints)[0];
-  return key ? constraints[key] : 'Invalid input.';
+  if (key) return constraints[key];
+  const child = error?.children?.[0];
+  return child ? firstMessage(child) : 'Invalid input.';
 };
 
 // Same rules as strictValidationPipe, but a failure is reported as

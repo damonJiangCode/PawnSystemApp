@@ -163,3 +163,11 @@ export const getPawnDueDatetime = (from: Date) =>
 
 export const getSellDueDatetime = (from: Date) =>
   new Date(from.getTime() + SELL_TERM_DAYS * MS_PER_DAY);
+
+/** Each paid interest month moves the due date by one 30-day period. */
+export const getExtendedDueDatetime = (dueDate: Date, months: number) =>
+  new Date(dueDate.getTime() + months * INTEREST_PERIOD_DAYS * MS_PER_DAY);
+
+/** Interest charged to extend a ticket by `months`. */
+export const getExtensionAmount = (amount: number, months: number) =>
+  round2(getBaseInterest(amount) * months);

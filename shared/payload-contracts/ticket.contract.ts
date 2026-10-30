@@ -37,7 +37,6 @@ export type UpdateTicketInput = TicketDescriptionInput &
     ticket_number: number;
     is_lost: boolean;
     onetime_fee: number;
-    partial_payment: number;
   };
 
 export type TransferTicketPreview = {
@@ -150,11 +149,11 @@ export type TransferTicketInput = {
   client_number: number;
 };
 
-export type ReverseTicketInput = {
+export type ReverseTicketInput = EmployeeAuthorizedInput & {
   ticket_number: number;
 };
 
-export type ReverseTicketFormField = "ticket_number";
+export type ReverseTicketFormField = "ticket_number" | "employee_password";
 
 export type ReverseTicketResult = {
   ticket: Ticket;
@@ -171,7 +170,6 @@ export type ConvertTicketInput = TicketDescriptionInput &
 
 export type ExpireTicketInput = {
   ticket_number: number;
-  employee_password?: string;
 };
 
 export type MarkTicketStolenInput = EmployeeAuthorizedInput & {
@@ -187,9 +185,12 @@ export type PickupTicketsInput = {
   tickets: PickupTicketPaymentInput[];
 };
 
+// `amount` is the interest the payment window showed; the server rejects the
+// batch if its own amount differs.
 export type ExtensionTicketPaymentInput = {
   ticket_number: number;
   months: number;
+  amount: number;
 };
 
 export type ExtendTicketsInput = {

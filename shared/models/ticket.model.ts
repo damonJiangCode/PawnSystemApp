@@ -11,8 +11,6 @@ export interface Ticket {
   interest_paid_months: number;
   recorded_interest_amount_paid?: number;
   recorded_interest_months_paid?: number;
-  partial_payment: number;
-  partial_payment_datetime?: Date;
   interested_datetime?: Date;
   employee_name: string;
   pickup_datetime?: Date;

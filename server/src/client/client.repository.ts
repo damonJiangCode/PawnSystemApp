@@ -213,18 +213,43 @@ export class ClientRepository {
     return result.rows[0] ?? null;
   }
 
-  async incrementSellCount(clientNumber: number, connection: PoolClient) {
+  // Column names come from this union only, never from request input.
+  async adjustCount(
+    clientNumber: number,
+    column: 'sell_count' | 'expire_count' | 'redeem_count',
+    delta: 1 | -1,
+    connection: PoolClient,
+  ) {
     await connection.query(
       `UPDATE client
-       SET sell_count = COALESCE(sell_count, 0) + 1,
+       SET ${column} = GREATEST(COALESCE(${column}, 0) + $2, 0),
            updated_at = CURRENT_TIMESTAMP
        WHERE client_number = $1`,
-      [clientNumber],
+      [clientNumber, delta],
     );
   }
 
-  async loadByNumber(clientNumber: number) {
-    const result = await this.pool.query(
+  // Signed entries are appended with a space, like client note signatures.
+  async appendNote(
+    clientNumber: number,
+    entry: string,
+    connection: PoolClient,
+  ) {
+    await connection.query(
+      `UPDATE client
+       SET notes = CASE WHEN COALESCE(notes, '') = '' THEN $2
+                        ELSE notes || ' ' || $2 END,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE client_number = $1`,
+      [clientNumber, entry],
+    );
+  }
+
+  async loadByNumber(
+    clientNumber: number,
+    connection: Pool | PoolClient = this.pool,
+  ) {
+    const result = await connection.query(
       `${clientWithIdentifications}
        WHERE c.client_number = $1`,
       [clientNumber],

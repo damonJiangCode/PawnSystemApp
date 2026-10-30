@@ -1,36 +1,22 @@
 import type { Ticket } from "../models/ticket.model.ts";
 import type {
   ConvertTicketInput,
-  BuybackReportResult,
-  DailyReportResult,
-  ExtendTicketsInput,
-  ExpireTicketInput,
-  InterestReportResult,
-  OverdueReportInput,
-  OverdueReportResult,
-  MarkTicketStolenInput,
-  PickupTicketsInput,
   CreatePawnTicketInput,
   CreateSellTicketInput,
-  ReportDateRangeInput,
+  ExpireTicketInput,
+  ExtendTicketsInput,
+  MarkTicketStolenInput,
+  PickupTicketsInput,
   ReverseTicketInput,
-  ReverseTicketFormField,
   ReverseTicketResult,
   TicketSearchResult,
-  TicketFormField,
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
 } from "../payload-contracts/ticket.contract.ts";
 
-export type ReverseTicketMutationResult =
-  | { ok: true; result: ReverseTicketResult }
-  | { ok: false; field: ReverseTicketFormField; message: string };
-
-export type TicketMutationResult =
-  | { ok: true; ticket: Ticket }
-  | { ok: false; field: TicketFormField; message: string };
-
+// Served by the NestJS /tickets routes. Failures reject with an Error carrying
+// the server's `field` and HTTP `status`.
 export type TicketApi = {
   loadTicketsByClient: (clientNumber: number) => Promise<Ticket[]>;
   searchTicketByNumber: (
@@ -39,33 +25,18 @@ export type TicketApi = {
   searchPaymentTicketByNumber: (
     ticketNumber: number,
   ) => Promise<TicketSearchResult | null>;
-  loadBuybackReport: (
-    input: ReportDateRangeInput,
-  ) => Promise<BuybackReportResult>;
-  loadDailyReport: (input: ReportDateRangeInput) => Promise<DailyReportResult>;
-  loadInterestReport: (
-    input: ReportDateRangeInput,
-  ) => Promise<InterestReportResult>;
-  loadOverdueReport: (
-    input: OverdueReportInput,
-  ) => Promise<OverdueReportResult>;
-  // HTTP methods reject with an Error carrying `field`/`status` instead of
-  // returning a TicketMutationResult.
   createPawnTicket: (input: CreatePawnTicketInput) => Promise<Ticket>;
   createSellTicket: (input: CreateSellTicketInput) => Promise<Ticket>;
-  updateTicket: (input: UpdateTicketInput) => Promise<TicketMutationResult>;
-  convertTicket: (input: ConvertTicketInput) => Promise<TicketMutationResult>;
-  expireTicket: (input: ExpireTicketInput) => Promise<TicketMutationResult>;
-  markTicketStolen: (
-    input: MarkTicketStolenInput,
-  ) => Promise<TicketMutationResult>;
-  pickupTickets: (input: PickupTicketsInput) => Promise<Ticket[]>;
-  extendTickets: (input: ExtendTicketsInput) => Promise<Ticket[]>;
+  updateTicket: (input: UpdateTicketInput) => Promise<Ticket>;
+  convertTicket: (input: ConvertTicketInput) => Promise<Ticket>;
   loadTransferTicketPreview: (
     ticketNumber: number,
   ) => Promise<TransferTicketPreview | null>;
-  transferTicket: (input: TransferTicketInput) => Promise<TicketMutationResult>;
-  reverseTicket: (
-    input: ReverseTicketInput,
-  ) => Promise<ReverseTicketMutationResult>;
+  transferTicket: (input: TransferTicketInput) => Promise<Ticket>;
+  pickupTickets: (input: PickupTicketsInput) => Promise<Ticket[]>;
+  extendTickets: (input: ExtendTicketsInput) => Promise<Ticket[]>;
+  expireTicket: (input: ExpireTicketInput) => Promise<Ticket>;
+  markTicketStolen: (input: MarkTicketStolenInput) => Promise<Ticket>;
+  unmarkTicketStolen: (ticketNumber: number) => Promise<Ticket>;
+  reverseTicket: (input: ReverseTicketInput) => Promise<ReverseTicketResult>;
 };

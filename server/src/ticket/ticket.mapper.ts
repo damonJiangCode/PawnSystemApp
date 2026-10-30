@@ -14,8 +14,6 @@ export type TicketRecord = {
   interest_paid_months: number;
   recorded_interest_amount_paid: number;
   recorded_interest_months_paid: number;
-  partial_payment: number;
-  partial_payment_datetime: Date | null;
   interested_datetime: Date | null;
   employee_name: string;
   pickup_datetime: Date | null;
@@ -30,7 +28,7 @@ export type TicketRecord = {
 export const ticketSelect = `
   SELECT t.ticket_number, t.transaction_datetime, t.is_lost, t.is_stolen,
     t.location, t.description, t.due_date, t.amount, t.onetime_fee,
-    t.interest_paid_months, t.partial_payment, t.partial_payment_datetime,
+    t.interest_paid_months,
     t.interested_datetime, t.employee_name, t.pickup_datetime,
     t.pickup_amount_paid, t.expire_date, t.status, t.status_updated_at,
     t.client_number,
@@ -61,8 +59,6 @@ export const mapTicketRow = (row: Record<string, unknown>): TicketRecord => ({
   interest_paid_months: toNumber(row.interest_paid_months),
   recorded_interest_amount_paid: toNumber(row.recorded_interest_amount_paid),
   recorded_interest_months_paid: toNumber(row.recorded_interest_months_paid),
-  partial_payment: toNumber(row.partial_payment),
-  partial_payment_datetime: toDateOrNull(row.partial_payment_datetime),
   interested_datetime: toDateOrNull(row.interested_datetime),
   employee_name: String(row.employee_name ?? ''),
   pickup_datetime: toDateOrNull(row.pickup_datetime),

@@ -110,7 +110,6 @@ describe('Ticket issuing HTTP: pawn and sell (mock PostgreSQL)', () => {
                 is_lost: false,
                 is_stolen: false,
                 interest_paid_months: 0,
-                partial_payment: '0',
                 status_updated_at: inserted[0],
               },
             ],
@@ -191,7 +190,7 @@ describe('Ticket issuing HTTP: pawn and sell (mock PostgreSQL)', () => {
       due_date: new Date(NOW.getTime() + 45 * DAY).toISOString(),
     });
     expect(sellCountUpdates()).toHaveLength(1);
-    expect(sellCountUpdates()[0][1]).toEqual([7]);
+    expect(sellCountUpdates()[0][1]).toEqual([7, 1]);
     expect(statements().at(-1)).toBe('COMMIT');
   });
 

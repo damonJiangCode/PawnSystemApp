@@ -1,6 +1,6 @@
 # PawnSystem HTTP Server
 
-NestJS backend. Client, employee and reference operations, ticket lookups and pawn/sell use HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
+NestJS backend. Client, employee and reference operations and every ticket workflow use HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
 
 ## Development
 
