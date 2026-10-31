@@ -507,6 +507,14 @@ describe('Ticket actions HTTP (in-memory PostgreSQL fake)', () => {
       );
     });
 
+    it('rejects a deactivated source owner', async () => {
+      clients.set(1, client({ is_active: false }));
+      expect(
+        (await call('POST', '/10/transfer', { client_number: 2 })).status,
+      ).toBe(409);
+      expect(tickets.get(10)!.client_number).toBe(1);
+    });
+
     it('rejects a deactivated target and a missing target', async () => {
       clients.set(2, client({ is_active: false }));
       expect(
