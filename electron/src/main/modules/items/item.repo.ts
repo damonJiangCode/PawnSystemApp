@@ -51,26 +51,6 @@ const itemSelectColumns = `
 `;
 
 export const itemRepo = {
-  loadByTicketNumber: async (ticketNumber: number): Promise<Item[]> => {
-    const client = await connect();
-    const query = `
-      SELECT ${itemSelectColumns}
-      FROM item_with_status iws
-      INNER JOIN ticket_item ti
-        ON ti.item_number = iws.item_number
-       AND ti.ticket_number = $1
-      WHERE ti.ticket_number = $1
-      ORDER BY iws.item_number DESC
-    `;
-
-    try {
-      const result = await client.query(query, [ticketNumber]);
-      return result.rows.map(mapItemRow);
-    } finally {
-      client.release();
-    }
-  },
-
   loadByItemNumber: async (
     itemNumber: number,
     dbClient: DbClient,

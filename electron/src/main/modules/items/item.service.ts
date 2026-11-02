@@ -9,14 +9,6 @@ import { imageStorage } from "../../shared/imageStorage.ts";
 import { itemInput } from "./item.input.ts";
 
 export const itemService = {
-  loadItems: async (ticketNumber: number): Promise<Item[]> => {
-    if (!ticketNumber) {
-      return [];
-    }
-
-    return itemRepo.loadByTicketNumber(ticketNumber);
-  },
-
   searchItems: async (input: ItemSearchInput): Promise<Item[]> => {
     const normalizedInput = itemInput.normalizeItemSearch(input);
 

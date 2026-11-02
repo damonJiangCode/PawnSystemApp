@@ -5,6 +5,7 @@ import { ClientModule } from './client/client.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module.js';
 import { EmployeeModule } from './employee/employee.module.js';
+import { ItemModule } from './item/item.module.js';
 import { ReferenceModule } from './reference/reference.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
 import { fileURLToPath } from 'node:url';
@@ -20,6 +21,7 @@ import { fileURLToPath } from 'node:url';
     }),
     ClientModule,
     EmployeeModule,
+    ItemModule,
     ReferenceModule,
     TicketModule,
     DatabaseModule,

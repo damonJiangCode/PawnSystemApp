@@ -10,13 +10,6 @@ const { ipcMain } = require("electron/main") as typeof import("electron");
 
 export const registerItemHandlers = () => {
   ipcMain.handle(
-    CHANNELS.GET_ITEMS,
-    async (_event: IpcMainInvokeEvent, ticketNumber: number) => {
-      return itemService.loadItems(ticketNumber);
-    },
-  );
-
-  ipcMain.handle(
     CHANNELS.SEARCH_ITEMS,
     async (_event: IpcMainInvokeEvent, payload: ItemSearchInput) => {
       return itemService.searchItems(payload);
