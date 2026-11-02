@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "rootDir": ".",
+    "outDir": "../.db-build",
+    "rewriteRelativeImportExtensions": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "types": ["node"]
+  },
+  "include": [
+    "env.ts",
+    "connection.ts",
+    "initialize.ts",
+    "runInit.ts",
+    "schema/**/*.ts",
+    "seed/**/*.ts",
+    "functions/**/*.ts",
+    "views/**/*.ts"
+  ]
+}

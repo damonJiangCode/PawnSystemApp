@@ -1,6 +1,7 @@
 # Dependencies and generated builds
 node_modules/
 .electron-build/
+.db-build/
 dist/
 release/
 coverage/

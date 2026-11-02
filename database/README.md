@@ -18,6 +18,9 @@
 - `npm run migration:execute`: initializes the schema automatically before importing;
   no separate `db:init` is needed for this workflow.
 - Build output: `.electron-build/database/`; Electron entry: `.electron-build/electron/src/main/index.js`.
+- `tsconfig.build.json` compiles schema init on its own into `.db-build/`
+  (no Electron build) for the server Docker image. The image also copies
+  `seed/canadacities.csv` and the ID type mapping files next to the output.
 - Changing a CREATE TABLE definition does not alter existing tables; existing
   databases need the corresponding SQL applied separately.
 
