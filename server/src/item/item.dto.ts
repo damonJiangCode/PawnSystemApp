@@ -1,14 +1,20 @@
 import { Transform, Type } from 'class-transformer';
 import {
   IsInt,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Max,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { SaveImageDto } from '../common/save-image.dto.js';
 
 const MAX_INT = 2147483647;
+// item.amount is NUMERIC(10,1).
+const MAX_MONEY = 999_999_999.9;
 
 const TrimUpper = () =>
   Transform(({ value }) =>
@@ -62,4 +68,53 @@ export class SearchItemsQueryDto {
   @IsString()
   @MaxLength(100)
   serial_number?: string;
+}
+
+export class SaveItemDto {
+  @IsInt({ message: 'Quantity must be greater than 0.' })
+  @Min(1, { message: 'Quantity must be greater than 0.' })
+  @Max(MAX_INT, { message: 'Quantity is too large.' })
+  quantity!: number;
+
+  @IsInt({ message: 'Select a category.' })
+  @Min(1, { message: 'Select a category.' })
+  @Max(MAX_INT, { message: 'Select a category.' })
+  subcategory_id!: number;
+
+  @TrimUpper()
+  @IsString()
+  @IsNotEmpty({ message: 'Description is required.' })
+  @MaxLength(500)
+  description!: string;
+
+  @IsOptional()
+  @TrimUpper()
+  @IsString()
+  @MaxLength(100)
+  brand_name?: string;
+
+  @IsOptional()
+  @TrimUpper()
+  @IsString()
+  @MaxLength(100)
+  model_number?: string;
+
+  @IsOptional()
+  @TrimUpper()
+  @IsString()
+  @MaxLength(100)
+  serial_number?: string;
+
+  @IsNumber(
+    { allowNaN: false, allowInfinity: false, maxDecimalPlaces: 1 },
+    { message: 'Enter a price with at most one decimal place.' },
+  )
+  @Min(0, { message: 'Price cannot be negative.' })
+  @Max(MAX_MONEY, { message: 'Price is too large.' })
+  amount!: number;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SaveImageDto)
+  photo?: SaveImageDto;
 }

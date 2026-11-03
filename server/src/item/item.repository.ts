@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Pool } from 'pg';
-import type { SearchItemsQueryDto } from './item.dto.js';
+import { Pool, type PoolClient } from 'pg';
+import type { TicketStatus } from '../ticket/ticket.mapper.js';
+import type { SaveItemDto, SearchItemsQueryDto } from './item.dto.js';
 import { itemSelect, mapItemRow, type ItemRow } from './item.mapper.js';
 
 @Injectable()
@@ -74,5 +75,62 @@ export class ItemRepository {
       values,
     );
     return result.rows.map(mapItemRow);
+  }
+
+  // Locks the ticket row so its status cannot change until the item is saved.
+  async lockTicketStatus(ticketNumber: number, connection: PoolClient) {
+    const result = await connection.query<{ status: TicketStatus }>(
+      'SELECT status FROM ticket WHERE ticket_number = $1 FOR UPDATE',
+      [ticketNumber],
+    );
+    return result.rows[0]?.status ?? null;
+  }
+
+  async loadSubcategoryActive(subcategoryId: number, connection: PoolClient) {
+    const result = await connection.query<{ is_active: boolean }>(
+      'SELECT is_active FROM item_subcategory WHERE id = $1',
+      [subcategoryId],
+    );
+    return result.rows[0]?.is_active ?? null;
+  }
+
+  async insert(item: SaveItemDto, imagePath: string, connection: PoolClient) {
+    const result = await connection.query<{ item_number: string }>(
+      `INSERT INTO item (quantity, subcategory_id, description, brand_name,
+         model_number, serial_number, amount, image_path)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING item_number`,
+      [
+        item.quantity,
+        item.subcategory_id,
+        item.description,
+        item.brand_name ?? '',
+        item.model_number ?? '',
+        item.serial_number ?? '',
+        item.amount,
+        imagePath,
+      ],
+    );
+    return Number(result.rows[0].item_number);
+  }
+
+  async linkToTicket(
+    ticketNumber: number,
+    itemNumber: number,
+    connection: PoolClient,
+  ) {
+    await connection.query(
+      `INSERT INTO ticket_item (ticket_number, item_number) VALUES ($1, $2)
+       ON CONFLICT (ticket_number, item_number) DO NOTHING`,
+      [ticketNumber, itemNumber],
+    );
+  }
+
+  async loadByItemNumber(itemNumber: number, connection: PoolClient) {
+    const result = await connection.query<ItemRow>(
+      `${itemSelect} WHERE iws.item_number = $1`,
+      [itemNumber],
+    );
+    return result.rows[0] ? mapItemRow(result.rows[0]) : null;
   }
 }

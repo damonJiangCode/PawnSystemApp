@@ -1,5 +1,9 @@
 import { Test } from '@nestjs/testing';
 import type { INestApplication } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { Pool } from 'pg';
 import {
   afterAll,
@@ -29,14 +33,37 @@ const itemRow = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
+// A 1x1 PNG.
+const png =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aVQAAAABJRU5ErkJggg==';
+
 describe('Item HTTP API (mock PostgreSQL)', () => {
   let app: INestApplication;
   let baseUrl: string;
+  let photoDir: string;
+  // pool.query serves single reads; pool.connect() hands out the transaction
+  // connection, whose queries are recorded in `sql`.
+  const connection = { query: vi.fn(), release: vi.fn() };
   const pool = { query: vi.fn(), connect: vi.fn() };
   let rows: Record<string, unknown>[];
+  let sql: string[];
+  let ticketStatus: string | null;
+  let subcategoryActive: boolean | null;
+  let failItemInsert: boolean;
 
   beforeAll(async () => {
-    const module = await Test.createTestingModule({ imports: [ItemModule] })
+    photoDir = await mkdtemp(path.join(tmpdir(), 'pawn-item-photos-'));
+    const module = await Test.createTestingModule({
+      imports: [
+        // Test-only config instead of the private .env.
+        ConfigModule.forRoot({
+          isGlobal: true,
+          ignoreEnvFile: true,
+          load: [() => ({ ITEM_IMAGE_DIR: photoDir })],
+        }),
+        ItemModule,
+      ],
+    })
       .overrideProvider(Pool)
       .useValue(pool)
       .compile();
@@ -46,14 +73,48 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
   });
   afterAll(async () => {
     await app?.close();
+    await rm(photoDir, { recursive: true, force: true });
   });
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.resetAllMocks();
     rows = [itemRow()];
+    sql = [];
+    ticketStatus = 'pawned';
+    subcategoryActive = true;
+    failItemInsert = false;
     pool.query.mockImplementation(async () => ({ rows }));
+    pool.connect.mockResolvedValue(connection);
+    connection.query.mockImplementation(async (text: string) => {
+      sql.push(text.trim().split(/\s+/).slice(0, 3).join(' '));
+      if (text.includes('FROM ticket WHERE'))
+        return { rows: ticketStatus ? [{ status: ticketStatus }] : [] };
+      if (text.includes('FROM item_subcategory'))
+        return {
+          rows:
+            subcategoryActive === null
+              ? []
+              : [{ is_active: subcategoryActive }],
+        };
+      if (text.includes('INSERT INTO item ')) {
+        if (failItemInsert) throw new Error('insert failed');
+        return { rows: [{ item_number: '41' }] };
+      }
+      if (text.includes('WHERE iws.item_number'))
+        return { rows: [itemRow({ item_number: '41' })] };
+      return { rows: [] };
+    });
+    for (const file of await readdir(photoDir)) {
+      await rm(path.join(photoDir, file));
+    }
   });
 
   const get = (path: string) => fetch(`${baseUrl}${path}`);
+  const post = (path: string, body: unknown) =>
+    fetch(`${baseUrl}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
 
   describe('GET /tickets/:ticketNumber/items', () => {
     it('lists the ticket’s items with numeric amounts and blank optional text', async () => {
@@ -185,6 +246,150 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
       expect(body.field).toBe(field);
       if (message) expect(body.message).toBe(message);
       expect(pool.query).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('POST /tickets/:ticketNumber/items', () => {
+    const newItem = (overrides: Record<string, unknown> = {}) => ({
+      quantity: 1,
+      subcategory_id: 3,
+      description: ' gold ring ',
+      serial_number: 'sn1',
+      amount: 120.5,
+      photo: { fileName: 'x.png', base64: png },
+      ...overrides,
+    });
+    const insertValues = () =>
+      connection.query.mock.calls.find(([text]) =>
+        String(text).includes('INSERT INTO item '),
+      )?.[1];
+
+    it('locks the ticket, saves and links the item in one transaction', async () => {
+      const response = await post('/tickets/10/items', newItem());
+      expect(response.status).toBe(201);
+      expect((await response.json()).item_number).toBe(41);
+      expect(sql).toEqual([
+        'BEGIN',
+        'SELECT status FROM',
+        'SELECT is_active FROM',
+        'INSERT INTO item',
+        'INSERT INTO ticket_item',
+        'SELECT iws.item_number, iws.quantity,',
+        'COMMIT',
+      ]);
+      expect(String(connection.query.mock.calls[1][0])).toContain('FOR UPDATE');
+      // Text is trimmed and upper-cased; missing text is blank.
+      expect(insertValues()).toEqual([
+        1,
+        3,
+        'GOLD RING',
+        '',
+        '',
+        'SN1',
+        120.5,
+        expect.stringMatching(/^images\/items\//),
+      ]);
+      expect(connection.release).toHaveBeenCalled();
+    });
+
+    it('stores the photo under a server-made name', async () => {
+      await post('/tickets/10/items', newItem());
+      const [file] = await readdir(photoDir);
+      expect(file).toMatch(/^[0-9a-f-]{36}\.png$/);
+      expect(insertValues()?.[7]).toBe(`images/items/${file}`);
+    });
+
+    it('allows a price of 0', async () => {
+      expect(
+        (await post('/tickets/10/items', newItem({ amount: 0 }))).status,
+      ).toBe(201);
+    });
+
+    it('rolls back and removes the new photo when saving the item fails', async () => {
+      failItemInsert = true;
+      const response = await post('/tickets/10/items', newItem());
+      expect(response.status).toBe(500);
+      expect(sql).toContain('ROLLBACK');
+      expect(sql).not.toContain('COMMIT');
+      expect(await readdir(photoDir)).toEqual([]);
+    });
+
+    it.each([
+      [null, 404, 'Ticket #10 was not found.'],
+      [
+        'pawned_picked_up',
+        409,
+        'Items can only be changed on pawned or sold tickets.',
+      ],
+      [
+        'sold_expired',
+        409,
+        'Items can only be changed on pawned or sold tickets.',
+      ],
+    ])('rejects a %s ticket without writing', async (status, code, message) => {
+      ticketStatus = status;
+      const response = await post('/tickets/10/items', newItem());
+      expect(response.status).toBe(code);
+      expect((await response.json()).message).toBe(message);
+      expect(sql).not.toContain('INSERT INTO item');
+      expect(sql).toContain('ROLLBACK');
+      expect(await readdir(photoDir)).toEqual([]);
+    });
+
+    it.each([
+      [null, 'Select a category.'],
+      [false, 'Select an active category.'],
+    ])('rejects subcategory state %s', async (active, message) => {
+      subcategoryActive = active;
+      const response = await post('/tickets/10/items', newItem());
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        field: 'subcategory_id',
+        message,
+      });
+    });
+
+    it.each([
+      [{ quantity: 0 }, 'quantity', 'Quantity must be greater than 0.'],
+      [{ subcategory_id: undefined }, 'subcategory_id', 'Select a category.'],
+      [{ description: '   ' }, 'description', 'Description is required.'],
+      [{ amount: -1 }, 'amount', 'Price cannot be negative.'],
+      [
+        { amount: 1.25 },
+        'amount',
+        'Enter a price with at most one decimal place.',
+      ],
+      [{ ticket_number: 10 }, 'ticket_number', undefined],
+      [{ photo: undefined }, 'photo', 'Take an item photo.'],
+      [{ photo: { fileName: 'x.png' } }, 'photo', undefined],
+    ])(
+      'rejects %j without opening a transaction',
+      async (change, field, message) => {
+        const response = await post('/tickets/10/items', newItem(change));
+        expect(response.status).toBe(400);
+        const body = await response.json();
+        expect(body.field).toBe(field);
+        if (message) expect(body.message).toBe(message);
+        expect(pool.connect).not.toHaveBeenCalled();
+      },
+    );
+
+    it('rejects a file that is not an image and removes nothing else', async () => {
+      const response = await post(
+        '/tickets/10/items',
+        newItem({
+          photo: {
+            fileName: 'x.png',
+            base64: Buffer.from('hello').toString('base64'),
+          },
+        }),
+      );
+      expect(response.status).toBe(400);
+      expect((await response.json()).message).toBe(
+        'Upload a PNG or JPEG image up to 5 MB',
+      );
+      expect(sql).toContain('ROLLBACK');
+      expect(await readdir(photoDir)).toEqual([]);
     });
   });
 });
