@@ -21,7 +21,7 @@ export function searchItemsHttp(
 ) {
   const url = apiUrl("/items/search", baseUrl);
   for (const [key, value] of Object.entries(input)) {
-    const text = value === undefined ? "" : String(value).trim();
+    const text = value == null ? "" : String(value).trim();
     if (text) url.searchParams.set(key, text);
   }
   return requestJson<ItemSearchResult>(url);
