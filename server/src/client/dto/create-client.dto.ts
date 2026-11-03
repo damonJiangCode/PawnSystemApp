@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { SaveClientImageDto } from './save-client-image.dto.js';
+import { SaveImageDto } from '../../common/save-image.dto.js';
 import {
   ArrayMinSize,
   ArrayMaxSize,
@@ -137,8 +137,8 @@ export class CreateClientDto {
   @IsDefined()
   @IsObject()
   @ValidateNested()
-  @Type(() => SaveClientImageDto)
-  photo!: SaveClientImageDto;
+  @Type(() => SaveImageDto)
+  photo!: SaveImageDto;
 
   @IsDefined()
   @IsObject()

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class SaveClientImageDto {
+export class SaveImageDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)

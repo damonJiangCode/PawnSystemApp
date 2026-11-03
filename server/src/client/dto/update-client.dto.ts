@@ -18,7 +18,7 @@ import {
   CreateClientDetailsDto,
   CreateClientIdDto,
 } from './create-client.dto.js';
-import { SaveClientImageDto } from './save-client-image.dto.js';
+import { SaveImageDto } from '../../common/save-image.dto.js';
 
 // Reuse field validation while allowing omitted fields to remain unchanged.
 export class UpdateClientDetailsDto extends PartialType(
@@ -53,8 +53,8 @@ export class UpdateClientDto {
   @ValidateIf((_object, value) => value !== undefined)
   @IsObject()
   @ValidateNested()
-  @Type(() => SaveClientImageDto)
-  photo?: SaveClientImageDto;
+  @Type(() => SaveImageDto)
+  photo?: SaveImageDto;
 
   @ValidateIf((_object, value) => value !== undefined)
   @IsString()
