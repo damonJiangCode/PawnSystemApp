@@ -1,12 +1,13 @@
 import type { Item } from "../models/item.model.ts";
 import type {
   ItemSearchInput,
+  ItemSearchResult,
   SaveItemInput,
 } from "../payload-contracts/item.contract.ts";
 
 export type ItemApi = {
   loadItemsByTicket: (ticketNumber: number) => Promise<Item[]>;
-  searchItems: (input: ItemSearchInput) => Promise<Item[]>;
+  searchItems: (input: ItemSearchInput) => Promise<ItemSearchResult>;
   createItem: (input: SaveItemInput) => Promise<Item>;
   updateItem: (input: SaveItemInput) => Promise<Item>;
   deleteItem: (ticketNumber: number, itemNumber: number) => Promise<void>;

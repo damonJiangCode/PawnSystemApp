@@ -1,3 +1,5 @@
+import type { Item } from "../models/item.model.ts";
+
 export type SaveItemInput = {
   item_number?: number;
   ticket_number: number;
@@ -19,4 +21,9 @@ export type ItemSearchInput = {
   brand_name?: string;
   model_number?: string;
   serial_number?: string;
+};
+
+export type ItemSearchResult = {
+  items: Item[];
+  truncated: boolean;
 };

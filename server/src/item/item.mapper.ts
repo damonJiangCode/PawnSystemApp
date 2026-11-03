@@ -18,9 +18,10 @@ export type ItemRecord = {
   image_path: string;
 };
 
-// pg returns NUMERIC (amount) as a string; the view can return NULLs.
+// pg returns BIGINT (item_number) and NUMERIC (amount) as strings; the view
+// can return NULLs.
 export type ItemRow = {
-  item_number: number;
+  item_number: string;
   quantity: number;
   subcategory_id: number | null;
   category_name: string | null;
@@ -46,7 +47,7 @@ export const itemSelect = `
 export const mapItemRow = (row: ItemRow): ItemRecord => {
   const status = row.latest_ticket_status ?? undefined;
   return {
-    item_number: row.item_number,
+    item_number: Number(row.item_number),
     quantity: row.quantity,
     subcategory_id: row.subcategory_id ?? undefined,
     category_name: row.category_name ?? '',

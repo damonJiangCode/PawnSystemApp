@@ -1,9 +1,5 @@
-import { connect } from "../../../../../database/connection.ts";
 import type { DbClient } from "../../../../../database/connection.ts";
-import type {
-  ItemSearchInput,
-  SaveItemInput,
-} from "../../../../../shared/payload-contracts/item.contract.ts";
+import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 import type { Item } from "../../../../../shared/models/item.model.ts";
 import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
 
@@ -64,77 +60,6 @@ export const itemRepo = {
 
     const result = await dbClient.query(query, [itemNumber]);
     return result.rows[0] ? mapItemRow(result.rows[0]) : null;
-  },
-
-  search: async (payload: ItemSearchInput): Promise<Item[]> => {
-    const conditions: string[] = [];
-    const values: Array<number | string> = [];
-
-    if (payload.client_number !== undefined) {
-      values.push(payload.client_number);
-      conditions.push(`iws.item_number IN (
-        SELECT ti.item_number FROM ticket t
-        INNER JOIN ticket_item ti ON ti.ticket_number = t.ticket_number
-        WHERE t.client_number = $${values.length}
-      )`);
-    }
-
-    if (payload.item_number) {
-      values.push(payload.item_number);
-      conditions.push(`iws.item_number = $${values.length}`);
-    } else {
-      const categoryId = payload.category_id;
-      const subcategoryId = payload.subcategory_id;
-      const brandName = payload.brand_name?.trim();
-      const modelNumber = payload.model_number?.trim();
-      const serialNumber = payload.serial_number?.trim();
-
-      if (categoryId) {
-        values.push(categoryId);
-        conditions.push(
-          `iws.category_name = (SELECT name FROM item_category WHERE id = $${values.length})`,
-        );
-      }
-
-      if (subcategoryId) {
-        values.push(subcategoryId);
-        conditions.push(`iws.subcategory_id = $${values.length}`);
-      }
-
-      if (brandName) {
-        values.push(`%${brandName}%`);
-        conditions.push(`iws.brand_name ILIKE $${values.length}`);
-      }
-
-      if (modelNumber) {
-        values.push(`%${modelNumber}%`);
-        conditions.push(`iws.model_number ILIKE $${values.length}`);
-      }
-
-      if (serialNumber) {
-        values.push(`%${serialNumber}%`);
-        conditions.push(`iws.serial_number ILIKE $${values.length}`);
-      }
-    }
-
-    if (!conditions.length) {
-      return [];
-    }
-
-    const client = await connect();
-    const query = `
-      SELECT ${itemSelectColumns}
-      FROM item_with_status iws
-      WHERE ${conditions.join(" AND ")}
-      ORDER BY iws.item_number DESC
-    `;
-
-    try {
-      const result = await client.query(query, values);
-      return result.rows.map(mapItemRow);
-    } finally {
-      client.release();
-    }
   },
 
   assertItemCanBeLoaded: async (

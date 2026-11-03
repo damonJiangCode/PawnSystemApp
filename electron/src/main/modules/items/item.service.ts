@@ -1,36 +1,11 @@
 import type { Item } from "../../../../../shared/models/item.model.ts";
-import type {
-  ItemSearchInput,
-  SaveItemInput,
-} from "../../../../../shared/payload-contracts/item.contract.ts";
+import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 import { itemRepo } from "./item.repo.ts";
 import { runInTransaction } from "../../shared/runInTransaction.ts";
 import { imageStorage } from "../../shared/imageStorage.ts";
 import { itemInput } from "./item.input.ts";
 
 export const itemService = {
-  searchItems: async (input: ItemSearchInput): Promise<Item[]> => {
-    const normalizedInput = itemInput.normalizeItemSearch(input);
-
-    if (
-      normalizedInput.client_number !== undefined &&
-      (!Number.isSafeInteger(normalizedInput.client_number) ||
-        normalizedInput.client_number <= 0)
-    ) {
-      throw new Error("Select a valid client.");
-    }
-
-    if (
-      normalizedInput.item_number &&
-      (!Number.isFinite(normalizedInput.item_number) ||
-        normalizedInput.item_number <= 0)
-    ) {
-      throw new Error("Enter a valid item number.");
-    }
-
-    return itemRepo.search(normalizedInput);
-  },
-
   createItem: async (input: SaveItemInput): Promise<Item> => {
     const normalizedInput = itemInput.normalizeSaveItem(input);
     itemInput.validateItem(normalizedInput);

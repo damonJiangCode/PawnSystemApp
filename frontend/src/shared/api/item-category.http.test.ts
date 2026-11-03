@@ -30,10 +30,10 @@ test("item categories use HTTP while other item operations keep their implementa
       return Response.json(categories);
     },
   );
-  const searchItems = async () => [];
-  setWindow(t, { item: { searchItems } });
+  const createItem = async () => ({}) as never;
+  setWindow(t, { item: { createItem } });
   const api = getAppApi()!;
-  assert.equal(api.item.searchItems, searchItems);
+  assert.equal(api.item.createItem, createItem);
   assert.deepEqual(await api.reference.loadItemCategories(), categories);
   assert.deepEqual(calls, ["/reference/item-categories"]);
 });

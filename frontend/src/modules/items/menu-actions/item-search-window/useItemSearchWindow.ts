@@ -386,7 +386,7 @@ export const useItemSearchWindow = () => {
     setCheckedItemIds([]);
     setSelectedItem(null);
     try {
-      const results = await itemApi.searchItems({
+      const { items: results, truncated } = await itemApi.searchItems({
         client_number: clientNumber,
       });
       if (
@@ -397,7 +397,9 @@ export const useItemSearchWindow = () => {
       setItems(results);
       setSelectedItem(results[0] ?? null);
       setMessage(
-        `${results.length} item(s) previously recorded for client #${clientNumber}.`,
+        truncated
+          ? `Showing the newest ${results.length} items recorded for client #${clientNumber}.`
+          : `${results.length} item(s) previously recorded for client #${clientNumber}.`,
       );
     } catch (err) {
       if (requestId === searchRequestIdRef.current) {
@@ -434,7 +436,7 @@ export const useItemSearchWindow = () => {
     setSearching(true);
 
     try {
-      const results = await itemApi.searchItems(
+      const { items: results, truncated } = await itemApi.searchItems(
         mode === "item-number"
           ? { item_number: normalizedItemNumber }
           : {
@@ -465,9 +467,11 @@ export const useItemSearchWindow = () => {
         return results[0] ?? retainedCheckedItems[0] ?? null;
       });
       setMessage(
-        results.length
-          ? `${results.length} item(s) found.`
-          : "No matching items found.",
+        truncated
+          ? `Showing the newest ${results.length} matches. Narrow your search to see the rest.`
+          : results.length
+            ? `${results.length} item(s) found.`
+            : "No matching items found.",
       );
     } catch (err) {
       if (requestId !== searchRequestIdRef.current) return;

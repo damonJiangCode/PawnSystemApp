@@ -8,7 +8,6 @@ const CHANNELS = {
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
-  SEARCH_ITEMS: "search-items",
   ADD_ITEM: "add-item",
   UPDATE_ITEM: "update-item",
   DELETE_ITEM: "delete-item",
@@ -37,7 +36,6 @@ const reportApi = {
 };
 
 const itemApi = {
-  searchItems: (payload) => invoke(CHANNELS.SEARCH_ITEMS, payload),
   createItem: (payload) => invoke(CHANNELS.ADD_ITEM, payload),
   updateItem: (payload) => invoke(CHANNELS.UPDATE_ITEM, payload),
   deleteItem: (ticketNumber, itemNumber) =>

@@ -1,7 +1,4 @@
-import type {
-  ItemSearchInput,
-  SaveItemInput,
-} from "../../../../../shared/payload-contracts/item.contract.ts";
+import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 
 const trimUpper = (value?: string) => value?.trim().toUpperCase() ?? "";
 
@@ -40,19 +37,6 @@ const validateItem = (item: SaveItemInput) => {
   }
 };
 
-const normalizeItemSearch = (input: ItemSearchInput): ItemSearchInput => ({
-  client_number:
-    input.client_number === undefined ? undefined : Number(input.client_number),
-  item_number: input.item_number ? Number(input.item_number) : undefined,
-  category_id: input.category_id ? Number(input.category_id) : undefined,
-  subcategory_id: input.subcategory_id
-    ? Number(input.subcategory_id)
-    : undefined,
-  brand_name: trimUpper(input.brand_name),
-  model_number: trimUpper(input.model_number),
-  serial_number: trimUpper(input.serial_number),
-});
-
 const normalizeTicketItemNumbers = (
   ticketNumber: number,
   itemNumbers: number[],
@@ -66,6 +50,5 @@ const normalizeTicketItemNumbers = (
 export const itemInput = {
   normalizeSaveItem,
   validateItem,
-  normalizeItemSearch,
   normalizeTicketItemNumbers,
 };

@@ -1,6 +1,7 @@
 import type { Item } from "../../../../shared/models/item.model";
 import type {
   ItemSearchInput,
+  ItemSearchResult,
   SaveItemInput,
 } from "../../../../shared/payload-contracts/item.contract";
 import { getAppApi } from "../../shared/api/app.api";
@@ -19,7 +20,7 @@ export const itemApi = {
     return api.loadItemsByTicket(ticketNumber);
   },
 
-  searchItems: async (input: ItemSearchInput): Promise<Item[]> => {
+  searchItems: async (input: ItemSearchInput): Promise<ItemSearchResult> => {
     const api = getAppApi()?.item;
     if (!api) {
       throw new Error("Item API is unavailable.");

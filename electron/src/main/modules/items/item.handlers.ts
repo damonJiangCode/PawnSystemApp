@@ -1,21 +1,11 @@
 import type { IpcMainInvokeEvent } from "electron";
-import type {
-  ItemSearchInput,
-  SaveItemInput,
-} from "../../../../../shared/payload-contracts/item.contract.ts";
+import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 import { itemService } from "./item.service.ts";
 import { CHANNELS } from "../../ipc/channels.ts";
 
 const { ipcMain } = require("electron/main") as typeof import("electron");
 
 export const registerItemHandlers = () => {
-  ipcMain.handle(
-    CHANNELS.SEARCH_ITEMS,
-    async (_event: IpcMainInvokeEvent, payload: ItemSearchInput) => {
-      return itemService.searchItems(payload);
-    },
-  );
-
   ipcMain.handle(
     CHANNELS.ADD_ITEM,
     async (_event: IpcMainInvokeEvent, payload: SaveItemInput) => {

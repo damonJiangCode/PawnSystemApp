@@ -36,18 +36,66 @@ test("loads a ticket's items from the ticket sub-resource", async (t) => {
   assert.deepEqual(await http.loadItemsByTicketHttp(10, base), [itemJson]);
 });
 
-test("getAppApi loads items over HTTP and keeps the other item methods on IPC", async (t) => {
-  const searchItems = () => Promise.resolve([]);
+test("searches with only the filled-in filters and returns the truncated flag", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    assert.equal(url.pathname, "/items/search");
+    assert.equal(
+      url.search,
+      "?category_id=2&brand_name=APPLE&serial_number=SN",
+    );
+    return Response.json({ items: [itemJson], truncated: true });
+  });
+  assert.deepEqual(
+    await http.searchItemsHttp(
+      {
+        client_number: undefined,
+        category_id: 2,
+        subcategory_id: undefined,
+        brand_name: " APPLE ",
+        model_number: "",
+        serial_number: "SN",
+      },
+      base,
+    ),
+    { items: [itemJson], truncated: true },
+  );
+});
+
+test("search shows the server's validation message", async (t) => {
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json(
+      { field: "item_number", message: "Enter a valid item number." },
+      { status: 400 },
+    ),
+  );
+  await assert.rejects(
+    http.searchItemsHttp({ item_number: 1.5 }, base),
+    /Enter a valid item number\./,
+  );
+});
+
+test("getAppApi serves loading and search over HTTP and keeps the rest on IPC", async (t) => {
+  const createItem = () => Promise.resolve({} as never);
+  const ipcMustNotBeUsed = () => {
+    throw new Error("IPC must not be used");
+  };
   setWindow(t, {
     item: {
-      searchItems,
-      loadItemsByTicket: () => {
-        throw new Error("IPC must not be used");
-      },
+      createItem,
+      loadItemsByTicket: ipcMustNotBeUsed,
+      searchItems: ipcMustNotBeUsed,
     },
   });
-  t.mock.method(globalThis, "fetch", async () => Response.json([]));
+  t.mock.method(globalThis, "fetch", async (url: URL) =>
+    Response.json(
+      url.pathname === "/items/search" ? { items: [], truncated: false } : [],
+    ),
+  );
   const api = getAppApi()!;
-  assert.equal(api.item.searchItems, searchItems);
+  assert.equal(api.item.createItem, createItem);
   assert.deepEqual(await api.item.loadItemsByTicket(10), []);
+  assert.deepEqual(await api.item.searchItems({ client_number: 7 }), {
+    items: [],
+    truncated: false,
+  });
 });
