@@ -6,30 +6,6 @@ import { imageStorage } from "../../shared/imageStorage.ts";
 import { itemInput } from "./item.input.ts";
 
 export const itemService = {
-  createItem: async (input: SaveItemInput): Promise<Item> => {
-    const normalizedInput = itemInput.normalizeSaveItem(input);
-    itemInput.validateItem(normalizedInput);
-
-    return runInTransaction("createItem", async (client) => {
-      const item = await itemRepo.create(normalizedInput, client);
-      const imagePath = item.image_path
-        ? await imageStorage.finalizeItemImage(
-            item.item_number,
-            item.image_path,
-          )
-        : "";
-
-      if (imagePath && imagePath !== item.image_path) {
-        await itemRepo.updateImagePath(item.item_number, imagePath, client);
-      }
-
-      return {
-        ...item,
-        image_path: imagePath || item.image_path,
-      };
-    });
-  },
-
   updateItem: async (input: SaveItemInput): Promise<Item> => {
     const normalizedInput = itemInput.normalizeSaveItem(input);
     itemInput.validateItem(normalizedInput);

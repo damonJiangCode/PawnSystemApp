@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import type { Item } from "../../../../../../shared/models/item.model";
 import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
-import { itemApi, type SaveItemInput } from "../../item.api";
+import { itemApi, type ItemPhotoInput } from "../../item.api";
 import ItemCategoryDialog from "./ItemCategoryDialog";
 import ItemPhotoCapture from "./ItemPhotoCapture";
 
@@ -51,6 +51,8 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
   const [serialNumber, setSerialNumber] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [imagePath, setImagePath] = useState("");
+  // A new item's photo stays here until Save sends it with the item.
+  const [newPhoto, setNewPhoto] = useState<ItemPhotoInput | null>(null);
   const [categoryError, setCategoryError] = useState("");
   const [quantityError, setQuantityError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
@@ -87,6 +89,7 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
     setSerialNumber(item?.serial_number ?? "");
     setAmount(item?.amount ?? "");
     setImagePath(item?.image_path ?? "");
+    setNewPhoto(null);
     setCategoryError("");
     setQuantityError("");
     setDescriptionError("");
@@ -97,8 +100,12 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
   }, [categories, item, mode, open]);
 
   const handleCapture = async (fileName: string, base64: string) => {
-    const savedPath = await itemApi.saveItemImage(fileName, base64);
-    setImagePath(savedPath);
+    if (mode === "add") {
+      setNewPhoto({ fileName, base64 });
+    } else {
+      const savedPath = await itemApi.saveItemImage(fileName, base64);
+      setImagePath(savedPath);
+    }
     setPhotoError("");
     setSubmitError("");
   };
@@ -131,7 +138,7 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
         ? "Price cannot be negative."
         : "";
     const nextPhotoError =
-      mode === "add" && !imagePath.trim() ? "Take an item photo." : "";
+      mode === "add" && !newPhoto ? "Take an item photo." : "";
 
     setCategoryError(nextCategoryError);
     setQuantityError(nextQuantityError);
@@ -162,8 +169,7 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
       return;
     }
 
-    const payload: SaveItemInput = {
-      item_number: item?.item_number,
+    const fields = {
       ticket_number: ticketNumber,
       quantity: normalizedQuantity,
       subcategory_id: selectedCategory.subcategory_id,
@@ -172,7 +178,6 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
       model_number: modelNumber,
       serial_number: serialNumber,
       amount: normalizedAmount,
-      image_path: imagePath,
     };
 
     setSaving(true);
@@ -180,9 +185,13 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
 
     try {
       const savedItem =
-        mode === "add"
-          ? await itemApi.createItem(payload)
-          : await itemApi.updateItem(payload);
+        mode === "add" && newPhoto
+          ? await itemApi.createItem({ ...fields, photo: newPhoto })
+          : await itemApi.updateItem({
+              ...fields,
+              item_number: item?.item_number,
+              image_path: imagePath,
+            });
 
       onSave({
         ...savedItem,

@@ -74,14 +74,48 @@ test("search shows the server's validation message", async (t) => {
   );
 });
 
-test("getAppApi serves loading and search over HTTP and keeps the rest on IPC", async (t) => {
-  const createItem = () => Promise.resolve({} as never);
+test("creates an item on its ticket with the photo in the body", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/tickets/10/items");
+    assert.equal(init.method, "POST");
+    assert.deepEqual(JSON.parse(String(init.body)), {
+      quantity: 1,
+      subcategory_id: 3,
+      description: "GOLD RING",
+      brand_name: "",
+      model_number: "",
+      serial_number: "SN1",
+      amount: 120.5,
+      photo: { fileName: "item_pending_1.png", base64: "iVBORw0KGgo=" },
+    });
+    return Response.json(itemJson, { status: 201 });
+  });
+  const created = await http.createItemHttp(
+    {
+      ticket_number: 10,
+      quantity: 1,
+      subcategory_id: 3,
+      description: "GOLD RING",
+      brand_name: "",
+      model_number: "",
+      serial_number: "SN1",
+      amount: 120.5,
+      photo: { fileName: "item_pending_1.png", base64: "iVBORw0KGgo=" },
+    },
+    base,
+  );
+  assert.deepEqual(created, itemJson);
+});
+
+test("getAppApi serves loading, search and create over HTTP and keeps the rest on IPC", async (t) => {
+  const updateItem = () => Promise.resolve({} as never);
   const ipcMustNotBeUsed = () => {
     throw new Error("IPC must not be used");
   };
   setWindow(t, {
     item: {
-      createItem,
+      updateItem,
+      createItem: ipcMustNotBeUsed,
       loadItemsByTicket: ipcMustNotBeUsed,
       searchItems: ipcMustNotBeUsed,
     },
@@ -92,7 +126,8 @@ test("getAppApi serves loading and search over HTTP and keeps the rest on IPC", 
     ),
   );
   const api = getAppApi()!;
-  assert.equal(api.item.createItem, createItem);
+  assert.equal(api.item.updateItem, updateItem);
+  assert.notEqual(api.item.createItem, ipcMustNotBeUsed);
   assert.deepEqual(await api.item.loadItemsByTicket(10), []);
   assert.deepEqual(await api.item.searchItems({ client_number: 7 }), {
     items: [],

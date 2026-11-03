@@ -1,5 +1,7 @@
 import type { Item } from "../../../../shared/models/item.model";
 import type {
+  CreateItemInput,
+  ItemPhotoInput,
   ItemSearchInput,
   ItemSearchResult,
   SaveItemInput,
@@ -39,7 +41,7 @@ export const itemApi = {
     });
   },
 
-  createItem: async (payload: SaveItemInput): Promise<Item> => {
+  createItem: async (payload: CreateItemInput): Promise<Item> => {
     const api = getAppApi()?.item;
     if (!api) {
       throw new Error("Item API is unavailable.");
@@ -91,4 +93,4 @@ export const itemApi = {
   },
 };
 
-export type { ItemSearchInput, SaveItemInput };
+export type { CreateItemInput, ItemPhotoInput, ItemSearchInput, SaveItemInput };

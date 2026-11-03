@@ -128,52 +128,6 @@ export const itemRepo = {
     return item;
   },
 
-  create: async (payload: SaveItemInput, dbClient: DbClient): Promise<Item> => {
-    const query = `
-      INSERT INTO item (
-        quantity,
-        subcategory_id,
-        description,
-        brand_name,
-        model_number,
-        serial_number,
-        amount,
-        image_path
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-      RETURNING item_number
-    `;
-
-    const result = await dbClient.query(query, [
-      payload.quantity,
-      payload.subcategory_id,
-      payload.description,
-      payload.brand_name,
-      payload.model_number,
-      payload.serial_number,
-      payload.amount,
-      payload.image_path ?? "",
-    ]);
-
-    const itemNumber = Number(result.rows[0].item_number);
-
-    await dbClient.query(
-      `
-        INSERT INTO ticket_item (ticket_number, item_number)
-        VALUES ($1, $2)
-        ON CONFLICT (ticket_number, item_number) DO NOTHING
-      `,
-      [payload.ticket_number, itemNumber],
-    );
-
-    const item = await itemRepo.loadByItemNumber(itemNumber, dbClient);
-
-    if (!item) {
-      throw new Error(`Item #${itemNumber} was not found after creating.`);
-    }
-
-    return item;
-  },
-
   update: async (payload: SaveItemInput, dbClient: DbClient): Promise<Item> => {
     const query = `
       UPDATE item
@@ -220,21 +174,6 @@ export const itemRepo = {
     }
 
     return item;
-  },
-
-  updateImagePath: async (
-    itemNumber: number,
-    imagePath: string,
-    dbClient: DbClient,
-  ): Promise<void> => {
-    await dbClient.query(
-      `
-        UPDATE item
-        SET image_path = $1
-        WHERE item_number = $2
-      `,
-      [imagePath, itemNumber],
-    );
   },
 
   delete: async (

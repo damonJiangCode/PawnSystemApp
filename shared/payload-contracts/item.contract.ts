@@ -13,6 +13,19 @@ export type SaveItemInput = {
   image_path?: string;
 };
 
+export type ItemPhotoInput = {
+  fileName: string;
+  base64: string;
+};
+
+// New items get their number and image path from the server.
+export type CreateItemInput = Omit<
+  SaveItemInput,
+  "item_number" | "image_path"
+> & {
+  photo: ItemPhotoInput;
+};
+
 export type ItemSearchInput = {
   client_number?: number;
   item_number?: number;

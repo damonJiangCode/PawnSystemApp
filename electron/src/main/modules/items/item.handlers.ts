@@ -7,13 +7,6 @@ const { ipcMain } = require("electron/main") as typeof import("electron");
 
 export const registerItemHandlers = () => {
   ipcMain.handle(
-    CHANNELS.ADD_ITEM,
-    async (_event: IpcMainInvokeEvent, payload: SaveItemInput) => {
-      return itemService.createItem(payload);
-    },
-  );
-
-  ipcMain.handle(
     CHANNELS.UPDATE_ITEM,
     async (_event: IpcMainInvokeEvent, payload: SaveItemInput) => {
       return itemService.updateItem(payload);

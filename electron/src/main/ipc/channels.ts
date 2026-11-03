@@ -6,7 +6,6 @@ const CHANNELS = {
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
-  ADD_ITEM: "add-item",
   UPDATE_ITEM: "update-item",
   DELETE_ITEM: "delete-item",
   LINK_ITEMS_TO_TICKET: "link-items-to-ticket",

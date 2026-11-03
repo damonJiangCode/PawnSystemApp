@@ -1,5 +1,6 @@
 import type { Item } from "../models/item.model.ts";
 import type {
+  CreateItemInput,
   ItemSearchInput,
   ItemSearchResult,
   SaveItemInput,
@@ -8,7 +9,7 @@ import type {
 export type ItemApi = {
   loadItemsByTicket: (ticketNumber: number) => Promise<Item[]>;
   searchItems: (input: ItemSearchInput) => Promise<ItemSearchResult>;
-  createItem: (input: SaveItemInput) => Promise<Item>;
+  createItem: (input: CreateItemInput) => Promise<Item>;
   updateItem: (input: SaveItemInput) => Promise<Item>;
   deleteItem: (ticketNumber: number, itemNumber: number) => Promise<void>;
   linkItemsToTicket: (
