@@ -1,7 +1,6 @@
 import type { Item } from "../models/item.model.ts";
 
-export type SaveItemInput = {
-  item_number?: number;
+type ItemFields = {
   ticket_number: number;
   quantity: number;
   subcategory_id: number;
@@ -10,7 +9,6 @@ export type SaveItemInput = {
   model_number: string;
   serial_number: string;
   amount: number;
-  image_path?: string;
 };
 
 export type ItemPhotoInput = {
@@ -18,12 +16,13 @@ export type ItemPhotoInput = {
   base64: string;
 };
 
-// New items get their number and image path from the server.
-export type CreateItemInput = Omit<
-  SaveItemInput,
-  "item_number" | "image_path"
-> & {
+export type CreateItemInput = ItemFields & {
   photo: ItemPhotoInput;
+};
+
+export type UpdateItemInput = ItemFields & {
+  item_number: number;
+  photo?: ItemPhotoInput;
 };
 
 export type ItemSearchInput = {

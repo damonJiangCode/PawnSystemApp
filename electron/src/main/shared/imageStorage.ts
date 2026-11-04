@@ -26,20 +26,6 @@ const getMigrationImageBaseDir = (kind: ImageKind) => {
   );
 };
 
-const resolveImagePath = (baseDir: string, imagePath: string) => {
-  const resolved = path.resolve(baseDir, imagePath);
-
-  if (!resolved.startsWith(`${baseDir}${path.sep}`) && resolved !== baseDir) {
-    throw new Error("Invalid image path");
-  }
-
-  return resolved;
-};
-
-const resolveItemImagePath = (imagePath: string) => {
-  return resolveImagePath(getItemImageBaseDir(), imagePath);
-};
-
 const getLegacyImagePath = (imagePath: string): string | null => {
   const legacyPath = path.resolve(app.getPath("userData"), imagePath);
   const legacyBase = path.resolve(app.getPath("userData"));
@@ -107,65 +93,7 @@ const resolveStoredImagePath = async (
   return legacyPath ?? directPath;
 };
 
-const finalizeImage = async (
-  imagePath: string,
-  baseDir: string,
-  prefix: string,
-): Promise<string> => {
-  if (!imagePath) {
-    return "";
-  }
-
-  const currentBaseName = path.basename(imagePath);
-
-  if (currentBaseName.startsWith(`${prefix}_`)) {
-    return imagePath;
-  }
-
-  await fs.mkdir(baseDir, { recursive: true });
-
-  const currentPath = await resolveStoredImagePath(imagePath, baseDir);
-  const nextName = `${prefix}_${Date.now()}.png`;
-  const nextPath = path.join(baseDir, nextName);
-  const nextRelPath = path.join("images", path.basename(baseDir), nextName);
-
-  if (!(await fileExists(currentPath))) {
-    return imagePath;
-  }
-
-  await fs.rename(currentPath, nextPath);
-  return nextRelPath;
-};
-
 export const imageStorage = {
-  saveItemImage: async (fileName: string, base64: string): Promise<string> => {
-    if (!base64) {
-      throw new Error("Missing image data");
-    }
-
-    const baseDir = getItemImageBaseDir();
-    await fs.mkdir(baseDir, { recursive: true });
-
-    const safeName = path.basename(fileName);
-    const relPath = path.join("images", "items", safeName);
-    const absPath = resolveItemImagePath(safeName);
-    const buffer = Buffer.from(base64, "base64");
-
-    await fs.writeFile(absPath, buffer);
-    return relPath;
-  },
-
-  finalizeItemImage: async (
-    itemNumber: number,
-    imagePath: string,
-  ): Promise<string> => {
-    return finalizeImage(
-      imagePath,
-      getItemImageBaseDir(),
-      `item_${itemNumber}`,
-    );
-  },
-
   resolveImageFile: async (
     kind: ImageKind,
     imagePath: string,

@@ -51,8 +51,8 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
   const [serialNumber, setSerialNumber] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [imagePath, setImagePath] = useState("");
-  // A new item's photo stays here until Save sends it with the item.
-  const [newPhoto, setNewPhoto] = useState<ItemPhotoInput | null>(null);
+  // A newly taken photo stays here until Save sends it with the item.
+  const [newPhoto, setNewPhoto] = useState<ItemPhotoInput>();
   const [categoryError, setCategoryError] = useState("");
   const [quantityError, setQuantityError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
@@ -89,7 +89,7 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
     setSerialNumber(item?.serial_number ?? "");
     setAmount(item?.amount ?? "");
     setImagePath(item?.image_path ?? "");
-    setNewPhoto(null);
+    setNewPhoto(undefined);
     setCategoryError("");
     setQuantityError("");
     setDescriptionError("");
@@ -99,13 +99,8 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
     setSaving(false);
   }, [categories, item, mode, open]);
 
-  const handleCapture = async (fileName: string, base64: string) => {
-    if (mode === "add") {
-      setNewPhoto({ fileName, base64 });
-    } else {
-      const savedPath = await itemApi.saveItemImage(fileName, base64);
-      setImagePath(savedPath);
-    }
+  const handleCapture = (fileName: string, base64: string) => {
+    setNewPhoto({ fileName, base64 });
     setPhotoError("");
     setSubmitError("");
   };
@@ -185,12 +180,12 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
 
     try {
       const savedItem =
-        mode === "add" && newPhoto
-          ? await itemApi.createItem({ ...fields, photo: newPhoto })
+        mode === "add"
+          ? await itemApi.createItem({ ...fields, photo: newPhoto! })
           : await itemApi.updateItem({
               ...fields,
-              item_number: item?.item_number,
-              image_path: imagePath,
+              item_number: item!.item_number,
+              photo: newPhoto,
             });
 
       onSave({

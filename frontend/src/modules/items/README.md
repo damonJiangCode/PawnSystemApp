@@ -68,10 +68,9 @@ Important rules:
 
 ```text
 ItemPhotoCapture
-  -> item.api.saveItemImage
-  -> preload
-  -> item.handlers.ts
-  -> imageStorage.ts
+  -> ItemEditDialog keeps the photo until Save
+  -> item.api.createItem / updateItem
+  -> server saves the file
 ```
 
 The database stores image paths, not raw image data.

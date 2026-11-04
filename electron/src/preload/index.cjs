@@ -8,10 +8,8 @@ const CHANNELS = {
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
-  UPDATE_ITEM: "update-item",
   DELETE_ITEM: "delete-item",
   LINK_ITEMS_TO_TICKET: "link-items-to-ticket",
-  SAVE_ITEM_IMAGE: "save-item-image",
   OPEN_PAYMENT_WINDOW: "open-payment-window",
   NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
   OPEN_QUOTE_WINDOW: "open-quote-window",
@@ -35,13 +33,10 @@ const reportApi = {
 };
 
 const itemApi = {
-  updateItem: (payload) => invoke(CHANNELS.UPDATE_ITEM, payload),
   deleteItem: (ticketNumber, itemNumber) =>
     invoke(CHANNELS.DELETE_ITEM, ticketNumber, itemNumber),
   linkItemsToTicket: (ticketNumber, itemNumbers) =>
     invoke(CHANNELS.LINK_ITEMS_TO_TICKET, ticketNumber, itemNumbers),
-  saveItemImage: (fileName, base64) =>
-    invoke(CHANNELS.SAVE_ITEM_IMAGE, fileName, base64),
 };
 
 const xmlReportApi = {

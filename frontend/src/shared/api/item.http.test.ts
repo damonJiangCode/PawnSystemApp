@@ -107,15 +107,49 @@ test("creates an item on its ticket with the photo in the body", async (t) => {
   assert.deepEqual(created, itemJson);
 });
 
-test("getAppApi serves loading, search and create over HTTP and keeps the rest on IPC", async (t) => {
-  const updateItem = () => Promise.resolve({} as never);
+test("updates an item through its ticket; without a photo none is sent", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/tickets/10/items/40");
+    assert.equal(init.method, "PATCH");
+    assert.deepEqual(JSON.parse(String(init.body)), {
+      quantity: 2,
+      subcategory_id: 3,
+      description: "GOLD RING",
+      brand_name: "",
+      model_number: "",
+      serial_number: "SN1",
+      amount: 99.5,
+    });
+    return Response.json(itemJson);
+  });
+  const updated = await http.updateItemHttp(
+    {
+      ticket_number: 10,
+      item_number: 40,
+      quantity: 2,
+      subcategory_id: 3,
+      description: "GOLD RING",
+      brand_name: "",
+      model_number: "",
+      serial_number: "SN1",
+      amount: 99.5,
+      photo: undefined,
+    },
+    base,
+  );
+  assert.deepEqual(updated, itemJson);
+});
+
+test("getAppApi serves loading, search, create and update over HTTP and keeps the rest on IPC", async (t) => {
+  const deleteItem = () => Promise.resolve();
   const ipcMustNotBeUsed = () => {
     throw new Error("IPC must not be used");
   };
   setWindow(t, {
     item: {
-      updateItem,
+      deleteItem,
       createItem: ipcMustNotBeUsed,
+      updateItem: ipcMustNotBeUsed,
       loadItemsByTicket: ipcMustNotBeUsed,
       searchItems: ipcMustNotBeUsed,
     },
@@ -126,8 +160,9 @@ test("getAppApi serves loading, search and create over HTTP and keeps the rest o
     ),
   );
   const api = getAppApi()!;
-  assert.equal(api.item.updateItem, updateItem);
+  assert.equal(api.item.deleteItem, deleteItem);
   assert.notEqual(api.item.createItem, ipcMustNotBeUsed);
+  assert.notEqual(api.item.updateItem, ipcMustNotBeUsed);
   assert.deepEqual(await api.item.loadItemsByTicket(10), []);
   assert.deepEqual(await api.item.searchItems({ client_number: 7 }), {
     items: [],

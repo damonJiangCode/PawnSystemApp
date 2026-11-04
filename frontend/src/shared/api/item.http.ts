@@ -4,13 +4,15 @@ import type {
   CreateItemInput,
   ItemSearchInput,
   ItemSearchResult,
+  UpdateItemInput,
 } from "../../../../shared/payload-contracts/item.contract.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 export type HttpItemMethods =
   | "loadItemsByTicket"
   | "searchItems"
-  | "createItem";
+  | "createItem"
+  | "updateItem";
 
 export function loadItemsByTicketHttp(
   ticketNumber: number,
@@ -40,6 +42,14 @@ export function createItemHttp(input: CreateItemInput, baseUrl = API_BASE_URL) {
   );
 }
 
+export function updateItemHttp(input: UpdateItemInput, baseUrl = API_BASE_URL) {
+  const { ticket_number, item_number, ...item } = input;
+  return requestJson<Item>(
+    apiUrl(`/tickets/${ticket_number}/items/${item_number}`, baseUrl),
+    jsonBody("PATCH", item),
+  );
+}
+
 export const createItemHttpApi = (
   baseUrl = API_BASE_URL,
 ): Pick<ItemApi, HttpItemMethods> => ({
@@ -47,4 +57,5 @@ export const createItemHttpApi = (
     loadItemsByTicketHttp(ticketNumber, baseUrl),
   searchItems: (input) => searchItemsHttp(input, baseUrl),
   createItem: (input) => createItemHttp(input, baseUrl),
+  updateItem: (input) => updateItemHttp(input, baseUrl),
 });

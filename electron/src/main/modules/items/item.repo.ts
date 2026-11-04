@@ -1,5 +1,4 @@
 import type { DbClient } from "../../../../../database/connection.ts";
-import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 import type { Item } from "../../../../../shared/models/item.model.ts";
 import type { Ticket } from "../../../../../shared/models/ticket.model.ts";
 
@@ -123,54 +122,6 @@ export const itemRepo = {
 
     if (!item) {
       throw new Error(`Item #${itemNumber} was not found after linking.`);
-    }
-
-    return item;
-  },
-
-  update: async (payload: SaveItemInput, dbClient: DbClient): Promise<Item> => {
-    const query = `
-      UPDATE item
-      SET
-        quantity = $1,
-        subcategory_id = $2,
-        description = $3,
-        brand_name = $4,
-        model_number = $5,
-        serial_number = $6,
-        amount = $7,
-        image_path = $8
-      WHERE item_number = $9
-      RETURNING item_number
-    `;
-
-    const result = await dbClient.query(query, [
-      payload.quantity,
-      payload.subcategory_id,
-      payload.description,
-      payload.brand_name,
-      payload.model_number,
-      payload.serial_number,
-      payload.amount,
-      payload.image_path ?? "",
-      payload.item_number,
-    ]);
-
-    if (!result.rows[0]) {
-      throw new Error(
-        `[itemRepo] update(): Item #${payload.item_number} not found`,
-      );
-    }
-
-    const item = await itemRepo.loadByItemNumber(
-      Number(result.rows[0].item_number),
-      dbClient,
-    );
-
-    if (!item) {
-      throw new Error(
-        `[itemRepo] update(): Item #${payload.item_number} not found after update`,
-      );
     }
 
     return item;

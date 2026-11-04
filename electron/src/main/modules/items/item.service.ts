@@ -1,35 +1,9 @@
 import type { Item } from "../../../../../shared/models/item.model.ts";
-import type { SaveItemInput } from "../../../../../shared/payload-contracts/item.contract.ts";
 import { itemRepo } from "./item.repo.ts";
 import { runInTransaction } from "../../shared/runInTransaction.ts";
-import { imageStorage } from "../../shared/imageStorage.ts";
 import { itemInput } from "./item.input.ts";
 
 export const itemService = {
-  updateItem: async (input: SaveItemInput): Promise<Item> => {
-    const normalizedInput = itemInput.normalizeSaveItem(input);
-    itemInput.validateItem(normalizedInput);
-
-    if (!normalizedInput.item_number) {
-      throw new Error("An item is required.");
-    }
-
-    return runInTransaction("updateItem", async (client) => {
-      const imagePath = normalizedInput.image_path
-        ? await imageStorage.finalizeItemImage(
-            normalizedInput.item_number as number,
-            normalizedInput.image_path,
-          )
-        : "";
-      const preparedInput = {
-        ...normalizedInput,
-        image_path: imagePath || normalizedInput.image_path,
-      };
-
-      return itemRepo.update(preparedInput, client);
-    });
-  },
-
   deleteItem: async (
     ticketNumber: number,
     itemNumber: number,
@@ -77,9 +51,5 @@ export const itemService = {
 
       return linkedItems;
     });
-  },
-
-  saveItemImage: async (fileName: string, base64: string): Promise<string> => {
-    return imageStorage.saveItemImage(fileName, base64);
   },
 };

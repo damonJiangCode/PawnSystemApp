@@ -4,7 +4,7 @@ import type {
   ItemPhotoInput,
   ItemSearchInput,
   ItemSearchResult,
-  SaveItemInput,
+  UpdateItemInput,
 } from "../../../../shared/payload-contracts/item.contract";
 import { getAppApi } from "../../shared/api/app.api";
 
@@ -50,7 +50,7 @@ export const itemApi = {
     return api.createItem(payload);
   },
 
-  updateItem: async (payload: SaveItemInput): Promise<Item> => {
+  updateItem: async (payload: UpdateItemInput): Promise<Item> => {
     const api = getAppApi()?.item;
     if (!api) {
       throw new Error("Item API is unavailable.");
@@ -82,15 +82,11 @@ export const itemApi = {
 
     return api.linkItemsToTicket(ticketNumber, itemNumbers);
   },
-
-  saveItemImage: async (fileName: string, base64: string): Promise<string> => {
-    const api = getAppApi()?.item;
-    if (!api) {
-      throw new Error("Item API is unavailable.");
-    }
-
-    return api.saveItemImage(fileName, base64);
-  },
 };
 
-export type { CreateItemInput, ItemPhotoInput, ItemSearchInput, SaveItemInput };
+export type {
+  CreateItemInput,
+  ItemPhotoInput,
+  ItemSearchInput,
+  UpdateItemInput,
+};
