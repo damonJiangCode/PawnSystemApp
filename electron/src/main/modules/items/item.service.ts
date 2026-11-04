@@ -4,19 +4,6 @@ import { runInTransaction } from "../../shared/runInTransaction.ts";
 import { itemInput } from "./item.input.ts";
 
 export const itemService = {
-  deleteItem: async (
-    ticketNumber: number,
-    itemNumber: number,
-  ): Promise<void> => {
-    if (!ticketNumber || !itemNumber) {
-      throw new Error("A ticket and item are required.");
-    }
-
-    return runInTransaction("deleteItem", async (client) =>
-      itemRepo.delete(Number(ticketNumber), Number(itemNumber), client),
-    );
-  },
-
   linkItemsToTicket: async (
     ticketNumber: number,
     itemNumbers: number[],

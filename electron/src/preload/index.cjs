@@ -8,7 +8,6 @@ const CHANNELS = {
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
-  DELETE_ITEM: "delete-item",
   LINK_ITEMS_TO_TICKET: "link-items-to-ticket",
   OPEN_PAYMENT_WINDOW: "open-payment-window",
   NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
@@ -33,8 +32,6 @@ const reportApi = {
 };
 
 const itemApi = {
-  deleteItem: (ticketNumber, itemNumber) =>
-    invoke(CHANNELS.DELETE_ITEM, ticketNumber, itemNumber),
   linkItemsToTicket: (ticketNumber, itemNumbers) =>
     invoke(CHANNELS.LINK_ITEMS_TO_TICKET, ticketNumber, itemNumbers),
 };

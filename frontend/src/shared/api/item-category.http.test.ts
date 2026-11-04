@@ -30,10 +30,10 @@ test("item categories use HTTP while other item operations keep their implementa
       return Response.json(categories);
     },
   );
-  const deleteItem = async () => undefined;
-  setWindow(t, { item: { deleteItem } });
+  const linkItemsToTicket = async () => [];
+  setWindow(t, { item: { linkItemsToTicket } });
   const api = getAppApi()!;
-  assert.equal(api.item.deleteItem, deleteItem);
+  assert.equal(api.item.linkItemsToTicket, linkItemsToTicket);
   assert.deepEqual(await api.reference.loadItemCategories(), categories);
   assert.deepEqual(calls, ["/reference/item-categories"]);
 });

@@ -43,5 +43,8 @@ export async function requestJson<T>(
     throw error;
   }
 
+  // 204 has no body to parse.
+  if (response.status === 204) return undefined as T;
+
   return response.json() as Promise<T>;
 }

@@ -126,19 +126,4 @@ export const itemRepo = {
 
     return item;
   },
-
-  delete: async (
-    ticketNumber: number,
-    itemNumber: number,
-    dbClient: DbClient,
-  ): Promise<void> => {
-    await dbClient.query(
-      `
-        DELETE FROM ticket_item
-        WHERE ticket_number = $1
-          AND item_number = $2
-      `,
-      [ticketNumber, itemNumber],
-    );
-  },
 };

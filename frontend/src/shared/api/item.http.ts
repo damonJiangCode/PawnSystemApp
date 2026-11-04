@@ -12,7 +12,8 @@ export type HttpItemMethods =
   | "loadItemsByTicket"
   | "searchItems"
   | "createItem"
-  | "updateItem";
+  | "updateItem"
+  | "deleteItem";
 
 export function loadItemsByTicketHttp(
   ticketNumber: number,
@@ -50,6 +51,17 @@ export function updateItemHttp(input: UpdateItemInput, baseUrl = API_BASE_URL) {
   );
 }
 
+export function deleteItemHttp(
+  ticketNumber: number,
+  itemNumber: number,
+  baseUrl = API_BASE_URL,
+) {
+  return requestJson<void>(
+    apiUrl(`/tickets/${ticketNumber}/items/${itemNumber}`, baseUrl),
+    { method: "DELETE" },
+  );
+}
+
 export const createItemHttpApi = (
   baseUrl = API_BASE_URL,
 ): Pick<ItemApi, HttpItemMethods> => ({
@@ -58,4 +70,6 @@ export const createItemHttpApi = (
   searchItems: (input) => searchItemsHttp(input, baseUrl),
   createItem: (input) => createItemHttp(input, baseUrl),
   updateItem: (input) => updateItemHttp(input, baseUrl),
+  deleteItem: (ticketNumber, itemNumber) =>
+    deleteItemHttp(ticketNumber, itemNumber, baseUrl),
 });

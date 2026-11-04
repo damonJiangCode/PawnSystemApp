@@ -140,16 +140,34 @@ test("updates an item through its ticket; without a photo none is sent", async (
   assert.deepEqual(updated, itemJson);
 });
 
-test("getAppApi serves loading, search, create and update over HTTP and keeps the rest on IPC", async (t) => {
-  const deleteItem = () => Promise.resolve();
+test("deletes an item from its ticket and accepts the empty 204", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/tickets/10/items/40");
+    assert.equal(init.method, "DELETE");
+    return new Response(null, { status: 204 });
+  });
+  assert.equal(await http.deleteItemHttp(10, 40, base), undefined);
+});
+
+test("delete shows the server's conflict message", async (t) => {
+  const message = "Items can only be changed on pawned or sold tickets.";
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({ field: "ticket_number", message }, { status: 409 }),
+  );
+  await assert.rejects(http.deleteItemHttp(10, 40, base), { message });
+});
+
+test("getAppApi serves everything but linking over HTTP and keeps linking on IPC", async (t) => {
+  const linkItemsToTicket = () => Promise.resolve([]);
   const ipcMustNotBeUsed = () => {
     throw new Error("IPC must not be used");
   };
   setWindow(t, {
     item: {
-      deleteItem,
+      linkItemsToTicket,
       createItem: ipcMustNotBeUsed,
       updateItem: ipcMustNotBeUsed,
+      deleteItem: ipcMustNotBeUsed,
       loadItemsByTicket: ipcMustNotBeUsed,
       searchItems: ipcMustNotBeUsed,
     },
@@ -160,7 +178,8 @@ test("getAppApi serves loading, search, create and update over HTTP and keeps th
     ),
   );
   const api = getAppApi()!;
-  assert.equal(api.item.deleteItem, deleteItem);
+  assert.equal(api.item.linkItemsToTicket, linkItemsToTicket);
+  assert.notEqual(api.item.deleteItem, ipcMustNotBeUsed);
   assert.notEqual(api.item.createItem, ipcMustNotBeUsed);
   assert.notEqual(api.item.updateItem, ipcMustNotBeUsed);
   assert.deepEqual(await api.item.loadItemsByTicket(10), []);

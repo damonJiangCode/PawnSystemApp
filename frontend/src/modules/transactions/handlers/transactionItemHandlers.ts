@@ -82,10 +82,21 @@ export const createTransactionItemHandlers = ({
       return;
     }
 
-    await itemApi.deleteItem(
-      selectedTicket.ticket_number,
-      removeItemTarget.item_number,
-    );
+    try {
+      await itemApi.deleteItem(
+        selectedTicket.ticket_number,
+        removeItemTarget.item_number,
+      );
+    } catch (err) {
+      console.error(err);
+      setStatusMessage(
+        err instanceof Error
+          ? err.message
+          : "Couldn't remove this item right now.",
+      );
+      setRemoveItemTarget(null);
+      return;
+    }
 
     const nextItems = items.filter(
       (current) => current.item_number !== removeItemTarget.item_number,
