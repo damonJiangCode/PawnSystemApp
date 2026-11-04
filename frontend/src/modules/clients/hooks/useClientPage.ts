@@ -51,7 +51,6 @@ export const useClientPage = ({
       searchLastName,
       searchDateOfBirth,
       searchRequestKey,
-      isActive,
     );
   const [displayResults, setDisplayResults] = useState<Client[]>([]);
   const [additionalClients, setAdditionalClients] = useState<Client[]>([]);
@@ -112,9 +111,9 @@ export const useClientPage = ({
       return;
     }
 
-    if (activeClient) {
-      setSelectedClient(activeClient);
-    }
+    // Also follow a cleared client, or this page would keep showing a selection
+    // the other tabs no longer have.
+    setSelectedClient(activeClient ?? null);
   }, [activeClient, isActive]);
 
   useEffect(() => {
