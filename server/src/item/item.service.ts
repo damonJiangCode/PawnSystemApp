@@ -56,17 +56,11 @@ export class ItemService {
     const { photo, ...item } = input;
     return inTransaction(this.pool, async (connection) => {
       await this.requireOpenTicket(ticketNumber, connection);
-      const currentSubcategoryId = await this.items.lockTicketItem(
+      const currentSubcategoryId = await this.requireTicketItem(
         ticketNumber,
         itemNumber,
         connection,
       );
-      if (currentSubcategoryId === null) {
-        throw new NotFoundException({
-          field: 'item_number',
-          message: `Item #${itemNumber} is not on ticket #${ticketNumber}.`,
-        });
-      }
       // An item may keep a category that was deactivated after it was saved.
       if (item.subcategory_id !== currentSubcategoryId) {
         await this.requireActiveSubcategory(item.subcategory_id, connection);
@@ -78,6 +72,15 @@ export class ItemService {
         await this.items.update(itemNumber, item, imagePath, connection);
         return this.loadSaved(itemNumber, connection);
       });
+    });
+  }
+
+  // Only the link goes: the item and its photo may still be on other tickets.
+  async removeFromTicket(ticketNumber: number, itemNumber: number) {
+    await inTransaction(this.pool, async (connection) => {
+      await this.requireOpenTicket(ticketNumber, connection);
+      await this.requireTicketItem(ticketNumber, itemNumber, connection);
+      await this.items.unlinkFromTicket(ticketNumber, itemNumber, connection);
     });
   }
 
@@ -116,6 +119,25 @@ export class ItemService {
         'Items can only be changed on pawned or sold tickets.',
       );
     }
+  }
+
+  private async requireTicketItem(
+    ticketNumber: number,
+    itemNumber: number,
+    connection: PoolClient,
+  ) {
+    const subcategoryId = await this.items.lockTicketItem(
+      ticketNumber,
+      itemNumber,
+      connection,
+    );
+    if (subcategoryId === null) {
+      throw new NotFoundException({
+        field: 'item_number',
+        message: `Item #${itemNumber} is not on ticket #${ticketNumber}.`,
+      });
+    }
+    return subcategoryId;
   }
 
   private async requireActiveSubcategory(

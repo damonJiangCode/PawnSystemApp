@@ -3,12 +3,13 @@
 Items and the tickets they are on (`ticket_item`). Migration from Electron IPC
 is in progress.
 
-| Method + path                                  | Success                            |
-| ---------------------------------------------- | ---------------------------------- |
-| GET /tickets/:ticketNumber/items               | 200 `Item[]`                       |
-| POST /tickets/:ticketNumber/items              | 201 `Item`                         |
-| PATCH /tickets/:ticketNumber/items/:itemNumber | 200 `Item`                         |
-| GET /items/search                              | 200 `{ items: Item[], truncated }` |
+| Method + path                                   | Success                            |
+| ----------------------------------------------- | ---------------------------------- |
+| GET /tickets/:ticketNumber/items                | 200 `Item[]`                       |
+| POST /tickets/:ticketNumber/items               | 201 `Item`                         |
+| PATCH /tickets/:ticketNumber/items/:itemNumber  | 200 `Item`                         |
+| DELETE /tickets/:ticketNumber/items/:itemNumber | 204                                |
+| GET /items/search                               | 200 `{ items: Item[], truncated }` |
 
 - An unknown ticket returns `[]`; an invalid ticket number returns 400.
 - Search filters: `client_number`, `item_number` (exact; ignores the rest but
@@ -21,3 +22,5 @@ is in progress.
 - Updating an item needs the same open ticket, and the item must be on it
   (404). A new category must be active; an unchanged one may be inactive.
   Without `photo` the item keeps its image; a replaced file is not deleted.
+- Deleting removes the item from the ticket only (same 404/409 checks); the
+  item and its photo stay because other tickets may use them.

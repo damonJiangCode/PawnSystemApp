@@ -170,6 +170,17 @@ export class ItemRepository {
     );
   }
 
+  async unlinkFromTicket(
+    ticketNumber: number,
+    itemNumber: number,
+    connection: PoolClient,
+  ) {
+    await connection.query(
+      'DELETE FROM ticket_item WHERE ticket_number = $1 AND item_number = $2',
+      [ticketNumber, itemNumber],
+    );
+  }
+
   async loadByItemNumber(itemNumber: number, connection: PoolClient) {
     const result = await connection.query<ItemRow>(
       `${itemSelect} WHERE iws.item_number = $1`,

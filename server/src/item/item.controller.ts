@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -36,6 +38,12 @@ export class ItemController {
   @Patch('tickets/:ticketNumber/items/:itemNumber')
   update(@Param() params: TicketItemParamsDto, @Body() input: UpdateItemDto) {
     return this.service.update(params.ticketNumber, params.itemNumber, input);
+  }
+
+  @Delete('tickets/:ticketNumber/items/:itemNumber')
+  @HttpCode(204)
+  async remove(@Param() params: TicketItemParamsDto) {
+    await this.service.removeFromTicket(params.ticketNumber, params.itemNumber);
   }
 
   @Get('items/search')

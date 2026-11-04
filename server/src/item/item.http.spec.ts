@@ -535,4 +535,51 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
       },
     );
   });
+
+  describe('DELETE /tickets/:ticketNumber/items/:itemNumber', () => {
+    const remove = (path: string) =>
+      fetch(`${baseUrl}${path}`, { method: 'DELETE' });
+
+    it('removes only the link to the ticket and returns no content', async () => {
+      const response = await remove('/tickets/10/items/41');
+      expect(response.status).toBe(204);
+      expect(await response.text()).toBe('');
+      expect(sql).toEqual([
+        'BEGIN',
+        'SELECT status FROM',
+        'SELECT i.subcategory_id FROM',
+        'DELETE FROM ticket_item',
+        'COMMIT',
+      ]);
+      expect(connection.query.mock.calls[3][1]).toEqual([10, 41]);
+    });
+
+    it('rejects an item that is not on the ticket', async () => {
+      ticketItemSubcategory = null;
+      const response = await remove('/tickets/10/items/41');
+      expect(response.status).toBe(404);
+      expect((await response.json()).message).toBe(
+        'Item #41 is not on ticket #10.',
+      );
+      expect(sql).not.toContain('DELETE FROM ticket_item');
+    });
+
+    it.each([
+      [null, 404],
+      ['pawned_picked_up', 409],
+    ])('rejects a %s ticket without deleting', async (status, code) => {
+      ticketStatus = status;
+      const response = await remove('/tickets/10/items/41');
+      expect(response.status).toBe(code);
+      expect(sql).not.toContain('DELETE FROM ticket_item');
+      expect(sql).toContain('ROLLBACK');
+    });
+
+    it('rejects an invalid item number without opening a transaction', async () => {
+      const response = await remove('/tickets/10/items/abc');
+      expect(response.status).toBe(400);
+      expect((await response.json()).field).toBe('itemNumber');
+      expect(pool.connect).not.toHaveBeenCalled();
+    });
+  });
 });
