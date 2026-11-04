@@ -126,6 +126,50 @@ export class ItemRepository {
     );
   }
 
+  // Locks the item and returns its category, or null if it is not on the ticket.
+  async lockTicketItem(
+    ticketNumber: number,
+    itemNumber: number,
+    connection: PoolClient,
+  ) {
+    const result = await connection.query<{ subcategory_id: number }>(
+      `SELECT i.subcategory_id
+       FROM ticket_item ti
+       JOIN item i ON i.item_number = ti.item_number
+       WHERE ti.ticket_number = $1 AND ti.item_number = $2
+       FOR UPDATE OF i`,
+      [ticketNumber, itemNumber],
+    );
+    return result.rows[0]?.subcategory_id ?? null;
+  }
+
+  // A null imagePath keeps the current photo.
+  async update(
+    itemNumber: number,
+    item: SaveItemDto,
+    imagePath: string | null,
+    connection: PoolClient,
+  ) {
+    await connection.query(
+      `UPDATE item
+       SET quantity = $1, subcategory_id = $2, description = $3,
+         brand_name = $4, model_number = $5, serial_number = $6, amount = $7,
+         image_path = COALESCE($8, image_path)
+       WHERE item_number = $9`,
+      [
+        item.quantity,
+        item.subcategory_id,
+        item.description,
+        item.brand_name ?? '',
+        item.model_number ?? '',
+        item.serial_number ?? '',
+        item.amount,
+        imagePath,
+        itemNumber,
+      ],
+    );
+  }
+
   async loadByItemNumber(itemNumber: number, connection: PoolClient) {
     const result = await connection.query<ItemRow>(
       `${itemSelect} WHERE iws.item_number = $1`,

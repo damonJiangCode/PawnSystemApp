@@ -3,13 +3,19 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UsePipes,
 } from '@nestjs/common';
 import { fieldValidationPipe } from '../common/field-validation.pipe.js';
 import { TicketNumberParamsDto } from '../ticket/ticket.dto.js';
-import { CreateItemDto, SearchItemsQueryDto } from './item.dto.js';
+import {
+  CreateItemDto,
+  SearchItemsQueryDto,
+  TicketItemParamsDto,
+  UpdateItemDto,
+} from './item.dto.js';
 import { ItemService } from './item.service.js';
 
 @Controller()
@@ -25,6 +31,11 @@ export class ItemController {
   @Post('tickets/:ticketNumber/items')
   create(@Param() params: TicketNumberParamsDto, @Body() input: CreateItemDto) {
     return this.service.create(params.ticketNumber, input);
+  }
+
+  @Patch('tickets/:ticketNumber/items/:itemNumber')
+  update(@Param() params: TicketItemParamsDto, @Body() input: UpdateItemDto) {
+    return this.service.update(params.ticketNumber, params.itemNumber, input);
   }
 
   @Get('items/search')

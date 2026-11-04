@@ -1,8 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Pool, type PoolClient } from 'pg';
 import { inTransaction } from '../common/transaction.js';
 import { ticketConflict, ticketNotFound } from '../ticket/ticket-support.js';
-import type { CreateItemDto, SearchItemsQueryDto } from './item.dto.js';
+import type {
+  CreateItemDto,
+  SearchItemsQueryDto,
+  UpdateItemDto,
+} from './item.dto.js';
 import { ItemImageService } from './item-image.service.js';
 import { ItemRepository } from './item.repository.js';
 
@@ -35,26 +43,66 @@ export class ItemService {
     return inTransaction(this.pool, async (connection) => {
       await this.requireOpenTicket(ticketNumber, connection);
       await this.requireActiveSubcategory(item.subcategory_id, connection);
-      // Saved after the checks, so a rejected request leaves no file behind.
       const imagePath = await this.images.save(photo.base64);
-      try {
+      return this.cleanUpImageOnError(imagePath, async () => {
         const itemNumber = await this.items.insert(item, imagePath, connection);
         await this.items.linkToTicket(ticketNumber, itemNumber, connection);
-        const created = await this.items.loadByItemNumber(
-          itemNumber,
-          connection,
-        );
-        if (!created) throw new Error(`Item #${itemNumber} vanished.`);
-        return created;
-      } catch (error) {
-        // Rollback undoes the rows but not the file, so remove it here. A
-        // failed COMMIT keeps the file: the rows may have been saved.
+        return this.loadSaved(itemNumber, connection);
+      });
+    });
+  }
+
+  async update(ticketNumber: number, itemNumber: number, input: UpdateItemDto) {
+    const { photo, ...item } = input;
+    return inTransaction(this.pool, async (connection) => {
+      await this.requireOpenTicket(ticketNumber, connection);
+      const currentSubcategoryId = await this.items.lockTicketItem(
+        ticketNumber,
+        itemNumber,
+        connection,
+      );
+      if (currentSubcategoryId === null) {
+        throw new NotFoundException({
+          field: 'item_number',
+          message: `Item #${itemNumber} is not on ticket #${ticketNumber}.`,
+        });
+      }
+      // An item may keep a category that was deactivated after it was saved.
+      if (item.subcategory_id !== currentSubcategoryId) {
+        await this.requireActiveSubcategory(item.subcategory_id, connection);
+      }
+      // The old photo file stays, like client photos: deleting it cannot be
+      // undone if the transaction fails afterwards.
+      const imagePath = photo ? await this.images.save(photo.base64) : null;
+      return this.cleanUpImageOnError(imagePath, async () => {
+        await this.items.update(itemNumber, item, imagePath, connection);
+        return this.loadSaved(itemNumber, connection);
+      });
+    });
+  }
+
+  // Rollback undoes the rows but not the file, so remove a new photo here. A
+  // failed COMMIT keeps the file: the rows may have been saved.
+  private async cleanUpImageOnError<T>(
+    imagePath: string | null,
+    write: () => Promise<T>,
+  ) {
+    try {
+      return await write();
+    } catch (error) {
+      if (imagePath) {
         await this.images.removeCreatedImage(imagePath).catch(() => {
           console.error('Could not clean up a failed item photo');
         });
-        throw error;
       }
-    });
+      throw error;
+    }
+  }
+
+  private async loadSaved(itemNumber: number, connection: PoolClient) {
+    const item = await this.items.loadByItemNumber(itemNumber, connection);
+    if (!item) throw new Error(`Item #${itemNumber} vanished.`);
+    return item;
   }
 
   private async requireOpenTicket(

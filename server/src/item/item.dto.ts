@@ -1,5 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
+  IsDefined,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -11,6 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { SaveImageDto } from '../common/save-image.dto.js';
+import { TicketNumberParamsDto } from '../ticket/ticket.dto.js';
 
 const MAX_INT = 2147483647;
 // item.amount is NUMERIC(10,1).
@@ -112,9 +114,27 @@ export class SaveItemDto {
   @Min(0, { message: 'Price cannot be negative.' })
   @Max(MAX_MONEY, { message: 'Price is too large.' })
   amount!: number;
+}
 
+export class CreateItemDto extends SaveItemDto {
+  @IsDefined({ message: 'Take an item photo.' })
+  @ValidateNested()
+  @Type(() => SaveImageDto)
+  photo!: SaveImageDto;
+}
+
+// Without a photo the item keeps its current one.
+export class UpdateItemDto extends SaveItemDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => SaveImageDto)
   photo?: SaveImageDto;
+}
+
+export class TicketItemParamsDto extends TicketNumberParamsDto {
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
+  itemNumber!: number;
 }

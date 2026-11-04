@@ -50,6 +50,9 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
   let ticketStatus: string | null;
   let subcategoryActive: boolean | null;
   let failItemInsert: boolean;
+  // The item's current category, or null when it is not on the ticket.
+  let ticketItemSubcategory: number | null;
+  let failItemUpdate: boolean;
 
   beforeAll(async () => {
     photoDir = await mkdtemp(path.join(tmpdir(), 'pawn-item-photos-'));
@@ -82,6 +85,8 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
     ticketStatus = 'pawned';
     subcategoryActive = true;
     failItemInsert = false;
+    ticketItemSubcategory = 3;
+    failItemUpdate = false;
     pool.query.mockImplementation(async () => ({ rows }));
     pool.connect.mockResolvedValue(connection);
     connection.query.mockImplementation(async (text: string) => {
@@ -99,6 +104,15 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
         if (failItemInsert) throw new Error('insert failed');
         return { rows: [{ item_number: '41' }] };
       }
+      if (text.includes('FROM ticket_item ti'))
+        return {
+          rows:
+            ticketItemSubcategory === null
+              ? []
+              : [{ subcategory_id: ticketItemSubcategory }],
+        };
+      if (text.includes('UPDATE item') && failItemUpdate)
+        throw new Error('update failed');
       if (text.includes('WHERE iws.item_number'))
         return { rows: [itemRow({ item_number: '41' })] };
       return { rows: [] };
@@ -112,6 +126,12 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
   const post = (path: string, body: unknown) =>
     fetch(`${baseUrl}${path}`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  const patch = (path: string, body: unknown) =>
+    fetch(`${baseUrl}${path}`, {
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
@@ -391,5 +411,128 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
       expect(sql).toContain('ROLLBACK');
       expect(await readdir(photoDir)).toEqual([]);
     });
+  });
+
+  describe('PATCH /tickets/:ticketNumber/items/:itemNumber', () => {
+    const changes = (overrides: Record<string, unknown> = {}) => ({
+      quantity: 2,
+      subcategory_id: 3,
+      description: ' gold ring ',
+      serial_number: 'sn1',
+      amount: 99.5,
+      ...overrides,
+    });
+    const updateValues = () =>
+      connection.query.mock.calls.find(([text]) =>
+        String(text).includes('UPDATE item'),
+      )?.[1];
+
+    it('locks the ticket and the item, then saves the changes', async () => {
+      const response = await patch('/tickets/10/items/41', changes());
+      expect(response.status).toBe(200);
+      expect((await response.json()).item_number).toBe(41);
+      expect(sql).toEqual([
+        'BEGIN',
+        'SELECT status FROM',
+        'SELECT i.subcategory_id FROM',
+        'UPDATE item SET',
+        'SELECT iws.item_number, iws.quantity,',
+        'COMMIT',
+      ]);
+      expect(String(connection.query.mock.calls[2][0])).toContain(
+        'FOR UPDATE OF i',
+      );
+      expect(connection.query.mock.calls[2][1]).toEqual([10, 41]);
+      // No photo: null keeps the current image_path.
+      expect(updateValues()).toEqual([
+        2,
+        3,
+        'GOLD RING',
+        '',
+        '',
+        'SN1',
+        99.5,
+        null,
+        41,
+      ]);
+      expect(await readdir(photoDir)).toEqual([]);
+    });
+
+    it('stores a new photo and points the item at it', async () => {
+      await patch(
+        '/tickets/10/items/41',
+        changes({ photo: { fileName: 'x.png', base64: png } }),
+      );
+      const [file] = await readdir(photoDir);
+      expect(updateValues()?.[7]).toBe(`images/items/${file}`);
+    });
+
+    it('rolls back and removes the new photo when the update fails', async () => {
+      failItemUpdate = true;
+      const response = await patch(
+        '/tickets/10/items/41',
+        changes({ photo: { fileName: 'x.png', base64: png } }),
+      );
+      expect(response.status).toBe(500);
+      expect(sql).toContain('ROLLBACK');
+      expect(await readdir(photoDir)).toEqual([]);
+    });
+
+    it('keeps a category that was deactivated after the item was saved', async () => {
+      subcategoryActive = false;
+      const response = await patch('/tickets/10/items/41', changes());
+      expect(response.status).toBe(200);
+      expect(sql).not.toContain('SELECT is_active FROM');
+    });
+
+    it('only allows changing to an active category', async () => {
+      subcategoryActive = false;
+      const response = await patch(
+        '/tickets/10/items/41',
+        changes({ subcategory_id: 5 }),
+      );
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        field: 'subcategory_id',
+        message: 'Select an active category.',
+      });
+      expect(sql).not.toContain('UPDATE item SET');
+    });
+
+    it('rejects an item that is not on the ticket', async () => {
+      ticketItemSubcategory = null;
+      const response = await patch(
+        '/tickets/10/items/41',
+        changes({ photo: { fileName: 'x.png', base64: png } }),
+      );
+      expect(response.status).toBe(404);
+      expect(await response.json()).toMatchObject({
+        field: 'item_number',
+        message: 'Item #41 is not on ticket #10.',
+      });
+      expect(sql).not.toContain('UPDATE item SET');
+      expect(await readdir(photoDir)).toEqual([]);
+    });
+
+    it('rejects a closed ticket without touching the item', async () => {
+      ticketStatus = 'pawned_picked_up';
+      const response = await patch('/tickets/10/items/41', changes());
+      expect(response.status).toBe(409);
+      expect(sql).not.toContain('SELECT i.subcategory_id FROM');
+    });
+
+    it.each([
+      ['/tickets/10/items/abc', changes(), 'itemNumber'],
+      ['/tickets/10/items/41', changes({ quantity: 0 }), 'quantity'],
+      ['/tickets/10/items/41', changes({ image_path: 'x.png' }), 'image_path'],
+    ])(
+      'rejects %s %j without opening a transaction',
+      async (url, body, field) => {
+        const response = await patch(url, body);
+        expect(response.status).toBe(400);
+        expect((await response.json()).field).toBe(field);
+        expect(pool.connect).not.toHaveBeenCalled();
+      },
+    );
   });
 });
