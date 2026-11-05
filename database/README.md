@@ -44,7 +44,7 @@
   ```
 
 - **Import:** `npm run migration:execute` initializes the schema, imports records,
-  exports photos, creates backups and validates the result.
+  writes photos to `images/`, creates backups and validates the result.
 - **Review:** inspect the generated reports before running `npm run dev`.
 
 ### Files
@@ -52,17 +52,18 @@
 - `migration/scripts/`: migration code.
 - `migration/mappings/`: required, Git-tracked category, location and ID type JSON rules.
 - `migration/source/`: private Access inputs.
-- `migration/exports/`: generated customer/item photos.
+- `../images/clients/`, `../images/items/`: customer and item photos, shared with
+  the server. The database stores paths such as `images/items/<file>`.
 - `migration/reports/`: per-run results, execution manifest and validation logs.
 - `migration/backups/`: per-run database and photo backups.
-- `source/`, `exports/`, `reports/` and `backups/` are Git-ignored.
+- `source/`, `reports/`, `backups/` and `images/` are Git-ignored.
 
 ### Behavior
 
 - `prepareDevMigration` in [prepareDevMigration.cjs](../scripts/prepareDevMigration.cjs)
   checks readiness; it does not start PostgreSQL or import records.
 - `executeDevMigration` in [executeDevMigration.cjs](../scripts/executeDevMigration.cjs)
-  writes to PostgreSQL and requires an empty target and clean photo exports.
+  writes to PostgreSQL and requires an empty target and an empty `images/` folder.
 - Imported clients start active with no hold: `is_active=true`, `hold_until=NULL`.
 - Failed imports are not automatically erased or resumed; inspect the report
   before deciding how to retry.

@@ -6,7 +6,7 @@ const { spawnSync } = require("node:child_process");
 const PRIVATE_PATHS = [
   ".env",
   "database/migration/source/check.txt",
-  "database/migration/exports/check.txt",
+  "images/check.txt",
   "database/migration/reports/check.txt",
   "database/migration/backups/check.txt",
 ];
@@ -95,7 +95,7 @@ const prepareDevMigration = ({
     "--",
     ".env",
     "database/migration/source",
-    "database/migration/exports",
+    "images",
     "database/migration/reports",
     "database/migration/backups",
   ]);
@@ -104,17 +104,12 @@ const prepareDevMigration = ({
   }
   if (errors.length) return finish();
 
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
     fs.mkdirSync(path.join(projectRoot, "database", "migration", folder), {
       recursive: true,
     });
   }
+  fs.mkdirSync(path.join(projectRoot, "images"), { recursive: true });
   log("Migration directories are available; mappings are versioned inputs.");
 
   const envPath = path.join(projectRoot, ".env");

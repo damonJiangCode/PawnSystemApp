@@ -151,23 +151,15 @@ const validateImportedDatabase = async (client, projectRoot) => {
       metrics.sequence_errors++;
   }
   for (const [table, folder] of [
-    ["client", "client-photos"],
-    ["item", "item-photos"],
+    ["client", "clients"],
+    ["item", "items"],
   ]) {
-    const base = fs.realpathSync(
-      path.join(projectRoot, "database/migration/exports", folder),
-    );
+    const base = fs.realpathSync(path.join(projectRoot, "images", folder));
     const photos = await client.query(
       `SELECT image_path FROM ${table} WHERE COALESCE(image_path,'')<>''`,
     );
     for (const { image_path: imagePath } of photos.rows) {
-      const normalized = imagePath.replace(/\\/g, "/");
-      const filename = path.resolve(
-        projectRoot,
-        normalized.startsWith("migration/exports/")
-          ? `database/${normalized}`
-          : imagePath,
-      );
+      const filename = path.resolve(projectRoot, imagePath);
       try {
         const real = fs.realpathSync(filename);
         const relative = path.relative(base, real);

@@ -31,13 +31,7 @@ const validMetrics = () => ({
 const fixture = (t, options = {}) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "execute-migration-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
     fs.mkdirSync(path.join(root, "database", "migration", folder), {
       recursive: true,
     });
@@ -128,14 +122,19 @@ const fixture = (t, options = {}) => {
               },
             },
             migration: {
-              volumes: ["source", "mappings", "exports", "reports"].map(
-                (folder) => ({
+              volumes: [
+                ...["source", "mappings", "reports"].map((folder) => ({
                   type: "bind",
                   source: path.join(root, "database", "migration", folder),
                   target: `/app/database/migration/${folder}`,
                   read_only: folder === "source" || folder === "mappings",
-                }),
-              ),
+                })),
+                {
+                  type: "bind",
+                  source: path.join(root, "images"),
+                  target: "/app/images",
+                },
+              ],
               environment: {
                 DB_HOST: "pawnsystemdb",
                 DB_PORT: "5432",
@@ -298,6 +297,16 @@ test("rejects an existing populated target before initialization, image build, o
   assert.equal(f.ended, true);
 });
 
+test("refuses a non-empty images folder and leaves its photos alone", async (t) => {
+  const f = fixture(t);
+  const photo = path.join(f.root, "images/items/old.png");
+  fs.mkdirSync(path.dirname(photo), { recursive: true });
+  fs.writeFileSync(photo, "synthetic");
+  assert.equal(await executeDevMigration(f.options), 1);
+  assert.match(f.logs.join("\n"), /Migration images already contain files/);
+  assert.ok(fs.existsSync(photo));
+});
+
 test("rejects an application connection pointing to a different database container", async (t) => {
   const f = fixture(t, { wrongIdentity: true });
   assert.equal(await executeDevMigration(f.options), 1);
@@ -387,10 +396,8 @@ test("empty-target guard also rejects unexpected populated public tables", async
 test("final photo checks reject paths outside the expected exported-photo directory", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "migration-photos-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  for (const folder of ["client-photos", "item-photos"])
-    fs.mkdirSync(path.join(dir, "database/migration/exports", folder), {
-      recursive: true,
-    });
+  for (const folder of ["clients", "items"])
+    fs.mkdirSync(path.join(dir, "images", folder), { recursive: true });
   fs.writeFileSync(path.join(dir, "unrelated.txt"), "synthetic");
   const client = {
     query: async (sql) => {

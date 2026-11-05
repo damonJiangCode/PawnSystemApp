@@ -12,7 +12,7 @@ const fixture = (t) => {
   assert.equal(spawnSync("git", ["init", "--quiet", root]).status, 0);
   fs.writeFileSync(
     path.join(root, ".gitignore"),
-    ".env\n/database/migration/source/\n/database/migration/exports/\n/database/migration/reports/\n/database/migration/backups/\n",
+    ".env\n/database/migration/source/\n/images/\n/database/migration/reports/\n/database/migration/backups/\n",
   );
   fs.writeFileSync(
     path.join(root, ".env.example"),
@@ -76,13 +76,7 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
   const pinSecret = content.match(/^EMPLOYEE_PIN_SECRET=(.+)$/m)[1];
   assert.match(pinSecret, /^[a-f0-9]{64}$/);
   assert.ok(!f.logs.join("\n").includes(pinSecret));
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
     assert.ok(
       fs
         .statSync(path.join(f.root, "database", "migration", folder))

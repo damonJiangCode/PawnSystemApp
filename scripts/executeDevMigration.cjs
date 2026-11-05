@@ -219,7 +219,7 @@ const executeDevMigration = async ({
         "Compose and database persistence configuration do not agree.",
       );
     }
-    for (const folder of ["source", "mappings", "exports", "reports"]) {
+    for (const folder of ["source", "mappings", "reports"]) {
       const mount = migrationService.volumes?.find(
         (volume) => volume.target === `/app/database/migration/${folder}`,
       );
@@ -235,6 +235,20 @@ const executeDevMigration = async ({
           "Migration container mount configuration does not match this workspace.",
         );
       }
+    }
+    // Without this bind mount the photos would stay inside the container.
+    const imagesMount = migrationService.volumes?.find(
+      (volume) => volume.target === "/app/images",
+    );
+    if (
+      !imagesMount ||
+      imagesMount.type !== "bind" ||
+      path.resolve(imagesMount.source) !== path.join(projectRoot, "images") ||
+      imagesMount.read_only
+    ) {
+      throw new Error(
+        "Migration container mount configuration does not match this workspace.",
+      );
     }
     client = await connect(values);
     const version = (await client.query("SHOW server_version_num")).rows[0]
@@ -281,17 +295,18 @@ const executeDevMigration = async ({
       throw new Error("Another migration is already using this database.");
     locked = true;
     await assertEmptyDatabase(client);
-    // Fresh database only. Old exports must not get mixed into this run's photos.
-    const exportRoot = path.join(projectRoot, "database/migration/exports");
+    // Fresh database only. Old photos must not get mixed into this run's photos.
+    const imagesRoot = path.join(projectRoot, "images");
+    fs.mkdirSync(imagesRoot, { recursive: true });
     const containsFile = (dir) =>
       fs.readdirSync(dir, { withFileTypes: true }).some((entry) => {
         if (entry.name === ".DS_Store" || entry.name === "Thumbs.db")
           return false;
         return !entry.isDirectory() || containsFile(path.join(dir, entry.name));
       });
-    if (containsFile(exportRoot))
+    if (containsFile(imagesRoot))
       throw new Error(
-        "Migration exports already contain files. Use a clean development workspace; files were not deleted.",
+        "Migration images already contain files. Use a clean development workspace; files were not deleted.",
       );
 
     fs.mkdirSync(reportDir, { recursive: true });
@@ -446,7 +461,7 @@ const executeDevMigration = async ({
       archive,
       "-C",
       projectRoot,
-      "database/migration/exports",
+      "images",
     ]);
     await command("check-photo-archive", "tar", ["-tzf", archive]);
     manifest.backups["photos.tar.gz"] = await hash(archive);
@@ -478,7 +493,7 @@ const executeDevMigration = async ({
     // Deliberately do not print database errors, rows, or subprocess stderr.
     log(`Migration stopped at: ${currentStep}.`);
     const known =
-      /^(Preparation checks|Docker Compose was not|Compose and|Migration container|Cannot connect|The application connection|Another migration|Target database|Migration exports|Client preview|Item preview|Ticket preview|Expected a fresh|Missing report metric|Invalid report metric|Preview prepared|Imported |A migration input|Final validation|Database backup|External command)/;
+      /^(Preparation checks|Docker Compose was not|Compose and|Migration container|Cannot connect|The application connection|Another migration|Target database|Migration images|Client preview|Item preview|Ticket preview|Expected a fresh|Missing report metric|Invalid report metric|Preview prepared|Imported |A migration input|Final validation|Database backup|External command)/;
     log(
       known.test(error.message)
         ? error.message

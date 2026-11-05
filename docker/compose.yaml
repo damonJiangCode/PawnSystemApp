@@ -38,7 +38,7 @@ services:
     volumes:
       - ../database/migration/source:/app/database/migration/source:ro
       - ../database/migration/mappings:/app/database/migration/mappings:ro
-      - ../database/migration/exports:/app/database/migration/exports
+      - ../images:/app/images
       - ../database/migration/reports:/app/database/migration/reports
 
 volumes:

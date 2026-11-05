@@ -10,7 +10,7 @@
 
 Run these commands one at a time in PowerShell from the project root. Continue only if the previous command succeeds.
 
-For the first import, close the app and use a fresh development database with an empty `database/migration/exports/` folder.
+For the first import, close the app and use a fresh development database with an empty `images/` folder.
 
 ```powershell
 npm ci

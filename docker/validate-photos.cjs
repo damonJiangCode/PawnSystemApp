@@ -12,7 +12,7 @@ const pool = new Pool({ host: process.env.DB_HOST, port: Number(process.env.DB_P
       let outsideProject = 0;
       for (const row of rows) {
         const normalized = row.image_path.replace(/\\/g, '/');
-        const filename = path.resolve(root, normalized.startsWith('migration/exports/') ? `database/${normalized}` : row.image_path);
+        const filename = path.resolve(root, normalized);
         if (!filename.startsWith(root + path.sep)) outsideProject++;
         else if (!fs.existsSync(filename) || !fs.statSync(filename).isFile()) missing++;
       }

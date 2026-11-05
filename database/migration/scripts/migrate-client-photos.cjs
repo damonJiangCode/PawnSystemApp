@@ -9,7 +9,8 @@ const { Pool } = require("pg");
 const migrationRoot = path.resolve(__dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const outputDir = path.join(migrationRoot, "exports", "client-photos");
+// The folder the server reads and writes; the DB stores images/clients/<file>.
+const outputDir = path.join(projectRoot, "images", "clients");
 const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "client-migration.md");
 const shouldUpdateDb = process.argv.includes("--update-db");
