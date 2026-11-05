@@ -1,5 +1,8 @@
 import { Transform, Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
   IsDefined,
   IsInt,
   IsNotEmpty,
@@ -129,6 +132,20 @@ export class UpdateItemDto extends SaveItemDto {
   @ValidateNested()
   @Type(() => SaveImageDto)
   photo?: SaveImageDto;
+}
+
+export class LinkItemsDto {
+  @IsArray({ message: 'Select at least one item.' })
+  @ArrayMinSize(1, { message: 'Select at least one item.' })
+  // Same limit as a search result page.
+  @ArrayMaxSize(1000, { message: 'Select at most 1000 items.' })
+  @IsInt({ each: true, message: 'Enter a valid item number.' })
+  @Min(1, { each: true, message: 'Enter a valid item number.' })
+  @Max(Number.MAX_SAFE_INTEGER, {
+    each: true,
+    message: 'Enter a valid item number.',
+  })
+  item_numbers!: number[];
 }
 
 export class TicketItemParamsDto extends TicketNumberParamsDto {

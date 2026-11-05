@@ -14,6 +14,7 @@ import { fieldValidationPipe } from '../common/field-validation.pipe.js';
 import { TicketNumberParamsDto } from '../ticket/ticket.dto.js';
 import {
   CreateItemDto,
+  LinkItemsDto,
   SearchItemsQueryDto,
   TicketItemParamsDto,
   UpdateItemDto,
@@ -33,6 +34,13 @@ export class ItemController {
   @Post('tickets/:ticketNumber/items')
   create(@Param() params: TicketNumberParamsDto, @Body() input: CreateItemDto) {
     return this.service.create(params.ticketNumber, input);
+  }
+
+  // 200, not 201: no item is created, and repeating the call changes nothing.
+  @Post('tickets/:ticketNumber/items/link')
+  @HttpCode(200)
+  link(@Param() params: TicketNumberParamsDto, @Body() input: LinkItemsDto) {
+    return this.service.linkToTicket(params.ticketNumber, input);
   }
 
   @Patch('tickets/:ticketNumber/items/:itemNumber')

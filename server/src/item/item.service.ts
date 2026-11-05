@@ -8,6 +8,7 @@ import { inTransaction } from '../common/transaction.js';
 import { ticketConflict, ticketNotFound } from '../ticket/ticket-support.js';
 import type {
   CreateItemDto,
+  LinkItemsDto,
   SearchItemsQueryDto,
   UpdateItemDto,
 } from './item.dto.js';
@@ -81,6 +82,36 @@ export class ItemService {
       await this.requireOpenTicket(ticketNumber, connection);
       await this.requireTicketItem(ticketNumber, itemNumber, connection);
       await this.items.unlinkFromTicket(ticketNumber, itemNumber, connection);
+    });
+  }
+
+  // All or nothing: one unavailable item rejects the whole request.
+  async linkToTicket(ticketNumber: number, input: LinkItemsDto) {
+    const itemNumbers = [...new Set(input.item_numbers)];
+    return inTransaction(this.pool, async (connection) => {
+      await this.requireOpenTicket(ticketNumber, connection);
+      // Locked before the check, so a parallel link waits and then sees ours.
+      await this.items.lockItems(itemNumbers, connection);
+      const found = await this.items.loadByItemNumbers(itemNumbers, connection);
+      for (const itemNumber of itemNumbers) {
+        const item = found.find((row) => row.item_number === itemNumber);
+        if (!item) {
+          throw new NotFoundException({
+            field: 'item_numbers',
+            message: `Item #${itemNumber} was not found.`,
+          });
+        }
+        if (!item.is_loadable && item.latest_ticket_number !== ticketNumber) {
+          throw ticketConflict(
+            `Item #${itemNumber} is already active on ticket #${item.latest_ticket_number}.`,
+            'item_numbers',
+          );
+        }
+      }
+      for (const itemNumber of itemNumbers) {
+        await this.items.linkToTicket(ticketNumber, itemNumber, connection);
+      }
+      return this.items.loadByItemNumbers(itemNumbers, connection);
     });
   }
 

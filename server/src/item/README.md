@@ -9,6 +9,7 @@ is in progress.
 | POST /tickets/:ticketNumber/items               | 201 `Item`                         |
 | PATCH /tickets/:ticketNumber/items/:itemNumber  | 200 `Item`                         |
 | DELETE /tickets/:ticketNumber/items/:itemNumber | 204                                |
+| POST /tickets/:ticketNumber/items/link          | 200 `Item[]`                       |
 | GET /items/search                               | 200 `{ items: Item[], truncated }` |
 
 - An unknown ticket returns `[]`; an invalid ticket number returns 400.
@@ -24,3 +25,6 @@ is in progress.
   Without `photo` the item keeps its image; a replaced file is not deleted.
 - Deleting removes the item from the ticket only (same 404/409 checks); the
   item and its photo stay because other tickets may use them.
+- Linking takes `{ item_numbers }` and is all or nothing: an unknown item is
+  404, and an item active on another ticket is 409. Items are locked in order
+  before the check, so parallel links cannot both take the same item.

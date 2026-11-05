@@ -53,6 +53,7 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
   // The item's current category, or null when it is not on the ticket.
   let ticketItemSubcategory: number | null;
   let failItemUpdate: boolean;
+  let linkedItems: Record<string, unknown>[];
 
   beforeAll(async () => {
     photoDir = await mkdtemp(path.join(tmpdir(), 'pawn-item-photos-'));
@@ -87,6 +88,7 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
     failItemInsert = false;
     ticketItemSubcategory = 3;
     failItemUpdate = false;
+    linkedItems = [];
     pool.query.mockImplementation(async () => ({ rows }));
     pool.connect.mockResolvedValue(connection);
     connection.query.mockImplementation(async (text: string) => {
@@ -113,6 +115,7 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
         };
       if (text.includes('UPDATE item') && failItemUpdate)
         throw new Error('update failed');
+      if (text.includes('iws.item_number = ANY')) return { rows: linkedItems };
       if (text.includes('WHERE iws.item_number'))
         return { rows: [itemRow({ item_number: '41' })] };
       return { rows: [] };
@@ -579,6 +582,125 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
       const response = await remove('/tickets/10/items/abc');
       expect(response.status).toBe(400);
       expect((await response.json()).field).toBe('itemNumber');
+      expect(pool.connect).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('POST /tickets/:ticketNumber/items/link', () => {
+    const closedItem = (itemNumber: string) =>
+      itemRow({
+        item_number: itemNumber,
+        latest_ticket_number: 5,
+        latest_ticket_status: 'pawned_picked_up',
+      });
+    const linkCalls = () =>
+      connection.query.mock.calls.filter(([text]) =>
+        String(text).includes('INSERT INTO ticket_item'),
+      );
+
+    it('locks the items before checking them and links them all', async () => {
+      linkedItems = [closedItem('41'), closedItem('42')];
+      const response = await post('/tickets/10/items/link', {
+        item_numbers: [42, 41, 42],
+      });
+      expect(response.status).toBe(200);
+      expect(
+        (await response.json()).map(
+          (item: { item_number: number }) => item.item_number,
+        ),
+      ).toEqual([41, 42]);
+      expect(sql).toEqual([
+        'BEGIN',
+        'SELECT status FROM',
+        'SELECT item_number FROM',
+        'SELECT iws.item_number, iws.quantity,',
+        'INSERT INTO ticket_item',
+        'INSERT INTO ticket_item',
+        'SELECT iws.item_number, iws.quantity,',
+        'COMMIT',
+      ]);
+      const lock = connection.query.mock.calls[2];
+      expect(String(lock[0])).toMatch(/ORDER BY item_number\s+FOR UPDATE/);
+      // Duplicates are dropped.
+      expect(lock[1]).toEqual([[42, 41]]);
+      expect(linkCalls().map(([, values]) => values)).toEqual([
+        [10, 42],
+        [10, 41],
+      ]);
+    });
+
+    it('accepts an item with no ticket and one already on this ticket', async () => {
+      linkedItems = [
+        itemRow({
+          item_number: '41',
+          latest_ticket_number: null,
+          latest_ticket_status: null,
+        }),
+        itemRow({ item_number: '42', latest_ticket_number: 10 }),
+      ];
+      const response = await post('/tickets/10/items/link', {
+        item_numbers: [41, 42],
+      });
+      expect(response.status).toBe(200);
+    });
+
+    it('links nothing when one item is active on another ticket', async () => {
+      linkedItems = [
+        closedItem('41'),
+        itemRow({ item_number: '42', latest_ticket_number: 7 }),
+      ];
+      const response = await post('/tickets/10/items/link', {
+        item_numbers: [41, 42],
+      });
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({
+        field: 'item_numbers',
+        message: 'Item #42 is already active on ticket #7.',
+      });
+      expect(linkCalls()).toEqual([]);
+      expect(sql).toContain('ROLLBACK');
+    });
+
+    it('links nothing when one item does not exist', async () => {
+      linkedItems = [closedItem('41')];
+      const response = await post('/tickets/10/items/link', {
+        item_numbers: [41, 42],
+      });
+      expect(response.status).toBe(404);
+      expect((await response.json()).message).toBe('Item #42 was not found.');
+      expect(linkCalls()).toEqual([]);
+    });
+
+    it.each([
+      [null, 404],
+      ['sold_expired', 409],
+    ])('rejects a %s ticket before locking items', async (status, code) => {
+      ticketStatus = status;
+      const response = await post('/tickets/10/items/link', {
+        item_numbers: [41],
+      });
+      expect(response.status).toBe(code);
+      expect(sql).not.toContain('SELECT item_number FROM');
+    });
+
+    it.each([
+      [{ item_numbers: [] }, 'Select at least one item.'],
+      // The pipe prefers the isInt message when the list itself is malformed.
+      [{}, 'Enter a valid item number.'],
+      [{ item_numbers: '41' }, 'Enter a valid item number.'],
+      [{ item_numbers: [0] }, 'Enter a valid item number.'],
+      [{ item_numbers: [1.5] }, 'Enter a valid item number.'],
+      [
+        { item_numbers: Array.from({ length: 1001 }, (_, i) => i + 1) },
+        'Select at most 1000 items.',
+      ],
+    ])('rejects %j without opening a transaction', async (body, message) => {
+      const response = await post('/tickets/10/items/link', body);
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        field: 'item_numbers',
+        message,
+      });
       expect(pool.connect).not.toHaveBeenCalled();
     });
   });

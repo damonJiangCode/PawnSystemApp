@@ -181,6 +181,25 @@ export class ItemRepository {
     );
   }
 
+  // Always locks in item order, so two requests cannot wait on each other.
+  async lockItems(itemNumbers: number[], connection: PoolClient) {
+    await connection.query(
+      `SELECT item_number FROM item
+       WHERE item_number = ANY($1)
+       ORDER BY item_number
+       FOR UPDATE`,
+      [itemNumbers],
+    );
+  }
+
+  async loadByItemNumbers(itemNumbers: number[], connection: PoolClient) {
+    const result = await connection.query<ItemRow>(
+      `${itemSelect} WHERE iws.item_number = ANY($1) ORDER BY iws.item_number`,
+      [itemNumbers],
+    );
+    return result.rows.map(mapItemRow);
+  }
+
   async loadByItemNumber(itemNumber: number, connection: PoolClient) {
     const result = await connection.query<ItemRow>(
       `${itemSelect} WHERE iws.item_number = $1`,
