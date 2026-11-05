@@ -8,7 +8,6 @@ const CHANNELS = {
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
-  LINK_ITEMS_TO_TICKET: "link-items-to-ticket",
   OPEN_PAYMENT_WINDOW: "open-payment-window",
   NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
   OPEN_QUOTE_WINDOW: "open-quote-window",
@@ -29,11 +28,6 @@ const reportApi = {
   loadDailyReport: (input) => invoke(CHANNELS.LOAD_DAILY_REPORT, input),
   loadInterestReport: (input) => invoke(CHANNELS.LOAD_INTEREST_REPORT, input),
   loadOverdueReport: (input) => invoke(CHANNELS.LOAD_OVERDUE_REPORT, input),
-};
-
-const itemApi = {
-  linkItemsToTicket: (ticketNumber, itemNumbers) =>
-    invoke(CHANNELS.LINK_ITEMS_TO_TICKET, ticketNumber, itemNumbers),
 };
 
 const xmlReportApi = {
@@ -81,7 +75,6 @@ const windowApi = {
 
 contextBridge.exposeInMainWorld("appAPI", {
   report: reportApi,
-  item: itemApi,
   window: windowApi,
   xmlReport: xmlReportApi,
 });

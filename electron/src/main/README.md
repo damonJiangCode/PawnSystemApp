@@ -69,20 +69,10 @@ focuses its existing window; closing it removes that entry from the map.
 
 ## Modules
 
-Clients, employees and tickets moved to the NestJS server (`/client`,
-`/employees`, `/tickets`); no client, employee or ticket IPC handlers remain, and
-Electron main no longer needs `EMPLOYEE_PIN_SECRET`.
-
-### items
-
-Owns item search, create/update/delete, item images, categories, and linking
-existing items to tickets.
-
-Start here:
-
-- `modules/items/item.handlers.ts`
-- `modules/items/item.service.ts`
-- `modules/items/item.repo.ts`
+Clients, employees, tickets and items moved to the NestJS server (`/client`,
+`/employees`, `/tickets`, `/items`); none of them has IPC handlers left, and
+Electron main no longer needs `EMPLOYEE_PIN_SECRET`. Item photos are still read
+through the Electron image protocol.
 
 ### reports
 
@@ -124,9 +114,7 @@ early validation message.
 shared/
   createFieldError.ts
   imageStorage.ts
-  runInTransaction.ts
 ```
 
 - `createFieldError.ts`: standard field error shape.
 - `imageStorage.ts`: saves images and safely resolves stored image paths.
-- `runInTransaction.ts`: database transaction helper.

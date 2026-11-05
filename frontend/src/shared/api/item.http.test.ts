@@ -157,34 +157,35 @@ test("delete shows the server's conflict message", async (t) => {
   await assert.rejects(http.deleteItemHttp(10, 40, base), { message });
 });
 
-test("getAppApi serves everything but linking over HTTP and keeps linking on IPC", async (t) => {
-  const linkItemsToTicket = () => Promise.resolve([]);
-  const ipcMustNotBeUsed = () => {
-    throw new Error("IPC must not be used");
-  };
-  setWindow(t, {
-    item: {
-      linkItemsToTicket,
-      createItem: ipcMustNotBeUsed,
-      updateItem: ipcMustNotBeUsed,
-      deleteItem: ipcMustNotBeUsed,
-      loadItemsByTicket: ipcMustNotBeUsed,
-      searchItems: ipcMustNotBeUsed,
-    },
+test("links items to a ticket and returns them", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
+    assert.equal(url.pathname, "/tickets/10/items/link");
+    assert.equal(init.method, "POST");
+    assert.deepEqual(JSON.parse(String(init.body)), {
+      item_numbers: [40, 41],
+    });
+    return Response.json([itemJson]);
   });
-  t.mock.method(globalThis, "fetch", async (url: URL) =>
-    Response.json(
-      url.pathname === "/items/search" ? { items: [], truncated: false } : [],
-    ),
+  assert.deepEqual(await http.linkItemsToTicketHttp(10, [40, 41], base), [
+    itemJson,
+  ]);
+});
+
+test("link shows which item is active on another ticket", async (t) => {
+  const message = "Item #41 is already active on ticket #7.";
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({ field: "item_numbers", message }, { status: 409 }),
   );
-  const api = getAppApi()!;
-  assert.equal(api.item.linkItemsToTicket, linkItemsToTicket);
-  assert.notEqual(api.item.deleteItem, ipcMustNotBeUsed);
-  assert.notEqual(api.item.createItem, ipcMustNotBeUsed);
-  assert.notEqual(api.item.updateItem, ipcMustNotBeUsed);
-  assert.deepEqual(await api.item.loadItemsByTicket(10), []);
-  assert.deepEqual(await api.item.searchItems({ client_number: 7 }), {
-    items: [],
-    truncated: false,
+  await assert.rejects(http.linkItemsToTicketHttp(10, [41], base), {
+    message,
   });
+});
+
+test("getAppApi serves the whole item domain over HTTP", async (t) => {
+  // The preload bridge no longer has an item domain, so this needs only HTTP.
+  setWindow(t, {});
+  t.mock.method(globalThis, "fetch", async () => Response.json([]));
+  const api = getAppApi()!;
+  assert.deepEqual(await api.item.loadItemsByTicket(10), []);
+  assert.deepEqual(await api.item.linkItemsToTicket(10, [40]), []);
 });

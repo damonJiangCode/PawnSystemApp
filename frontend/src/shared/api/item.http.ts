@@ -8,13 +8,6 @@ import type {
 } from "../../../../shared/payload-contracts/item.contract.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
-export type HttpItemMethods =
-  | "loadItemsByTicket"
-  | "searchItems"
-  | "createItem"
-  | "updateItem"
-  | "deleteItem";
-
 export function loadItemsByTicketHttp(
   ticketNumber: number,
   baseUrl = API_BASE_URL,
@@ -62,9 +55,18 @@ export function deleteItemHttp(
   );
 }
 
-export const createItemHttpApi = (
+export function linkItemsToTicketHttp(
+  ticketNumber: number,
+  itemNumbers: number[],
   baseUrl = API_BASE_URL,
-): Pick<ItemApi, HttpItemMethods> => ({
+) {
+  return requestJson<Item[]>(
+    apiUrl(`/tickets/${ticketNumber}/items/link`, baseUrl),
+    jsonBody("POST", { item_numbers: itemNumbers }),
+  );
+}
+
+export const createItemHttpApi = (baseUrl = API_BASE_URL): ItemApi => ({
   loadItemsByTicket: (ticketNumber) =>
     loadItemsByTicketHttp(ticketNumber, baseUrl),
   searchItems: (input) => searchItemsHttp(input, baseUrl),
@@ -72,4 +74,6 @@ export const createItemHttpApi = (
   updateItem: (input) => updateItemHttp(input, baseUrl),
   deleteItem: (ticketNumber, itemNumber) =>
     deleteItemHttp(ticketNumber, itemNumber, baseUrl),
+  linkItemsToTicket: (ticketNumber, itemNumbers) =>
+    linkItemsToTicketHttp(ticketNumber, itemNumbers, baseUrl),
 });
