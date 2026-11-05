@@ -27,7 +27,8 @@ export const isItemAddable = (item: Item, targetTicketNumber?: number) =>
   !activeItemTicketStatuses.has(item.latest_ticket_status ?? "");
 
 export const getItemStatusRowClass = (item: Item) => {
-  if (item.latest_ticket_status === "pawned") return "pawned-item-row";
+  if (activeItemTicketStatuses.has(item.latest_ticket_status ?? ""))
+    return "active-item-row";
   if (
     item.latest_ticket_status === "pawned_expired" ||
     item.latest_ticket_status === "sold_expired"

@@ -16,12 +16,14 @@ const item = (status?: Item["latest_ticket_status"]): Item => ({
   latest_ticket_status: status,
 });
 
-test("pawned rows are red and both expired statuses are yellow", () => {
-  assert.equal(getItemStatusRowClass(item("pawned")), "pawned-item-row");
+test("active rows are red and both expired statuses are yellow", () => {
+  for (const status of ["pawned", "sold"] as const) {
+    assert.equal(getItemStatusRowClass(item(status)), "active-item-row");
+  }
   for (const status of ["pawned_expired", "sold_expired"] as const) {
     assert.equal(getItemStatusRowClass(item(status)), "expired-item-row");
   }
-  for (const status of ["pawned_picked_up", "sold", undefined] as const) {
+  for (const status of ["pawned_picked_up", undefined] as const) {
     assert.equal(getItemStatusRowClass(item(status)), "");
   }
 });

@@ -404,11 +404,11 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
                 outline: "2px solid #718096",
                 outlineOffset: "-2px",
               },
-              "& .MuiDataGrid-row.pawned-item-row, & .MuiDataGrid-row.pawned-item-row.Mui-selected":
+              "& .MuiDataGrid-row.active-item-row, & .MuiDataGrid-row.active-item-row.Mui-selected":
                 {
                   backgroundColor: "#ffcdd2",
                 },
-              "& .MuiDataGrid-row.pawned-item-row:hover, & .MuiDataGrid-row.pawned-item-row.Mui-selected:hover":
+              "& .MuiDataGrid-row.active-item-row:hover, & .MuiDataGrid-row.active-item-row.Mui-selected:hover":
                 {
                   backgroundColor: "#ef9a9a",
                 },
