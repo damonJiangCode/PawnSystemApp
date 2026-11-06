@@ -31,29 +31,26 @@ const validMetrics = () => ({
 const fixture = (t, options = {}) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "execute-migration-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
-    fs.mkdirSync(path.join(root, "migration", folder), { recursive: true });
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
+    fs.mkdirSync(path.join(root, "database", "migration", folder), {
+      recursive: true,
+    });
   }
   for (const name of [
     "source/superpawnconv.mdb",
     "source/Pictureconv.mdb",
-    "mappings/category-mapping.md",
-    "mappings/location-mapping.md",
+    "mappings/category-mapping.json",
+    "mappings/location-mapping.json",
+    "mappings/id-type-mapping.json",
   ]) {
     fs.writeFileSync(
-      path.join(root, "migration", name),
+      path.join(root, "database", "migration", name),
       "Synthetic fixture only.\n",
     );
   }
   fs.writeFileSync(
     path.join(root, ".env"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\n",
+    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\nEMPLOYEE_PIN_SECRET=test-only-employee-pin-secret-0123456789\n",
   );
   const compiler = path.join(root, "node_modules/typescript/bin");
   fs.mkdirSync(compiler, { recursive: true });
@@ -125,20 +122,26 @@ const fixture = (t, options = {}) => {
               },
             },
             migration: {
-              volumes: ["source", "mappings", "exports", "reports"].map(
-                (folder) => ({
+              volumes: [
+                ...["source", "mappings", "reports"].map((folder) => ({
                   type: "bind",
-                  source: path.join(root, "migration", folder),
-                  target: `/app/migration/${folder}`,
+                  source: path.join(root, "database", "migration", folder),
+                  target: `/app/database/migration/${folder}`,
                   read_only: folder === "source" || folder === "mappings",
-                }),
-              ),
+                })),
+                {
+                  type: "bind",
+                  source: path.join(root, "images"),
+                  target: "/app/images",
+                },
+              ],
               environment: {
                 DB_HOST: "pawnsystemdb",
                 DB_PORT: "5432",
                 DB_USER: "pawnsystem_dev",
                 DB_PASSWORD: "test-only-private-password",
                 DB_NAME: "pawnsystemdb",
+                EMPLOYEE_PIN_SECRET: "test-only-employee-pin-secret-0123456789",
               },
             },
           },
@@ -163,7 +166,9 @@ const fixture = (t, options = {}) => {
       fs.writeFileSync(args[1], "synthetic photo archive");
     if (args.some((arg) => arg.endsWith("/database/runInit.js")))
       initialized = true;
-    const script = args.find((arg) => arg.startsWith("migration/scripts/"));
+    const script = args.find((arg) =>
+      arg.startsWith("database/migration/scripts/"),
+    );
     if (script) {
       const reportRoot = path.join(
         root,
@@ -230,7 +235,7 @@ const fixture = (t, options = {}) => {
 const committed = (f, kind) =>
   f.calls.some(
     ({ args }) =>
-      args.includes(`migration/scripts/migrate-${kind}.cjs`) &&
+      args.includes(`database/migration/scripts/migrate-${kind}.cjs`) &&
       args.includes("--commit"),
   );
 
@@ -241,12 +246,12 @@ test("simulated execution imports in order, writes backups, and never starts/res
   const commits = f.calls
     .filter(({ args }) => args.includes("--commit"))
     .map(({ args }) =>
-      args.find((arg) => arg.startsWith("migration/scripts/")),
+      args.find((arg) => arg.startsWith("database/migration/scripts/")),
     );
   assert.deepEqual(
     commits,
     ["client", "employee", "ticket", "item", "client-statistics"].map(
-      (kind) => `migration/scripts/migrate-${kind}.cjs`,
+      (kind) => `database/migration/scripts/migrate-${kind}.cjs`,
     ),
   );
   assert.ok(
@@ -254,14 +259,24 @@ test("simulated execution imports in order, writes backups, and never starts/res
       args.some((arg) => ["up", "down", "stop", "start"].includes(arg)),
     ),
   );
-  const run = fs.readdirSync(path.join(f.root, "migration/reports"))[0];
+  const run = fs.readdirSync(
+    path.join(f.root, "database/migration/reports"),
+  )[0];
   const manifest = JSON.parse(
     fs.readFileSync(
-      path.join(f.root, "migration/reports", run, "execution.json"),
+      path.join(f.root, "database/migration/reports", run, "execution.json"),
       "utf8",
     ),
   );
   assert.equal(manifest.status, "completed");
+  assert.deepEqual(Object.keys(manifest.mappings).sort(), [
+    "category-mapping.json",
+    "id-type-mapping.json",
+    "location-mapping.json",
+  ]);
+  for (const checksum of Object.values(manifest.mappings)) {
+    assert.match(checksum, /^[a-f0-9]{64}$/);
+  }
   assert.equal(Object.keys(manifest.backups).length, 3);
   assert.ok(!JSON.stringify(manifest).includes("test-only-private-password"));
   assert.ok(!f.logs.join("\n").includes("test-only-private-password"));
@@ -272,7 +287,7 @@ test("rejects an existing populated target before initialization, image build, o
   assert.equal(await executeDevMigration(f.options), 1);
   assert.equal(f.initialized, false);
   assert.equal(
-    fs.readdirSync(path.join(f.root, "migration/backups")).length,
+    fs.readdirSync(path.join(f.root, "database/migration/backups")).length,
     0,
   );
   assert.ok(
@@ -280,6 +295,16 @@ test("rejects an existing populated target before initialization, image build, o
   );
   assert.match(f.logs.join("\n"), /already contains/);
   assert.equal(f.ended, true);
+});
+
+test("refuses a non-empty images folder and leaves its photos alone", async (t) => {
+  const f = fixture(t);
+  const photo = path.join(f.root, "images/items/old.png");
+  fs.mkdirSync(path.dirname(photo), { recursive: true });
+  fs.writeFileSync(photo, "synthetic");
+  assert.equal(await executeDevMigration(f.options), 1);
+  assert.match(f.logs.join("\n"), /Migration images already contain files/);
+  assert.ok(fs.existsSync(photo));
 });
 
 test("rejects an application connection pointing to a different database container", async (t) => {
@@ -307,10 +332,12 @@ test("a zero-exit preview with blockers never reaches the corresponding commit",
 test("unresolved final validation saves backups but cannot declare success", async (t) => {
   const f = fixture(t, { invalidFinal: true });
   assert.equal(await executeDevMigration(f.options), 1);
-  const run = fs.readdirSync(path.join(f.root, "migration/reports"))[0];
+  const run = fs.readdirSync(
+    path.join(f.root, "database/migration/reports"),
+  )[0];
   const manifest = JSON.parse(
     fs.readFileSync(
-      path.join(f.root, "migration/reports", run, "execution.json"),
+      path.join(f.root, "database/migration/reports", run, "execution.json"),
       "utf8",
     ),
   );
@@ -369,10 +396,8 @@ test("empty-target guard also rejects unexpected populated public tables", async
 test("final photo checks reject paths outside the expected exported-photo directory", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "migration-photos-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  for (const folder of ["client-photos", "item-photos"])
-    fs.mkdirSync(path.join(dir, "migration/exports", folder), {
-      recursive: true,
-    });
+  for (const folder of ["clients", "items"])
+    fs.mkdirSync(path.join(dir, "images", folder), { recursive: true });
   fs.writeFileSync(path.join(dir, "unrelated.txt"), "synthetic");
   const client = {
     query: async (sql) => {

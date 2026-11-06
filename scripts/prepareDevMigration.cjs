@@ -5,16 +5,17 @@ const { spawnSync } = require("node:child_process");
 
 const PRIVATE_PATHS = [
   ".env",
-  "migration/source/check.txt",
-  "migration/exports/check.txt",
-  "migration/reports/check.txt",
-  "migration/backups/check.txt",
+  "database/migration/source/check.txt",
+  "images/check.txt",
+  "database/migration/reports/check.txt",
+  "database/migration/backups/check.txt",
 ];
 const REQUIRED_INPUTS = [
-  "migration/source/superpawnconv.mdb",
-  "migration/source/Pictureconv.mdb",
-  "migration/mappings/category-mapping.md",
-  "migration/mappings/location-mapping.md",
+  "database/migration/source/superpawnconv.mdb",
+  "database/migration/source/Pictureconv.mdb",
+  "database/migration/mappings/category-mapping.json",
+  "database/migration/mappings/location-mapping.json",
+  "database/migration/mappings/id-type-mapping.json",
 ];
 
 const parseEnv = (content) => {
@@ -93,27 +94,22 @@ const prepareDevMigration = ({
     "ls-files",
     "--",
     ".env",
-    "migration/source",
-    "migration/exports",
-    "migration/reports",
-    "migration/backups",
+    "database/migration/source",
+    "images",
+    "database/migration/reports",
+    "database/migration/backups",
   ]);
   if (tracked.status !== 0 || tracked.stdout?.trim()) {
     fail("Private migration files must not be tracked by Git.");
   }
   if (errors.length) return finish();
 
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
-    fs.mkdirSync(path.join(projectRoot, "migration", folder), {
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
+    fs.mkdirSync(path.join(projectRoot, "database", "migration", folder), {
       recursive: true,
     });
   }
+  fs.mkdirSync(path.join(projectRoot, "images"), { recursive: true });
   log("Migration directories are available; mappings are versioned inputs.");
 
   const envPath = path.join(projectRoot, ".env");
@@ -123,15 +119,27 @@ const prepareDevMigration = ({
       fail("Restore .env.example before preparing local configuration.");
     } else {
       const template = fs.readFileSync(templatePath, "utf8");
-      if (!/^DB_PASSWORD=.*$/m.test(template)) {
-        fail(".env.example must contain a DB_PASSWORD entry.");
-      } else {
-        const content = template.replace(
-          /^DB_PASSWORD=.*$/m,
-          `DB_PASSWORD=${crypto.randomBytes(24).toString("hex")}`,
+      if (
+        !/^DB_PASSWORD=.*$/m.test(template) ||
+        !/^EMPLOYEE_PIN_SECRET=.*$/m.test(template)
+      ) {
+        fail(
+          ".env.example must contain DB_PASSWORD and EMPLOYEE_PIN_SECRET entries.",
         );
+      } else {
+        const content = template
+          .replace(
+            /^DB_PASSWORD=.*$/m,
+            `DB_PASSWORD=${crypto.randomBytes(24).toString("hex")}`,
+          )
+          .replace(
+            /^EMPLOYEE_PIN_SECRET=.*$/m,
+            `EMPLOYEE_PIN_SECRET=${crypto.randomBytes(32).toString("hex")}`,
+          );
         fs.writeFileSync(envPath, content, { flag: "wx", mode: 0o600 });
-        log("Created private .env with a generated database password.");
+        log(
+          "Created private .env with a generated database password and employee PIN secret.",
+        );
       }
     }
   } else {
@@ -147,6 +155,7 @@ const prepareDevMigration = ({
       "DB_NAME",
       "DB_USER",
       "DB_PASSWORD",
+      "EMPLOYEE_PIN_SECRET",
     ]) {
       if (process.env[key] !== undefined) values[key] = process.env[key];
       if (!values[key]?.trim())
@@ -173,11 +182,21 @@ const prepareDevMigration = ({
       !fs.statSync(filePath).isFile() ||
       fs.statSync(filePath).size === 0
     ) {
-      const inputType = relativePath.startsWith("migration/mappings/")
+      const inputType = relativePath.startsWith("database/migration/mappings/")
         ? "versioned mapping"
         : "private source database";
       fail(`Provide a nonempty ${inputType}: ${relativePath}`);
     }
+  }
+  try {
+    require("../database/migration/scripts/id-type-mapping.cjs").loadIdTypeMapping(
+      path.join(
+        projectRoot,
+        "database/migration/mappings/id-type-mapping.json",
+      ),
+    );
+  } catch (error) {
+    fail(`Invalid ID type mapping: ${error.message}`);
   }
   for (const dependency of ["pg", "csv-parser", "electron"]) {
     try {

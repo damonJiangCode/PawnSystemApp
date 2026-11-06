@@ -1,26 +1,90 @@
 # PawnSystemApp
 
-An Electron desktop application for pawn shop operations, built with React, TypeScript, Material UI and PostgreSQL.
+A full-stack desktop application for running a pawn shop: clients, pawn and sell
+tickets, items, payments and reports. Built with React, Electron, NestJS and
+PostgreSQL, with tooling to import legacy Microsoft Access data.
+
+![Transaction page with active tickets, items and an item photo](docs/screenshots/transaction.png)
+
+| Client profile and search                   | Pickup and interest payments                    |
+| ------------------------------------------- | ----------------------------------------------- |
+| ![Client page](docs/screenshots/client.png) | ![Payment window](docs/screenshots/payment.png) |
+
+| Item search across tickets                              |
+| ------------------------------------------------------- |
+| ![Item search window](docs/screenshots/item-search.png) |
+
+_Screenshots use fictional demo data from a local stub API; photos are placeholders._
 
 ## Features
 
-- Customer search, profiles, identification records, photos and holds.
-- Pawn and sell tickets, linked items, ticket conversion, transfer and expiration.
-- Interest payments, pickup, history, repawn and eligible ticket reversals.
-- Item search, categories, photos and printable tickets.
-- Daily, buyback, interest, overdue and LeadsOnline XML reporting.
-- Employee, location, holiday and hair/eye color administration.
+- **Clients:** name and birthday search, profiles, IDs, photos, signed notes, holds
+  and activation. Inactive clients cannot receive new tickets.
+- **Tickets:** pawn, sell, edit, convert, transfer, expire, mark stolen, reverse and
+  repawn, with printable envelope tickets.
+- **Payments:** pickups and interest extensions, with a legal pickup hold warning.
+- **Items:** search, categories, photos and linking items to new tickets.
+- **Reports:** daily, buyback, interest and overdue, plus LeadsOnline XML submission.
+- **Administration:** employees, locations, holidays, ID types, colors and item categories.
+- **Legacy import:** Access records and photos mapped into PostgreSQL, with backups
+  and post-import validation.
 
-## Local development
+## Architecture
 
-Use a separate empty development database and fictional data.
+```text
+React UI ── HTTP ── NestJS controllers → services → repositories → PostgreSQL
+    │
+    └── preload bridge ── Electron windows, menus, reports
+```
+
+| Area      | Technology                                                    |
+| --------- | ------------------------------------------------------------- |
+| Frontend  | React 18, TypeScript, Material UI, MUI Data Grid, Vite        |
+| Desktop   | Electron                                                      |
+| Backend   | NestJS, class-validator, node-postgres with parameterized SQL |
+| Database  | PostgreSQL 16 in Docker                                       |
+| Migration | Node.js, mdbtools, versioned JSON mapping rules               |
+| Testing   | Vitest for the server; Node test runner for everything else   |
+
+## Engineering highlights
+
+- **The server owns business rules.** The frontend requests and renders; interest,
+  legal dates and status changes are decided on the server.
+- **Money cannot drift.** Payment requests carry the amounts the screen showed. The
+  server recomputes them under row locks and rejects the whole batch with 409 if any differs.
+- **Concurrency is designed in.** Multi-step writes run in one transaction, and rows
+  lock in a fixed order so parallel requests cannot deadlock or remove the last manager.
+- **Photo storage stays private.** Responses carry an `image_url`, never a file path,
+  and new files get server-chosen UUID names.
+- **Employee PINs are never stored in plain text.** They are stored as a keyed
+  HMAC-SHA256, which still allows lookup by PIN alone.
+- **Dates do not depend on the host.** Business dates use the `America/Regina` shop
+  calendar, tested under other process time zones.
+- **630+ automated tests.** HTTP tests run real Nest routes and DTOs against a mocked
+  database connection; they do not touch a live database.
+
+## Current status
+
+The business workflows are moving from Electron IPC to the NestJS server.
+
+- Clients, employees, reference data, tickets and items use HTTP.
+- Reports and XML reports still run in Electron.
+- API routes have no authentication yet. Employee PINs attribute actions but do not
+  create a login session, so this must stay on a trusted network for now.
+- There is no installer or server container yet: the desktop app needs Vite, and
+  Docker runs PostgreSQL only.
+
+## Getting started
+
+You need Node.js 22, Docker Desktop and a desktop environment. From the repository root:
 
 ```bash
 npm ci
+npm --prefix server ci
 cp .env.example .env
 ```
 
-Edit the ignored `.env` and set your own database password. To use the included local PostgreSQL service:
+Set the database credentials and `EMPLOYEE_PIN_SECRET` (at least 32 characters) in `.env`, then:
 
 ```bash
 docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
@@ -28,9 +92,10 @@ npm run db:init
 npm run dev
 ```
 
-`db:init` initializes schema and reference data; it does not create an initial employee or manager. The current desktop window setup targets the Vite development server at `localhost:5173`. This revision does not include a Windows installer configuration.
-
-Optional LeadsOnline integration reads `LEADSONLINE_*` configuration from the private environment. Leave it unset for local development without external reporting.
+This starts Vite on 5173, NestJS on 3000 and Electron; PostgreSQL uses host port 5433.
+`db:init` does not create an employee. To import Access data instead, see the
+[migration guide](database/README.md#access-migration) or the
+[Windows setup](docs/instructions.md).
 
 ## Verification
 
@@ -38,26 +103,21 @@ Optional LeadsOnline integration reads `LEADSONLINE_*` configuration from the pr
 npm run typecheck:main
 npm run typecheck:renderer
 npm test
+npm --prefix server test
+npm --prefix server run test:e2e
+npm --prefix server run build
 npm run build
 ```
 
-## Repository structure
+## Documentation
 
-| Path | Purpose |
-| --- | --- |
-| `src/renderer/` | Frontend HTML entry, React screens, components and UI workflows |
-| `src/main/` | Electron windows, business services and SQL repositories |
-| `src/preload/` | IPC bridge exposed as `window.appAPI` |
-| `src/shared/` | Shared models, contracts and calculation helpers |
-| `vite.config.ts` | Frontend development server and build configuration |
-| `docker/` | Local database and optional migration tooling |
-| `migration/scripts/` | Migration tooling; private inputs are supplied separately |
-| `docs/` | Architecture and public repository guidance |
+- [Frontend](frontend/README.md)
+- [Electron](electron/README.md)
+- [Server](server/README.md)
+- [Database](database/README.md)
+- [Shared code](shared/README.md)
 
-See [architecture](docs/architecture.md), the README in each source module, and [Windows development setup](docs/instructions.md).
+## Private data
 
-## Public source and private data
-
-This repository publishes software source and sanitized configuration examples. Customer/employee records, identification data, photos, source databases, backups, migration reports, logs and actual credentials belong in ignored local storage. See [public repository policy](docs/public-repository.md).
-
-Reviewed category and location conversion rules are versioned in `migration/mappings/` and included in a fresh clone. Supply the private Access databases separately. External SOAP reference documents remain private; ordinary application startup does not require them.
+Credentials, Access files, client and employee records, photos, migration reports and
+backups are ignored by Git. Commit only source code and sanitized example configuration.

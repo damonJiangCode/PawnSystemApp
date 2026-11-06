@@ -31,14 +31,15 @@ services:
       DB_USER: ${DB_USER:?Set DB_USER}
       DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
       DB_NAME: ${DB_NAME:?Set DB_NAME}
+      EMPLOYEE_PIN_SECRET: ${EMPLOYEE_PIN_SECRET:?Set EMPLOYEE_PIN_SECRET}
     depends_on:
       pawnsystemdb:
         condition: service_healthy
     volumes:
-      - ../migration/source:/app/migration/source:ro
-      - ../migration/mappings:/app/migration/mappings:ro
-      - ../migration/exports:/app/migration/exports
-      - ../migration/reports:/app/migration/reports
+      - ../database/migration/source:/app/database/migration/source:ro
+      - ../database/migration/mappings:/app/database/migration/mappings:ro
+      - ../images:/app/images
+      - ../database/migration/reports:/app/database/migration/reports
 
 volumes:
   postgres_data:

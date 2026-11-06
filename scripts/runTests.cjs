@@ -6,9 +6,11 @@ const result = spawnSync(
     "--loader",
     "ts-node/esm",
     "--test",
-    "src/**/*.test.ts",
+    "frontend/src/**/*.test.ts",
+    "electron/src/**/*.test.ts",
+    "shared/**/*.test.ts",
     "scripts/*.test.cjs",
-    "migration/scripts/*.test.cjs",
+    "database/migration/scripts/*.test.cjs",
   ],
   {
     stdio: "inherit",

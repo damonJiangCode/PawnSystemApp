@@ -1,0 +1,21 @@
+const CHANNELS = {
+  LOAD_BUYBACK_REPORT: "load-buyback-report",
+  LOAD_DAILY_REPORT: "load-daily-report",
+  LOAD_INTEREST_REPORT: "load-interest-report",
+  LOAD_OVERDUE_REPORT: "load-overdue-report",
+  CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
+  LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
+  SUBMIT_XML_REPORT: "submit-xml-report",
+  OPEN_PAYMENT_WINDOW: "open-payment-window",
+  NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
+  OPEN_QUOTE_WINDOW: "open-quote-window",
+  NOTIFY_QUOTE_WINDOW_INPUT_UPDATED: "notify-quote-window-input-updated",
+  OPEN_TICKET_SEARCH_WINDOW: "open-ticket-search-window",
+  OPEN_ITEM_SEARCH_WINDOW: "open-item-search-window",
+  FOCUS_MAIN_WINDOW: "focus-main-window",
+  GET_ITEM_SEARCH_WINDOW_INPUT: "get-item-search-window-input",
+  NOTIFY_ITEM_SEARCH_WINDOW_INPUT_UPDATED:
+    "notify-item-search-window-input-updated",
+} as const;
+
+export { CHANNELS };

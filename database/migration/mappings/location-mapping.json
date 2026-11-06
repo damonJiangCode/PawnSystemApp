@@ -1,0 +1,7214 @@
+[
+  {
+    "legacy_location": "K",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FURN",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FRON",
+    "mapped_location": "FRON"
+  },
+  {
+    "legacy_location": "RR'M",
+    "mapped_location": "RR-M"
+  },
+  {
+    "legacy_location": "W'M",
+    "mapped_location": "W-M"
+  },
+  {
+    "legacy_location": "CP3",
+    "mapped_location": "CP3"
+  },
+  {
+    "legacy_location": "WATM",
+    "mapped_location": "W-M"
+  },
+  {
+    "legacy_location": "AB21",
+    "mapped_location": "AB21"
+  },
+  {
+    "legacy_location": "AK",
+    "mapped_location": "AK"
+  },
+  {
+    "legacy_location": "CP10",
+    "mapped_location": "CP10"
+  },
+  {
+    "legacy_location": "RR'S",
+    "mapped_location": "RR-S"
+  },
+  {
+    "legacy_location": "CP2",
+    "mapped_location": "CP2"
+  },
+  {
+    "legacy_location": "AA83",
+    "mapped_location": "AA83"
+  },
+  {
+    "legacy_location": "RR'B",
+    "mapped_location": "RR-B"
+  },
+  {
+    "legacy_location": "AA84",
+    "mapped_location": "AA84"
+  },
+  {
+    "legacy_location": "CP1",
+    "mapped_location": "CP1"
+  },
+  {
+    "legacy_location": "CP5",
+    "mapped_location": "CP5"
+  },
+  {
+    "legacy_location": "CP6",
+    "mapped_location": "CP6"
+  },
+  {
+    "legacy_location": "RR11",
+    "mapped_location": "RR11"
+  },
+  {
+    "legacy_location": "CP4",
+    "mapped_location": "CP4"
+  },
+  {
+    "legacy_location": "RR'C",
+    "mapped_location": "RR-C"
+  },
+  {
+    "legacy_location": "WATL",
+    "mapped_location": "W-L"
+  },
+  {
+    "legacy_location": "RR'L",
+    "mapped_location": "RR-L"
+  },
+  {
+    "legacy_location": "C'5",
+    "mapped_location": "C5"
+  },
+  {
+    "legacy_location": "AF15",
+    "mapped_location": "AF15"
+  },
+  {
+    "legacy_location": "CP8",
+    "mapped_location": "CP8"
+  },
+  {
+    "legacy_location": "AB14",
+    "mapped_location": "AB14"
+  },
+  {
+    "legacy_location": "CP9",
+    "mapped_location": "CP9"
+  },
+  {
+    "legacy_location": "AF25",
+    "mapped_location": "AF25"
+  },
+  {
+    "legacy_location": "AA93",
+    "mapped_location": "AA93"
+  },
+  {
+    "legacy_location": "RR'H",
+    "mapped_location": "RR-H"
+  },
+  {
+    "legacy_location": "AA94",
+    "mapped_location": "AA94"
+  },
+  {
+    "legacy_location": "W'L",
+    "mapped_location": "W-L"
+  },
+  {
+    "legacy_location": "AA95",
+    "mapped_location": "AA95"
+  },
+  {
+    "legacy_location": "AF13",
+    "mapped_location": "AF13"
+  },
+  {
+    "legacy_location": "AF33",
+    "mapped_location": "AF33"
+  },
+  {
+    "legacy_location": "AF45",
+    "mapped_location": "AF45"
+  },
+  {
+    "legacy_location": "RR'P",
+    "mapped_location": "RR-P"
+  },
+  {
+    "legacy_location": "R'M",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF63",
+    "mapped_location": "AF63"
+  },
+  {
+    "legacy_location": "AF53",
+    "mapped_location": "AF53"
+  },
+  {
+    "legacy_location": "AF35",
+    "mapped_location": "AF35"
+  },
+  {
+    "legacy_location": "AF43",
+    "mapped_location": "AF43"
+  },
+  {
+    "legacy_location": "FUR2",
+    "mapped_location": "F10"
+  },
+  {
+    "legacy_location": "C'3",
+    "mapped_location": "C3"
+  },
+  {
+    "legacy_location": "B2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB13",
+    "mapped_location": "AB13"
+  },
+  {
+    "legacy_location": "AF24",
+    "mapped_location": "AF24"
+  },
+  {
+    "legacy_location": "AA33",
+    "mapped_location": "AA33"
+  },
+  {
+    "legacy_location": "AF44",
+    "mapped_location": "AF44"
+  },
+  {
+    "legacy_location": "AA34",
+    "mapped_location": "AA34"
+  },
+  {
+    "legacy_location": "TG1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'A",
+    "mapped_location": "RR-A"
+  },
+  {
+    "legacy_location": "AF23",
+    "mapped_location": "AF23"
+  },
+  {
+    "legacy_location": "CP7",
+    "mapped_location": "CP7"
+  },
+  {
+    "legacy_location": "AA85",
+    "mapped_location": "AA85"
+  },
+  {
+    "legacy_location": "AB15",
+    "mapped_location": "AB15"
+  },
+  {
+    "legacy_location": "AF14",
+    "mapped_location": "AF14"
+  },
+  {
+    "legacy_location": "B1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA24",
+    "mapped_location": "AA24"
+  },
+  {
+    "legacy_location": "C'4",
+    "mapped_location": "C4"
+  },
+  {
+    "legacy_location": "AF34",
+    "mapped_location": "AF34"
+  },
+  {
+    "legacy_location": "BC1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'D",
+    "mapped_location": "RR-D"
+  },
+  {
+    "legacy_location": "AA23",
+    "mapped_location": "AA23"
+  },
+  {
+    "legacy_location": "AA92",
+    "mapped_location": "AA92"
+  },
+  {
+    "legacy_location": "R'B",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR12",
+    "mapped_location": "RR12"
+  },
+  {
+    "legacy_location": "RR'T",
+    "mapped_location": "RR-T"
+  },
+  {
+    "legacy_location": "R'S",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF54",
+    "mapped_location": "AF54"
+  },
+  {
+    "legacy_location": "AVEB",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "C'2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA43",
+    "mapped_location": "AA43"
+  },
+  {
+    "legacy_location": "B3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA82",
+    "mapped_location": "AA82"
+  },
+  {
+    "legacy_location": "RR'K",
+    "mapped_location": "RR-K"
+  },
+  {
+    "legacy_location": "AC81",
+    "mapped_location": "AC81"
+  },
+  {
+    "legacy_location": "AF74",
+    "mapped_location": "AF74"
+  },
+  {
+    "legacy_location": "AF73",
+    "mapped_location": "AF73"
+  },
+  {
+    "legacy_location": "R'P",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA35",
+    "mapped_location": "AA35"
+  },
+  {
+    "legacy_location": "CP12",
+    "mapped_location": "CP12"
+  },
+  {
+    "legacy_location": "AF16",
+    "mapped_location": "AF16"
+  },
+  {
+    "legacy_location": "AF64",
+    "mapped_location": "AF64"
+  },
+  {
+    "legacy_location": "AF62",
+    "mapped_location": "AF62"
+  },
+  {
+    "legacy_location": "AA25",
+    "mapped_location": "AA25"
+  },
+  {
+    "legacy_location": "AF22",
+    "mapped_location": "AF22"
+  },
+  {
+    "legacy_location": "AF84",
+    "mapped_location": "AF84"
+  },
+  {
+    "legacy_location": "RR'G",
+    "mapped_location": "RR-G"
+  },
+  {
+    "legacy_location": "RR'W",
+    "mapped_location": "RR-W"
+  },
+  {
+    "legacy_location": "AF12",
+    "mapped_location": "AF12"
+  },
+  {
+    "legacy_location": "AA44",
+    "mapped_location": "AA44"
+  },
+  {
+    "legacy_location": "AF42",
+    "mapped_location": "AF42"
+  },
+  {
+    "legacy_location": "SIDE",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF52",
+    "mapped_location": "AF52"
+  },
+  {
+    "legacy_location": "AA32",
+    "mapped_location": "AA32"
+  },
+  {
+    "legacy_location": "AF32",
+    "mapped_location": "AF32"
+  },
+  {
+    "legacy_location": "AF83",
+    "mapped_location": "AF83"
+  },
+  {
+    "legacy_location": "AA45",
+    "mapped_location": "AA45"
+  },
+  {
+    "legacy_location": "AF26",
+    "mapped_location": "AF26"
+  },
+  {
+    "legacy_location": "TG3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR13",
+    "mapped_location": "RR13"
+  },
+  {
+    "legacy_location": "AA53",
+    "mapped_location": "AA53"
+  },
+  {
+    "legacy_location": "RR'R",
+    "mapped_location": "RR-R"
+  },
+  {
+    "legacy_location": "AA73",
+    "mapped_location": "AA73"
+  },
+  {
+    "legacy_location": "AF11",
+    "mapped_location": "AF11"
+  },
+  {
+    "legacy_location": "AB34",
+    "mapped_location": "AB34"
+  },
+  {
+    "legacy_location": "R'C",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF51",
+    "mapped_location": "AF51"
+  },
+  {
+    "legacy_location": "AA22",
+    "mapped_location": "AA22"
+  },
+  {
+    "legacy_location": "G1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "C1",
+    "mapped_location": "C1"
+  },
+  {
+    "legacy_location": "AA54",
+    "mapped_location": "AA54"
+  },
+  {
+    "legacy_location": "F 8",
+    "mapped_location": "F8"
+  },
+  {
+    "legacy_location": "AF41",
+    "mapped_location": "AF41"
+  },
+  {
+    "legacy_location": "DS16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF75",
+    "mapped_location": "AF75"
+  },
+  {
+    "legacy_location": "AG13",
+    "mapped_location": "AG13"
+  },
+  {
+    "legacy_location": "AA81",
+    "mapped_location": "AA81"
+  },
+  {
+    "legacy_location": "DB",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "A1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA42",
+    "mapped_location": "AA42"
+  },
+  {
+    "legacy_location": "AB43",
+    "mapped_location": "AB43"
+  },
+  {
+    "legacy_location": "AF61",
+    "mapped_location": "AF61"
+  },
+  {
+    "legacy_location": "C2",
+    "mapped_location": "C2"
+  },
+  {
+    "legacy_location": "AA26",
+    "mapped_location": "AA26"
+  },
+  {
+    "legacy_location": "R'H",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA52",
+    "mapped_location": "AA52"
+  },
+  {
+    "legacy_location": "R'D",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF21",
+    "mapped_location": "AF21"
+  },
+  {
+    "legacy_location": "CP14",
+    "mapped_location": "CP14"
+  },
+  {
+    "legacy_location": "FA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'N",
+    "mapped_location": "RR-N"
+  },
+  {
+    "legacy_location": "F 9",
+    "mapped_location": "F9"
+  },
+  {
+    "legacy_location": "AB12",
+    "mapped_location": "AB12"
+  },
+  {
+    "legacy_location": "D5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'L",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF94",
+    "mapped_location": "AF94"
+  },
+  {
+    "legacy_location": "H1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB44",
+    "mapped_location": "AB44"
+  },
+  {
+    "legacy_location": "AF31",
+    "mapped_location": "AF31"
+  },
+  {
+    "legacy_location": "AD11",
+    "mapped_location": "AD11"
+  },
+  {
+    "legacy_location": "C'1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA72",
+    "mapped_location": "AA72"
+  },
+  {
+    "legacy_location": "AC61",
+    "mapped_location": "AC61"
+  },
+  {
+    "legacy_location": "AD31",
+    "mapped_location": "AD31"
+  },
+  {
+    "legacy_location": "C3",
+    "mapped_location": "C3"
+  },
+  {
+    "legacy_location": "AB53",
+    "mapped_location": "AB53"
+  },
+  {
+    "legacy_location": "AF93",
+    "mapped_location": "AF93"
+  },
+  {
+    "legacy_location": "J1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF72",
+    "mapped_location": "AF72"
+  },
+  {
+    "legacy_location": "GA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "E1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA55",
+    "mapped_location": "AA55"
+  },
+  {
+    "legacy_location": "AB63",
+    "mapped_location": "AB63"
+  },
+  {
+    "legacy_location": "R'W",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "G4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "D1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "I1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC11",
+    "mapped_location": "BC11"
+  },
+  {
+    "legacy_location": "AD61",
+    "mapped_location": "AD61"
+  },
+  {
+    "legacy_location": "AD21",
+    "mapped_location": "AD21"
+  },
+  {
+    "legacy_location": "AA14",
+    "mapped_location": "AA14"
+  },
+  {
+    "legacy_location": "AA11",
+    "mapped_location": "AA11"
+  },
+  {
+    "legacy_location": "F 7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA91",
+    "mapped_location": "AA91"
+  },
+  {
+    "legacy_location": "AB45",
+    "mapped_location": "AB45"
+  },
+  {
+    "legacy_location": "AF36",
+    "mapped_location": "AF36"
+  },
+  {
+    "legacy_location": "AF55",
+    "mapped_location": "AF55"
+  },
+  {
+    "legacy_location": "AB23",
+    "mapped_location": "AB23"
+  },
+  {
+    "legacy_location": "AC71",
+    "mapped_location": "AC71"
+  },
+  {
+    "legacy_location": "AA36",
+    "mapped_location": "AA36"
+  },
+  {
+    "legacy_location": "AB35",
+    "mapped_location": "AB35"
+  },
+  {
+    "legacy_location": "AD22",
+    "mapped_location": "AD22"
+  },
+  {
+    "legacy_location": "AB33",
+    "mapped_location": "AB33"
+  },
+  {
+    "legacy_location": "AA12",
+    "mapped_location": "AA12"
+  },
+  {
+    "legacy_location": "CP11",
+    "mapped_location": "CP11"
+  },
+  {
+    "legacy_location": "AC41",
+    "mapped_location": "AC41"
+  },
+  {
+    "legacy_location": "D3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "E2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB61",
+    "mapped_location": "BB61"
+  },
+  {
+    "legacy_location": "BK32",
+    "mapped_location": "BK32"
+  },
+  {
+    "legacy_location": "E5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "F2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD71",
+    "mapped_location": "AD71"
+  },
+  {
+    "legacy_location": "AB11",
+    "mapped_location": "AB11"
+  },
+  {
+    "legacy_location": "AA96",
+    "mapped_location": "AA96"
+  },
+  {
+    "legacy_location": "AG43",
+    "mapped_location": "AG43"
+  },
+  {
+    "legacy_location": "EA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA13",
+    "mapped_location": "AA13"
+  },
+  {
+    "legacy_location": "RR'F",
+    "mapped_location": "RR-F"
+  },
+  {
+    "legacy_location": "AG53",
+    "mapped_location": "AG53"
+  },
+  {
+    "legacy_location": "R'A",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF82",
+    "mapped_location": "AF82"
+  },
+  {
+    "legacy_location": "AF65",
+    "mapped_location": "AF65"
+  },
+  {
+    "legacy_location": "BD11",
+    "mapped_location": "BD11"
+  },
+  {
+    "legacy_location": "AB54",
+    "mapped_location": "AB54"
+  },
+  {
+    "legacy_location": "AD12",
+    "mapped_location": "AD12"
+  },
+  {
+    "legacy_location": "BP12",
+    "mapped_location": "BP12"
+  },
+  {
+    "legacy_location": "CP13",
+    "mapped_location": "CP13"
+  },
+  {
+    "legacy_location": "AB64",
+    "mapped_location": "AB64"
+  },
+  {
+    "legacy_location": "AD52",
+    "mapped_location": "AD52"
+  },
+  {
+    "legacy_location": "AF71",
+    "mapped_location": "AF71"
+  },
+  {
+    "legacy_location": "BP11",
+    "mapped_location": "BP11"
+  },
+  {
+    "legacy_location": "AD42",
+    "mapped_location": "AD42"
+  },
+  {
+    "legacy_location": "AB32",
+    "mapped_location": "AB32"
+  },
+  {
+    "legacy_location": "AD41",
+    "mapped_location": "AD41"
+  },
+  {
+    "legacy_location": "AA21",
+    "mapped_location": "AA21"
+  },
+  {
+    "legacy_location": "R'T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'E",
+    "mapped_location": "RR-E"
+  },
+  {
+    "legacy_location": "AC21",
+    "mapped_location": "AC21"
+  },
+  {
+    "legacy_location": "R'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB16",
+    "mapped_location": "AB16"
+  },
+  {
+    "legacy_location": "AC83",
+    "mapped_location": "AC83"
+  },
+  {
+    "legacy_location": "AB73",
+    "mapped_location": "AB73"
+  },
+  {
+    "legacy_location": "AG33",
+    "mapped_location": "AG33"
+  },
+  {
+    "legacy_location": "AG14",
+    "mapped_location": "AG14"
+  },
+  {
+    "legacy_location": "TA4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB24",
+    "mapped_location": "AB24"
+  },
+  {
+    "legacy_location": "AA31",
+    "mapped_location": "AA31"
+  },
+  {
+    "legacy_location": "D2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA86",
+    "mapped_location": "AA86"
+  },
+  {
+    "legacy_location": "AB25",
+    "mapped_location": "AB25"
+  },
+  {
+    "legacy_location": "AA46",
+    "mapped_location": "AA46"
+  },
+  {
+    "legacy_location": "AC11",
+    "mapped_location": "AC11"
+  },
+  {
+    "legacy_location": "AB42",
+    "mapped_location": "AB42"
+  },
+  {
+    "legacy_location": "HA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC51",
+    "mapped_location": "AC51"
+  },
+  {
+    "legacy_location": "AD62",
+    "mapped_location": "AD62"
+  },
+  {
+    "legacy_location": "AD32",
+    "mapped_location": "AD32"
+  },
+  {
+    "legacy_location": "I4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF85",
+    "mapped_location": "AF85"
+  },
+  {
+    "legacy_location": "AA63",
+    "mapped_location": "AA63"
+  },
+  {
+    "legacy_location": "AD13",
+    "mapped_location": "AD13"
+  },
+  {
+    "legacy_location": "AB84",
+    "mapped_location": "AB84"
+  },
+  {
+    "legacy_location": "E4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF46",
+    "mapped_location": "AF46"
+  },
+  {
+    "legacy_location": "AG23",
+    "mapped_location": "AG23"
+  },
+  {
+    "legacy_location": "AD51",
+    "mapped_location": "AD51"
+  },
+  {
+    "legacy_location": "AA71",
+    "mapped_location": "AA71"
+  },
+  {
+    "legacy_location": "J2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC31",
+    "mapped_location": "AC31"
+  },
+  {
+    "legacy_location": "AB71",
+    "mapped_location": "AB71"
+  },
+  {
+    "legacy_location": "CAM2",
+    "mapped_location": "C2"
+  },
+  {
+    "legacy_location": "AA51",
+    "mapped_location": "AA51"
+  },
+  {
+    "legacy_location": "AB83",
+    "mapped_location": "AB83"
+  },
+  {
+    "legacy_location": "AF95",
+    "mapped_location": "AF95"
+  },
+  {
+    "legacy_location": "AB52",
+    "mapped_location": "AB52"
+  },
+  {
+    "legacy_location": "AK41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'G",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF92",
+    "mapped_location": "AF92"
+  },
+  {
+    "legacy_location": "AF76",
+    "mapped_location": "AF76"
+  },
+  {
+    "legacy_location": "A5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "E3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB74",
+    "mapped_location": "AB74"
+  },
+  {
+    "legacy_location": "J3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC63",
+    "mapped_location": "AC63"
+  },
+  {
+    "legacy_location": "T17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF11",
+    "mapped_location": "BF11"
+  },
+  {
+    "legacy_location": "C5",
+    "mapped_location": "C5"
+  },
+  {
+    "legacy_location": "AB61",
+    "mapped_location": "AB61"
+  },
+  {
+    "legacy_location": "D4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "F 1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA41",
+    "mapped_location": "AA41"
+  },
+  {
+    "legacy_location": "H2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA56",
+    "mapped_location": "AA56"
+  },
+  {
+    "legacy_location": "AD53",
+    "mapped_location": "AD53"
+  },
+  {
+    "legacy_location": "AG16",
+    "mapped_location": "AG16"
+  },
+  {
+    "legacy_location": "AC84",
+    "mapped_location": "AC84"
+  },
+  {
+    "legacy_location": "G2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC73",
+    "mapped_location": "AC73"
+  },
+  {
+    "legacy_location": "AD81",
+    "mapped_location": "AD81"
+  },
+  {
+    "legacy_location": "AB62",
+    "mapped_location": "AB62"
+  },
+  {
+    "legacy_location": "BM11",
+    "mapped_location": "BM11"
+  },
+  {
+    "legacy_location": "AG15",
+    "mapped_location": "AG15"
+  },
+  {
+    "legacy_location": "BL61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK21",
+    "mapped_location": "BK21"
+  },
+  {
+    "legacy_location": "AF86",
+    "mapped_location": "AF86"
+  },
+  {
+    "legacy_location": "R'K",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'J",
+    "mapped_location": "RR-J"
+  },
+  {
+    "legacy_location": "CP15",
+    "mapped_location": "CP15"
+  },
+  {
+    "legacy_location": "AB55",
+    "mapped_location": "AB55"
+  },
+  {
+    "legacy_location": "AG63",
+    "mapped_location": "AG63"
+  },
+  {
+    "legacy_location": "AC82",
+    "mapped_location": "AC82"
+  },
+  {
+    "legacy_location": "UM1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC53",
+    "mapped_location": "AC53"
+  },
+  {
+    "legacy_location": "J4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE11",
+    "mapped_location": "BE11"
+  },
+  {
+    "legacy_location": "GUN",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "EA21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'F",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC64",
+    "mapped_location": "AC64"
+  },
+  {
+    "legacy_location": "AG45",
+    "mapped_location": "AG45"
+  },
+  {
+    "legacy_location": "AG25",
+    "mapped_location": "AG25"
+  },
+  {
+    "legacy_location": "AC75",
+    "mapped_location": "AC75"
+  },
+  {
+    "legacy_location": "BK31",
+    "mapped_location": "BK31"
+  },
+  {
+    "legacy_location": "DM9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB75",
+    "mapped_location": "AB75"
+  },
+  {
+    "legacy_location": "AD82",
+    "mapped_location": "AD82"
+  },
+  {
+    "legacy_location": "AC62",
+    "mapped_location": "AC62"
+  },
+  {
+    "legacy_location": "AA62",
+    "mapped_location": "AA62"
+  },
+  {
+    "legacy_location": "BK42",
+    "mapped_location": "BK42"
+  },
+  {
+    "legacy_location": "F 2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC24",
+    "mapped_location": "AC24"
+  },
+  {
+    "legacy_location": "BX61",
+    "mapped_location": "BX61"
+  },
+  {
+    "legacy_location": "AC43",
+    "mapped_location": "AC43"
+  },
+  {
+    "legacy_location": "AD72",
+    "mapped_location": "AD72"
+  },
+  {
+    "legacy_location": "AC74",
+    "mapped_location": "AC74"
+  },
+  {
+    "legacy_location": "BL31",
+    "mapped_location": "BL31"
+  },
+  {
+    "legacy_location": "AF81",
+    "mapped_location": "AF81"
+  },
+  {
+    "legacy_location": "AD91",
+    "mapped_location": "AD91"
+  },
+  {
+    "legacy_location": "AB91",
+    "mapped_location": "AB91"
+  },
+  {
+    "legacy_location": "UM3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB76",
+    "mapped_location": "AB76"
+  },
+  {
+    "legacy_location": "AB36",
+    "mapped_location": "AB36"
+  },
+  {
+    "legacy_location": "AC85",
+    "mapped_location": "AC85"
+  },
+  {
+    "legacy_location": "AB85",
+    "mapped_location": "AB85"
+  },
+  {
+    "legacy_location": "BX41",
+    "mapped_location": "BX41"
+  },
+  {
+    "legacy_location": "AG36",
+    "mapped_location": "AG36"
+  },
+  {
+    "legacy_location": "AC65",
+    "mapped_location": "AC65"
+  },
+  {
+    "legacy_location": "AB26",
+    "mapped_location": "AB26"
+  },
+  {
+    "legacy_location": "AB94",
+    "mapped_location": "AB94"
+  },
+  {
+    "legacy_location": "BP41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX31",
+    "mapped_location": "BX31"
+  },
+  {
+    "legacy_location": "AC45",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC34",
+    "mapped_location": "AC34"
+  },
+  {
+    "legacy_location": "AE11",
+    "mapped_location": "AE11"
+  },
+  {
+    "legacy_location": "BP61",
+    "mapped_location": "BP61"
+  },
+  {
+    "legacy_location": "AC42",
+    "mapped_location": "AC42"
+  },
+  {
+    "legacy_location": "AB65",
+    "mapped_location": "AB65"
+  },
+  {
+    "legacy_location": "A3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG55",
+    "mapped_location": "AG55"
+  },
+  {
+    "legacy_location": "AG44",
+    "mapped_location": "AG44"
+  },
+  {
+    "legacy_location": "AB51",
+    "mapped_location": "AB51"
+  },
+  {
+    "legacy_location": "G3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK61",
+    "mapped_location": "BK61"
+  },
+  {
+    "legacy_location": "AB31",
+    "mapped_location": "AB31"
+  },
+  {
+    "legacy_location": "AG12",
+    "mapped_location": "AG12"
+  },
+  {
+    "legacy_location": "AG34",
+    "mapped_location": "AG34"
+  },
+  {
+    "legacy_location": "F1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB46",
+    "mapped_location": "AB46"
+  },
+  {
+    "legacy_location": "F 6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD92",
+    "mapped_location": "AD92"
+  },
+  {
+    "legacy_location": "AG73",
+    "mapped_location": "AG73"
+  },
+  {
+    "legacy_location": "AC33",
+    "mapped_location": "AC33"
+  },
+  {
+    "legacy_location": "AE23",
+    "mapped_location": "AE23"
+  },
+  {
+    "legacy_location": "DW1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK51",
+    "mapped_location": "BK51"
+  },
+  {
+    "legacy_location": "AB95",
+    "mapped_location": "AB95"
+  },
+  {
+    "legacy_location": "H3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UM2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'V",
+    "mapped_location": "RR-V"
+  },
+  {
+    "legacy_location": "I2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "CAM3",
+    "mapped_location": "C3"
+  },
+  {
+    "legacy_location": "CAM1",
+    "mapped_location": "C1"
+  },
+  {
+    "legacy_location": "AC44",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC25",
+    "mapped_location": "AC25"
+  },
+  {
+    "legacy_location": "AC54",
+    "mapped_location": "AC54"
+  },
+  {
+    "legacy_location": "AC55",
+    "mapped_location": "AC55"
+  },
+  {
+    "legacy_location": "AG32",
+    "mapped_location": "AG32"
+  },
+  {
+    "legacy_location": "AG24",
+    "mapped_location": "AG24"
+  },
+  {
+    "legacy_location": "RR'O",
+    "mapped_location": "RR-O"
+  },
+  {
+    "legacy_location": "AC87",
+    "mapped_location": "AC87"
+  },
+  {
+    "legacy_location": "AK51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD14",
+    "mapped_location": "AD14"
+  },
+  {
+    "legacy_location": "TG2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD51",
+    "mapped_location": "BD51"
+  },
+  {
+    "legacy_location": "AG26",
+    "mapped_location": "AG26"
+  },
+  {
+    "legacy_location": "AC72",
+    "mapped_location": "AC72"
+  },
+  {
+    "legacy_location": "BE51",
+    "mapped_location": "BE51"
+  },
+  {
+    "legacy_location": "BG71",
+    "mapped_location": "BG71"
+  },
+  {
+    "legacy_location": "AB81",
+    "mapped_location": "AB81"
+  },
+  {
+    "legacy_location": "AA27",
+    "mapped_location": "AA27"
+  },
+  {
+    "legacy_location": "AB22",
+    "mapped_location": "AB22"
+  },
+  {
+    "legacy_location": "BK41",
+    "mapped_location": "BK41"
+  },
+  {
+    "legacy_location": "AA37",
+    "mapped_location": "AA37"
+  },
+  {
+    "legacy_location": "DA1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK22",
+    "mapped_location": "BK22"
+  },
+  {
+    "legacy_location": "DS17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "H4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC32",
+    "mapped_location": "AC32"
+  },
+  {
+    "legacy_location": "AB56",
+    "mapped_location": "AB56"
+  },
+  {
+    "legacy_location": "AC15",
+    "mapped_location": "AC15"
+  },
+  {
+    "legacy_location": "AB27",
+    "mapped_location": "AB27"
+  },
+  {
+    "legacy_location": "A2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL11",
+    "mapped_location": "BL11"
+  },
+  {
+    "legacy_location": "RR14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "G5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX11",
+    "mapped_location": "BX11"
+  },
+  {
+    "legacy_location": "AE24",
+    "mapped_location": "AE24"
+  },
+  {
+    "legacy_location": "AB93",
+    "mapped_location": "AB93"
+  },
+  {
+    "legacy_location": "AG35",
+    "mapped_location": "AG35"
+  },
+  {
+    "legacy_location": "BK11",
+    "mapped_location": "BK11"
+  },
+  {
+    "legacy_location": "AC22",
+    "mapped_location": "AC22"
+  },
+  {
+    "legacy_location": "BB33",
+    "mapped_location": "BB33"
+  },
+  {
+    "legacy_location": "BQ11",
+    "mapped_location": "BQ11"
+  },
+  {
+    "legacy_location": "F5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC14",
+    "mapped_location": "AC14"
+  },
+  {
+    "legacy_location": "AF96",
+    "mapped_location": "AF96"
+  },
+  {
+    "legacy_location": "BS11",
+    "mapped_location": "BS11"
+  },
+  {
+    "legacy_location": "T18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB72",
+    "mapped_location": "AB72"
+  },
+  {
+    "legacy_location": "EA22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB41",
+    "mapped_location": "AB41"
+  },
+  {
+    "legacy_location": "BG11",
+    "mapped_location": "BG11"
+  },
+  {
+    "legacy_location": "AC86",
+    "mapped_location": "AC86"
+  },
+  {
+    "legacy_location": "AE34",
+    "mapped_location": "AE34"
+  },
+  {
+    "legacy_location": "AC52",
+    "mapped_location": "AC52"
+  },
+  {
+    "legacy_location": "AK11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX51",
+    "mapped_location": "BX51"
+  },
+  {
+    "legacy_location": "DV8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC35",
+    "mapped_location": "AC35"
+  },
+  {
+    "legacy_location": "AD43",
+    "mapped_location": "AD43"
+  },
+  {
+    "legacy_location": "I3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG42",
+    "mapped_location": "AG42"
+  },
+  {
+    "legacy_location": "AG52",
+    "mapped_location": "AG52"
+  },
+  {
+    "legacy_location": "FA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC26",
+    "mapped_location": "AC26"
+  },
+  {
+    "legacy_location": "AE12",
+    "mapped_location": "AE12"
+  },
+  {
+    "legacy_location": "TB4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP21",
+    "mapped_location": "BP21"
+  },
+  {
+    "legacy_location": "AB37",
+    "mapped_location": "AB37"
+  },
+  {
+    "legacy_location": "UM5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA33",
+    "mapped_location": "BA33"
+  },
+  {
+    "legacy_location": "EA31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC13",
+    "mapped_location": "AC13"
+  },
+  {
+    "legacy_location": "F 5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK52",
+    "mapped_location": "BK52"
+  },
+  {
+    "legacy_location": "AK21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD24",
+    "mapped_location": "AD24"
+  },
+  {
+    "legacy_location": "AC67",
+    "mapped_location": "AC67"
+  },
+  {
+    "legacy_location": "AG65",
+    "mapped_location": "AG65"
+  },
+  {
+    "legacy_location": "BP31",
+    "mapped_location": "BP31"
+  },
+  {
+    "legacy_location": "AB82",
+    "mapped_location": "AB82"
+  },
+  {
+    "legacy_location": "R3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB31",
+    "mapped_location": "BB31"
+  },
+  {
+    "legacy_location": "AC77",
+    "mapped_location": "AC77"
+  },
+  {
+    "legacy_location": "UM4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TE2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL21",
+    "mapped_location": "BL21"
+  },
+  {
+    "legacy_location": "R'J",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB86",
+    "mapped_location": "AB86"
+  },
+  {
+    "legacy_location": "F3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG54",
+    "mapped_location": "AG54"
+  },
+  {
+    "legacy_location": "AE31",
+    "mapped_location": "AE31"
+  },
+  {
+    "legacy_location": "DS15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC47",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE63",
+    "mapped_location": "AE63"
+  },
+  {
+    "legacy_location": "FA22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE41",
+    "mapped_location": "AE41"
+  },
+  {
+    "legacy_location": "AF91",
+    "mapped_location": "AF91"
+  },
+  {
+    "legacy_location": "AC16",
+    "mapped_location": "AC16"
+  },
+  {
+    "legacy_location": "AG22",
+    "mapped_location": "AG22"
+  },
+  {
+    "legacy_location": "AB92",
+    "mapped_location": "AB92"
+  },
+  {
+    "legacy_location": "BQ51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE64",
+    "mapped_location": "AE64"
+  },
+  {
+    "legacy_location": "BR11",
+    "mapped_location": "BR11"
+  },
+  {
+    "legacy_location": "AE13",
+    "mapped_location": "AE13"
+  },
+  {
+    "legacy_location": "DV1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG31",
+    "mapped_location": "AG31"
+  },
+  {
+    "legacy_location": "AC76",
+    "mapped_location": "AC76"
+  },
+  {
+    "legacy_location": "AC36",
+    "mapped_location": "AC36"
+  },
+  {
+    "legacy_location": "AD34",
+    "mapped_location": "AD34"
+  },
+  {
+    "legacy_location": "AC23",
+    "mapped_location": "AC23"
+  },
+  {
+    "legacy_location": "AC12",
+    "mapped_location": "AC12"
+  },
+  {
+    "legacy_location": "AE71",
+    "mapped_location": "AE71"
+  },
+  {
+    "legacy_location": "AA74",
+    "mapped_location": "AA74"
+  },
+  {
+    "legacy_location": "BC51",
+    "mapped_location": "BC51"
+  },
+  {
+    "legacy_location": "AG11",
+    "mapped_location": "AG11"
+  },
+  {
+    "legacy_location": "BD32",
+    "mapped_location": "BD32"
+  },
+  {
+    "legacy_location": "C4",
+    "mapped_location": "C4"
+  },
+  {
+    "legacy_location": "AC57",
+    "mapped_location": "AC57"
+  },
+  {
+    "legacy_location": "AB96",
+    "mapped_location": "AB96"
+  },
+  {
+    "legacy_location": "AC56",
+    "mapped_location": "AC56"
+  },
+  {
+    "legacy_location": "TB2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ41",
+    "mapped_location": "BQ41"
+  },
+  {
+    "legacy_location": "BB45",
+    "mapped_location": "BB45"
+  },
+  {
+    "legacy_location": "RR'I",
+    "mapped_location": "RR-I"
+  },
+  {
+    "legacy_location": "BC33",
+    "mapped_location": "BC33"
+  },
+  {
+    "legacy_location": "C'7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG75",
+    "mapped_location": "AG75"
+  },
+  {
+    "legacy_location": "BK71",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK81",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA11",
+    "mapped_location": "BA11"
+  },
+  {
+    "legacy_location": "S13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ31",
+    "mapped_location": "BQ31"
+  },
+  {
+    "legacy_location": "BR21",
+    "mapped_location": "BR21"
+  },
+  {
+    "legacy_location": "DV4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "A4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF51",
+    "mapped_location": "BF51"
+  },
+  {
+    "legacy_location": "FA42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG64",
+    "mapped_location": "AG64"
+  },
+  {
+    "legacy_location": "BQ61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA57",
+    "mapped_location": "AA57"
+  },
+  {
+    "legacy_location": "TA2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA31",
+    "mapped_location": "BA31"
+  },
+  {
+    "legacy_location": "BQ71",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK91",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD33",
+    "mapped_location": "AD33"
+  },
+  {
+    "legacy_location": "AE14",
+    "mapped_location": "AE14"
+  },
+  {
+    "legacy_location": "CAM4",
+    "mapped_location": "C4"
+  },
+  {
+    "legacy_location": "AG51",
+    "mapped_location": "AG51"
+  },
+  {
+    "legacy_location": "AD23",
+    "mapped_location": "AD23"
+  },
+  {
+    "legacy_location": "AB47",
+    "mapped_location": "AB47"
+  },
+  {
+    "legacy_location": "BS21",
+    "mapped_location": "BS21"
+  },
+  {
+    "legacy_location": "AG41",
+    "mapped_location": "AG41"
+  },
+  {
+    "legacy_location": "TB3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE21",
+    "mapped_location": "AE21"
+  },
+  {
+    "legacy_location": "T6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "EA23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA43",
+    "mapped_location": "BA43"
+  },
+  {
+    "legacy_location": "AE54",
+    "mapped_location": "AE54"
+  },
+  {
+    "legacy_location": "AC66",
+    "mapped_location": "AC66"
+  },
+  {
+    "legacy_location": "DA5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA64",
+    "mapped_location": "AA64"
+  },
+  {
+    "legacy_location": "TE4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC32",
+    "mapped_location": "BC32"
+  },
+  {
+    "legacy_location": "BP71",
+    "mapped_location": "BP71"
+  },
+  {
+    "legacy_location": "DV10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB11",
+    "mapped_location": "BB11"
+  },
+  {
+    "legacy_location": "TE1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FA31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TD2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA61",
+    "mapped_location": "AA61"
+  },
+  {
+    "legacy_location": "AA47",
+    "mapped_location": "AA47"
+  },
+  {
+    "legacy_location": "BA32",
+    "mapped_location": "BA32"
+  },
+  {
+    "legacy_location": "GA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE94",
+    "mapped_location": "AE94"
+  },
+  {
+    "legacy_location": "BS31",
+    "mapped_location": "BS31"
+  },
+  {
+    "legacy_location": "EA32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP81",
+    "mapped_location": "BP81"
+  },
+  {
+    "legacy_location": "BM41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG46",
+    "mapped_location": "AG46"
+  },
+  {
+    "legacy_location": "T10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FA32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP51",
+    "mapped_location": "BP51"
+  },
+  {
+    "legacy_location": "BA53",
+    "mapped_location": "BA53"
+  },
+  {
+    "legacy_location": "T9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FA21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM21",
+    "mapped_location": "BM21"
+  },
+  {
+    "legacy_location": "BA34",
+    "mapped_location": "BA34"
+  },
+  {
+    "legacy_location": "BA52",
+    "mapped_location": "BA52"
+  },
+  {
+    "legacy_location": "AE44",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "EA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DG3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE51",
+    "mapped_location": "AE51"
+  },
+  {
+    "legacy_location": "GA32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ21",
+    "mapped_location": "BQ21"
+  },
+  {
+    "legacy_location": "AG83",
+    "mapped_location": "AG83"
+  },
+  {
+    "legacy_location": "BC31",
+    "mapped_location": "BC31"
+  },
+  {
+    "legacy_location": "BM31",
+    "mapped_location": "BM31"
+  },
+  {
+    "legacy_location": "AK61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'Y",
+    "mapped_location": "RR-Y"
+  },
+  {
+    "legacy_location": "AG72",
+    "mapped_location": "AG72"
+  },
+  {
+    "legacy_location": "BA42",
+    "mapped_location": "BA42"
+  },
+  {
+    "legacy_location": "FA41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "EA13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB32",
+    "mapped_location": "BB32"
+  },
+  {
+    "legacy_location": "UM6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TF1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE93",
+    "mapped_location": "AE93"
+  },
+  {
+    "legacy_location": "GA22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE72",
+    "mapped_location": "BE72"
+  },
+  {
+    "legacy_location": "R'N",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG32",
+    "mapped_location": "BG32"
+  },
+  {
+    "legacy_location": "AE33",
+    "mapped_location": "AE33"
+  },
+  {
+    "legacy_location": "RR'Q",
+    "mapped_location": "RR-Q"
+  },
+  {
+    "legacy_location": "AG93",
+    "mapped_location": "AG93"
+  },
+  {
+    "legacy_location": "AG62",
+    "mapped_location": "AG62"
+  },
+  {
+    "legacy_location": "TA1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE43",
+    "mapped_location": "AE43"
+  },
+  {
+    "legacy_location": "AG74",
+    "mapped_location": "AG74"
+  },
+  {
+    "legacy_location": "BC13",
+    "mapped_location": "BC13"
+  },
+  {
+    "legacy_location": "BB23",
+    "mapped_location": "BB23"
+  },
+  {
+    "legacy_location": "C'6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC22",
+    "mapped_location": "BC22"
+  },
+  {
+    "legacy_location": "TA3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB21",
+    "mapped_location": "BB21"
+  },
+  {
+    "legacy_location": "TE3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE74",
+    "mapped_location": "AE74"
+  },
+  {
+    "legacy_location": "BK12",
+    "mapped_location": "BK12"
+  },
+  {
+    "legacy_location": "AC46",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC41",
+    "mapped_location": "BC41"
+  },
+  {
+    "legacy_location": "R'E",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM22",
+    "mapped_location": "BM22"
+  },
+  {
+    "legacy_location": "FA43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB97",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TF2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB57",
+    "mapped_location": "AB57"
+  },
+  {
+    "legacy_location": "TC1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE73",
+    "mapped_location": "AE73"
+  },
+  {
+    "legacy_location": "S16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX21",
+    "mapped_location": "BX21"
+  },
+  {
+    "legacy_location": "AG94",
+    "mapped_location": "AG94"
+  },
+  {
+    "legacy_location": "BA22",
+    "mapped_location": "BA22"
+  },
+  {
+    "legacy_location": "BC53",
+    "mapped_location": "BC53"
+  },
+  {
+    "legacy_location": "BB34",
+    "mapped_location": "BB34"
+  },
+  {
+    "legacy_location": "F 4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD33",
+    "mapped_location": "BD33"
+  },
+  {
+    "legacy_location": "BE61",
+    "mapped_location": "BE61"
+  },
+  {
+    "legacy_location": "BR61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA23",
+    "mapped_location": "BA23"
+  },
+  {
+    "legacy_location": "GA31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "C'8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG85",
+    "mapped_location": "AG85"
+  },
+  {
+    "legacy_location": "BT51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD54",
+    "mapped_location": "AD54"
+  },
+  {
+    "legacy_location": "L38",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE61",
+    "mapped_location": "AE61"
+  },
+  {
+    "legacy_location": "TD1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BU31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF31",
+    "mapped_location": "BF31"
+  },
+  {
+    "legacy_location": "DV2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA51",
+    "mapped_location": "BA51"
+  },
+  {
+    "legacy_location": "T19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA13",
+    "mapped_location": "BA13"
+  },
+  {
+    "legacy_location": "L22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE83",
+    "mapped_location": "AE83"
+  },
+  {
+    "legacy_location": "BE12",
+    "mapped_location": "BE12"
+  },
+  {
+    "legacy_location": "AE81",
+    "mapped_location": "AE81"
+  },
+  {
+    "legacy_location": "S15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE41",
+    "mapped_location": "BE41"
+  },
+  {
+    "legacy_location": "AE53",
+    "mapped_location": "AE53"
+  },
+  {
+    "legacy_location": "BW41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC12",
+    "mapped_location": "BC12"
+  },
+  {
+    "legacy_location": "BA12",
+    "mapped_location": "BA12"
+  },
+  {
+    "legacy_location": "BA61",
+    "mapped_location": "BA61"
+  },
+  {
+    "legacy_location": "GA21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE32",
+    "mapped_location": "BE32"
+  },
+  {
+    "legacy_location": "BD42",
+    "mapped_location": "BD42"
+  },
+  {
+    "legacy_location": "DS5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG61",
+    "mapped_location": "AG61"
+  },
+  {
+    "legacy_location": "T11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB43",
+    "mapped_location": "BB43"
+  },
+  {
+    "legacy_location": "BF41",
+    "mapped_location": "BF41"
+  },
+  {
+    "legacy_location": "BN32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BACK",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM12",
+    "mapped_location": "BM12"
+  },
+  {
+    "legacy_location": "UA1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE22",
+    "mapped_location": "AE22"
+  },
+  {
+    "legacy_location": "L11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG21",
+    "mapped_location": "AG21"
+  },
+  {
+    "legacy_location": "FA13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE71",
+    "mapped_location": "BE71"
+  },
+  {
+    "legacy_location": "AG84",
+    "mapped_location": "AG84"
+  },
+  {
+    "legacy_location": "BG51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG22",
+    "mapped_location": "BG22"
+  },
+  {
+    "legacy_location": "S1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "F4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "CAM5",
+    "mapped_location": "C5"
+  },
+  {
+    "legacy_location": "BU21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA41",
+    "mapped_location": "BA41"
+  },
+  {
+    "legacy_location": "S18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BU11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE42",
+    "mapped_location": "BE42"
+  },
+  {
+    "legacy_location": "UB8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB41",
+    "mapped_location": "BB41"
+  },
+  {
+    "legacy_location": "BA44",
+    "mapped_location": "BA44"
+  },
+  {
+    "legacy_location": "L21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD41",
+    "mapped_location": "BD41"
+  },
+  {
+    "legacy_location": "T3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA21",
+    "mapped_location": "BA21"
+  },
+  {
+    "legacy_location": "BC44",
+    "mapped_location": "BC44"
+  },
+  {
+    "legacy_location": "BC52",
+    "mapped_location": "BC52"
+  },
+  {
+    "legacy_location": "DM1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG71",
+    "mapped_location": "AG71"
+  },
+  {
+    "legacy_location": "AB17",
+    "mapped_location": "AB17"
+  },
+  {
+    "legacy_location": "BC21",
+    "mapped_location": "BC21"
+  },
+  {
+    "legacy_location": "AD83",
+    "mapped_location": "AD83"
+  },
+  {
+    "legacy_location": "UB5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GA42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC14",
+    "mapped_location": "BC14"
+  },
+  {
+    "legacy_location": "BE43",
+    "mapped_location": "BE43"
+  },
+  {
+    "legacy_location": "BC73",
+    "mapped_location": "BC73"
+  },
+  {
+    "legacy_location": "BE81",
+    "mapped_location": "BE81"
+  },
+  {
+    "legacy_location": "BD73",
+    "mapped_location": "BD73"
+  },
+  {
+    "legacy_location": "UB33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DC3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE31",
+    "mapped_location": "BE31"
+  },
+  {
+    "legacy_location": "BG33",
+    "mapped_location": "BG33"
+  },
+  {
+    "legacy_location": "BF23",
+    "mapped_location": "BF23"
+  },
+  {
+    "legacy_location": "S10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD43",
+    "mapped_location": "BD43"
+  },
+  {
+    "legacy_location": "BN52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD13",
+    "mapped_location": "BD13"
+  },
+  {
+    "legacy_location": "BD14",
+    "mapped_location": "BD14"
+  },
+  {
+    "legacy_location": "UA3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE22",
+    "mapped_location": "BE22"
+  },
+  {
+    "legacy_location": "BD61",
+    "mapped_location": "BD61"
+  },
+  {
+    "legacy_location": "BD23",
+    "mapped_location": "BD23"
+  },
+  {
+    "legacy_location": "GA13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG72",
+    "mapped_location": "BG72"
+  },
+  {
+    "legacy_location": "BM32",
+    "mapped_location": "BM32"
+  },
+  {
+    "legacy_location": "FU1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG95",
+    "mapped_location": "AG95"
+  },
+  {
+    "legacy_location": "BC42",
+    "mapped_location": "BC42"
+  },
+  {
+    "legacy_location": "BN31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE33",
+    "mapped_location": "BE33"
+  },
+  {
+    "legacy_location": "L13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE84",
+    "mapped_location": "AE84"
+  },
+  {
+    "legacy_location": "EA33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC62",
+    "mapped_location": "BC62"
+  },
+  {
+    "legacy_location": "M3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF13",
+    "mapped_location": "BF13"
+  },
+  {
+    "legacy_location": "BV41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK82",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF21",
+    "mapped_location": "BF21"
+  },
+  {
+    "legacy_location": "BE52",
+    "mapped_location": "BE52"
+  },
+  {
+    "legacy_location": "BV14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY21",
+    "mapped_location": "AY21"
+  },
+  {
+    "legacy_location": "BC23",
+    "mapped_location": "BC23"
+  },
+  {
+    "legacy_location": "AY12",
+    "mapped_location": "AY12"
+  },
+  {
+    "legacy_location": "FA23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AF87",
+    "mapped_location": "AF87"
+  },
+  {
+    "legacy_location": "BG23",
+    "mapped_location": "BG23"
+  },
+  {
+    "legacy_location": "BF12",
+    "mapped_location": "BF12"
+  },
+  {
+    "legacy_location": "BE23",
+    "mapped_location": "BE23"
+  },
+  {
+    "legacy_location": "BS41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD52",
+    "mapped_location": "BD52"
+  },
+  {
+    "legacy_location": "S8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN53",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L39",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD24",
+    "mapped_location": "BD24"
+  },
+  {
+    "legacy_location": "BK62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG81",
+    "mapped_location": "AG81"
+  },
+  {
+    "legacy_location": "BA62",
+    "mapped_location": "BA62"
+  },
+  {
+    "legacy_location": "BE62",
+    "mapped_location": "BE62"
+  },
+  {
+    "legacy_location": "BN42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF72",
+    "mapped_location": "BF72"
+  },
+  {
+    "legacy_location": "S6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM42",
+    "mapped_location": "BM42"
+  },
+  {
+    "legacy_location": "UA7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC43",
+    "mapped_location": "BC43"
+  },
+  {
+    "legacy_location": "BG43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG63",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG41",
+    "mapped_location": "BG41"
+  },
+  {
+    "legacy_location": "BA83",
+    "mapped_location": "BA83"
+  },
+  {
+    "legacy_location": "L42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF32",
+    "mapped_location": "BF32"
+  },
+  {
+    "legacy_location": "U12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG82",
+    "mapped_location": "AG82"
+  },
+  {
+    "legacy_location": "BE53",
+    "mapped_location": "BE53"
+  },
+  {
+    "legacy_location": "BV33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD53",
+    "mapped_location": "BD53"
+  },
+  {
+    "legacy_location": "AC37",
+    "mapped_location": "AC37"
+  },
+  {
+    "legacy_location": "L4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA14",
+    "mapped_location": "BA14"
+  },
+  {
+    "legacy_location": "BE21",
+    "mapped_location": "BE21"
+  },
+  {
+    "legacy_location": "AD44",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB66",
+    "mapped_location": "AB66"
+  },
+  {
+    "legacy_location": "UF11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG92",
+    "mapped_location": "AG92"
+  },
+  {
+    "legacy_location": "BG31",
+    "mapped_location": "BG31"
+  },
+  {
+    "legacy_location": "AF77",
+    "mapped_location": "AF77"
+  },
+  {
+    "legacy_location": "AG91",
+    "mapped_location": "AG91"
+  },
+  {
+    "legacy_location": "BD31",
+    "mapped_location": "BD31"
+  },
+  {
+    "legacy_location": "AE91",
+    "mapped_location": "AE91"
+  },
+  {
+    "legacy_location": "U10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DC2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB12",
+    "mapped_location": "BB12"
+  },
+  {
+    "legacy_location": "BE63",
+    "mapped_location": "BE63"
+  },
+  {
+    "legacy_location": "L41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD93",
+    "mapped_location": "AD93"
+  },
+  {
+    "legacy_location": "UB4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB52",
+    "mapped_location": "BB52"
+  },
+  {
+    "legacy_location": "BA24",
+    "mapped_location": "BA24"
+  },
+  {
+    "legacy_location": "TB1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD64",
+    "mapped_location": "AD64"
+  },
+  {
+    "legacy_location": "S20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD71",
+    "mapped_location": "BD71"
+  },
+  {
+    "legacy_location": "HA41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD22",
+    "mapped_location": "BD22"
+  },
+  {
+    "legacy_location": "BN62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'V",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC17",
+    "mapped_location": "AC17"
+  },
+  {
+    "legacy_location": "BC64",
+    "mapped_location": "BC64"
+  },
+  {
+    "legacy_location": "DM2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD62",
+    "mapped_location": "BD62"
+  },
+  {
+    "legacy_location": "BC63",
+    "mapped_location": "BC63"
+  },
+  {
+    "legacy_location": "BL53",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "S22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF43",
+    "mapped_location": "BF43"
+  },
+  {
+    "legacy_location": "BD12",
+    "mapped_location": "BD12"
+  },
+  {
+    "legacy_location": "BV22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY11",
+    "mapped_location": "AY11"
+  },
+  {
+    "legacy_location": "BC34",
+    "mapped_location": "BC34"
+  },
+  {
+    "legacy_location": "BB42",
+    "mapped_location": "BB42"
+  },
+  {
+    "legacy_location": "BV32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC72",
+    "mapped_location": "BC72"
+  },
+  {
+    "legacy_location": "L19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE32",
+    "mapped_location": "AE32"
+  },
+  {
+    "legacy_location": "BD72",
+    "mapped_location": "BD72"
+  },
+  {
+    "legacy_location": "AF97",
+    "mapped_location": "AF97"
+  },
+  {
+    "legacy_location": "AK63",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE82",
+    "mapped_location": "BE82"
+  },
+  {
+    "legacy_location": "GA41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN63",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF22",
+    "mapped_location": "BF22"
+  },
+  {
+    "legacy_location": "BB35",
+    "mapped_location": "BB35"
+  },
+  {
+    "legacy_location": "BW61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF33",
+    "mapped_location": "BF33"
+  },
+  {
+    "legacy_location": "GA43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD73",
+    "mapped_location": "AD73"
+  },
+  {
+    "legacy_location": "BB14",
+    "mapped_location": "BB14"
+  },
+  {
+    "legacy_location": "TD4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GA23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LF",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD63",
+    "mapped_location": "BD63"
+  },
+  {
+    "legacy_location": "U34",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD82",
+    "mapped_location": "BD82"
+  },
+  {
+    "legacy_location": "DS7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF52",
+    "mapped_location": "BF52"
+  },
+  {
+    "legacy_location": "BL42",
+    "mapped_location": "BL42"
+  },
+  {
+    "legacy_location": "BG13",
+    "mapped_location": "BG13"
+  },
+  {
+    "legacy_location": "AK32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL43",
+    "mapped_location": "BL43"
+  },
+  {
+    "legacy_location": "BB22",
+    "mapped_location": "BB22"
+  },
+  {
+    "legacy_location": "DC6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DC5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DG2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U35",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF42",
+    "mapped_location": "BF42"
+  },
+  {
+    "legacy_location": "BC71",
+    "mapped_location": "BC71"
+  },
+  {
+    "legacy_location": "BL52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'U",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC24",
+    "mapped_location": "BC24"
+  },
+  {
+    "legacy_location": "AE52",
+    "mapped_location": "AE52"
+  },
+  {
+    "legacy_location": "BB51",
+    "mapped_location": "BB51"
+  },
+  {
+    "legacy_location": "BF81",
+    "mapped_location": "BF81"
+  },
+  {
+    "legacy_location": "BG52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG76",
+    "mapped_location": "AG76"
+  },
+  {
+    "legacy_location": "L6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA71",
+    "mapped_location": "BA71"
+  },
+  {
+    "legacy_location": "L17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA30",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL12",
+    "mapped_location": "BL12"
+  },
+  {
+    "legacy_location": "L29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC27",
+    "mapped_location": "AC27"
+  },
+  {
+    "legacy_location": "BF61",
+    "mapped_location": "BF61"
+  },
+  {
+    "legacy_location": "AD63",
+    "mapped_location": "AD63"
+  },
+  {
+    "legacy_location": "AK43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG53",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX42",
+    "mapped_location": "BX42"
+  },
+  {
+    "legacy_location": "BC74",
+    "mapped_location": "BC74"
+  },
+  {
+    "legacy_location": "UB36",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD21",
+    "mapped_location": "BD21"
+  },
+  {
+    "legacy_location": "BC61",
+    "mapped_location": "BC61"
+  },
+  {
+    "legacy_location": "R20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UM",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB53",
+    "mapped_location": "BB53"
+  },
+  {
+    "legacy_location": "AK13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD54",
+    "mapped_location": "BD54"
+  },
+  {
+    "legacy_location": "U26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY22",
+    "mapped_location": "AY22"
+  },
+  {
+    "legacy_location": "BV31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD81",
+    "mapped_location": "BD81"
+  },
+  {
+    "legacy_location": "DB13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF53",
+    "mapped_location": "BF53"
+  },
+  {
+    "legacy_location": "UE6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE73",
+    "mapped_location": "BE73"
+  },
+  {
+    "legacy_location": "BA81",
+    "mapped_location": "BA81"
+  },
+  {
+    "legacy_location": "AK23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'Q",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FA33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD64",
+    "mapped_location": "BD64"
+  },
+  {
+    "legacy_location": "BN41",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB24",
+    "mapped_location": "BB24"
+  },
+  {
+    "legacy_location": "M1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA63",
+    "mapped_location": "BA63"
+  },
+  {
+    "legacy_location": "BW21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L35",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA73",
+    "mapped_location": "BA73"
+  },
+  {
+    "legacy_location": "DS1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG96",
+    "mapped_location": "AG96"
+  },
+  {
+    "legacy_location": "BW72",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE83",
+    "mapped_location": "BE83"
+  },
+  {
+    "legacy_location": "U5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB77",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L30",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP13",
+    "mapped_location": "BP13"
+  },
+  {
+    "legacy_location": "BE13",
+    "mapped_location": "BE13"
+  },
+  {
+    "legacy_location": "BD34",
+    "mapped_location": "BD34"
+  },
+  {
+    "legacy_location": "BW73",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA97",
+    "mapped_location": "AA97"
+  },
+  {
+    "legacy_location": "BG61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC83",
+    "mapped_location": "BC83"
+  },
+  {
+    "legacy_location": "BG21",
+    "mapped_location": "BG21"
+  },
+  {
+    "legacy_location": "F 3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA84",
+    "mapped_location": "BA84"
+  },
+  {
+    "legacy_location": "BD83",
+    "mapped_location": "BD83"
+  },
+  {
+    "legacy_location": "FU6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF73",
+    "mapped_location": "BF73"
+  },
+  {
+    "legacy_location": "BS22",
+    "mapped_location": "BS22"
+  },
+  {
+    "legacy_location": "U37",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD44",
+    "mapped_location": "BD44"
+  },
+  {
+    "legacy_location": "BA25",
+    "mapped_location": "BA25"
+  },
+  {
+    "legacy_location": "L36",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA64",
+    "mapped_location": "BA64"
+  },
+  {
+    "legacy_location": "AB87",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC81",
+    "mapped_location": "BC81"
+  },
+  {
+    "legacy_location": "BX52",
+    "mapped_location": "BX52"
+  },
+  {
+    "legacy_location": "UA25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BIWK",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV44",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB39",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "STOP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP32",
+    "mapped_location": "BP32"
+  },
+  {
+    "legacy_location": "UL1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA54",
+    "mapped_location": "BA54"
+  },
+  {
+    "legacy_location": "BC54",
+    "mapped_location": "BC54"
+  },
+  {
+    "legacy_location": "AD94",
+    "mapped_location": "AD94"
+  },
+  {
+    "legacy_location": "L16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE42",
+    "mapped_location": "AE42"
+  },
+  {
+    "legacy_location": "U23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FU8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DG1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC82",
+    "mapped_location": "BC82"
+  },
+  {
+    "legacy_location": "U18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL41",
+    "mapped_location": "BL41"
+  },
+  {
+    "legacy_location": "BB54",
+    "mapped_location": "BB54"
+  },
+  {
+    "legacy_location": "BB62",
+    "mapped_location": "BB62"
+  },
+  {
+    "legacy_location": "TD3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE92",
+    "mapped_location": "AE92"
+  },
+  {
+    "legacy_location": "L43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L37",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB44",
+    "mapped_location": "BB44"
+  },
+  {
+    "legacy_location": "BP42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD84",
+    "mapped_location": "AD84"
+  },
+  {
+    "legacy_location": "AK53",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK72",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB30",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB13",
+    "mapped_location": "BB13"
+  },
+  {
+    "legacy_location": "BX32",
+    "mapped_location": "BX32"
+  },
+  {
+    "legacy_location": "U21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB37",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL22",
+    "mapped_location": "BL22"
+  },
+  {
+    "legacy_location": "BA82",
+    "mapped_location": "BA82"
+  },
+  {
+    "legacy_location": "BR32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GA33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA15",
+    "mapped_location": "BA15"
+  },
+  {
+    "legacy_location": "BF71",
+    "mapped_location": "BF71"
+  },
+  {
+    "legacy_location": "R13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BU22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BG12",
+    "mapped_location": "BG12"
+  },
+  {
+    "legacy_location": "BL63",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN61",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA94",
+    "mapped_location": "BA94"
+  },
+  {
+    "legacy_location": "R'O",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AE82",
+    "mapped_location": "AE82"
+  },
+  {
+    "legacy_location": "AE62",
+    "mapped_location": "AE62"
+  },
+  {
+    "legacy_location": "UK11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AA87",
+    "mapped_location": "AA87"
+  },
+  {
+    "legacy_location": "UG15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L40",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AD74",
+    "mapped_location": "AD74"
+  },
+  {
+    "legacy_location": "UL5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "H",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA35",
+    "mapped_location": "BA35"
+  },
+  {
+    "legacy_location": "BA72",
+    "mapped_location": "BA72"
+  },
+  {
+    "legacy_location": "UE10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF83",
+    "mapped_location": "BF83"
+  },
+  {
+    "legacy_location": "BW52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR22",
+    "mapped_location": "BR22"
+  },
+  {
+    "legacy_location": "UA6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L34",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB38",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC84",
+    "mapped_location": "BC84"
+  },
+  {
+    "legacy_location": "DV11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA93",
+    "mapped_location": "BA93"
+  },
+  {
+    "legacy_location": "AE72",
+    "mapped_location": "AE72"
+  },
+  {
+    "legacy_location": "UA15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "HA43",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD84",
+    "mapped_location": "BD84"
+  },
+  {
+    "legacy_location": "L25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'U",
+    "mapped_location": "RR-U"
+  },
+  {
+    "legacy_location": "UA2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG77",
+    "mapped_location": "AG77"
+  },
+  {
+    "legacy_location": "UK10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF82",
+    "mapped_location": "BF82"
+  },
+  {
+    "legacy_location": "DD3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U30",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AK12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP22",
+    "mapped_location": "BP22"
+  },
+  {
+    "legacy_location": "FU4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR12",
+    "mapped_location": "BR12"
+  },
+  {
+    "legacy_location": "RR'Z",
+    "mapped_location": "RR-Z"
+  },
+  {
+    "legacy_location": "U27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB34",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UH1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX12",
+    "mapped_location": "BX12"
+  },
+  {
+    "legacy_location": "BX22",
+    "mapped_location": "BX22"
+  },
+  {
+    "legacy_location": "BS12",
+    "mapped_location": "BS12"
+  },
+  {
+    "legacy_location": "UB35",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW81",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BD74",
+    "mapped_location": "BD74"
+  },
+  {
+    "legacy_location": "DM15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UA8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DC1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB15",
+    "mapped_location": "BB15"
+  },
+  {
+    "legacy_location": "BB63",
+    "mapped_location": "BB63"
+  },
+  {
+    "legacy_location": "DM16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG86",
+    "mapped_location": "AG86"
+  },
+  {
+    "legacy_location": "M12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW71",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BX62",
+    "mapped_location": "BX62"
+  },
+  {
+    "legacy_location": "BT52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP72",
+    "mapped_location": "BP72"
+  },
+  {
+    "legacy_location": "M15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UF9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB25",
+    "mapped_location": "BB25"
+  },
+  {
+    "legacy_location": "UA9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP52",
+    "mapped_location": "BP52"
+  },
+  {
+    "legacy_location": "UA14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC38",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW53",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'Y",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'I",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW83",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG87",
+    "mapped_location": "AG87"
+  },
+  {
+    "legacy_location": "DM5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL32",
+    "mapped_location": "BL32"
+  },
+  {
+    "legacy_location": "DM25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BB65",
+    "mapped_location": "BB65"
+  },
+  {
+    "legacy_location": "UG7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA92",
+    "mapped_location": "BA92"
+  },
+  {
+    "legacy_location": "UJ10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BV34",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF62",
+    "mapped_location": "BF62"
+  },
+  {
+    "legacy_location": "DM20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ12",
+    "mapped_location": "BQ12"
+  },
+  {
+    "legacy_location": "S9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK33",
+    "mapped_location": "BK33"
+  },
+  {
+    "legacy_location": "DM14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP82",
+    "mapped_location": "BP82"
+  },
+  {
+    "legacy_location": "M16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UB40",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW63",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW82",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BP62",
+    "mapped_location": "BP62"
+  },
+  {
+    "legacy_location": "UD13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BW42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AG97",
+    "mapped_location": "AG97"
+  },
+  {
+    "legacy_location": "BV21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX21",
+    "mapped_location": "AX21"
+  },
+  {
+    "legacy_location": "AX31",
+    "mapped_location": "AX31"
+  },
+  {
+    "legacy_location": "R2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA91",
+    "mapped_location": "BA91"
+  },
+  {
+    "legacy_location": "DM10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX61",
+    "mapped_location": "AX61"
+  },
+  {
+    "legacy_location": "BQ62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK92",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA74",
+    "mapped_location": "BA74"
+  },
+  {
+    "legacy_location": "BB64",
+    "mapped_location": "BB64"
+  },
+  {
+    "legacy_location": "U28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UG14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA85",
+    "mapped_location": "BA85"
+  },
+  {
+    "legacy_location": "BR62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX11",
+    "mapped_location": "AX11"
+  },
+  {
+    "legacy_location": "AX41",
+    "mapped_location": "AX41"
+  },
+  {
+    "legacy_location": "U36",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R25",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BA95",
+    "mapped_location": "BA95"
+  },
+  {
+    "legacy_location": "BB55",
+    "mapped_location": "BB55"
+  },
+  {
+    "legacy_location": "BT42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX51",
+    "mapped_location": "AX51"
+  },
+  {
+    "legacy_location": "R6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DD9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK23",
+    "mapped_location": "BK23"
+  },
+  {
+    "legacy_location": "R5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BU12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK43",
+    "mapped_location": "BK43"
+  },
+  {
+    "legacy_location": "DA11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BU32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB98",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TC7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM26",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UH3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ32",
+    "mapped_location": "BQ32"
+  },
+  {
+    "legacy_location": "BQ72",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM13",
+    "mapped_location": "BM13"
+  },
+  {
+    "legacy_location": "DM13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX71",
+    "mapped_location": "AX71"
+  },
+  {
+    "legacy_location": "UD20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS62",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX13",
+    "mapped_location": "AX13"
+  },
+  {
+    "legacy_location": "UH2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R28",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX53",
+    "mapped_location": "AX53"
+  },
+  {
+    "legacy_location": "R7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY43",
+    "mapped_location": "AY43"
+  },
+  {
+    "legacy_location": "BK53",
+    "mapped_location": "BK53"
+  },
+  {
+    "legacy_location": "R30",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB78",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM27",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX43",
+    "mapped_location": "AX43"
+  },
+  {
+    "legacy_location": "R'Z",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY31",
+    "mapped_location": "AY31"
+  },
+  {
+    "legacy_location": "K3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX12",
+    "mapped_location": "AX12"
+  },
+  {
+    "legacy_location": "AB88",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "PW",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "ZZZ",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DC4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF63",
+    "mapped_location": "BF63"
+  },
+  {
+    "legacy_location": "AY61",
+    "mapped_location": "AY61"
+  },
+  {
+    "legacy_location": "R29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L50",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ22",
+    "mapped_location": "BQ22"
+  },
+  {
+    "legacy_location": "AX42",
+    "mapped_location": "AX42"
+  },
+  {
+    "legacy_location": "L46",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UH4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R31",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY41",
+    "mapped_location": "AY41"
+  },
+  {
+    "legacy_location": "UC3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L'F",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BUY",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "WATC",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DM7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UK9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DWF",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UD9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX63",
+    "mapped_location": "AX63"
+  },
+  {
+    "legacy_location": "AX34",
+    "mapped_location": "AX34"
+  },
+  {
+    "legacy_location": "BN21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L49",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX32",
+    "mapped_location": "AX32"
+  },
+  {
+    "legacy_location": "UD2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L45",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GUIT",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX81",
+    "mapped_location": "AX81"
+  },
+  {
+    "legacy_location": "S'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BQ42",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX91",
+    "mapped_location": "AX91"
+  },
+  {
+    "legacy_location": "AY23",
+    "mapped_location": "AY23"
+  },
+  {
+    "legacy_location": "L51",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BM23",
+    "mapped_location": "BM23"
+  },
+  {
+    "legacy_location": "K8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY32",
+    "mapped_location": "AY32"
+  },
+  {
+    "legacy_location": "UK24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX22",
+    "mapped_location": "AX22"
+  },
+  {
+    "legacy_location": "AY51",
+    "mapped_location": "AY51"
+  },
+  {
+    "legacy_location": "R36",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "RR'X",
+    "mapped_location": "RR-X"
+  },
+  {
+    "legacy_location": "AY42",
+    "mapped_location": "AY42"
+  },
+  {
+    "legacy_location": "DB3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "G'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UC19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BN23",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL33",
+    "mapped_location": "BL33"
+  },
+  {
+    "legacy_location": "BN12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "W'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R34",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L47",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX44",
+    "mapped_location": "AX44"
+  },
+  {
+    "legacy_location": "AX52",
+    "mapped_location": "AX52"
+  },
+  {
+    "legacy_location": "DB7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R32",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY33",
+    "mapped_location": "AY33"
+  },
+  {
+    "legacy_location": "AVEC",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX33",
+    "mapped_location": "AX33"
+  },
+  {
+    "legacy_location": "AX23",
+    "mapped_location": "AX23"
+  },
+  {
+    "legacy_location": "BASE",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "SAFE",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX62",
+    "mapped_location": "AX62"
+  },
+  {
+    "legacy_location": "UH5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BE15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX14",
+    "mapped_location": "AX14"
+  },
+  {
+    "legacy_location": "DW5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY13",
+    "mapped_location": "AY13"
+  },
+  {
+    "legacy_location": "BE14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R33",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UJ19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TRAD",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "C'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LTOP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UH6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TTOP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX24",
+    "mapped_location": "AX24"
+  },
+  {
+    "legacy_location": "BN13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "F'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX54",
+    "mapped_location": "AX54"
+  },
+  {
+    "legacy_location": "K'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX66",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BK13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL13",
+    "mapped_location": "BL13"
+  },
+  {
+    "legacy_location": "BS1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DV",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R40",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "D'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX45",
+    "mapped_location": "AX45"
+  },
+  {
+    "legacy_location": "J'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R35",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DB4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UL",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "WAT",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Y",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX82",
+    "mapped_location": "AX82"
+  },
+  {
+    "legacy_location": "CAME",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DA7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX64",
+    "mapped_location": "AX64"
+  },
+  {
+    "legacy_location": "K11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "A'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GUI",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "H'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "J6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY34",
+    "mapped_location": "AY34"
+  },
+  {
+    "legacy_location": "AX73",
+    "mapped_location": "AX73"
+  },
+  {
+    "legacy_location": "I'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "KHAN",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L48",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R38",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB79",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB99",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC39",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AUTO",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY62",
+    "mapped_location": "AY62"
+  },
+  {
+    "legacy_location": "BH",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "C1C",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW ]",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DW5C",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "F7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "FROT",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "G'RY",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K1K",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "KBOO",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L.",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LF A",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LF K",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LF T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "LRON",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M'S",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'LK",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "STR",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "STRE",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T  E",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T  L",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T'F",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TRAE",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UE24",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UMN",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UV3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "UV4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "V'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "WATH",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "J5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX72",
+    "mapped_location": "AX72"
+  },
+  {
+    "legacy_location": "E'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AIRT",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "10",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "ATOP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B1`",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "B433",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BF2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "D",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "DS18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GUIJ",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "GUNB",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "H  B",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "J1`",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K  T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K 8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K HA",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "K3T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L'SK",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "M",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "N'",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "NBC",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O'RB",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'RL",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'RP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R37",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "SAFT",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T  B",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T  H",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "T'TP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "TELP",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "U'T",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Y'R",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "YH",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AB89",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AC29",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX15",
+    "mapped_location": "AX15"
+  },
+  {
+    "legacy_location": "AX16",
+    "mapped_location": "AX16"
+  },
+  {
+    "legacy_location": "AX25",
+    "mapped_location": "AX25"
+  },
+  {
+    "legacy_location": "AX26",
+    "mapped_location": "AX26"
+  },
+  {
+    "legacy_location": "AX35",
+    "mapped_location": "AX35"
+  },
+  {
+    "legacy_location": "AX36",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX46",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX55",
+    "mapped_location": "AX55"
+  },
+  {
+    "legacy_location": "AX56",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX65",
+    "mapped_location": "AX65"
+  },
+  {
+    "legacy_location": "AX74",
+    "mapped_location": "AX74"
+  },
+  {
+    "legacy_location": "AX75",
+    "mapped_location": "AX75"
+  },
+  {
+    "legacy_location": "AX76",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX83",
+    "mapped_location": "AX83"
+  },
+  {
+    "legacy_location": "AX84",
+    "mapped_location": "AX84"
+  },
+  {
+    "legacy_location": "AX85",
+    "mapped_location": "AX85"
+  },
+  {
+    "legacy_location": "AX86",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AX92",
+    "mapped_location": "AX92"
+  },
+  {
+    "legacy_location": "AX93",
+    "mapped_location": "AX93"
+  },
+  {
+    "legacy_location": "AX94",
+    "mapped_location": "AX94"
+  },
+  {
+    "legacy_location": "AX95",
+    "mapped_location": "AX95"
+  },
+  {
+    "legacy_location": "AX96",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AY63",
+    "mapped_location": "AY63"
+  },
+  {
+    "legacy_location": "BC91",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC92",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC93",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BC94",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BL23",
+    "mapped_location": "BL23"
+  },
+  {
+    "legacy_location": "BR1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BR3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BS3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "BT3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L44",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "L52",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "O7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "OFFI",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P1",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P11",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P12",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P13",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P14",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P15",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P16",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P17",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P18",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P19",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P20",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P21",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P22",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "P9",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q2",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q3",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q4",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q5",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q6",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q7",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "Q8",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R'X",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "R39",
+    "mapped_location": "UNKNOWN"
+  },
+  {
+    "legacy_location": "AZ93",
+    "mapped_location": "AZ93"
+  }
+]

@@ -151,12 +151,10 @@ const validateImportedDatabase = async (client, projectRoot) => {
       metrics.sequence_errors++;
   }
   for (const [table, folder] of [
-    ["client", "client-photos"],
-    ["item", "item-photos"],
+    ["client", "clients"],
+    ["item", "items"],
   ]) {
-    const base = fs.realpathSync(
-      path.join(projectRoot, "migration/exports", folder),
-    );
+    const base = fs.realpathSync(path.join(projectRoot, "images", folder));
     const photos = await client.query(
       `SELECT image_path FROM ${table} WHERE COALESCE(image_path,'')<>''`,
     );

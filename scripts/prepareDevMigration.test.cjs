@@ -12,11 +12,11 @@ const fixture = (t) => {
   assert.equal(spawnSync("git", ["init", "--quiet", root]).status, 0);
   fs.writeFileSync(
     path.join(root, ".gitignore"),
-    ".env\n/migration/source/\n/migration/exports/\n/migration/reports/\n/migration/backups/\n",
+    ".env\n/database/migration/source/\n/images/\n/database/migration/reports/\n/database/migration/backups/\n",
   );
   fs.writeFileSync(
     path.join(root, ".env.example"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\n",
+    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\nEMPLOYEE_PIN_SECRET=\n",
   );
   for (const name of ["pg", "csv-parser", "electron"]) {
     const folder = path.join(root, "node_modules", name);
@@ -26,18 +26,27 @@ const fixture = (t) => {
   for (const input of [
     "source/superpawnconv.mdb",
     "source/Pictureconv.mdb",
-    "mappings/category-mapping.md",
-    "mappings/location-mapping.md",
+    "mappings/category-mapping.json",
+    "mappings/location-mapping.json",
+    "mappings/id-type-mapping.json",
   ]) {
-    const file = path.join(root, "migration", input);
+    const file = path.join(root, "database", "migration", input);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(
       file,
-      "Synthetic test input; not a real customer record.\n",
+      input.endsWith("id-type-mapping.json")
+        ? fs.readFileSync(
+            path.join(
+              __dirname,
+              "../database/migration/mappings/id-type-mapping.json",
+            ),
+          )
+        : "Synthetic test input; not a real customer record.\n",
     );
   }
   assert.equal(
-    spawnSync("git", ["add", "migration/mappings"], { cwd: root }).status,
+    spawnSync("git", ["add", "database/migration/mappings"], { cwd: root })
+      .status,
     0,
   );
   const logs = [];
@@ -64,15 +73,14 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
   const password = content.match(/^DB_PASSWORD=(.+)$/m)[1];
   assert.match(password, /^[a-f0-9]{48}$/);
   assert.ok(!f.logs.join("\n").includes(password));
-  for (const folder of [
-    "source",
-    "mappings",
-    "exports",
-    "reports",
-    "backups",
-  ]) {
+  const pinSecret = content.match(/^EMPLOYEE_PIN_SECRET=(.+)$/m)[1];
+  assert.match(pinSecret, /^[a-f0-9]{64}$/);
+  assert.ok(!f.logs.join("\n").includes(pinSecret));
+  for (const folder of ["source", "mappings", "reports", "backups"]) {
     assert.ok(
-      fs.statSync(path.join(f.root, "migration", folder)).isDirectory(),
+      fs
+        .statSync(path.join(f.root, "database", "migration", folder))
+        .isDirectory(),
     );
   }
   assert.equal(prepareDevMigration(f.options), 0);
@@ -86,16 +94,20 @@ test("accepts tracked mappings, generates credentials once, and never starts ser
 
 test("reports both missing mappings and a stopped Docker engine instead of declaring readiness", (t) => {
   const f = fixture(t);
-  fs.unlinkSync(path.join(f.root, "migration/mappings/category-mapping.md"));
-  fs.unlinkSync(path.join(f.root, "migration/mappings/location-mapping.md"));
+  fs.unlinkSync(
+    path.join(f.root, "database/migration/mappings/category-mapping.json"),
+  );
+  fs.unlinkSync(
+    path.join(f.root, "database/migration/mappings/location-mapping.json"),
+  );
   const run = (executable, args, options) =>
     args[0] === "info"
       ? { status: 1, stdout: "", stderr: "Docker is stopped" }
       : f.run(executable, args, options);
   assert.equal(prepareDevMigration({ ...f.options, run }), 1);
   const output = f.logs.join("\n");
-  assert.match(output, /category-mapping\.md/);
-  assert.match(output, /location-mapping\.md/);
+  assert.match(output, /category-mapping\.json/);
+  assert.match(output, /location-mapping\.json/);
   assert.match(output, /Start Docker Desktop/);
   assert.doesNotMatch(output, /checks passed|Next:/);
 });

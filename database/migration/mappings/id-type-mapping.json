@@ -1,0 +1,331 @@
+{
+  "status": "ready",
+  "scope": "Shared runtime mapping for Access ID audits, static previews, client imports and ID type seeds. Legacy-only targets preserve original short descriptions without guessing their meaning.",
+  "normalization": {
+    "code": "trim, then uppercase",
+    "number": "trim; blank or a single '-' means missing",
+    "empty_slot": "blank code and missing number: no record"
+  },
+  "defaults": {
+    "new_id_type_is_active": true,
+    "unknown_code_action": "review",
+    "missing_number_action": "report_and_skip",
+    "missing_target_type_action": "block"
+  },
+  "rules": [
+    {
+      "legacy_code": "",
+      "legacy_descriptions": [],
+      "action": "map",
+      "mapped_type": "Other",
+      "requires_review": false,
+      "reason": "An ID number without a source type is preserved as Other; empty slots are ignored. Do not guess a document type."
+    },
+    {
+      "legacy_code": "AHC",
+      "legacy_descriptions": ["ALT H/C"],
+      "action": "map",
+      "mapped_type": "Health Card",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "ALI",
+      "legacy_descriptions": ["ALT I.D."],
+      "action": "map",
+      "mapped_type": "Provincial ID",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "ALT",
+      "legacy_descriptions": ["ALT D/L."],
+      "action": "map",
+      "mapped_type": "Provincial ID",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "BAR",
+      "legacy_descriptions": ["BAR CARD"],
+      "action": "map",
+      "mapped_type": "Legacy BAR: BAR CARD",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "BCD",
+      "legacy_descriptions": ["BIRTH C."],
+      "action": "map",
+      "mapped_type": "Birth Certificate",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "BCI",
+      "legacy_descriptions": ["BC ID"],
+      "action": "map",
+      "mapped_type": "Provincial ID",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "BRI",
+      "legacy_descriptions": ["B.C. D/L"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "CAS",
+      "legacy_descriptions": ["CASH PLA"],
+      "action": "map",
+      "mapped_type": "Legacy CAS: CASH PLA",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "CIB",
+      "legacy_descriptions": ["CIBC BAN"],
+      "action": "map",
+      "mapped_type": "Legacy CIB: CIBC BAN",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "CIT",
+      "legacy_descriptions": ["CITIZEN"],
+      "action": "map",
+      "mapped_type": "Citizenship Card",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "CRE",
+      "legacy_descriptions": ["CREDIT U"],
+      "action": "map",
+      "mapped_type": "Legacy CRE: CREDIT U",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "DRL",
+      "legacy_descriptions": ["DRIVER L"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "FAC",
+      "legacy_descriptions": ["FIRE ARM"],
+      "action": "map",
+      "mapped_type": "Firearms License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "HCD",
+      "legacy_descriptions": ["HEALTH C"],
+      "action": "map",
+      "mapped_type": "Health Card",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "LIB",
+      "legacy_descriptions": ["LIBRARY"],
+      "action": "map",
+      "mapped_type": "Legacy LIB: LIBRARY",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "M/M",
+      "legacy_descriptions": ["MONEY MA"],
+      "action": "map",
+      "mapped_type": "Legacy M/M: MONEY MA",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "MAN",
+      "legacy_descriptions": ["MAN. D/L"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "NSD",
+      "legacy_descriptions": ["N.S. D/L"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "NTD",
+      "legacy_descriptions": ["N. T. DL"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "ONT",
+      "legacy_descriptions": ["ONT D/L"],
+      "action": "map",
+      "mapped_type": "Driver's License",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "OTH",
+      "legacy_descriptions": ["OTHERS"],
+      "action": "map",
+      "mapped_type": "Other",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "PAS",
+      "legacy_descriptions": ["PASSPORT"],
+      "action": "map",
+      "mapped_type": "Canadian Passport",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "PHO",
+      "legacy_descriptions": ["PHONE NO"],
+      "action": "review",
+      "mapped_type": null,
+      "requires_review": true,
+      "reason": "PHONE NO is not an identification document. Block any populated client PHO slot for preservation review; never silently discard or overwrite a telephone number."
+    },
+    {
+      "legacy_code": "REM",
+      "legacy_descriptions": ["REMARKS"],
+      "action": "map",
+      "mapped_type": "Legacy REM: REMARKS",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "ROY",
+      "legacy_descriptions": ["ROYAL BK"],
+      "action": "map",
+      "mapped_type": "Legacy ROY: ROYAL BK",
+      "requires_review": false,
+      "reason": "Preserve the original source code and description as a historical-only type. Default inactive; this does not assert the entry is a valid document for new transactions."
+    },
+    {
+      "legacy_code": "SAI",
+      "legacy_descriptions": ["SASKID"],
+      "action": "map",
+      "mapped_type": "Provincial ID",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "SIN",
+      "legacy_descriptions": ["S.I.N."],
+      "action": "map",
+      "mapped_type": "Social Insurance Number",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    },
+    {
+      "legacy_code": "TRD",
+      "legacy_descriptions": ["TREATY C"],
+      "action": "map",
+      "mapped_type": "Indian Status Card",
+      "requires_review": false,
+      "reason": "Retain the established canonical type mapping."
+    }
+  ],
+  "target_types": [
+    {
+      "type": "Driver's License",
+      "is_active": true
+    },
+    {
+      "type": "Health Card",
+      "is_active": true
+    },
+    {
+      "type": "Indian Status Card",
+      "is_active": true
+    },
+    {
+      "type": "Birth Certificate",
+      "is_active": true
+    },
+    {
+      "type": "Social Insurance Number",
+      "is_active": true
+    },
+    {
+      "type": "Firearms License",
+      "is_active": true
+    },
+    {
+      "type": "Canadian Passport",
+      "is_active": true
+    },
+    {
+      "type": "Citizenship Card",
+      "is_active": true
+    },
+    {
+      "type": "Permanent Resident Card",
+      "is_active": true
+    },
+    {
+      "type": "Provincial ID",
+      "is_active": true
+    },
+    {
+      "type": "Military ID",
+      "is_active": true
+    },
+    {
+      "type": "Other",
+      "is_active": true
+    },
+    {
+      "type": "Legacy BAR: BAR CARD",
+      "is_active": false
+    },
+    {
+      "type": "Legacy CAS: CASH PLA",
+      "is_active": false
+    },
+    {
+      "type": "Legacy CIB: CIBC BAN",
+      "is_active": false
+    },
+    {
+      "type": "Legacy CRE: CREDIT U",
+      "is_active": false
+    },
+    {
+      "type": "Legacy LIB: LIBRARY",
+      "is_active": false
+    },
+    {
+      "type": "Legacy M/M: MONEY MA",
+      "is_active": false
+    },
+    {
+      "type": "Legacy REM: REMARKS",
+      "is_active": false
+    },
+    {
+      "type": "Legacy ROY: ROYAL BK",
+      "is_active": false
+    }
+  ]
+}
