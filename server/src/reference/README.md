@@ -8,7 +8,7 @@ repository set per resource, each in its own folder with its DTOs and specs:
 | ------------------ | --------------------------------------------- | ------------------------------------------------------------- |
 | `cities/`          | `City{Controller,Service,Repository}`         | `/reference/cities`                                           |
 | `id-types/`        | `IdType{Controller,Service,Repository}`       | `/reference/id-types`                                         |
-| `colors/`          | `Color{Controller,Service,Repository}`        | `/reference/hair-colors`, `/reference/eye-colors`             |
+| `colors/`          | `Color{Controller,Service,Repository}`        | `/reference/colors/:kind` (`hair` or `eye`)                   |
 | `locations/`       | `Location{Controller,Service,Repository}`     | `/reference/locations`                                        |
 | `holidays/`        | `Holiday{Controller,Service,Repository}`      | `/reference/holidays`                                         |
 | `item-categories/` | `ItemCategory{Controller,Service,Repository}` | `/reference/item-categories`, `/reference/item-subcategories` |
@@ -19,22 +19,18 @@ transform input, strip undecorated fields and reject unknown ones with 400.
 
 ## Cities and colors
 
-Paths below are relative to `/reference`. Body means JSON `{ "color": "BROWN" }`.
+Paths below are relative to `/reference`. `:kind` must be `hair` or `eye`; any
+other value returns 400. Body means JSON `{ "color": "BROWN" }`.
 
-| Method + path                 | Params | C → S → R                                                                         |
-| ----------------------------- | ------ | --------------------------------------------------------------------------------- |
-| GET /cities                   | None   | loadCities → S.loadCities → R.loadCities                                          |
-| GET /id-types                 | None   | loadIdTypes → S.loadIdTypes → R.loadIdTypes                                       |
-| GET /hair-colors              | None   | loadHairColors → S.loadColors('hair') → R.loadColors('hair')                      |
-| GET /eye-colors               | None   | loadEyeColors → S.loadColors('eye') → R.loadColors('eye')                         |
-| GET /hair-colors/all          | None   | loadAllHairColors → S.loadAllColors('hair') → R.loadAllColors('hair')             |
-| GET /eye-colors/all           | None   | loadAllEyeColors → S.loadAllColors('eye') → R.loadAllColors('eye')                |
-| POST /hair-colors             | Body   | addHairColor → S.addColor → R.addColor                                            |
-| POST /eye-colors              | Body   | addEyeColor → S.addColor → R.addColor                                             |
-| PATCH /hair-colors/activate   | Body   | activateHairColor → S.setColorActive → R.setColorActive; R.findColor on failure   |
-| PATCH /hair-colors/deactivate | Body   | deactivateHairColor → S.setColorActive → R.setColorActive; R.findColor on failure |
-| PATCH /eye-colors/activate    | Body   | activateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure    |
-| PATCH /eye-colors/deactivate  | Body   | deactivateEyeColor → S.setColorActive → R.setColorActive; R.findColor on failure  |
+| Method + path                  | Params      | C → S → R                                                                     |
+| ------------------------------ | ----------- | ----------------------------------------------------------------------------- |
+| GET /cities                    | None        | loadCities → S.loadCities → R.loadCities                                      |
+| GET /id-types                  | None        | loadIdTypes → S.loadIdTypes → R.loadIdTypes                                   |
+| GET /colors/:kind              | :kind       | loadColors → S.loadColors → R.loadColors                                      |
+| GET /colors/:kind/all          | :kind       | loadAllColors → S.loadAllColors → R.loadAllColors                             |
+| POST /colors/:kind             | :kind, Body | addColor → S.addColor → R.addColor                                            |
+| PATCH /colors/:kind/activate   | :kind, Body | activateColor → S.setColorActive → R.setColorActive; R.findColor on failure   |
+| PATCH /colors/:kind/deactivate | :kind, Body | deactivateColor → S.setColorActive → R.setColorActive; R.findColor on failure |
 
 ## ID types
 

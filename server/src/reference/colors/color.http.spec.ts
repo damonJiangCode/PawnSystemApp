@@ -86,7 +86,7 @@ describe('Color reference operations HTTP (mock PostgreSQL)', () => {
       });
   });
   const request = (kind: string, path = '', method = 'GET', body?: unknown) =>
-    fetch(`${baseUrl}/reference/${kind}-colors${path}`, {
+    fetch(`${baseUrl}/reference/colors/${kind}${path}`, {
       method,
       ...(body === undefined
         ? {}
@@ -187,6 +187,21 @@ describe('Color reference operations HTTP (mock PostgreSQL)', () => {
       },
     );
   }
+
+  it.each([
+    ['', 'GET', undefined],
+    ['/all', 'GET', undefined],
+    ['', 'POST', { color: 'PINK' }],
+    ['/activate', 'PATCH', { color: 'PINK' }],
+    ['/deactivate', 'PATCH', { color: 'PINK' }],
+  ])(
+    'rejects an unknown color kind before SQL (%s %s)',
+    async (path, method, body) => {
+      const response = await request('skin', path, method, body);
+      expect(response.status).toBe(400);
+      expect(pool.query).not.toHaveBeenCalled();
+    },
+  );
 
   it('keeps user text in SQL parameters and isolates the selected color table', async () => {
     const color = "O'NEIL";

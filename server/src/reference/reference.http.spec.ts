@@ -108,7 +108,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
       pool.query.mockResolvedValue({
         rows: [{ color: 'BLACK' }, { color: 'BROWN' }],
       });
-      const response = await fetch(`${baseUrl}/reference/${kind}-colors`);
+      const response = await fetch(`${baseUrl}/reference/colors/${kind}`);
       expect(response.status).toBe(200);
       expect(await response.json()).toEqual(['BLACK', 'BROWN']);
       expect(pool.query).toHaveBeenCalledExactlyOnceWith(
@@ -120,8 +120,8 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
   it.each([
     'cities',
     'id-types',
-    'hair-colors',
-    'eye-colors',
+    'colors/hair',
+    'colors/eye',
     'item-categories',
   ])('handles empty %s without inventing seed data', async (resource) => {
     pool.query.mockResolvedValue({ rows: [] });
@@ -145,7 +145,7 @@ describe('Reference HTTP API (mock PostgreSQL)', () => {
   });
 
   it('does not expose a color delete endpoint', async () => {
-    const response = await fetch(`${baseUrl}/reference/hair-colors`, {
+    const response = await fetch(`${baseUrl}/reference/colors/hair`, {
       method: 'DELETE',
     });
     expect(response.status).toBe(404);

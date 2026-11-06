@@ -69,8 +69,8 @@ Client dropdowns use these read-only routes:
 | -------------------------- | ------------------------------------------------------------------- | ------------------ |
 | GET /reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities         |
 | GET /reference/id-types    | string[]                                                            | loadIdTypes        |
-| GET /reference/hair-colors | string[] of active colors                                           | loadColors('hair') |
-| GET /reference/eye-colors  | string[] of active colors                                           | loadColors('eye')  |
+| GET /reference/colors/hair | string[] of active colors                                           | loadColors('hair') |
+| GET /reference/colors/eye  | string[] of active colors                                           | loadColors('eye')  |
 
 No seed data is created by these endpoints. `ReferenceModule` imports the
 database pool; see the [Reference README](src/reference/README.md) for the

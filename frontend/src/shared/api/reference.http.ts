@@ -53,12 +53,12 @@ export function setIdTypeActiveHttp(
 }
 
 export function loadColorsHttp(kind: ColorKind, baseUrl = API_BASE_URL) {
-  return requestJson<string[]>(apiUrl(`/reference/${kind}-colors`, baseUrl));
+  return requestJson<string[]>(apiUrl(`/reference/colors/${kind}`, baseUrl));
 }
 
 export function loadAllColorsHttp(kind: ColorKind, baseUrl = API_BASE_URL) {
   return requestJson<(HairColor | EyeColor)[]>(
-    apiUrl(`/reference/${kind}-colors/all`, baseUrl),
+    apiUrl(`/reference/colors/${kind}/all`, baseUrl),
   );
 }
 
@@ -68,7 +68,7 @@ export async function addColorHttp(
   baseUrl = API_BASE_URL,
 ) {
   const result = await requestJson<{ color: string }>(
-    apiUrl(`/reference/${kind}-colors`, baseUrl),
+    apiUrl(`/reference/colors/${kind}`, baseUrl),
     jsonBody("POST", { color }),
   );
   return result.color;
@@ -82,7 +82,7 @@ export function setColorActiveHttp(
 ) {
   return requestJson<HairColor | EyeColor>(
     apiUrl(
-      `/reference/${kind}-colors/${isActive ? "activate" : "deactivate"}`,
+      `/reference/colors/${kind}/${isActive ? "activate" : "deactivate"}`,
       baseUrl,
     ),
     jsonBody("PATCH", { color }),

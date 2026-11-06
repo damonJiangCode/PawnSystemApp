@@ -23,14 +23,14 @@ for (const kind of ["hair", "eye"] as const) {
       );
       assert.deepEqual(JSON.parse(init.body as string), { color: "blue" });
       if (init.method === "POST") {
-        assert.equal(url.pathname, `/reference/${kind}-colors`);
+        assert.equal(url.pathname, `/reference/colors/${kind}`);
         return Response.json({ color: "BLUE" }, { status: 201 });
       }
       assert.equal(init.method, "PATCH");
       const active = url.pathname.endsWith("/activate");
       assert.equal(
         url.pathname,
-        `/reference/${kind}-colors/${active ? "activate" : "deactivate"}`,
+        `/reference/colors/${kind}/${active ? "activate" : "deactivate"}`,
       );
       return Response.json({ color: "BLUE", is_active: active });
     });
@@ -76,8 +76,8 @@ test("reference HTTP preserves the city response and uses the configured base UR
 
 const listLoaders = {
   "id-types": () => loadIdTypesHttp(),
-  "hair-colors": () => loadColorsHttp("hair"),
-  "eye-colors": () => loadColorsHttp("eye"),
+  "colors/hair": () => loadColorsHttp("hair"),
+  "colors/eye": () => loadColorsHttp("eye"),
 };
 for (const [resource, load] of Object.entries(listLoaders)) {
   test(`reference HTTP loads ${resource} as strings`, async (t) => {
@@ -111,7 +111,7 @@ test("getAppApi serves client and reference over HTTP and keeps desktop domains"
   assert.equal(api.report.loadDailyReport, loadDailyReport);
   await api.reference.loadEyeColors();
   await api.client.searchClients("A", "B");
-  assert.deepEqual(paths, ["/reference/eye-colors", "/clients"]);
+  assert.deepEqual(paths, ["/reference/colors/eye", "/clients"]);
 });
 
 test("getAppApi is unavailable outside the desktop shell", (t) => {

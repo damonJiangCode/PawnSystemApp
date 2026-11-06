@@ -1,60 +1,46 @@
-import { Body, Controller, Get, Patch, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UsePipes,
+} from '@nestjs/common';
 import { strictValidationPipe } from '../../common/strict-validation.pipe.js';
-import { ColorDto } from './color.dto.js';
+import { ColorDto, ColorKindParamsDto } from './color.dto.js';
 import { ColorService } from './color.service.js';
 
-@Controller('reference')
+@Controller('reference/colors/:kind')
 @UsePipes(strictValidationPipe)
 export class ColorController {
   constructor(private readonly service: ColorService) {}
 
-  @Get('hair-colors')
-  loadHairColors() {
-    return this.service.loadColors('hair');
+  @Get()
+  loadColors(@Param() params: ColorKindParamsDto) {
+    return this.service.loadColors(params.kind);
   }
 
-  @Get('eye-colors')
-  loadEyeColors() {
-    return this.service.loadColors('eye');
+  @Get('all')
+  loadAllColors(@Param() params: ColorKindParamsDto) {
+    return this.service.loadAllColors(params.kind);
   }
 
-  @Get('hair-colors/all')
-  loadAllHairColors() {
-    return this.service.loadAllColors('hair');
+  @Post()
+  async addColor(@Param() params: ColorKindParamsDto, @Body() input: ColorDto) {
+    return { color: await this.service.addColor(params.kind, input.color) };
   }
 
-  @Get('eye-colors/all')
-  loadAllEyeColors() {
-    return this.service.loadAllColors('eye');
+  @Patch('activate')
+  activateColor(@Param() params: ColorKindParamsDto, @Body() input: ColorDto) {
+    return this.service.setColorActive(params.kind, input.color, true);
   }
 
-  @Post('hair-colors')
-  async addHairColor(@Body() input: ColorDto) {
-    return { color: await this.service.addColor('hair', input.color) };
-  }
-
-  @Post('eye-colors')
-  async addEyeColor(@Body() input: ColorDto) {
-    return { color: await this.service.addColor('eye', input.color) };
-  }
-
-  @Patch('hair-colors/activate')
-  activateHairColor(@Body() input: ColorDto) {
-    return this.service.setColorActive('hair', input.color, true);
-  }
-
-  @Patch('hair-colors/deactivate')
-  deactivateHairColor(@Body() input: ColorDto) {
-    return this.service.setColorActive('hair', input.color, false);
-  }
-
-  @Patch('eye-colors/activate')
-  activateEyeColor(@Body() input: ColorDto) {
-    return this.service.setColorActive('eye', input.color, true);
-  }
-
-  @Patch('eye-colors/deactivate')
-  deactivateEyeColor(@Body() input: ColorDto) {
-    return this.service.setColorActive('eye', input.color, false);
+  @Patch('deactivate')
+  deactivateColor(
+    @Param() params: ColorKindParamsDto,
+    @Body() input: ColorDto,
+  ) {
+    return this.service.setColorActive(params.kind, input.color, false);
   }
 }
