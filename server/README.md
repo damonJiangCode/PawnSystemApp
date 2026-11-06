@@ -19,10 +19,10 @@ will not start without it); start PostgreSQL separately. `PORT` defaults to 3000
 `CORS_ORIGINS` defaults to `http://localhost:5173` (comma-separated origins).
 The combined root launcher assumes Vite 5173 and backend 3000.
 
-New images default to `../images/clients` (`CLIENT_IMAGE_DIR`); imported images
-can be served from `../database/migration/exports/client-photos`
-(`CLIENT_MIGRATION_IMAGE_DIR`). Relative storage paths resolve from the server
-working directory. Do not commit credentials or customer photos.
+Photos default to `../images/clients` (`CLIENT_IMAGE_DIR`) and `../images/items`
+(`ITEM_IMAGE_DIR`), for both new and migrated files. Relative storage paths
+resolve from the server working directory. Do not commit credentials or customer
+photos.
 
 Sources: `bootstrap` in [src/main.ts](src/main.ts), `DatabaseModule` pool
 `useFactory` in [src/database/database.module.ts](src/database/database.module.ts),
@@ -35,18 +35,18 @@ Sources: `bootstrap` in [src/main.ts](src/main.ts), `DatabaseModule` pool
 These are the actual routes in `ClientController` in
 [src/client/client.controller.ts](src/client/client.controller.ts):
 
-| Status      | Endpoint                    | Input                                                            | Controller method |
-| ----------- | --------------------------- | ---------------------------------------------------------------- | ----------------- |
-| Implemented | GET /client                 | Query: firstName?, lastName?                                     | search            |
-| Implemented | GET /client/by-dob          | Query: dateOfBirth=YYYY-MM-DD                                    | searchByDob       |
-| Implemented | POST /client                | JSON: client, identifications, photo, optional notes attribution | create            |
-| Implemented | PATCH /client/:clientNumber | JSON: submitted client fields, optional IDs/photo/attribution    | update            |
-| Implemented | GET /client/images          | Query: path                                                      | loadImage         |
+| Status      | Endpoint                         | Input                                                            | Controller method |
+| ----------- | -------------------------------- | ---------------------------------------------------------------- | ----------------- |
+| Implemented | GET /clients                     | Query: firstName?, lastName?                                     | search            |
+| Implemented | GET /clients/by-dob              | Query: dateOfBirth=YYYY-MM-DD                                    | searchByDob       |
+| Implemented | POST /clients                    | JSON: client, identifications, photo, optional notes attribution | create            |
+| Implemented | PATCH /clients/:clientNumber     | JSON: submitted client fields, optional IDs/photo/attribution    | update            |
+| Implemented | GET /clients/:clientNumber/image | Path: clientNumber; photo file                                   | loadImage         |
 
 PATCH covers profile edits, notes, photo replacement, client-only pickup, hold,
 and deactivate/reactivate. There is no separate hold/status/notes route. Clients
 cannot be deleted: there is no DELETE route or client deletion bridge. PUT and
-standalone POST /client/images are not implemented; images are submitted inside
+standalone photo uploads are not implemented; images are submitted inside
 POST/PATCH. Search and write results include client details and identifications.
 
 `ClientService.create/update` in [client.service.ts](src/client/client.service.ts)

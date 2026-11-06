@@ -7,17 +7,18 @@ Image operations use `ClientImageService` ([image service](client-image.service.
 
 ## Endpoints
 
-| Endpoint                    | Parameters                                                                                            | C → S → R                                                                                                                         |
-| --------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| GET /client                 | query: firstName?, lastName?; max 20 characters each                                                  | search → search → searchByName                                                                                                    |
-| GET /client/by-dob          | query: dateOfBirth, valid YYYY-MM-DD                                                                  | searchByDob → searchByDob → searchByDob                                                                                           |
-| POST /client                | body: { client, identifications, photo, employee_password?, notes_action? }                           | create → create → create, insertIds; image service save                                                                           |
-| PATCH /client/:clientNumber | positive integer path; body: { client?, identifications?, photo?, employee_password?, notes_action? } | update → update → loadForUpdate, update; deleteIds + insertIds when replacing IDs, otherwise loadIds; optional image service save |
-| GET /client/images          | query: path                                                                                           | loadImage → image service resolve → file; no repository                                                                           |
+| Endpoint                         | Parameters                                                                                            | C → S → R                                                                                                                         |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| GET /clients                     | query: firstName?, lastName?; max 20 characters each                                                  | search → search → searchByName                                                                                                    |
+| GET /clients/by-dob              | query: dateOfBirth, valid YYYY-MM-DD                                                                  | searchByDob → searchByDob → searchByDob                                                                                           |
+| POST /clients                    | body: { client, identifications, photo, employee_password?, notes_action? }                           | create → create → create, insertIds; image service save                                                                           |
+| PATCH /clients/:clientNumber     | positive integer path; body: { client?, identifications?, photo?, employee_password?, notes_action? } | update → update → loadForUpdate, update; deleteIds + insertIds when replacing IDs, otherwise loadIds; optional image service save |
+| GET /clients/:clientNumber/image | positive integer path                                                                                 | loadImage → loadImageFile → loadImagePath; image service resolve                                                                  |
 
 Searches return `Client[]`; POST returns 201 with a `Client`; PATCH returns 200
 with a `Client`. Responses include identifications; `mapRowToClient` in
-[client.mapper.ts](client.mapper.ts) defines the shape.
+[client.mapper.ts](client.mapper.ts) defines the shape. Responses carry `image_url` (null when there is no photo), not
+the stored path. An unknown client, no photo or a missing file on the image route is 404.
 
 ## Inputs and rules
 

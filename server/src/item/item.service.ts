@@ -26,6 +26,12 @@ export class ItemService {
     private readonly images: ItemImageService,
   ) {}
 
+  async loadImageFile(itemNumber: number) {
+    const imagePath = await this.items.loadImagePath(itemNumber);
+    if (!imagePath) throw new NotFoundException('Image not found');
+    return this.images.resolve(imagePath);
+  }
+
   listByTicket(ticketNumber: number) {
     return this.items.loadByTicketNumber(ticketNumber);
   }

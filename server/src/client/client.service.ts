@@ -11,6 +11,19 @@ import { CreateClientDto } from './dto/create-client.dto.js';
 import { mapRowToClient } from './client.mapper.js';
 import { UpdateClientDto } from './dto/update-client.dto.js';
 
+// client_number is an INTEGER column; a larger value would fail in PostgreSQL.
+const MAX_CLIENT_NUMBER = 2147483647;
+
+const requireValidClientNumber = (clientNumber: number) => {
+  if (
+    !Number.isInteger(clientNumber) ||
+    clientNumber <= 0 ||
+    clientNumber > MAX_CLIENT_NUMBER
+  ) {
+    throw new BadRequestException('Enter a valid client number.');
+  }
+};
+
 @Injectable()
 export class ClientService {
   constructor(
@@ -20,10 +33,15 @@ export class ClientService {
     private readonly images: ClientImageService,
   ) {}
 
+  async loadImageFile(clientNumber: number) {
+    requireValidClientNumber(clientNumber);
+    const imagePath = await this.clientRepository.loadImagePath(clientNumber);
+    if (!imagePath) throw new NotFoundException('Image not found');
+    return this.images.resolve(imagePath);
+  }
+
   async update(clientNumber: number, input: UpdateClientDto) {
-    if (!Number.isSafeInteger(clientNumber) || clientNumber <= 0) {
-      throw new BadRequestException('Enter a valid client number.');
-    }
+    requireValidClientNumber(clientNumber);
     const changes: ClientChanges = Object.fromEntries(
       Object.entries(input.client ?? {}).filter(
         ([, value]) => value !== undefined,

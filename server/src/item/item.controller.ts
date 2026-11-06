@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   Param,
   Patch,
@@ -10,10 +11,12 @@ import {
   Query,
   UsePipes,
 } from '@nestjs/common';
+import { toImageResponse } from '../common/image-store.js';
 import { fieldValidationPipe } from '../common/field-validation.pipe.js';
 import { TicketNumberParamsDto } from '../ticket/ticket.dto.js';
 import {
   CreateItemDto,
+  ItemNumberParamsDto,
   LinkItemsDto,
   SearchItemsQueryDto,
   TicketItemParamsDto,
@@ -52,6 +55,13 @@ export class ItemController {
   @HttpCode(204)
   async remove(@Param() params: TicketItemParamsDto) {
     await this.service.removeFromTicket(params.ticketNumber, params.itemNumber);
+  }
+
+  @Get('items/:itemNumber/image')
+  @Header('Cache-Control', 'private, no-store')
+  @Header('X-Content-Type-Options', 'nosniff')
+  async loadImage(@Param() params: ItemNumberParamsDto) {
+    return toImageResponse(await this.service.loadImageFile(params.itemNumber));
   }
 
   @Get('items/search')

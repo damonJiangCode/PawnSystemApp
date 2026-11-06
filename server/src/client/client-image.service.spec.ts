@@ -24,7 +24,6 @@ describe('ClientImageService', () => {
     service = new ClientImageService(
       new ConfigService({
         CLIENT_IMAGE_DIR: path.join(root, 'photos'),
-        CLIENT_MIGRATION_IMAGE_DIR: path.join(root, 'legacy'),
       }),
     );
   });
@@ -40,17 +39,24 @@ describe('ClientImageService', () => {
     );
   });
 
-  it.each([
-    'migration/exports/client-photos/',
-    'database/migration/exports/client-photos/',
-  ])('resolves current and older migrated image paths: %s', async (prefix) => {
-    const base = path.join(root, 'legacy');
+  it('resolves a migrated photo but never deletes it', async () => {
+    const base = path.join(root, 'photos');
     await mkdir(base, { recursive: true });
-    await writeFile(path.join(base, 'client.jpg'), Buffer.from(png, 'base64'));
-    expect(await service.resolve(`${prefix}client.jpg`)).toBe(
-      await realpath(path.join(base, 'client.jpg')),
+    const file = path.join(base, '10013_CLIENT.jpg');
+    await writeFile(file, Buffer.from(png, 'base64'));
+    const imagePath = 'images/clients/10013_CLIENT.jpg';
+    expect(await service.resolve(imagePath)).toBe(await realpath(file));
+    await expect(service.removeCreatedImage(imagePath)).rejects.toThrow(
+      'Invalid',
     );
-    await expect(service.resolve(`${prefix}../outside.jpg`)).rejects.toThrow();
+    await expect(service.resolve(imagePath)).resolves.toBeTruthy();
+  });
+
+  it.each([
+    'migration/exports/client-photos/client.jpg',
+    'database/migration/exports/client-photos/client.jpg',
+  ])('does not find the removed migration path: %s', async (value) => {
+    await expect(service.resolve(value)).rejects.toThrow('not found');
   });
 
   it.each(['not base64!', Buffer.from('not an image').toString('base64')])(

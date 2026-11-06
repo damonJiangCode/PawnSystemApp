@@ -1,3 +1,5 @@
+import { buildImageUrl } from '../common/image-url.js';
+
 export const mapRowToClient = (row: Record<string, unknown>) => ({
   client_number: Number(row.client_number),
   first_name: row.first_name ? String(row.first_name).toUpperCase() : '',
@@ -17,7 +19,10 @@ export const mapRowToClient = (row: Record<string, unknown>) => ({
   email: String(row.email ?? ''),
   phone: String(row.phone ?? ''),
   notes: String(row.notes ?? ''),
-  image_path: String(row.image_path ?? ''),
+  image_url: buildImageUrl(
+    `/clients/${Number(row.client_number)}/image`,
+    row.image_path,
+  ),
   image_updated_at: row.image_updated_at
     ? (row.image_updated_at as Date)
     : null,

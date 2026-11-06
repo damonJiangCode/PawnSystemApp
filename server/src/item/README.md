@@ -11,7 +11,10 @@ is in progress.
 | DELETE /tickets/:ticketNumber/items/:itemNumber | 204                                |
 | POST /tickets/:ticketNumber/items/link          | 200 `Item[]`                       |
 | GET /items/search                               | 200 `{ items: Item[], truncated }` |
+| GET /items/:itemNumber/image                    | 200 image file                     |
 
+- Items carry `image_url` (null when there is no photo), not the stored path.
+  An unknown item, no photo or a missing file on the image route is 404.
 - An unknown ticket returns `[]`; an invalid ticket number returns 400.
 - Search filters: `client_number`, `item_number` (exact; ignores the rest but
   the client), `category_id`, `subcategory_id`, and partial `brand_name`,

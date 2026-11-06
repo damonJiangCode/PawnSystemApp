@@ -26,6 +26,14 @@ const TrimUpper = () =>
     typeof value === 'string' ? value.trim().toUpperCase() : value,
   );
 
+export class ItemNumberParamsDto {
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
+  itemNumber!: number;
+}
+
 // Query values arrive as strings; @Type converts the numeric ones first.
 export class SearchItemsQueryDto {
   @IsOptional()

@@ -8,31 +8,18 @@ import {
   Param,
   ParseIntPipe,
   Query,
-  StreamableFile,
   ValidationPipe,
 } from '@nestjs/common';
-import { createReadStream } from 'node:fs';
-import { ClientImageService } from './client-image.service.js';
+import { toImageResponse } from '../common/image-store.js';
 import { CreateClientDto } from './dto/create-client.dto.js';
 import { UpdateClientDto } from './dto/update-client.dto.js';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ClientService } from './client.service.js';
 import { SearchClientDto } from './dto/search-client.dto.js';
 import { SearchClientByDobDto } from './dto/search-client-by-dob.dto.js';
 
-class ClientImageQueryDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(500)
-  path!: string;
-}
-
-@Controller('client')
+@Controller('clients')
 export class ClientController {
-  constructor(
-    private readonly clientService: ClientService,
-    private readonly images: ClientImageService,
-  ) {}
+  constructor(private readonly clientService: ClientService) {}
 
   @Post()
   create(
@@ -63,24 +50,15 @@ export class ClientController {
     return this.clientService.update(clientNumber, input);
   }
 
-  @Get('images')
+  @Get(':clientNumber/image')
   @Header('Cache-Control', 'private, no-store')
   @Header('X-Content-Type-Options', 'nosniff')
-  async loadImage(
-    @Query(
-      new ValidationPipe({
-        transform: true,
-        whitelist: true,
-        forbidNonWhitelisted: true,
-      }),
-    )
-    query: ClientImageQueryDto,
-  ) {
-    const file = await this.images.resolve(query.path);
-    return new StreamableFile(createReadStream(file), {
-      type: /\.png$/i.test(file) ? 'image/png' : 'image/jpeg',
-    });
+  async loadImage(@Param('clientNumber', ParseIntPipe) clientNumber: number) {
+    return toImageResponse(
+      await this.clientService.loadImageFile(clientNumber),
+    );
   }
+
   @Get()
   search(
     @Query(

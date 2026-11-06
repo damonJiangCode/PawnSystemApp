@@ -200,6 +200,14 @@ export class ItemRepository {
     return result.rows.map(mapItemRow);
   }
 
+  async loadImagePath(itemNumber: number) {
+    const result = await this.pool.query<{ image_path: string | null }>(
+      'SELECT image_path FROM item WHERE item_number = $1',
+      [itemNumber],
+    );
+    return result.rows[0]?.image_path ?? null;
+  }
+
   async loadByItemNumber(itemNumber: number, connection: PoolClient) {
     const result = await connection.query<ItemRow>(
       `${itemSelect} WHERE iws.item_number = $1`,

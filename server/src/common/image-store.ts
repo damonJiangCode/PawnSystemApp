@@ -1,5 +1,10 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  StreamableFile,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
+import { createReadStream } from 'node:fs';
 import { mkdir, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -11,21 +16,16 @@ export type ImageStoreOptions = {
   // Folder for photos the server saves, and the path prefix stored in the DB.
   root: string;
   prefix: string;
-  // Folder of photos exported by the legacy import, and the DB prefixes for it.
-  migrationRoot: string;
-  migrationPrefixes: string[];
 };
 
 // Photos live on disk; the database keeps only a relative path such as
 // `images/items/<uuid>.png`, which resolve() maps back to a file in its folder.
 export class ImageStore {
   private readonly root: string;
-  private readonly migrationRoot: string;
   private readonly createdPath: RegExp;
 
   constructor(private readonly options: ImageStoreOptions) {
     this.root = path.resolve(options.root);
-    this.migrationRoot = path.resolve(options.migrationRoot);
     const prefix = options.prefix.replace(/[/.]/g, '\\$&');
     this.createdPath = new RegExp(`^${prefix}[0-9a-f-]{36}\\.(png|jpg)$`);
   }
@@ -60,43 +60,35 @@ export class ImageStore {
     return `${this.options.prefix}${fileName}`;
   }
 
+  // Stored paths come from the database, so a bad one means "no such photo"
+  // rather than a bad request.
   async resolve(imagePath: string) {
-    let base: string;
-    let name: string;
-    const migrationPrefix = this.options.migrationPrefixes.find((prefix) =>
-      imagePath.startsWith(prefix),
-    );
-    if (imagePath.startsWith(this.options.prefix)) {
-      base = this.root;
-      name = imagePath.slice(this.options.prefix.length);
-    } else if (migrationPrefix) {
-      base = this.migrationRoot;
-      name = imagePath.slice(migrationPrefix.length);
-    } else {
-      throw new BadRequestException('Invalid image path');
-    }
+    const notFound = new NotFoundException('Image not found');
+    if (!imagePath.startsWith(this.options.prefix)) throw notFound;
+    const name = imagePath.slice(this.options.prefix.length);
     if (!name || /[/\\\0]/.test(name) || name === '.' || name === '..') {
-      throw new BadRequestException('Invalid image path');
+      throw notFound;
     }
     // realpath follows symlinks, so a link pointing outside the folder fails.
     try {
       const [basePath, filePath] = await Promise.all([
-        realpath(base),
-        realpath(path.join(base, name)),
+        realpath(this.root),
+        realpath(path.join(this.root, name)),
       ]);
       if (
         path.dirname(filePath) !== basePath ||
         !(await stat(filePath)).isFile()
       ) {
-        throw new NotFoundException('Image not found');
+        throw notFound;
       }
       return filePath;
     } catch {
-      throw new NotFoundException('Image not found');
+      throw notFound;
     }
   }
 
-  // Only a photo this server just saved may be deleted, never a legacy one.
+  // Migrated photos share this folder; only a UUID name this server created
+  // may be deleted, so they stay safe.
   async removeCreated(imagePath: string) {
     if (!this.createdPath.test(imagePath)) {
       throw new BadRequestException('Invalid server-created image path');
@@ -104,3 +96,8 @@ export class ImageStore {
     await rm(path.join(this.root, path.basename(imagePath)), { force: true });
   }
 }
+
+export const toImageResponse = (file: string) =>
+  new StreamableFile(createReadStream(file), {
+    type: /\.png$/i.test(file) ? 'image/png' : 'image/jpeg',
+  });

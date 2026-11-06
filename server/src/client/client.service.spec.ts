@@ -286,7 +286,7 @@ describe('ClientService', () => {
     );
     expect(repository.deleteIds).not.toHaveBeenCalled();
     expect(images.save).not.toHaveBeenCalled();
-    expect(client.image_path).toBe('old.png');
+    expect(client.image_url).toMatch(/\/image\?v=[0-9a-f]{8}$/);
     expect(client.redeem_count).toBe(7);
     expect(client.identifications).toHaveLength(1);
     expect(connection.query).toHaveBeenCalledWith('COMMIT');

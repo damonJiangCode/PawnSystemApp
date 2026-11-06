@@ -14,7 +14,8 @@ import { ClientModule } from './client.module.js';
 import { ClientImageService } from './client-image.service.js';
 import { EmployeePinHasher } from '../employee/employee-pin.hasher.js';
 import { ConfigService } from '@nestjs/config';
-import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import { buildImageUrl } from '../common/image-url.js';
+import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -27,6 +28,11 @@ const photo = {
   base64:
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aVQAAAABJRU5ErkJggg==',
 };
+
+const oldImageUrl = buildImageUrl(
+  '/clients/42/image',
+  'images/clients/old.png',
+);
 
 describe('Client HTTP search (database replaced with a mock)', () => {
   let app: INestApplication;
@@ -80,20 +86,21 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       ],
     });
     const response = await fetch(
-      `${baseUrl}/client?firstName=%20Da%25%20&lastName=Wa`,
+      `${baseUrl}/clients?firstName=%20Da%25%20&lastName=Wa`,
     );
     expect(response.status).toBe(200);
     const [client] = await response.json();
     expect(client.first_name).toBe('DAMON');
     expect(client.date_of_birth).toBe('1990-01-01T00:00:00.000Z');
     expect(client.hold_until).toBe('2026-10-20');
-    expect(client.image_path).toBe('images/clients/test.png');
+    expect(client.image_url).toMatch(/^\/clients\/\d+\/image\?v=[0-9a-f]{8}$/);
+    expect(client).not.toHaveProperty('image_path');
     expect(client.identifications).toHaveLength(1);
     expect(pool.query.mock.calls[0][1]).toEqual(['Da!%', 'Wa']);
   });
 
   it('skips the database for whitespace-only input', async () => {
-    const response = await fetch(`${baseUrl}/client?firstName=%20%20`);
+    const response = await fetch(`${baseUrl}/clients?firstName=%20%20`);
     expect(await response.json()).toEqual([]);
     expect(pool.query).not.toHaveBeenCalled();
   });
@@ -103,7 +110,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     `firstName=${'x'.repeat(21)}`,
     'firstName=Da&firstName=Tom',
   ])('rejects invalid parameters before querying: %s', async (query) => {
-    const response = await fetch(`${baseUrl}/client?${query}`);
+    const response = await fetch(`${baseUrl}/clients?${query}`);
     expect(response.status).toBe(400);
     expect(pool.query).not.toHaveBeenCalled();
   });
@@ -119,7 +126,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       ],
     });
     const response = await fetch(
-      `${baseUrl}/client/by-dob?dateOfBirth=%202000-02-29%20`,
+      `${baseUrl}/clients/by-dob?dateOfBirth=%202000-02-29%20`,
     );
     expect(response.status).toBe(200);
     const [client] = await response.json();
@@ -132,7 +139,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   it('returns an empty array when DOB has no matches', async () => {
     pool.query.mockResolvedValue({ rows: [] });
     const response = await fetch(
-      `${baseUrl}/client/by-dob?dateOfBirth=1990-01-01`,
+      `${baseUrl}/clients/by-dob?dateOfBirth=1990-01-01`,
     );
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual([]);
@@ -149,7 +156,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     'dateOfBirth=1990-01-01&extra=x',
     'dateOfBirth=1990-01-01&dateOfBirth=1991-01-01',
   ])('rejects invalid DOB before querying: %s', async (query) => {
-    const response = await fetch(`${baseUrl}/client/by-dob?${query}`);
+    const response = await fetch(`${baseUrl}/clients/by-dob?${query}`);
     expect(response.status).toBe(400);
     expect(pool.query).not.toHaveBeenCalled();
   });
@@ -205,7 +212,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
         return { rows: [] };
       },
     );
-    const response = await fetch(`${baseUrl}/client`, {
+    const response = await fetch(`${baseUrl}/clients`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(validCreate),
@@ -220,10 +227,14 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     expect(idInserts).toHaveLength(1);
     expect(idInserts[0][1]).toEqual([1, 'TEST', '1', 'TEST', '2']);
     expect(client.redeem_count).toBe(0);
-    expect(client.image_path).toMatch(/^images\/clients\/[0-9a-f-]+\.png$/);
-    const image = await fetch(
-      `${baseUrl}/client/images?${new URLSearchParams({ path: client.image_path })}`,
+    expect(client.image_url).toMatch(/^\/clients\/\d+\/image\?v=[0-9a-f]{8}$/);
+    const insert = connection.query.mock.calls.find(([sql]) =>
+      sql.includes('INSERT INTO client ('),
     );
+    pool.query.mockResolvedValueOnce({
+      rows: [{ image_path: insert?.[1][17] }],
+    });
+    const image = await fetch(`${baseUrl}${client.image_url}`);
     expect(image.status).toBe(200);
     expect(Buffer.from(await image.arrayBuffer())).toEqual(
       Buffer.from(photo.base64, 'base64'),
@@ -260,7 +271,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   ])(
     'rejects invalid create input before opening a connection',
     async (body) => {
-      const response = await fetch(`${baseUrl}/client`, {
+      const response = await fetch(`${baseUrl}/clients`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -280,7 +291,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
         throw Object.assign(new Error('Invalid ID type'), { code: '23503' });
       return { rows: [] };
     });
-    const response = await fetch(`${baseUrl}/client`, {
+    const response = await fetch(`${baseUrl}/clients`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(validCreate),
@@ -294,7 +305,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   it('rejects invalid photo content without leaving a file', async () => {
     const before = await readdir(imageRoot);
     connection.query.mockResolvedValue({ rows: [] });
-    const response = await fetch(`${baseUrl}/client`, {
+    const response = await fetch(`${baseUrl}/clients`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -344,7 +355,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
   }
 
   function patch(body: unknown, number = '42') {
-    return fetch(`${baseUrl}/client/${number}`, {
+    return fetch(`${baseUrl}/clients/${number}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -520,7 +531,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     const client = await response.json();
     expect(client.phone).toBe('new-phone');
     expect(client.redeem_count).toBe(7);
-    expect(client.image_path).toBe('images/clients/old.png');
+    expect(client.image_url).toBe(oldImageUrl);
     expect(client.identifications).toHaveLength(1);
     expect(
       connection.query.mock.calls.some(([sql]) =>
@@ -567,7 +578,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     const response = await patch({ photo });
     expect(response.status).toBe(200);
     const client = await response.json();
-    expect(client.image_path).not.toBe('images/clients/old.png');
+    expect(client.image_url).not.toBe(oldImageUrl);
     expect(await readdir(imageRoot)).toHaveLength(files.length + 1);
     for (const file of files) expect(await readdir(imageRoot)).toContain(file);
   });
@@ -614,7 +625,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
         ? [{ type: 'TEST', is_active: false }]
         : [],
     }));
-    const response = await fetch(`${baseUrl}/client`, {
+    const response = await fetch(`${baseUrl}/clients`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(validCreate),
@@ -662,5 +673,53 @@ describe('Client HTTP search (database replaced with a mock)', () => {
       ),
     ).toBe(false);
     expect(connection.query).toHaveBeenCalledWith('ROLLBACK');
+  });
+
+  it('rejects a PATCH client number too large for the database', async () => {
+    const response = await fetch(`${baseUrl}/clients/99999999999`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: { phone: 'new-phone' } }),
+    });
+    expect(response.status).toBe(400);
+    expect(pool.connect).not.toHaveBeenCalled();
+  });
+
+  describe('GET /clients/:clientNumber/image', () => {
+    const load = (clientNumber: string) =>
+      fetch(`${baseUrl}/clients/${clientNumber}/image`);
+
+    it('returns the file stored for the client', async () => {
+      const content = Buffer.from([255, 216, 255, 1]);
+      await writeFile(path.join(imageRoot, '10013_CLIENT.jpg'), content);
+      pool.query.mockResolvedValueOnce({
+        rows: [{ image_path: 'images/clients/10013_CLIENT.jpg' }],
+      });
+      const response = await load('10013');
+      expect(response.status).toBe(200);
+      expect(response.headers.get('content-type')).toBe('image/jpeg');
+      expect(response.headers.get('cache-control')).toBe('private, no-store');
+      expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(Buffer.from(await response.arrayBuffer())).toEqual(content);
+      expect(pool.query.mock.calls[0][1]).toEqual([10013]);
+    });
+
+    it.each([
+      ['an unknown client', []],
+      ['a client without a photo', [{ image_path: '' }]],
+      ['a missing file', [{ image_path: 'images/clients/missing.jpg' }]],
+      ['a bad stored path', [{ image_path: 'images/clients/../secret.jpg' }]],
+    ])('returns 404 for %s', async (_name, rows) => {
+      pool.query.mockResolvedValueOnce({ rows });
+      expect((await load('1')).status).toBe(404);
+    });
+
+    it.each(['abc', '0', '-1', '99999999999'])(
+      'returns 400 without reading the database for %s',
+      async (clientNumber) => {
+        expect((await load(clientNumber)).status).toBe(400);
+        expect(pool.query).not.toHaveBeenCalled();
+      },
+    );
   });
 });

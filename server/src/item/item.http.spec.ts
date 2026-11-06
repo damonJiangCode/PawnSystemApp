@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import type { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { mkdtemp, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { Pool } from 'pg';
@@ -14,6 +14,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { buildImageUrl } from '../common/image-url.js';
 import { ItemModule } from './item.module.js';
 
 const itemRow = (overrides: Record<string, unknown> = {}) => ({
@@ -158,7 +159,7 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
           latest_ticket_number: 10,
           latest_ticket_status: 'pawned',
           is_loadable: false,
-          image_path: 'images/items/a.png',
+          image_url: buildImageUrl('/items/40/image', 'images/items/a.png'),
         },
       ]);
       const [sql, values] = pool.query.mock.calls[0];
@@ -703,5 +704,53 @@ describe('Item HTTP API (mock PostgreSQL)', () => {
       });
       expect(pool.connect).not.toHaveBeenCalled();
     });
+  });
+
+  describe('GET /items/:itemNumber/image', () => {
+    const load = (itemNumber: string) =>
+      fetch(`${baseUrl}/items/${itemNumber}/image`);
+
+    it('returns the file stored for the item', async () => {
+      const content = Buffer.from([255, 216, 255, 1]);
+      await writeFile(path.join(photoDir, '518057.jpg'), content);
+      rows = [{ image_path: 'images/items/518057.jpg' }];
+      const res = await load('518057');
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-type')).toBe('image/jpeg');
+      expect(res.headers.get('cache-control')).toBe('private, no-store');
+      expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(Buffer.from(await res.arrayBuffer())).toEqual(content);
+      expect(pool.query.mock.calls[0][1]).toEqual([518057]);
+    });
+
+    it('returns a PNG as image/png', async () => {
+      await writeFile(
+        path.join(photoDir, 'new.png'),
+        Buffer.from(png, 'base64'),
+      );
+      rows = [{ image_path: 'images/items/new.png' }];
+      const res = await load('41');
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-type')).toBe('image/png');
+    });
+
+    it.each<[string, Record<string, unknown>[]]>([
+      ['an unknown item', []],
+      ['an item without a photo', [{ image_path: null }]],
+      ['a missing file', [{ image_path: 'images/items/missing.jpg' }]],
+      ['a bad stored path', [{ image_path: 'images/items/../secret.jpg' }]],
+      ['a path from another folder', [{ image_path: 'images/clients/a.jpg' }]],
+    ])('returns 404 for %s', async (_name, stored) => {
+      rows = stored;
+      expect((await load('41')).status).toBe(404);
+    });
+
+    it.each(['abc', '0', '-1'])(
+      'returns 400 without reading the database for %s',
+      async (itemNumber) => {
+        expect((await load(itemNumber)).status).toBe(400);
+        expect(pool.query).not.toHaveBeenCalled();
+      },
+    );
   });
 });

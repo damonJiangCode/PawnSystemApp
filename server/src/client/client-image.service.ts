@@ -10,13 +10,6 @@ export class ClientImageService {
     this.store = new ImageStore({
       root: config.get<string>('CLIENT_IMAGE_DIR') ?? '../images/clients',
       prefix: 'images/clients/',
-      migrationRoot:
-        config.get<string>('CLIENT_MIGRATION_IMAGE_DIR') ??
-        '../database/migration/exports/client-photos',
-      migrationPrefixes: [
-        'database/migration/exports/client-photos/',
-        'migration/exports/client-photos/',
-      ],
     });
   }
 

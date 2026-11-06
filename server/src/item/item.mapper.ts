@@ -1,3 +1,4 @@
+import { buildImageUrl } from '../common/image-url.js';
 import type { TicketStatus } from '../ticket/ticket.mapper.js';
 
 export type ItemRecord = {
@@ -15,7 +16,7 @@ export type ItemRecord = {
   latest_ticket_status: TicketStatus | undefined;
   // An item can join a new ticket only when its latest ticket is closed.
   is_loadable: boolean;
-  image_path: string;
+  image_url: string | null;
 };
 
 // pg returns BIGINT (item_number) and NUMERIC (amount) as strings; the view
@@ -60,6 +61,9 @@ export const mapItemRow = (row: ItemRow): ItemRecord => {
     latest_ticket_number: row.latest_ticket_number ?? undefined,
     latest_ticket_status: status,
     is_loadable: status !== 'pawned' && status !== 'sold',
-    image_path: row.image_path ?? '',
+    image_url: buildImageUrl(
+      `/items/${Number(row.item_number)}/image`,
+      row.image_path,
+    ),
   };
 };

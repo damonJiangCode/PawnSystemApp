@@ -245,6 +245,14 @@ export class ClientRepository {
     );
   }
 
+  async loadImagePath(clientNumber: number) {
+    const result = await this.pool.query<{ image_path: string | null }>(
+      'SELECT image_path FROM client WHERE client_number = $1',
+      [clientNumber],
+    );
+    return result.rows[0]?.image_path ?? null;
+  }
+
   async loadByNumber(
     clientNumber: number,
     connection: Pool | PoolClient = this.pool,
