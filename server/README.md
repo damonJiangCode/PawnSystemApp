@@ -1,142 +1,61 @@
-# PawnSystem HTTP Server
+# Server
 
-NestJS backend. Client, employee and reference operations and every ticket workflow use HTTP; ticket operations are not fully converted yet. Default URL: `http://localhost:3000`.
+NestJS HTTP backend. Default URL: `http://localhost:3000`.
 
-## Development
+## Run
 
-From the project root:
+From the repository root, with PostgreSQL running:
 
 ```bash
 npm --prefix server ci
 npm run dev:server
-# Or run frontend + server + Electron together:
-npm run dev
 ```
 
-Configure the private `server/.env` with `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`
-and `DB_PASSWORD`, plus `EMPLOYEE_PIN_SECRET` (at least 32 characters; the server
-will not start without it); start PostgreSQL separately. `PORT` defaults to 3000.
-`CORS_ORIGINS` defaults to `http://localhost:5173` (comma-separated origins).
-The combined root launcher assumes Vite 5173 and backend 3000.
+## Configuration
 
-Photos default to `../images/clients` (`CLIENT_IMAGE_DIR`) and `../images/items`
-(`ITEM_IMAGE_DIR`), for both new and migrated files. Relative storage paths
-resolve from the server working directory. Do not commit credentials or customer
-photos.
+Settings come from the root `.env`, with an optional private `server/.env` override.
 
-Sources: `bootstrap` in [src/main.ts](src/main.ts), `DatabaseModule` pool
-`useFactory` in [src/database/database.module.ts](src/database/database.module.ts),
-`ClientImageService.constructor` in
-[src/client/client-image.service.ts](src/client/client-image.service.ts), and
-`scripts` in [../package.json](../package.json).
+| Variable                                       | Purpose                                             |
+| ---------------------------------------------- | --------------------------------------------------- |
+| `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | PostgreSQL connection (also `DB_PORT`)              |
+| `EMPLOYEE_PIN_SECRET`                          | Required, 32+ characters; the server will not start |
+| `PORT`                                         | Default 3000                                        |
+| `CORS_ORIGINS`                                 | Comma-separated; default `http://localhost:5173`    |
+| `CLIENT_IMAGE_DIR`                             | Default `../images/clients`                         |
+| `ITEM_IMAGE_DIR`                               | Default `../images/items`                           |
 
-## Client API status
+Relative image paths resolve from the server working directory.
 
-These are the actual routes in `ClientController` in
-[src/client/client.controller.ts](src/client/client.controller.ts):
+## Modules
 
-| Status      | Endpoint                         | Input                                                            | Controller method |
-| ----------- | -------------------------------- | ---------------------------------------------------------------- | ----------------- |
-| Implemented | GET /clients                     | Query: firstName?, lastName?                                     | search            |
-| Implemented | GET /clients/by-dob              | Query: dateOfBirth=YYYY-MM-DD                                    | searchByDob       |
-| Implemented | POST /clients                    | JSON: client, identifications, photo, optional notes attribution | create            |
-| Implemented | PATCH /clients/:clientNumber     | JSON: submitted client fields, optional IDs/photo/attribution    | update            |
-| Implemented | GET /clients/:clientNumber/image | Path: clientNumber; photo file                                   | loadImage         |
+| Module                               | Routes                                   |
+| ------------------------------------ | ---------------------------------------- |
+| [Client](src/client/README.md)       | `/clients`                               |
+| [Employee](src/employee/README.md)   | `/employees`                             |
+| [Item](src/item/README.md)           | `/tickets/:ticketNumber/items`, `/items` |
+| [Reference](src/reference/README.md) | `/reference/*`                           |
+| [Ticket](src/ticket/README.md)       | `/tickets`                               |
 
-PATCH covers profile edits, notes, photo replacement, client-only pickup, hold,
-and deactivate/reactivate. There is no separate hold/status/notes route. Clients
-cannot be deleted: there is no DELETE route or client deletion bridge. PUT and
-standalone photo uploads are not implemented; images are submitted inside
-POST/PATCH. Search and write results include client details and identifications.
+## Conventions
 
-`ClientService.create/update` in [client.service.ts](src/client/client.service.ts)
-handle business rules and transactions. `ClientRepository` methods in
-[client.repository.ts](src/client/client.repository.ts) handle parameterized SQL;
-`mapRowToClient` in [client.mapper.ts](src/client/client.mapper.ts) creates responses.
-`getAppApi` in [app.api.ts](../frontend/src/shared/api/app.api.ts) connects renderer
-client operations to HTTP. Concise module references:
-[Client](src/client/README.md), [Employee](src/employee/README.md) and
-[Reference](src/reference/README.md).
-
-### Reference data (implemented)
-
-`ReferenceModule` in [src/reference/](src/reference/) serves all lookup data under
-`/reference` (cities, ID types, hair/eye colors, locations, holidays and item
-categories), with one controller → service → repository set per resource.
-Client dropdowns use these read-only routes:
-
-| Endpoint                   | Response                                                            | Repository method  |
-| -------------------------- | ------------------------------------------------------------------- | ------------------ |
-| GET /reference/cities      | { provinces: string[], citiesByProvince: Record<string, string[]> } | loadCities         |
-| GET /reference/id-types    | string[]                                                            | loadIdTypes        |
-| GET /reference/colors/hair | string[] of active colors                                           | loadColors('hair') |
-| GET /reference/colors/eye  | string[] of active colors                                           | loadColors('eye')  |
-
-No seed data is created by these endpoints. `ReferenceModule` imports the
-database pool; see the [Reference README](src/reference/README.md) for the
-folder layout and all GET /all, POST, PATCH and DELETE routes.
-The renderer reaches them through `getAppApi().reference`
-([reference.http.ts](../frontend/src/shared/api/reference.http.ts)); old query
-IPC handlers were removed.
-
-### Rules
-
-- POST requires client details, 2–20 identifications and a photo. Age must be at
-  least 18 using the Regina calendar date. Photos remain in renderer state until
-  submission; the server assigns UUID filenames to PNG/JPEG images up to 5 MB.
-- PATCH preserves omitted fields, IDs and photos. Provided IDs replace the ID
-  set and must contain 2–20 entries. Optional text clears with `""`; only
-  `hold_until` accepts `null` to clear. Unknown or server-owned fields are rejected.
-- New/non-empty changed notes require `notes_action: "append_signature"` and an
-  active employee password. `notes_action: "clear"` clears notes without a password.
-  Passwords attribute the action to an employee; they do not create a login session.
-- Setting a hold requires a valid employee every time, including repeated dates,
-  and appends `Hold till MM-DD-YYYY (NAME, MM-DD-YYYY)`. Clearing a hold needs no
-  password and preserves notes. API dates remain `YYYY-MM-DD`; the frontend's
-  today-or-later restriction is not enforced by the backend. Submit hold changes
-  separately from manual notes changes.
-- Changing `is_active` requires an employee and appends `Deactivated client (...)`
-  or `Reactivated client (...)` with an MM-DD-YYYY action date. Unchanged status
-  does not add a signature. Clients remain searchable and existing tickets remain.
-  Ticket issuance is blocked in the current ticket backend: Pawn, Sell, Convert,
-  Transfer (either party), and Repawn. These ticket operations still run in main.
-
-Sources: `CreateClientDto` / `UpdateClientDto` in [dto/](src/client/dto/),
-`ClientService.create/update`, `EmployeeRepository.findActiveByPassword` in
-[employee.repository.ts](src/employee/employee.repository.ts),
-`ClientImageService.save`, `ClientHoldDialog.save` in
-[ClientHoldDialog.tsx](../frontend/src/modules/clients/components/ClientHoldDialog.tsx),
-and `ticketService.createPawnTicket/createSellTicket/convertTicket/transferTicket`
-in [ticket.service.ts](../electron/src/main/modules/tickets/ticket.service.ts).
-
-### Remaining work
-
-| Area                          | Current implementation                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Imported legacy photo display | Server resolve supports imported paths, but renderer getImageUrl still chooses the Electron image protocol for them |
-
-Source: `getImageUrl` in [imageUrl.ts](../frontend/src/shared/utils/imageUrl.ts).
-Client/reference APIs now use HTTP; imported legacy photo display remains on the
-Electron image protocol.
+- Each module is controller → service → repository. Controllers validate with
+  class-validator DTOs, services own business rules, and repositories own parameterized SQL.
+- Multi-step writes run in one transaction (`src/common/transaction.ts`).
+- `strictValidationPipe` rejects unknown fields with 400. `fieldValidationPipe` returns
+  `{ field, message }` so a form can focus the input.
+- Photos are stored by `ImageStore` (`src/common/image-store.ts`). Responses carry
+  `image_url`, built by `buildImageUrl`, and never the stored path.
+- No route has authentication yet; see the [root README](../README.md#current-status).
 
 ## Verification
 
 Run from `server/`:
 
 ```bash
-npm test -- src/client src/employee src/reference
+npm test
+npm run test:e2e
 npm run build
 ```
 
-Client and reference HTTP tests run real Nest routes and implementation code with a mocked
-PostgreSQL connection; they are not live-database integration tests. See
-`describe` in [client.http.spec.ts](src/client/client.http.spec.ts).
-Module-level reference tests in
-[src/reference/reference.http.spec.ts](src/reference/reference.http.spec.ts) cover
-response shapes, SQL ordering and active-color filtering, empty results, and database failures.
-`ClientService`, repository and image service tests cover isolated behavior.
-The root `scripts/clientActivation.test.cjs` also checks ticket restrictions.
-
-The full `npm test` currently includes an unrelated starter test:
-`AppController.getHello` returns `Hello, guest!`, while
-[src/app.controller.spec.ts](src/app.controller.spec.ts) expects `Hello World!`.
+`*.http.spec.ts` files run real Nest routes and DTOs with a mocked PostgreSQL pool. They
+are not live-database integration tests.

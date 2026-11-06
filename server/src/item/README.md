@@ -1,9 +1,8 @@
 # Item API
 
-Items and the tickets they are on (`ticket_item`). Migration from Electron IPC
-is in progress.
+Items and the tickets they are on (`ticket_item`).
 
-| Method + path                                   | Success                            |
+| Endpoint                                        | Success                            |
 | ----------------------------------------------- | ---------------------------------- |
 | GET /tickets/:ticketNumber/items                | 200 `Item[]`                       |
 | POST /tickets/:ticketNumber/items               | 201 `Item`                         |
@@ -13,21 +12,16 @@ is in progress.
 | GET /items/search                               | 200 `{ items: Item[], truncated }` |
 | GET /items/:itemNumber/image                    | 200 image file                     |
 
-- Items carry `image_url` (null when there is no photo), not the stored path.
-  An unknown item, no photo or a missing file on the image route is 404.
-- An unknown ticket returns `[]`; an invalid ticket number returns 400.
-- Search filters: `client_number`, `item_number` (exact; ignores the rest but
-  the client), `category_id`, `subcategory_id`, and partial `brand_name`,
-  `model_number`, `serial_number`. No filter finds nothing. At most the newest
-  1000 are returned; `truncated` is true when more matched.
-- Creating an item needs a `pawned` or `sold` ticket (404 unknown, 409 closed)
-  and an active subcategory. The required `photo` is saved to `ITEM_IMAGE_DIR`
-  and removed again if the item cannot be saved.
-- Updating an item needs the same open ticket, and the item must be on it
-  (404). A new category must be active; an unchanged one may be inactive.
-  Without `photo` the item keeps its image; a replaced file is not deleted.
-- Deleting removes the item from the ticket only (same 404/409 checks); the
-  item and its photo stay because other tickets may use them.
-- Linking takes `{ item_numbers }` and is all or nothing: an unknown item is
-  404, and an item active on another ticket is 409. Items are locked in order
-  before the check, so parallel links cannot both take the same item.
+- **Photos:** items carry `image_url` (null when there is no photo), not the stored path.
+  The image route returns 404 for an unknown item, no photo or a missing file.
+- **List:** an unknown ticket returns `[]`; an invalid ticket number returns 400.
+- **Search:** filters are `client_number`, exact `item_number`, `category_id`,
+  `subcategory_id` and partial `brand_name`, `model_number`, `serial_number`. No filter
+  finds nothing. At most the newest 1000 are returned, with `truncated` set when more matched.
+- **Create:** needs a `pawned` or `sold` ticket (404 unknown, 409 closed), an active
+  subcategory and a photo. The photo is removed again if the item cannot be saved.
+- **Update:** the item must be on that open ticket. A new category must be active; an
+  unchanged one may be inactive. Without `photo` the item keeps its image.
+- **Delete:** removes the item from the ticket only, because other tickets may use it.
+- **Link:** takes `{ item_numbers }` and is all or nothing (404 unknown, 409 active on
+  another ticket). Items lock in order, so parallel links cannot take the same item.

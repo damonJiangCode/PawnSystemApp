@@ -1,123 +1,39 @@
 # Database
 
-- This README is a developer guide, not a runtime input.
-- `schema/`: PostgreSQL table and index definitions.
-- `seed/`: initial reference data, including city data.
-- `functions/` and `views/`: database functions and views.
-- `env.ts` → `loadEnv`: reads the private root `.env`.
-- `connection.ts` → `connect`: provides Electron's PostgreSQL connections.
-- `initialize.ts` → `initializeDatabase`: creates schema and reference data.
-- NestJS uses its own pool provider in `server/src/database/database.module.ts`.
-- `migration/`: imports legacy Access data using scripts and versioned JSON rules.
+PostgreSQL schema, seed data and the legacy Access migration. There is no migration
+framework: `database/schema/` holds `CREATE ... IF NOT EXISTS` SQL.
+
+| Path            | Purpose                                      |
+| --------------- | -------------------------------------------- |
+| `schema/`       | Tables and indexes                           |
+| `seed/`         | Reference data, including cities             |
+| `functions/`    | Database guard functions                     |
+| `views/`        | Views such as item status lookup             |
+| `initialize.ts` | Creates the schema and reference data        |
+| `connection.ts` | PostgreSQL connections for Electron          |
+| `migration/`    | Access import scripts and JSON mapping rules |
+
+NestJS uses its own pool in `server/src/database/database.module.ts`.
 
 ## Commands
 
-- Run commands from the project root with PostgreSQL running and `.env` configured.
-- `npm run build:main`: compiles Electron/database code into `.electron-build/`.
-- `npm run db:init`: builds and initializes the database; it does not import Access records.
-- `npm run migration:execute`: initializes the schema automatically before importing;
-  no separate `db:init` is needed for this workflow.
-- Build output: `.electron-build/database/`; Electron entry: `.electron-build/electron/src/main/index.js`.
-- `tsconfig.build.json` compiles schema init on its own into `.db-build/`
-  (no Electron build) for the server Docker image. The image also copies
-  `seed/canadacities.csv` and the ID type mapping files next to the output.
-- Changing a CREATE TABLE definition does not alter existing tables; existing
-  databases need the corresponding SQL applied separately.
+Run from the project root, with PostgreSQL running and `.env` configured.
 
-## Access migration
+```bash
+npm run db:init
+```
 
-- This README explains the workflow; scripts read Access files and JSON rules.
-- Run every command from the project root.
-- Install dependencies with `npm ci`, start Docker Desktop, and keep the app closed.
+This builds and initializes the database. It does not import Access records or create an employee.
 
-### Run in this order
+## Changing an existing database
 
-- **Inputs:** put both files in `database/migration/source/`:
-  `superpawnconv.mdb` and `Pictureconv.mdb`.
-- **Prepare:** `npm run migration:prepare` creates missing local directories and
-  `.env` with a generated database password and `EMPLOYEE_PIN_SECRET`, then
-  checks inputs, dependencies and Docker.
-- **Start PostgreSQL:**
+Editing a `CREATE TABLE` definition does not alter existing tables, so apply the change by
+hand and document it here. These have already been applied to the dev database:
 
-  ```bash
-  docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
-  ```
-
-- **Import:** `npm run migration:execute` initializes the schema, imports records,
-  writes photos to `images/`, creates backups and validates the result.
-- **Review:** inspect the generated reports before running `npm run dev`.
-
-### Files
-
-- `migration/scripts/`: migration code.
-- `migration/mappings/`: required, Git-tracked category, location and ID type JSON rules.
-- `migration/source/`: private Access inputs.
-- `../images/clients/`, `../images/items/`: customer and item photos, shared with
-  the server. The database stores paths such as `images/items/<file>`.
-- `migration/reports/`: per-run results, execution manifest and validation logs.
-- `migration/backups/`: per-run database and photo backups.
-- `source/`, `reports/`, `backups/` and `images/` are Git-ignored.
-
-### Behavior
-
-- `prepareDevMigration` in [prepareDevMigration.cjs](../scripts/prepareDevMigration.cjs)
-  checks readiness; it does not start PostgreSQL or import records.
-- `executeDevMigration` in [executeDevMigration.cjs](../scripts/executeDevMigration.cjs)
-  writes to PostgreSQL and requires an empty target and an empty `images/` folder.
-- Imported clients start active with no hold: `is_active=true`, `hold_until=NULL`.
-- Failed imports are not automatically erased or resumed; inspect the report
-  before deciding how to retry.
-
-### ID type mapping
-
-- `migration/mappings/id-type-mapping.json` is the shared runtime input for ID
-  seeds, static previews, client migration and the read-only audit.
-- Established document types retain their mappings. Eight legacy-specific entries
-  use distinct `Legacy CODE: DESCRIPTION` targets, initially inactive. Original
-  abbreviations are preserved without claiming they are valid documents for new use.
-- A number with no type is kept as `Other`; completely empty slots are ignored.
-- Populated PHO or unknown codes block client import for preservation review.
-  PHO means PHONE NO; the importer does not silently discard it or overwrite phones.
-- Missing numbers are reported and skipped; no identification numbers are invented.
-- Seed reruns insert missing targets and preserve all existing activation states.
-  Execution manifests record the mapping checksum; prepare rejects invalid rules.
-- Run from the project root:
-
-  ```bash
-  node --env-file=.env database/migration/scripts/audit-id-types.cjs
-  ```
-
-- Private reports: `migration/reports/id-type-audit-*/summary.json` and `summary.md`.
-  They include per-code counts, source/mapping checksums and ID-count distributions,
-  without customer names or actual identification/telephone numbers.
-- The audit never changes mappings or database data. Counts cover ID slots only,
-  not full client/ticket eligibility. New rules do not rewrite already-imported IDs;
-  historical reclassification needs a separate import or correction.
-
-### Employee PINs
-
-- `employee.pin_hash` stores HMAC-SHA256(`EMPLOYEE_PIN_SECRET`, trimmed PIN) as
-  64 hex characters; plain-text passwords are never stored. The keyed hash keeps
-  PIN-only lookup and the `UNIQUE` constraint working, which a salted hash cannot.
-- [employee-pin.cjs](migration/scripts/employee-pin.cjs) is the shared helper;
-  `migrate-employee.cjs` uses it during import.
-- Back up `EMPLOYEE_PIN_SECRET` together with database backups. Changing or losing
-  it makes every stored PIN unverifiable.
-- Existing databases with the old `password` column: back up the table, then run
-  the one-time conversion (preview first; rerunning after conversion is a no-op):
-
-  ```bash
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs --commit
-  ```
-
-  It locks `employee`, fills `pin_hash`, adds `NOT NULL` and `UNIQUE`, and drops
-  `password` in one transaction. Applied to the dev database on 2026-10-28.
-
-- The unused ticket partial-payment feature was removed (2026-10-30): the schema
-  no longer has `ticket.partial_payment` or `ticket.partial_payment_datetime`
-  (every row was 0/NULL). Applied to the dev database on 2026-10-30, after no code
-  read them. Other existing databases:
+- Indexes `idx_ticket_client_number`, `item_category_name_normalized_idx`,
+  `item_subcategory_name_normalized_idx` and the unique `LOWER(type)` index on `id_type`.
+  See `schema/` for their definitions.
+- Removed the unused partial-payment columns:
 
   ```sql
   ALTER TABLE ticket
@@ -125,10 +41,61 @@
     DROP COLUMN IF EXISTS partial_payment_datetime;
   ```
 
-- `idx_ticket_client_number` (added 2026-10-29, applied to the dev database)
-  turns the per-client ticket list into an index scan.
+- Converted plain-text employee passwords to `pin_hash`. Back up the table, preview, then commit:
 
-- ID type names have an additional case-insensitive unique index on LOWER(type).
-  It prevents duplicate reference labels without changing existing names or their
-  case-sensitive foreign-key references. Existing databases need this index applied
-  separately, as with other CREATE definition changes.
+  ```bash
+  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs
+  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs --commit
+  ```
+
+## Access migration
+
+Install dependencies with `npm ci`, start Docker Desktop and keep the app closed.
+
+1. Put `superpawnconv.mdb` and `Pictureconv.mdb` in `database/migration/source/`.
+2. Check readiness. This also creates a missing `.env` with generated secrets.
+
+   ```bash
+   npm run migration:prepare
+   ```
+
+3. Start PostgreSQL.
+
+   ```bash
+   docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+   ```
+
+4. Import. This initializes the schema, imports records, writes photos to `images/`,
+   creates backups and validates the result. It needs an empty database and `images/` folder.
+
+   ```bash
+   npm run migration:execute
+   ```
+
+5. Review `migration/reports/` before running `npm run dev`. Failed imports are not erased
+   or resumed automatically.
+
+The database stores relative photo paths such as `images/items/<file>`. `source/`, `reports/`,
+`backups/` and `images/` are ignored by Git.
+
+## ID type mapping
+
+`migration/mappings/id-type-mapping.json` drives ID seeds, client migration and the audit.
+
+- A number with no type is kept as `Other`; empty slots are ignored.
+- Legacy-specific types are created inactive, so they are not offered for new records.
+- Populated `PHO` (phone number) or unknown codes block client import for review.
+- Missing numbers are reported and skipped; no identification numbers are invented.
+
+The read-only audit writes counts, without customer data, to `migration/reports/`:
+
+```bash
+node --env-file=.env database/migration/scripts/audit-id-types.cjs
+```
+
+## Employee PINs
+
+`employee.pin_hash` stores HMAC-SHA256(`EMPLOYEE_PIN_SECRET`, trimmed PIN). A keyed hash keeps
+PIN-only lookup and the `UNIQUE` constraint working, which a salted hash cannot.
+
+Back up `EMPLOYEE_PIN_SECRET` with the database. Changing or losing it makes every stored PIN unverifiable.

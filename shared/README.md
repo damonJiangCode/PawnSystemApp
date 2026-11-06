@@ -1,114 +1,19 @@
-# Shared Code Map
+# Shared
 
-`shared` contains TypeScript shapes and pure utilities used by both
-renderer and main.
+TypeScript shapes and pure utilities used across the frontend and Electron. React-only shared code
+belongs in `frontend/src/shared`.
 
-It is not a UI shared folder. Renderer-only shared code belongs in
-`frontend/src/shared`.
+| Path                 | Contains                                                     |
+| -------------------- | ------------------------------------------------------------ |
+| `models/`            | Business data, such as `client.model.ts`                     |
+| `payload-contracts/` | Method inputs and results, such as `CreatePawnTicketInput`   |
+| `api-contracts/`     | Methods available through `getAppApi()`, such as `TicketApi` |
+| `utils/`             | Pure logic, such as interest calculations                    |
 
-## Structure
+Contracts describe the communication surface and implement nothing. The wrappers that UI code
+calls live in `frontend/src/modules/*/*.api.ts`.
 
-```text
-shared/
-  models/
-  payload-contracts/
-  api-contracts/
-  utils/
-  test/
-```
+Code here must not import React or Electron, connect to a database or touch the filesystem.
 
-## Models
-
-`models/` contains business data shapes.
-
-Examples:
-
-- `client.model.ts`
-- `ticket.model.ts`
-- `item.model.ts`
-- `employee.model.ts`
-- `location.model.ts`
-
-Use models for data that exists as app business objects.
-
-## Payload Contracts
-
-`payload-contracts/` contains method inputs and result shapes.
-
-Examples:
-
-- `CreatePawnTicketInput`
-- `UpdateTicketInput`
-- `SearchItemsInput`
-- `OpenItemSearchWindowInput`
-
-Use payload contracts when data exists because an API method needs to receive or
-return it.
-
-## API Contracts
-
-`api-contracts/` contains method shapes exposed through `window.appAPI`.
-
-Examples:
-
-- `AppApi`
-- `ClientApi`
-- `TicketApi`
-- `ItemApi`
-- `WindowApi`
-
-These files describe the communication surface. They should not implement
-business logic.
-
-These are contracts, not renderer wrappers.
-
-```text
-api-contracts
-  = what appAPI methods exist
-  = what input and return type each method has
-  = shared by renderer, preload, and main
-
-frontend/src/modules/*/*.api.ts
-  = wrapper used by UI code
-  = calls getAppApi()
-  = belongs to the renderer module that uses it
-```
-
-Example:
-
-```text
-api-contracts/itemApi.contract.ts
-  defines item.searchItems(input)
-
-frontend/src/modules/items/item.api.ts
-  exports itemApi.searchItems(input)
-  calls getAppApi()?.item.searchItems(input)
-```
-
-## Utils
-
-`utils/` contains pure shared logic.
-
-Examples:
-
-- interest and ticket amount calculations (display previews; the server's
-  `server/src/ticket/ticket-finance.ts` is authoritative)
-- the legal earliest-pickup hold is server-only and not in `utils/`
-
-Rules:
-
-- no React
-- no Electron
-- no database connection
-- no filesystem access
-
-## Naming Rule
-
-Use this split:
-
-```text
-models = business data
-payload-contracts = input/result shapes
-api-contracts = method shapes
-utils = pure shared behavior
-```
+`utils/` calculations are display previews only. `server/src/ticket/ticket-finance.ts` is
+authoritative, and the legal pickup hold exists only on the server.
