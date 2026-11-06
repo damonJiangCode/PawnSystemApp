@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 import type { Item } from "../../../../../../shared/models/item.model";
-import { getImageUrl } from "../../../../shared/utils/imageUrl";
+import { getImageSrc } from "../../../../shared/api/http";
 
 interface TransactionItemImageProps {
   selectedItem?: Item;
@@ -21,13 +21,11 @@ const TransactionItemImage: React.FC<TransactionItemImageProps> = (props) => {
     sx,
   } = props;
   const [imageFailed, setImageFailed] = useState(false);
-  const imageSrc = imageFailed
-    ? null
-    : getImageUrl("item", selectedItem?.image_path);
+  const imageSrc = imageFailed ? null : getImageSrc(selectedItem?.image_url);
 
   useEffect(() => {
     setImageFailed(false);
-  }, [selectedItem?.image_path]);
+  }, [selectedItem?.image_url]);
 
   return (
     <Box

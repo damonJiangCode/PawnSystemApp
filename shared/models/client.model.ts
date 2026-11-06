@@ -25,7 +25,7 @@ export interface Client {
   email: string;
   phone: string;
   notes: string;
-  image_path: string;
+  image_url: string | null;
   image_updated_at?: Date | null;
   pickup_self_only: boolean;
   is_active: boolean;

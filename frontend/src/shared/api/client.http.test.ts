@@ -10,7 +10,7 @@ import defaultClient from "../../modules/clients/data/defaultClient.ts";
 
 test("activation PATCH sends the boolean and employee password without overwriting notes", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.pathname, "/client/42");
+    assert.equal(url.pathname, "/clients/42");
     assert.equal(init.method, "PATCH");
     assert.deepEqual(JSON.parse(init.body as string), {
       client: { is_active: false },
@@ -34,7 +34,7 @@ test("activation PATCH sends the boolean and employee password without overwriti
 test("hold PATCH sends only date and attribution; clear preserves explicit null", async (t) => {
   const bodies: unknown[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.pathname, "/client/42");
+    assert.equal(url.pathname, "/clients/42");
     assert.equal(init.method, "PATCH");
     bodies.push(JSON.parse(init.body as string));
     return Response.json({
@@ -56,7 +56,7 @@ test("hold PATCH sends only date and attribution; clear preserves explicit null"
 
 test("HTTP search encodes names and restores client and ID dates", async (t) => {
   t.mock.method(globalThis, "fetch", async (input: URL) => {
-    assert.equal(input.pathname, "/client");
+    assert.equal(input.pathname, "/clients");
     assert.equal(input.searchParams.get("firstName"), "Da &");
     assert.equal(input.searchParams.get("lastName"), "Wa");
     return Response.json([
@@ -106,7 +106,7 @@ test("HTTP search reports unavailable backend", async (t) => {
 
 test("DOB HTTP search uses the date endpoint and restores dates", async (t) => {
   t.mock.method(globalThis, "fetch", async (input: URL) => {
-    assert.equal(input.pathname, "/client/by-dob");
+    assert.equal(input.pathname, "/clients/by-dob");
     assert.equal(input.searchParams.get("dateOfBirth"), "2000-02-29");
     assert.equal(input.searchParams.has("firstName"), false);
     return Response.json([
@@ -132,14 +132,14 @@ test("DOB HTTP search surfaces invalid date errors", async (t) => {
 
 test("create sends only editable fields, a date-only DOB and restores the result", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.pathname, "/client");
+    assert.equal(url.pathname, "/clients");
     assert.equal(init.method, "POST");
     const body = JSON.parse(init.body as string);
     assert.equal(body.client.date_of_birth, "1990-01-01");
     assert.equal("redeem_count" in body.client, false);
     assert.equal("client_number" in body.client, false);
     assert.equal("updated_at" in body.client, false);
-    assert.equal("image_path" in body.client, false);
+    assert.equal("image_url" in body.client, false);
     assert.deepEqual(body.photo, {
       fileName: "test.png",
       base64: "fixture-photo",
@@ -193,7 +193,7 @@ test("create preserves employee field errors for the form", async (t) => {
 
 test("update sends a partial PATCH with an optional photo and no server-owned fields", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {
-    assert.equal(url.pathname, "/client/42");
+    assert.equal(url.pathname, "/clients/42");
     assert.equal(init.method, "PATCH");
     assert.deepEqual(JSON.parse(init.body as string), {
       client: { phone: "" },
@@ -203,7 +203,7 @@ test("update sends a partial PATCH with an optional photo and no server-owned fi
       client_number: 42,
       date_of_birth: "1990-01-01",
       updated_at: "2026-10-20T00:00:00Z",
-      image_path: "images/clients/server-name.png",
+      image_url: "/clients/42/image?v=abc12345",
     });
   });
   const client = await updateClientHttp({
@@ -211,7 +211,7 @@ test("update sends a partial PATCH with an optional photo and no server-owned fi
       client_number: 42,
       phone: "",
       redeem_count: 999,
-      image_path: "untrusted",
+      image_url: "untrusted",
     },
     photo: { fileName: "photo.png", base64: "test-image" },
   });

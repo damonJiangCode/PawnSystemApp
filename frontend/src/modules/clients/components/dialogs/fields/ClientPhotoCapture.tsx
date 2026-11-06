@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import type { Client } from "../../../../../../../shared/models/client.model";
-import { getClientImageUrl } from "../../../hooks/useClientImage";
+import { getImageSrc } from "../../../../../shared/api/http";
 
 interface ClientPhotoCaptureProps {
   client: Client;
@@ -63,8 +63,8 @@ const ClientPhotoCapture: React.FC<ClientPhotoCaptureProps> = (props) => {
   }, [active]);
 
   useEffect(() => {
-    setPhotoData(previewSrc ?? getClientImageUrl(client.image_path));
-  }, [client.client_number, client.image_path, previewSrc, active]);
+    setPhotoData(previewSrc ?? getImageSrc(client.image_url));
+  }, [client.client_number, client.image_url, previewSrc, active]);
 
   const handleTakePhoto = () => {
     const video = videoRef.current;

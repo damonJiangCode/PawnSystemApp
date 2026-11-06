@@ -8,7 +8,6 @@ business logic, and database access.
 ```text
 main/
   index.ts
-  image/
   ipc/
   window/
   modules/
@@ -16,7 +15,6 @@ main/
 ```
 
 - `index.ts`: starts Electron and opens the main window.
-- `image/`: registers the controlled `pawn-image://` protocol.
 - `ipc/`: channel names and handler registration.
 - `window/`: app window creation, reuse, and window-action handlers.
 - Root-level `database/`: shared connection, schema, seed data, views, and initializer.
@@ -69,10 +67,10 @@ focuses its existing window; closing it removes that entry from the map.
 
 ## Modules
 
-Clients, employees, tickets and items moved to the NestJS server (`/client`,
+Clients, employees, tickets and items moved to the NestJS server (`/clients`,
 `/employees`, `/tickets`, `/items`); none of them has IPC handlers left, and
-Electron main no longer needs `EMPLOYEE_PIN_SECRET`. Item photos are still read
-through the Electron image protocol.
+Electron main no longer needs `EMPLOYEE_PIN_SECRET`. Photos are read from the
+server through each record's `image_url`.
 
 ### reports
 
@@ -113,8 +111,6 @@ early validation message.
 ```text
 shared/
   createFieldError.ts
-  imageStorage.ts
 ```
 
 - `createFieldError.ts`: standard field error shape.
-- `imageStorage.ts`: saves images and safely resolves stored image paths.

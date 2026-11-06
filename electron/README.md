@@ -3,7 +3,6 @@
 - `src/main/index.ts`: application lifecycle and native menus.
 - `src/main/window/`: window creation, focus, sizing and renderer URLs.
 - `src/main/ipc/`: registration and channel names for the preload bridge.
-- `src/main/image/`: controlled legacy image protocol.
 - `src/main/modules/`: remaining business workflows, pending HTTP conversion.
 - `src/preload/index.cjs`: controlled methods exposed to the React frontend.
 - `tsconfig.json`: main-process compilation; output is root `.electron-build/`.

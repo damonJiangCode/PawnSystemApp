@@ -15,7 +15,7 @@ export interface Item {
   latest_ticket_number?: number;
   latest_ticket_status?: Ticket["status"];
   is_loadable?: boolean;
-  image_path?: string;
+  image_url?: string | null;
   draft_id?: string;
   is_loaded_draft?: boolean;
 }

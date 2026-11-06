@@ -111,7 +111,7 @@ test("getAppApi serves client and reference over HTTP and keeps desktop domains"
   assert.equal(api.report.loadDailyReport, loadDailyReport);
   await api.reference.loadEyeColors();
   await api.client.searchClients("A", "B");
-  assert.deepEqual(paths, ["/reference/eye-colors", "/client"]);
+  assert.deepEqual(paths, ["/reference/eye-colors", "/clients"]);
 });
 
 test("getAppApi is unavailable outside the desktop shell", (t) => {

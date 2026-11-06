@@ -50,7 +50,6 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
   const [modelNumber, setModelNumber] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [amount, setAmount] = useState<number | "">("");
-  const [imagePath, setImagePath] = useState("");
   // A newly taken photo stays here until Save sends it with the item.
   const [newPhoto, setNewPhoto] = useState<ItemPhotoInput>();
   const [categoryError, setCategoryError] = useState("");
@@ -88,7 +87,6 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
     setModelNumber(item?.model_number ?? "");
     setSerialNumber(item?.serial_number ?? "");
     setAmount(item?.amount ?? "");
-    setImagePath(item?.image_path ?? "");
     setNewPhoto(undefined);
     setCategoryError("");
     setQuantityError("");
@@ -357,7 +355,7 @@ const ItemEditDialog: React.FC<ItemEditDialogProps> = ({
                 }}
               >
                 <ItemPhotoCapture
-                  imagePath={imagePath}
+                  imageUrl={item?.image_url}
                   itemNumber={item?.item_number}
                   active={open}
                   previewSize={230}

@@ -24,7 +24,7 @@ const itemJson = {
   latest_ticket_number: 10,
   latest_ticket_status: "pawned",
   is_loadable: false,
-  image_path: "images/items/a.png",
+  image_url: "/items/40/image?v=abc12345",
 };
 
 test("loads a ticket's items from the ticket sub-resource", async (t) => {

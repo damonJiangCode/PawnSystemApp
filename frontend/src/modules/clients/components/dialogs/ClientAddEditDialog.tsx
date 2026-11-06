@@ -86,7 +86,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
       return;
     }
     setClient(clientExisted || defaultClient);
-    setPhotoCaptured(Boolean(clientExisted?.image_path));
+    setPhotoCaptured(Boolean(clientExisted?.image_url));
     setPendingPhoto(null);
     setCameraActive(true);
     setShowPasswordDialog(false);

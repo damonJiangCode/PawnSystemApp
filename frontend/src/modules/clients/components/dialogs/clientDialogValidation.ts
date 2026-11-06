@@ -148,7 +148,7 @@ export const buildPendingClientUpdate = ({
     nextErrors.country = "Country is required.";
   }
 
-  if (!isEditMode && !photoCaptured && !client.image_path?.trim()) {
+  if (!isEditMode && !photoCaptured && !client.image_url) {
     nextErrors.photo = "Client photo is required.";
   }
 

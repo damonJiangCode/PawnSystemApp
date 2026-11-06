@@ -6,7 +6,7 @@ import type {
   PaymentCompletedEvent,
 } from "../../../../../shared/payload-contracts/window.contract";
 import { getAppApi } from "../../../shared/api/app.api";
-import { getClientImageUrl } from "../../clients/hooks/useClientImage";
+import { getImageSrc } from "../../../shared/api/http";
 import { ticketApi } from "../ticket.api";
 import { createPaymentColumns } from "./payment.columns";
 import { loadAvailablePaymentRows, processPaymentRows } from "./payment.data";
@@ -263,7 +263,7 @@ export const usePaymentWindow = () => {
       }
 
       setTicketSearchPreview(preview);
-      setTicketSearchClientImage(getClientImageUrl(preview.client.image_path));
+      setTicketSearchClientImage(getImageSrc(preview.client.image_url));
       setTicketSearchDialogOpen(true);
     } catch (err) {
       console.error(err);

@@ -5,6 +5,10 @@ export const API_BASE_URL: string =
 export const apiUrl = (path: string, baseUrl = API_BASE_URL) =>
   new URL(`${baseUrl.replace(/\/$/, "")}${path}`);
 
+// The server decides the photo's URL; only its address is added here.
+export const getImageSrc = (imageUrl?: string | null) =>
+  imageUrl ? apiUrl(imageUrl).toString() : null;
+
 export const jsonBody = (method: string, body: unknown): RequestInit => ({
   method,
   headers: { "Content-Type": "application/json" },

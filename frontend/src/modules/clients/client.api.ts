@@ -61,7 +61,6 @@ const normalizeSaveClientInput = (input: SaveClientInput): SaveClientInput => ({
     email: input.client.email?.trim() ?? "",
     phone: input.client.phone?.trim() ?? "",
     notes: input.client.notes?.trim() ?? "",
-    image_path: input.client.image_path?.trim() ?? "",
   },
   identifications: (input.identifications ?? []).map((id) => ({
     ...id,

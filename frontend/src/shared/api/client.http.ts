@@ -33,7 +33,7 @@ export async function createClientHttp(
     notes: source.notes,
     pickup_self_only: source.pickup_self_only,
   };
-  const result = await requestJson<Client>(apiUrl(`/client`, baseUrl), {
+  const result = await requestJson<Client>(apiUrl(`/clients`, baseUrl), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -84,7 +84,7 @@ export async function updateClientHttp(
         field === "date_of_birth" ? formatIsoDate(value as Date) : value;
   }
   const result = await requestJson<Client>(
-    apiUrl(`/client/${input.client.client_number}`, baseUrl),
+    apiUrl(`/clients/${input.client.client_number}`, baseUrl),
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -108,7 +108,7 @@ export async function searchClientsHttp(
   lastName: string,
   baseUrl = API_BASE_URL,
 ): Promise<Client[]> {
-  const url = apiUrl(`/client`, baseUrl);
+  const url = apiUrl(`/clients`, baseUrl);
   url.search = new URLSearchParams({ firstName, lastName }).toString();
 
   return requestClients(url);
@@ -118,7 +118,7 @@ export async function searchClientsByDobHttp(
   dateOfBirth: string,
   baseUrl = API_BASE_URL,
 ): Promise<Client[]> {
-  const url = apiUrl(`/client/by-dob`, baseUrl);
+  const url = apiUrl(`/clients/by-dob`, baseUrl);
   url.search = new URLSearchParams({ dateOfBirth }).toString();
   return requestClients(url);
 }

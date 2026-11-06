@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { getImageUrl } from "../../../../shared/utils/imageUrl";
+import { getImageSrc } from "../../../../shared/api/http";
 
 interface ItemPhotoCaptureProps {
-  imagePath?: string;
+  imageUrl?: string | null;
   itemNumber?: number;
   active?: boolean;
   previewSize?: number;
@@ -12,7 +12,7 @@ interface ItemPhotoCaptureProps {
 }
 
 const ItemPhotoCapture: React.FC<ItemPhotoCaptureProps> = ({
-  imagePath,
+  imageUrl,
   itemNumber,
   active = false,
   previewSize = 220,
@@ -62,8 +62,8 @@ const ItemPhotoCapture: React.FC<ItemPhotoCaptureProps> = ({
   }, [active]);
 
   useEffect(() => {
-    setPhotoData(getImageUrl("item", imagePath));
-  }, [imagePath]);
+    setPhotoData(getImageSrc(imageUrl));
+  }, [imageUrl]);
 
   const handleTakePhoto = () => {
     const video = videoRef.current;

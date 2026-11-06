@@ -1,31 +1,28 @@
 import { useEffect, useState } from "react";
-import { getImageUrl } from "../../../shared/utils/imageUrl";
+import { getImageSrc } from "../../../shared/api/http";
 
-export const getClientImageUrl = (imagePath?: string) =>
-  getImageUrl("client", imagePath);
-
-export const useClientImage = (imagePath?: string) => {
+export const useClientImage = (imageUrl?: string | null) => {
   const [src, setSrc] = useState<string | null>(null);
 
   useEffect(() => {
     setSrc(null);
 
-    const imageUrl = getClientImageUrl(imagePath);
+    const imageSrc = getImageSrc(imageUrl);
 
-    if (!imageUrl) {
+    if (!imageSrc) {
       return;
     }
 
     const image = new Image();
-    image.onload = () => setSrc(imageUrl);
+    image.onload = () => setSrc(imageSrc);
     image.onerror = () => setSrc(null);
-    image.src = imageUrl;
+    image.src = imageSrc;
 
     return () => {
       image.onload = null;
       image.onerror = null;
     };
-  }, [imagePath]);
+  }, [imageUrl]);
 
   return src;
 };

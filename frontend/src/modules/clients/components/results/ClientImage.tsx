@@ -9,7 +9,7 @@ interface ClientImageProps {
 }
 
 const ClientImage: React.FC<ClientImageProps> = ({ client }) => {
-  const imageSrc = useClientImage(client?.image_path);
+  const imageSrc = useClientImage(client?.image_url);
   const photoDate = client?.image_updated_at
     ? formatIsoDate(client.image_updated_at)
     : "";
@@ -42,7 +42,7 @@ const ClientImage: React.FC<ClientImageProps> = ({ client }) => {
           flexShrink: 0,
         }}
       >
-        {client?.image_path
+        {client?.image_url
           ? `Photo: ${photoDate || "date unknown"}`
           : "Photo: none"}
       </Typography>

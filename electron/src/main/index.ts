@@ -1,8 +1,4 @@
 import { registerHandlers } from "./ipc/register.ts";
-import {
-  registerImageProtocol,
-  registerImageScheme,
-} from "./image/image.protocol.ts";
 import { hasMainWindow, openMainWindow } from "./window/window.main.ts";
 import { openManagedWindow } from "./window/window.manager.ts";
 
@@ -10,7 +6,6 @@ const { app, BrowserWindow, Menu } =
   require("electron/main") as typeof import("electron");
 
 app.setName("ME");
-registerImageScheme();
 
 type MenuActionConfig = {
   id: string;
@@ -218,7 +213,6 @@ const createAppMenu = () => {
 };
 
 app.whenReady().then(() => {
-  registerImageProtocol();
   openMainWindow();
   createAppMenu();
   registerHandlers();

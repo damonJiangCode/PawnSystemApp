@@ -25,7 +25,7 @@ const defaultClient: Client = {
   email: "",
   phone: "",
   notes: "",
-  image_path: "",
+  image_url: null,
   image_updated_at: null,
   pickup_self_only: false,
   is_active: true,
