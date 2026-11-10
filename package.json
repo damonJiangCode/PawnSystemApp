@@ -15,6 +15,7 @@
     "dev": "npm-run-all --print-label --parallel dev:frontend dev:server dev:main dev:app",
     "typecheck:main": "tsc --noEmit -p electron/tsconfig.json",
     "typecheck:renderer": "tsc --noEmit -p frontend/tsconfig.json",
+    "typecheck": "npm run typecheck:main && npm run typecheck:renderer",
     "build:main": "node scripts/prepareElectronBuild.cjs && tsc -p electron/tsconfig.json",
     "build": "npm run build:main && npm run typecheck:renderer && vite build --config frontend/vite.config.ts",
     "db:init": "npm run build:main && node .electron-build/database/runInit.js",
