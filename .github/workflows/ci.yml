@@ -2,9 +2,18 @@ name: CI
 
 on:
   push:
-    branches: ["master", "feature/*", "hotfix/*"]
+    branches: ["master"]
   pull_request:
     branches: ["master"]
+
+# read-only token: CI only needs to check out code
+permissions:
+  contents: read
+
+# cancel an older run when a newer commit arrives on the same branch/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   app:
