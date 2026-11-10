@@ -1,0 +1,172 @@
+import { Test } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
+import { Pool } from 'pg';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+import { ReportModule } from './report.module.js';
+
+const row = (overrides: Record<string, unknown> = {}) => ({
+  ticket_number: 10,
+  ticket_amount: '100.0',
+  ticket_description: 'RING',
+  client_name: 'LEE, ANN',
+  gender: 'female',
+  eye_color: 'BROWN',
+  identifications: 'Passport: P1',
+  item_number: 1,
+  quantity: 1,
+  item_description: 'GOLD RING',
+  brand_name: null,
+  model_number: null,
+  serial_number: null,
+  item_amount: '100.0',
+  ...overrides,
+});
+
+describe('Report HTTP (mock PostgreSQL)', () => {
+  let app: INestApplication;
+  let baseUrl: string;
+  const pool = { query: vi.fn() };
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({ imports: [ReportModule] })
+      .overrideProvider(Pool)
+      .useValue(pool)
+      .compile();
+    app = module.createNestApplication({ logger: false });
+    await app.listen(0, '127.0.0.1');
+    baseUrl = await app.getUrl();
+  });
+  afterAll(async () => app?.close());
+  beforeEach(() => {
+    pool.query.mockReset().mockResolvedValue({ rows: [] });
+  });
+
+  const daily = (query: string) => fetch(`${baseUrl}/reports/daily?${query}`);
+
+  it('groups items under tickets and totals quantities and amounts', async () => {
+    pool.query.mockResolvedValue({
+      rows: [
+        row(),
+        row({ item_number: 2, quantity: 3, item_amount: '20.5' }),
+        row({
+          ticket_number: 11,
+          ticket_amount: '50.5',
+          item_number: null,
+          quantity: null,
+          item_amount: null,
+        }),
+      ],
+    });
+
+    const response = await daily('from_date=2026-11-01&to_date=2026-11-02');
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toMatchObject({
+      from_date: '2026-11-01',
+      to_date: '2026-11-02',
+      missing_item_ticket_numbers: [11],
+      total_tickets: 2,
+      total_items: 4,
+      total_amount: 150.5,
+    });
+    expect(body.tickets[0]).toEqual({
+      ticket_number: 10,
+      amount: 100,
+      description: 'RING',
+      client_name: 'LEE, ANN',
+      gender: 'female',
+      eye_color: 'BROWN',
+      identifications: 'Passport: P1',
+      items: [
+        {
+          item_number: 1,
+          quantity: 1,
+          description: 'GOLD RING',
+          brand_name: '',
+          model_number: '',
+          serial_number: '',
+          amount: 100,
+        },
+        expect.objectContaining({ item_number: 2, quantity: 3, amount: 20.5 }),
+      ],
+    });
+    expect(body.tickets[1].items).toEqual([]);
+  });
+
+  it('bounds the days in the shop time zone with SQL parameters', async () => {
+    await daily('from_date=%202026-11-01%20&to_date=2026-11-01');
+
+    const [sql, values] = pool.query.mock.calls[0];
+    expect(values).toEqual(['2026-11-01', '2026-11-01']);
+    expect(sql).toContain(
+      "t.transaction_datetime >= ($1::date::timestamp AT TIME ZONE 'America/Regina')",
+    );
+    expect(sql).toContain(
+      "t.transaction_datetime < (($2::date + 1)::timestamp AT TIME ZONE 'America/Regina')",
+    );
+  });
+
+  it('accepts a range of up to one year', async () => {
+    const response = await daily('from_date=2025-11-11&to_date=2026-11-10');
+    expect(response.status).toBe(200);
+  });
+
+  it.each([
+    ['', 'from_date', 'Enter a valid From date.'],
+    ['from_date=2026-11-01', 'to_date', 'Enter a valid To date.'],
+    [
+      'from_date=11-01-2026&to_date=2026-11-01',
+      'from_date',
+      'Enter a valid From date.',
+    ],
+    [
+      'from_date=2026-02-30&to_date=2026-03-01',
+      'from_date',
+      'Enter a valid From date.',
+    ],
+    [
+      'from_date=2026-11-01&to_date=2026-13-01',
+      'to_date',
+      'Enter a valid To date.',
+    ],
+    [
+      'from_date=2026-11-02&to_date=2026-11-01',
+      'to_date',
+      'To date must be the same as or later than From date.',
+    ],
+    [
+      'from_date=2025-11-10&to_date=2026-11-10',
+      'to_date',
+      'Date range cannot exceed 1 year.',
+    ],
+    [
+      'from_date=2026-11-01&to_date=2026-11-01&extra=1',
+      'extra',
+      'property extra should not exist',
+    ],
+  ])('rejects %s before SQL', async (query, field, message) => {
+    const response = await daily(query);
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ field, message });
+    expect(pool.query).not.toHaveBeenCalled();
+  });
+
+  it('reports a database failure as 500 without its details', async () => {
+    pool.query.mockRejectedValue(new Error('Private database error'));
+
+    const response = await daily('from_date=2026-11-01&to_date=2026-11-01');
+
+    expect(response.status).toBe(500);
+    expect(JSON.stringify(await response.json())).not.toContain('Private');
+  });
+});

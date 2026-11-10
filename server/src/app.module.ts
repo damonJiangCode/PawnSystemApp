@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module.js';
 import { EmployeeModule } from './employee/employee.module.js';
 import { ItemModule } from './item/item.module.js';
 import { ReferenceModule } from './reference/reference.module.js';
+import { ReportModule } from './report/report.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
 import { fileURLToPath } from 'node:url';
 
@@ -23,6 +24,7 @@ import { fileURLToPath } from 'node:url';
     EmployeeModule,
     ItemModule,
     ReferenceModule,
+    ReportModule,
     TicketModule,
     DatabaseModule,
   ],
