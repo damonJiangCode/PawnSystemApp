@@ -12,4 +12,9 @@ export class ReportController {
   loadDaily(@Query() range: ReportDateRangeQueryDto) {
     return this.service.loadDaily(range);
   }
+
+  @Get('buyback')
+  loadBuyback(@Query() range: ReportDateRangeQueryDto) {
+    return this.service.loadBuyback(range);
+  }
 }

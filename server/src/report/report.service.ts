@@ -95,6 +95,27 @@ export class ReportService {
     };
   }
 
+  async loadBuyback(range: ReportDateRangeQueryDto) {
+    this.requireValidRange(range);
+    const rows = await this.repository.loadBuybackRows(
+      range.from_date,
+      range.to_date,
+    );
+    const list = rows.map((row) => ({
+      ...row,
+      pickup_amount_paid: roundMoney(row.pickup_amount_paid),
+    }));
+
+    return {
+      from_date: range.from_date,
+      to_date: range.to_date,
+      rows: list,
+      total_buyback_price: roundMoney(
+        list.reduce((sum, row) => sum + row.pickup_amount_paid, 0),
+      ),
+    };
+  }
+
   // YYYY-MM-DD strings compare correctly as text.
   private requireValidRange({ from_date, to_date }: ReportDateRangeQueryDto) {
     if (from_date > to_date) {

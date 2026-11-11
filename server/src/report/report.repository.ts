@@ -19,6 +19,14 @@ export type DailyReportRow = {
   item_amount: number;
 };
 
+export type BuybackReportRow = {
+  ticket_number: number;
+  pickup_datetime: Date;
+  pickup_amount_paid: number;
+  description: string;
+  client_name: string;
+};
+
 const clientNameSql = (alias: string) => `
   CONCAT(
     UPPER(${alias}.last_name), ', ', UPPER(${alias}.first_name),
@@ -90,6 +98,36 @@ export class ReportRepository {
       model_number: text(row.model_number),
       serial_number: text(row.serial_number),
       item_amount: Number(row.item_amount ?? 0),
+    }));
+  }
+
+  // Tickets picked up (bought back) between the two shop days.
+  async loadBuybackRows(
+    fromDate: string,
+    toDate: string,
+  ): Promise<BuybackReportRow[]> {
+    const { rows } = await this.pool.query(
+      `SELECT
+         t.ticket_number,
+         t.pickup_datetime,
+         t.pickup_amount_paid,
+         t.description,
+         ${clientNameSql('c')} AS client_name
+       FROM ticket t
+       LEFT JOIN client c ON c.client_number = t.client_number
+       WHERE t.status = 'pawned_picked_up'
+         AND t.pickup_datetime >= ${shopDayStart('$1::date')}
+         AND t.pickup_datetime < ${shopDayStart('($2::date + 1)')}
+       ORDER BY t.pickup_datetime, t.ticket_number`,
+      [fromDate, toDate],
+    );
+
+    return rows.map((row: Record<string, unknown>) => ({
+      ticket_number: Number(row.ticket_number),
+      pickup_datetime: row.pickup_datetime as Date,
+      pickup_amount_paid: Number(row.pickup_amount_paid ?? 0),
+      description: text(row.description),
+      client_name: text(row.client_name),
     }));
   }
 }

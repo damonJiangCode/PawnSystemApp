@@ -169,4 +169,93 @@ describe('Report HTTP (mock PostgreSQL)', () => {
     expect(response.status).toBe(500);
     expect(JSON.stringify(await response.json())).not.toContain('Private');
   });
+
+  describe('GET /reports/buyback', () => {
+    const buyback = (query: string) =>
+      fetch(`${baseUrl}/reports/buyback?${query}`);
+
+    it('lists picked-up tickets with numeric amounts and a rounded total', async () => {
+      pool.query.mockResolvedValue({
+        rows: [
+          {
+            ticket_number: 20,
+            pickup_datetime: new Date('2026-11-02T01:00:00Z'),
+            pickup_amount_paid: '130.10',
+            description: 'WATCH',
+            client_name: 'LEE, ANN',
+          },
+          {
+            ticket_number: 21,
+            pickup_datetime: new Date('2026-11-02T03:00:00Z'),
+            pickup_amount_paid: '0.20',
+            description: null,
+            client_name: null,
+          },
+        ],
+      });
+
+      const response = await buyback('from_date=2026-11-01&to_date=2026-11-01');
+
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({
+        from_date: '2026-11-01',
+        to_date: '2026-11-01',
+        rows: [
+          {
+            ticket_number: 20,
+            pickup_datetime: '2026-11-02T01:00:00.000Z',
+            pickup_amount_paid: 130.1,
+            description: 'WATCH',
+            client_name: 'LEE, ANN',
+          },
+          {
+            ticket_number: 21,
+            pickup_datetime: '2026-11-02T03:00:00.000Z',
+            pickup_amount_paid: 0.2,
+            description: '',
+            client_name: '',
+          },
+        ],
+        total_buyback_price: 130.3,
+      });
+    });
+
+    it('filters picked-up tickets by pickup time in the shop time zone', async () => {
+      await buyback('from_date=2026-11-01&to_date=2026-11-03');
+
+      const [sql, values] = pool.query.mock.calls[0];
+      expect(values).toEqual(['2026-11-01', '2026-11-03']);
+      expect(sql).toContain("t.status = 'pawned_picked_up'");
+      expect(sql).toContain(
+        "t.pickup_datetime >= ($1::date::timestamp AT TIME ZONE 'America/Regina')",
+      );
+      expect(sql).toContain(
+        "t.pickup_datetime < (($2::date + 1)::timestamp AT TIME ZONE 'America/Regina')",
+      );
+    });
+
+    it.each([
+      [
+        'from_date=bad&to_date=2026-11-01',
+        'from_date',
+        'Enter a valid From date.',
+      ],
+      [
+        'from_date=2026-11-02&to_date=2026-11-01',
+        'to_date',
+        'To date must be the same as or later than From date.',
+      ],
+      [
+        'from_date=2025-11-10&to_date=2026-11-10',
+        'to_date',
+        'Date range cannot exceed 1 year.',
+      ],
+    ])('rejects %s before SQL', async (query, field, message) => {
+      const response = await buyback(query);
+
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({ field, message });
+      expect(pool.query).not.toHaveBeenCalled();
+    });
+  });
 });
