@@ -17,4 +17,9 @@ export class ReportController {
   loadBuyback(@Query() range: ReportDateRangeQueryDto) {
     return this.service.loadBuyback(range);
   }
+
+  @Get('interest')
+  loadInterest(@Query() range: ReportDateRangeQueryDto) {
+    return this.service.loadInterest(range);
+  }
 }

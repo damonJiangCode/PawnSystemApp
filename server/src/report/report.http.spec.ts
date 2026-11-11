@@ -258,4 +258,115 @@ describe('Report HTTP (mock PostgreSQL)', () => {
       expect(pool.query).not.toHaveBeenCalled();
     });
   });
+
+  describe('GET /reports/interest', () => {
+    const interest = (query: string) =>
+      fetch(`${baseUrl}/reports/interest?${query}`);
+
+    it('lists interest payments with numeric amounts and a rounded total', async () => {
+      pool.query.mockImplementation(async (sql: string) =>
+        sql.includes('MIN(payment_datetime)')
+          ? { rows: [{ start_date: '2026-10-29' }] }
+          : {
+              rows: [
+                {
+                  ticket_number: 30,
+                  months_paid: 2,
+                  amount_paid: '60.10',
+                  payment_datetime: new Date('2026-11-02T01:00:00Z'),
+                  description: 'LAPTOP',
+                  client_name: 'LEE, ANN',
+                },
+                {
+                  ticket_number: 31,
+                  months_paid: 1,
+                  amount_paid: '0.20',
+                  payment_datetime: new Date('2026-11-02T02:00:00Z'),
+                  description: null,
+                  client_name: null,
+                },
+              ],
+            },
+      );
+
+      const response = await interest(
+        'from_date=2026-11-01&to_date=2026-11-01',
+      );
+
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({
+        from_date: '2026-11-01',
+        to_date: '2026-11-01',
+        records_start_date: '2026-10-29',
+        rows: [
+          {
+            ticket_number: 30,
+            months_paid: 2,
+            amount_paid: 60.1,
+            payment_datetime: '2026-11-02T01:00:00.000Z',
+            description: 'LAPTOP',
+            client_name: 'LEE, ANN',
+          },
+          {
+            ticket_number: 31,
+            months_paid: 1,
+            amount_paid: 0.2,
+            payment_datetime: '2026-11-02T02:00:00.000Z',
+            description: '',
+            client_name: '',
+          },
+        ],
+        total_interest_paid: 60.3,
+      });
+    });
+
+    it('filters payments by payment time in the shop time zone', async () => {
+      await interest('from_date=2026-09-21&to_date=2026-09-30');
+
+      const [sql, values] = pool.query.mock.calls.find(([text]) =>
+        String(text).includes('FROM interest_payment ip'),
+      )!;
+      expect(values).toEqual(['2026-09-21', '2026-09-30']);
+      expect(sql).toContain(
+        "ip.payment_datetime >= ($1::date::timestamp AT TIME ZONE 'America/Regina')",
+      );
+      expect(sql).toContain(
+        "ip.payment_datetime < (($2::date + 1)::timestamp AT TIME ZONE 'America/Regina')",
+      );
+    });
+
+    it('returns an empty report with a null start date before any payment', async () => {
+      const response = await interest(
+        'from_date=2026-01-01&to_date=2026-01-31',
+      );
+
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({
+        from_date: '2026-01-01',
+        to_date: '2026-01-31',
+        records_start_date: null,
+        rows: [],
+        total_interest_paid: 0,
+      });
+      const startSql = pool.query.mock.calls
+        .map(([text]) => String(text))
+        .find((text) => text.includes('MIN(payment_datetime)'));
+      expect(startSql).toContain("AT TIME ZONE 'America/Regina'");
+    });
+
+    it.each([
+      [
+        'from_date=2026-11-02&to_date=2026-11-01',
+        'to_date',
+        'To date must be the same as or later than From date.',
+      ],
+      ['from_date=2026-11-01&to_date=bad', 'to_date', 'Enter a valid To date.'],
+    ])('rejects %s before SQL', async (query, field, message) => {
+      const response = await interest(query);
+
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({ field, message });
+      expect(pool.query).not.toHaveBeenCalled();
+    });
+  });
 });

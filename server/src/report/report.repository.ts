@@ -27,6 +27,15 @@ export type BuybackReportRow = {
   client_name: string;
 };
 
+export type InterestReportRow = {
+  ticket_number: number;
+  months_paid: number;
+  amount_paid: number;
+  payment_datetime: Date;
+  description: string;
+  client_name: string;
+};
+
 const clientNameSql = (alias: string) => `
   CONCAT(
     UPPER(${alias}.last_name), ', ', UPPER(${alias}.first_name),
@@ -129,5 +138,47 @@ export class ReportRepository {
       description: text(row.description),
       client_name: text(row.client_name),
     }));
+  }
+
+  // Interest (extension) payments made between the two shop days.
+  async loadInterestRows(
+    fromDate: string,
+    toDate: string,
+  ): Promise<InterestReportRow[]> {
+    const { rows } = await this.pool.query(
+      `SELECT
+         ip.ticket_number,
+         ip.months_paid,
+         ip.amount_paid,
+         ip.payment_datetime,
+         t.description,
+         ${clientNameSql('c')} AS client_name
+       FROM interest_payment ip
+       INNER JOIN ticket t ON t.ticket_number = ip.ticket_number
+       LEFT JOIN client c ON c.client_number = t.client_number
+       WHERE ip.payment_datetime >= ${shopDayStart('$1::date')}
+         AND ip.payment_datetime < ${shopDayStart('($2::date + 1)')}
+       ORDER BY ip.payment_datetime, ip.ticket_number`,
+      [fromDate, toDate],
+    );
+
+    return rows.map((row: Record<string, unknown>) => ({
+      ticket_number: Number(row.ticket_number),
+      months_paid: Number(row.months_paid ?? 0),
+      amount_paid: Number(row.amount_paid ?? 0),
+      payment_datetime: row.payment_datetime as Date,
+      description: text(row.description),
+      client_name: text(row.client_name),
+    }));
+  }
+
+  // The shop day of the first recorded interest payment, or null if none yet.
+  async loadInterestRecordsStartDate(): Promise<string | null> {
+    const { rows } = await this.pool.query(
+      `SELECT TO_CHAR(MIN(payment_datetime) AT TIME ZONE '${SHOP_TIME_ZONE}', 'YYYY-MM-DD')
+                AS start_date
+       FROM interest_payment`,
+    );
+    return (rows[0]?.start_date as string | null) ?? null;
   }
 }

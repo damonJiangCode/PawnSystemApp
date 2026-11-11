@@ -116,6 +116,26 @@ export class ReportService {
     };
   }
 
+  async loadInterest(range: ReportDateRangeQueryDto) {
+    this.requireValidRange(range);
+    // interest_payment is only written by this system, so days before the
+    // first recorded payment have no data; records_start_date lets the UI say so.
+    const [rows, recordsStartDate] = await Promise.all([
+      this.repository.loadInterestRows(range.from_date, range.to_date),
+      this.repository.loadInterestRecordsStartDate(),
+    ]);
+
+    return {
+      from_date: range.from_date,
+      to_date: range.to_date,
+      records_start_date: recordsStartDate,
+      rows,
+      total_interest_paid: roundMoney(
+        rows.reduce((sum, row) => sum + row.amount_paid, 0),
+      ),
+    };
+  }
+
   // YYYY-MM-DD strings compare correctly as text.
   private requireValidRange({ from_date, to_date }: ReportDateRangeQueryDto) {
     if (from_date > to_date) {
