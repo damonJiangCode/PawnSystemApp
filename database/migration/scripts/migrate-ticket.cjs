@@ -182,6 +182,7 @@ const parseLegacyTime = (value) => {
   const minute = Number(match[2]);
   const second = Number(match[3]);
   const meridiem = normalizeUpper(match[4]);
+  let inferredPm = false;
   if (meridiem) {
     if (hour < 1 || hour > 12) return { value: null, reason: "invalid" };
     if (meridiem === "AM") hour = hour === 12 ? 0 : hour;
@@ -189,7 +190,9 @@ const parseLegacyTime = (value) => {
   } else if (hour >= 1 && hour <= 8) {
     // Some legacy times are 12-hour without AM/PM. The shop opens at 9:30
     // (10:00 on Sunday) and closes by 21:00, so 1:00-8:59 can only be PM.
+    // Each one is counted in the migration report so the rule can be audited.
     hour += 12;
+    inferredPm = true;
   }
   if (hour > 23 || minute > 59 || second > 59) {
     return { value: null, reason: "invalid" };
@@ -199,6 +202,7 @@ const parseLegacyTime = (value) => {
       .map((part) => String(part).padStart(2, "0"))
       .join(":"),
     reason: null,
+    inferredPm,
   };
 };
 
@@ -266,7 +270,11 @@ const combineDateTime = (
       ? { value: `${date.value} 00:00:00`, reason: `${time.reason} time` }
       : { value: null, reason: `${time.reason} time` };
   }
-  return { value: `${date.value} ${time.value}`, reason: null };
+  return {
+    value: `${date.value} ${time.value}`,
+    reason: null,
+    inferredPm: time.inferredPm,
+  };
 };
 
 const candidateStatus = (row) => {
@@ -534,6 +542,12 @@ const main = async () => {
       if (!transactionDateTime.value) {
         blockers.push("invalid transaction date/time");
       }
+      if (transactionDateTime.inferredPm) {
+        increment(
+          warningCounts,
+          "transaction time 1-8 without AM/PM read as PM",
+        );
+      }
 
       let dueDate = parseLegacyDate(row.SA100DUEDATE);
       if (
@@ -588,6 +602,9 @@ const main = async () => {
           optional: true,
         },
       );
+      if (pickupDateTime.inferredPm) {
+        increment(warningCounts, "pickup time 1-8 without AM/PM read as PM");
+      }
       const pickupAmountPaid = candidatePickupAmountPaid(row, status);
       increment(pickupAmountPaidCounts, pickupAmountPaid.reason);
 
@@ -596,6 +613,9 @@ const main = async () => {
         row.SA100INTERESTTIME,
         { optional: true },
       );
+      if (interestDateTime.inferredPm) {
+        increment(warningCounts, "interest time 1-8 without AM/PM read as PM");
+      }
       const expireDate = parseLegacyDate(row.SA100EXPDATE);
       const employeeNumber =
         normalizeText(row.SA100EMPLOYEENO) ||

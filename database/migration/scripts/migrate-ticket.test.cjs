@@ -74,7 +74,7 @@ const helpers = () =>
   );
 
 test("reads unmarked 1:00-8:59 times as PM and keeps the rest", () => {
-  const { parseLegacyTime } = helpers();
+  const { parseLegacyTime, combineDateTime } = helpers();
   const cases = [
     ["1:19:31", "13:19:31"],
     ["04:39:03", "16:39:03"],
@@ -90,6 +90,11 @@ test("reads unmarked 1:00-8:59 times as PM and keeps the rest", () => {
   for (const [raw, expected] of cases) {
     assert.equal(parseLegacyTime(raw).value, expected, raw);
   }
+  // Only the shifted times are flagged, so the report can count them.
+  assert.equal(parseLegacyTime("1:19:31").inferredPm, true);
+  assert.equal(parseLegacyTime("9:53:01").inferredPm, false);
+  assert.equal(parseLegacyTime("1:01:55 PM").inferredPm, false);
+  assert.equal(combineDateTime("10/29/2026", "2:17:56").inferredPm, true);
 });
 
 test("imports in the shop time zone so zoneless values mean Regina time", () => {
