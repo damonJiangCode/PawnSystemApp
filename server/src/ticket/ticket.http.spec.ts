@@ -77,7 +77,14 @@ describe('Ticket HTTP lookups (mock PostgreSQL)', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-05-13T18:00:00Z'));
     tickets = [ticketRow()];
-    clients = [{ client_number: 7, first_name: 'ann', last_name: 'lee' }];
+    clients = [
+      {
+        client_number: 7,
+        first_name: 'ann',
+        last_name: 'lee',
+        date_of_birth: '1990-01-01',
+      },
+    ];
     holidays = [];
     pool.query.mockImplementation(async (sql: string) => {
       if (sql.includes('FROM holiday_date'))
