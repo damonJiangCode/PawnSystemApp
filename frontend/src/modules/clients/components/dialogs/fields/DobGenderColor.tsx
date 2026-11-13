@@ -2,14 +2,10 @@ import DateField from "../../../../../shared/components/DateField";
 import React, { useEffect, useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import { formatClientOption } from "../../../utils/clientDisplay.ts";
-import {
-  formatLocalIsoDatePart,
-  resolveDate,
-} from "../../../../../shared/utils/formatters";
 import { referenceApi } from "../../../../reference/reference.api";
 
 interface DobGenderColorProps {
-  date_of_birth?: Date | string;
+  date_of_birth?: string;
   gender?: string;
   hair_color?: string;
   eye_color?: string;
@@ -83,9 +79,6 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
     eye_color ??
     "";
 
-  const isValidDate = (d: unknown) =>
-    d instanceof Date && !Number.isNaN(d.getTime());
-
   return (
     <Box sx={{ display: "flex", gap: 2 }}>
       <DateField
@@ -93,13 +86,7 @@ const DobGenderColor: React.FC<DobGenderColorProps> = ({
         required
         name="date_of_birth"
         label="DoB (MM-DD-YYYY)"
-        value={
-          typeof date_of_birth === "string"
-            ? date_of_birth
-            : date_of_birth && isValidDate(resolveDate(date_of_birth))
-              ? formatLocalIsoDatePart(resolveDate(date_of_birth) as Date)
-              : ""
-        }
+        value={date_of_birth ?? ""}
         onValueChange={onDateOfBirthChange}
         onBlur={onDateOfBirthBlur}
         size="small"

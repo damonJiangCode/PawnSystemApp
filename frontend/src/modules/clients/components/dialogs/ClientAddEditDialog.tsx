@@ -15,7 +15,6 @@ import type {
   ClientPhotoInput,
   UpdateClientInput,
 } from "../../../../../../shared/payload-contracts/client.contract";
-import { formatIsoDate } from "../../../../shared/utils/formatters";
 import ClientPhotoCapture from "./fields/ClientPhotoCapture";
 import HeightWeightFields from "./fields/HeightWeightFields";
 import NameFields from "./fields/NameFields";
@@ -215,10 +214,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
         for (const field of fields) {
           const next = payload.client[field];
           const previous = clientExisted[field];
-          const changed =
-            field === "date_of_birth"
-              ? formatIsoDate(next as Date) !== formatIsoDate(previous as Date)
-              : next !== previous;
+          const changed = next !== previous;
           if (changed) Object.assign(update.client, { [field]: next });
         }
         const nextIds = payload.identifications.map((id) => ({
@@ -414,9 +410,7 @@ const ClientAddEditDialog: React.FC<ClientAddEditDialogProps> = (props) => {
                   onDateOfBirthChange={(value) => {
                     setClient((prev) => ({
                       ...prev,
-                      date_of_birth: value
-                        ? new Date(`${value}T00:00:00`)
-                        : new Date(NaN),
+                      date_of_birth: value,
                     }));
                     clearValidationError("date_of_birth");
                     setSubmitError("");

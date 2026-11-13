@@ -37,7 +37,7 @@ const ticketJson = {
 const clientJson = {
   client_number: 7,
   first_name: "ANN",
-  date_of_birth: "1990-01-02T00:00:00.000Z",
+  date_of_birth: "1990-01-02",
   updated_at: "2026-01-01T00:00:00.000Z",
   image_updated_at: null,
   identifications: [],
@@ -67,7 +67,7 @@ test("searches by number and returns the ticket with its client", async (t) => {
   });
   const result = await http.searchTicketByNumberHttp(123, base);
   assert.equal(result?.ticket.ticket_number, 123);
-  assert.ok(result?.client.date_of_birth instanceof Date);
+  assert.equal(result?.client.date_of_birth, "1990-01-02");
 });
 
 test("a missing ticket is null, other failures still throw", async (t) => {

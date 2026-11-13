@@ -1,10 +1,9 @@
 import type { Client } from "../../../../../shared/models/client.model";
+import { formatLocalIsoDatePart } from "../../../shared/utils/formatters.ts";
 
 const today = new Date();
-const defaultDob = new Date(
-  today.getFullYear() - 18,
-  today.getMonth(),
-  today.getDate(),
+const defaultDob = formatLocalIsoDatePart(
+  new Date(today.getFullYear() - 18, today.getMonth(), today.getDate()),
 );
 
 const defaultClient: Client = {
