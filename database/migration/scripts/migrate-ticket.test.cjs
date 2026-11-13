@@ -98,8 +98,27 @@ test("reads unmarked 1:00-8:59 times as PM and keeps the rest", () => {
 });
 
 test("imports in the shop time zone so zoneless values mean Regina time", () => {
-  const { dbConfig, combineDateTime } = helpers();
-  assert.equal(dbConfig.options, "-c timezone=America/Regina");
+  // Capture what the script hands to pg's Pool instead of connecting.
+  let poolConfig;
+  const fakePg = {
+    Pool: class {
+      constructor(config) {
+        poolConfig = config;
+      }
+    },
+  };
+  const { createPool, combineDateTime } = vm.runInNewContext(
+    source + "\n({ createPool, combineDateTime });",
+    {
+      __dirname,
+      process,
+      console,
+      require: (name) => (name === "pg" ? fakePg : require(name)),
+    },
+    { timeout: 5000 },
+  );
+  createPool();
+  assert.equal(poolConfig.options, "-c timezone=America/Regina");
   assert.equal(
     combineDateTime("10/29/2026", "2:17:56").value,
     "2026-10-29 14:17:56",
