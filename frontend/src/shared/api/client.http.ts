@@ -4,7 +4,6 @@ import type {
   CreateClientInput,
   UpdateClientInput,
 } from "../../../../shared/payload-contracts/client.contract.ts";
-import { formatIsoDate } from "../utils/formatters.ts";
 import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
 
 export async function createClientHttp(
@@ -17,7 +16,7 @@ export async function createClientHttp(
     first_name: source.first_name,
     last_name: source.last_name,
     middle_name: source.middle_name,
-    date_of_birth: formatIsoDate(source.date_of_birth),
+    date_of_birth: source.date_of_birth,
     gender: source.gender,
     hair_color: source.hair_color,
     eye_color: source.eye_color,
@@ -79,9 +78,7 @@ export async function updateClientHttp(
   ] as const;
   for (const field of fields) {
     const value = input.client[field];
-    if (value !== undefined)
-      client[field] =
-        field === "date_of_birth" ? formatIsoDate(value as Date) : value;
+    if (value !== undefined) client[field] = value;
   }
   const result = await requestJson<Client>(
     apiUrl(`/clients/${input.client.client_number}`, baseUrl),
@@ -132,7 +129,6 @@ async function requestClients(url: URL): Promise<Client[]> {
 export function restoreClientDates(client: Client): Client {
   return {
     ...client,
-    date_of_birth: new Date(client.date_of_birth),
     updated_at: new Date(client.updated_at),
     image_updated_at: client.image_updated_at
       ? new Date(client.image_updated_at)

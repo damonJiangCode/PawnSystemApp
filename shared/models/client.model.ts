@@ -11,7 +11,8 @@ export interface Client {
   first_name: string;
   last_name: string;
   middle_name: string;
-  date_of_birth: Date;
+  // Calendar day as YYYY-MM-DD; no time zone applies.
+  date_of_birth: string;
   gender: string;
   hair_color: string;
   eye_color: string;

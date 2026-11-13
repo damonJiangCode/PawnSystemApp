@@ -27,6 +27,7 @@ const PAST_DUE = new Date('2026-05-10T18:00:00Z');
 
 type Row = Record<string, unknown>;
 type ClientRow = {
+  date_of_birth: string;
   is_active: boolean;
   notes: string;
   sell_count: number;
@@ -95,6 +96,7 @@ describe('Ticket actions HTTP (in-memory PostgreSQL fake)', () => {
   });
 
   const client = (overrides: Partial<ClientRow> = {}): ClientRow => ({
+    date_of_birth: '1990-01-01',
     is_active: true,
     notes: 'Regular',
     sell_count: 2,

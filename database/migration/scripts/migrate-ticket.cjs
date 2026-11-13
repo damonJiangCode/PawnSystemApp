@@ -21,12 +21,19 @@ const shouldCommit = process.argv.includes("--commit");
 const INSERT_BATCH_SIZE = 1000;
 const PENDING_EMPLOYEE_PREFIX = "Legacy Employee";
 
+// Legacy dates and times are shop wall-clock values with no zone, written as
+// strings such as "2026-10-29 14:17:56" or "2026-11-11". PostgreSQL reads a
+// zoneless string into TIMESTAMPTZ using the session time zone, so the session
+// must be the shop's (Regina has no daylight saving, so every value is exact).
+const SHOP_TIME_ZONE = "America/Regina";
+
 const dbConfig = {
   user: process.env.DB_USER || "moneyexpress",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "pawnsystemdb_migration",
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT || 5432),
+  options: `-c timezone=${SHOP_TIME_ZONE}`,
 };
 
 const normalizeText = (value) => String(value ?? "").trim();
@@ -175,10 +182,17 @@ const parseLegacyTime = (value) => {
   const minute = Number(match[2]);
   const second = Number(match[3]);
   const meridiem = normalizeUpper(match[4]);
+  let inferredPm = false;
   if (meridiem) {
     if (hour < 1 || hour > 12) return { value: null, reason: "invalid" };
     if (meridiem === "AM") hour = hour === 12 ? 0 : hour;
     if (meridiem === "PM") hour = hour === 12 ? 12 : hour + 12;
+  } else if (hour >= 1 && hour <= 8) {
+    // Some legacy times are 12-hour without AM/PM. The shop opens at 9:30
+    // (10:00 on Sunday) and closes by 21:00, so 1:00-8:59 can only be PM.
+    // Each one is counted in the migration report so the rule can be audited.
+    hour += 12;
+    inferredPm = true;
   }
   if (hour > 23 || minute > 59 || second > 59) {
     return { value: null, reason: "invalid" };
@@ -188,6 +202,7 @@ const parseLegacyTime = (value) => {
       .map((part) => String(part).padStart(2, "0"))
       .join(":"),
     reason: null,
+    inferredPm,
   };
 };
 
@@ -255,7 +270,11 @@ const combineDateTime = (
       ? { value: `${date.value} 00:00:00`, reason: `${time.reason} time` }
       : { value: null, reason: `${time.reason} time` };
   }
-  return { value: `${date.value} ${time.value}`, reason: null };
+  return {
+    value: `${date.value} ${time.value}`,
+    reason: null,
+    inferredPm: time.inferredPm,
+  };
 };
 
 const candidateStatus = (row) => {
@@ -410,13 +429,16 @@ const insertBatch = async (client, tickets) => {
   await client.query(query.text, query.values);
 };
 
+// Every import connection must run in the shop time zone (see dbConfig).
+const createPool = () => new Pool(dbConfig);
+
 const main = async () => {
   fs.mkdirSync(summaryDir, { recursive: true });
   if (!process.env.DB_PASSWORD) {
     throw new Error("Set DB_PASSWORD in private environment configuration.");
   }
 
-  const pool = new Pool(dbConfig);
+  const pool = createPool();
 
   const client = await pool.connect();
   const locationMapping = loadLocationMapping();
@@ -523,6 +545,12 @@ const main = async () => {
       if (!transactionDateTime.value) {
         blockers.push("invalid transaction date/time");
       }
+      if (transactionDateTime.inferredPm) {
+        increment(
+          warningCounts,
+          "transaction time 1-8 without AM/PM read as PM",
+        );
+      }
 
       let dueDate = parseLegacyDate(row.SA100DUEDATE);
       if (
@@ -577,6 +605,9 @@ const main = async () => {
           optional: true,
         },
       );
+      if (pickupDateTime.inferredPm) {
+        increment(warningCounts, "pickup time 1-8 without AM/PM read as PM");
+      }
       const pickupAmountPaid = candidatePickupAmountPaid(row, status);
       increment(pickupAmountPaidCounts, pickupAmountPaid.reason);
 
@@ -585,6 +616,9 @@ const main = async () => {
         row.SA100INTERESTTIME,
         { optional: true },
       );
+      if (interestDateTime.inferredPm) {
+        increment(warningCounts, "interest time 1-8 without AM/PM read as PM");
+      }
       const expireDate = parseLegacyDate(row.SA100EXPDATE);
       const employeeNumber =
         normalizeText(row.SA100EMPLOYEENO) ||

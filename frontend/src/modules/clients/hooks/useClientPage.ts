@@ -3,7 +3,6 @@ import type { ClientNotesAction } from "../../../../../shared/payload-contracts/
 import type { Client, ID } from "../../../../../shared/models/client.model";
 import { useClientSearch } from "./useClientSearch";
 import { clientApi } from "../client.api";
-import { formatIsoDate } from "../../../shared/utils/formatters";
 
 interface UseClientPageParams {
   isActive?: boolean;
@@ -23,7 +22,7 @@ const matchesSearch = (
 ) => {
   const clientFirst = client.first_name?.trim().toLowerCase() ?? "";
   const clientLast = client.last_name?.trim().toLowerCase() ?? "";
-  const clientDob = formatIsoDate(client.date_of_birth);
+  const clientDob = client.date_of_birth;
 
   const firstMatches =
     !normalizedFirst || clientFirst.startsWith(normalizedFirst);

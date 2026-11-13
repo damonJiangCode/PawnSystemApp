@@ -62,7 +62,7 @@ test("HTTP search encodes names and restores client and ID dates", async (t) => 
     return Response.json([
       {
         client_number: 1,
-        date_of_birth: "1990-01-01T00:00:00.000Z",
+        date_of_birth: "1990-01-01",
         updated_at: "2026-10-19T00:00:00.000Z",
         image_updated_at: null,
         identifications: [
@@ -76,7 +76,8 @@ test("HTTP search encodes names and restores client and ID dates", async (t) => 
     ]);
   });
   const [client] = await searchClientsHttp("Da &", "Wa");
-  assert.ok(client.date_of_birth instanceof Date);
+  // DOB stays the server's YYYY-MM-DD string; only instants become Dates.
+  assert.equal(client.date_of_birth, "1990-01-01");
   assert.ok(client.updated_at instanceof Date);
   assert.ok(client.identifications?.[0].updated_at instanceof Date);
   assert.equal(client.image_updated_at, null);
@@ -112,15 +113,14 @@ test("DOB HTTP search uses the date endpoint and restores dates", async (t) => {
     return Response.json([
       {
         client_number: 1,
-        date_of_birth: "2000-02-29T00:00:00Z",
+        date_of_birth: "2000-02-29",
         updated_at: "2026-10-19T00:00:00Z",
         identifications: [],
       },
     ]);
   });
   const [client] = await searchClientsByDobHttp("2000-02-29");
-  assert.ok(client.date_of_birth instanceof Date);
-  assert.equal(client.date_of_birth.toISOString(), "2000-02-29T00:00:00.000Z");
+  assert.equal(client.date_of_birth, "2000-02-29");
 });
 
 test("DOB HTTP search surfaces invalid date errors", async (t) => {
@@ -157,7 +157,7 @@ test("create sends only editable fields, a date-only DOB and restores the result
   const client = await createClientHttp({
     client: {
       ...defaultClient,
-      date_of_birth: new Date(1990, 0, 1),
+      date_of_birth: "1990-01-01",
       client_number: 999,
       redeem_count: 999,
     },
