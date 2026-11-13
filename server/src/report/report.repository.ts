@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
+import { clientNameSql } from '../common/client-name.sql.js';
 import { SHOP_TIME_ZONE } from '../ticket/ticket-finance.js';
 
 export type DailyReportRow = {
@@ -83,13 +84,6 @@ const overdueLocationSql = (
     key,
   ];
 };
-
-const clientNameSql = (alias: string) => `
-  CONCAT(
-    UPPER(${alias}.last_name), ', ', UPPER(${alias}.first_name),
-    CASE WHEN COALESCE(TRIM(${alias}.middle_name), '') = '' THEN ''
-         ELSE CONCAT(' ', UPPER(${alias}.middle_name)) END
-  )`;
 
 // The database runs in UTC, so a report day must start at midnight in the
 // shop's time zone, not at midnight UTC (6 PM in Regina).
