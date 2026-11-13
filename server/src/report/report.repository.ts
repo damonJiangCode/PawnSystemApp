@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { clientNameSql } from '../common/client-name.sql.js';
+import { shopDateSql, shopDayStart } from '../common/shop-time.sql.js';
 import {
   LETTERED_LOCATION_PATTERN,
   SHELF_LOCATION_PATTERN,
 } from './report-location.js';
-import { SHOP_TIME_ZONE } from '../ticket/ticket-finance.js';
 
 export type DailyReportRow = {
   ticket_number: number;
@@ -90,15 +90,6 @@ const overdueLocationSql = (
     key,
   ];
 };
-
-// The database runs in UTC, so a report day must start at midnight in the
-// shop's time zone, not at midnight UTC (6 PM in Regina).
-const shopDayStart = (param: string) =>
-  `(${param}::timestamp AT TIME ZONE '${SHOP_TIME_ZONE}')`;
-
-// YYYY-MM-DD day in the shop's time zone.
-const shopDateSql = (column: string) =>
-  `TO_CHAR(${column} AT TIME ZONE '${SHOP_TIME_ZONE}', 'YYYY-MM-DD')`;
 
 const text = (value: unknown) => (value ? String(value) : '');
 
@@ -227,8 +218,7 @@ export class ReportRepository {
   // The shop day of the first recorded interest payment, or null if none yet.
   async loadInterestRecordsStartDate(): Promise<string | null> {
     const { rows } = await this.pool.query(
-      `SELECT TO_CHAR(MIN(payment_datetime) AT TIME ZONE '${SHOP_TIME_ZONE}', 'YYYY-MM-DD')
-                AS start_date
+      `SELECT ${shopDateSql('MIN(payment_datetime)')} AS start_date
        FROM interest_payment`,
     );
     return (rows[0]?.start_date as string | null) ?? null;
