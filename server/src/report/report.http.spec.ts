@@ -10,6 +10,10 @@ import {
   it,
   vi,
 } from 'vitest';
+import {
+  LETTERED_LOCATION_PATTERN,
+  SHELF_LOCATION_PATTERN,
+} from './report-location.js';
 import { ReportModule } from './report.module.js';
 
 const row = (overrides: Record<string, unknown> = {}) => ({
@@ -506,7 +510,10 @@ describe('Report HTTP (mock PostgreSQL)', () => {
       expect(values).toEqual(['2026-11-10', 'AB', 11, 'AC', 43]);
       expect(sql).toContain("t.status = 'pawned'");
       expect(sql).toContain('c.hold_until < $1::date');
-      expect(sql).toContain("SUBSTRING(t.location FROM '^([A-Z]+)[0-9]+$')");
+      // The SQL must use the same pattern the service parses with.
+      expect(sql).toContain(
+        `regexp_match(t.location, '${SHELF_LOCATION_PATTERN}')`,
+      );
       expect(sql).toContain('>= ($2::text, $3::int)');
       expect(sql).toContain('<= ($4::text, $5::int)');
       expect(sql).toContain(
@@ -528,7 +535,9 @@ describe('Report HTTP (mock PostgreSQL)', () => {
       expect(response.status).toBe(200);
       const [sql, values] = reportCall()!;
       expect(values).toEqual(['2026-11-10', ...keys]);
-      expect(sql).toContain("SUBSTRING(t.location FROM '^([A-Z]+)-[A-Z]+$')");
+      expect(sql).toContain(
+        `regexp_match(t.location, '${LETTERED_LOCATION_PATTERN}')`,
+      );
       expect(sql).toContain('>= ($2::text, $3::text)');
     });
 

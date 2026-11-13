@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { clientNameSql } from '../common/client-name.sql.js';
+import {
+  LETTERED_LOCATION_PATTERN,
+  SHELF_LOCATION_PATTERN,
+} from './report-location.js';
 import { SHOP_TIME_ZONE } from '../ticket/ticket-finance.js';
 
 export type DailyReportRow = {
@@ -62,12 +66,14 @@ export type OverdueLocationFilter =
 
 // Location codes as (first, second) sort keys; NULL when the code has another shape.
 // COLLATE "C" compares letters by code point, the same way JavaScript does.
+const locationPart = (pattern: string, part: 1 | 2) =>
+  `(regexp_match(t.location, '${pattern}'))[${part}]`;
 const shelfKeySql = `
-  SUBSTRING(t.location FROM '^([A-Z]+)[0-9]+$') COLLATE "C",
-  CAST(SUBSTRING(t.location FROM '^[A-Z]+([0-9]+)$') AS INTEGER)`;
+  ${locationPart(SHELF_LOCATION_PATTERN, 1)} COLLATE "C",
+  CAST(${locationPart(SHELF_LOCATION_PATTERN, 2)} AS INTEGER)`;
 const letteredKeySql = `
-  SUBSTRING(t.location FROM '^([A-Z]+)-[A-Z]+$') COLLATE "C",
-  SUBSTRING(t.location FROM '^[A-Z]+-([A-Z]+)$') COLLATE "C"`;
+  ${locationPart(LETTERED_LOCATION_PATTERN, 1)} COLLATE "C",
+  ${locationPart(LETTERED_LOCATION_PATTERN, 2)} COLLATE "C"`;
 
 // The WHERE condition, its values ($2...), and the location sort order.
 const overdueLocationSql = (

@@ -7,6 +7,10 @@ import {
   type OverdueLocationFilter,
   ReportRepository,
 } from './report.repository.js';
+import {
+  LETTERED_LOCATION_PATTERN,
+  SHELF_LOCATION_PATTERN,
+} from './report-location.js';
 
 type DailyReportTicket = {
   ticket_number: number;
@@ -51,10 +55,13 @@ type ParsedLocation =
   | { kind: 'lettered'; key: [string, string] }
   | { kind: 'single' };
 
+const shelfLocation = new RegExp(SHELF_LOCATION_PATTERN);
+const letteredLocation = new RegExp(LETTERED_LOCATION_PATTERN);
+
 const parseLocation = (code: string): ParsedLocation => {
-  const shelf = /^([A-Z]+)(\d+)$/.exec(code);
+  const shelf = shelfLocation.exec(code);
   if (shelf) return { kind: 'shelf', key: [shelf[1], Number(shelf[2])] };
-  const lettered = /^([A-Z]+)-([A-Z]+)$/.exec(code);
+  const lettered = letteredLocation.exec(code);
   if (lettered) return { kind: 'lettered', key: [lettered[1], lettered[2]] };
   return { kind: 'single' };
 };
