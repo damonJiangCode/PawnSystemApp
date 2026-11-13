@@ -21,12 +21,19 @@ const shouldCommit = process.argv.includes("--commit");
 const INSERT_BATCH_SIZE = 1000;
 const PENDING_EMPLOYEE_PREFIX = "Legacy Employee";
 
+// Legacy dates and times are shop wall-clock values with no zone, written as
+// strings such as "2026-10-29 14:17:56" or "2026-11-11". PostgreSQL reads a
+// zoneless string into TIMESTAMPTZ using the session time zone, so the session
+// must be the shop's (Regina has no daylight saving, so every value is exact).
+const SHOP_TIME_ZONE = "America/Regina";
+
 const dbConfig = {
   user: process.env.DB_USER || "moneyexpress",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "pawnsystemdb_migration",
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT || 5432),
+  options: `-c timezone=${SHOP_TIME_ZONE}`,
 };
 
 const normalizeText = (value) => String(value ?? "").trim();
@@ -179,6 +186,10 @@ const parseLegacyTime = (value) => {
     if (hour < 1 || hour > 12) return { value: null, reason: "invalid" };
     if (meridiem === "AM") hour = hour === 12 ? 0 : hour;
     if (meridiem === "PM") hour = hour === 12 ? 12 : hour + 12;
+  } else if (hour >= 1 && hour <= 8) {
+    // Some legacy times are 12-hour without AM/PM. The shop opens at 9:30
+    // (10:00 on Sunday) and closes by 21:00, so 1:00-8:59 can only be PM.
+    hour += 12;
   }
   if (hour > 23 || minute > 59 || second > 59) {
     return { value: null, reason: "invalid" };
