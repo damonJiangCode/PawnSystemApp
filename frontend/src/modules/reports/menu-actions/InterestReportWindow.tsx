@@ -17,7 +17,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { INTEREST_REPORT_START_DATE } from "../../../../../shared/reportSettings";
 import { reportApi } from "../report.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 import WindowLayout from "../../../windows/WindowLayout";
@@ -44,16 +43,6 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
       return;
     }
 
-    if (
-      fromDate < INTEREST_REPORT_START_DATE ||
-      toDate < INTEREST_REPORT_START_DATE
-    ) {
-      setErrorMessage(
-        `Interest reports are available from ${INTEREST_REPORT_START_DATE}.`,
-      );
-      return;
-    }
-
     setIsLoading(true);
     setErrorMessage("");
 
@@ -73,6 +62,8 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
   };
 
   const rows = report?.rows ?? [];
+  // The server explains days without interest records.
+  const recordsNote = report?.records_note;
   const ticketCount = new Set(rows.map((row) => row.ticket_number)).size;
 
   return (
@@ -120,7 +111,6 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
               setReport(undefined);
               setErrorMessage("");
             }}
-            min={INTEREST_REPORT_START_DATE}
             sx={{ width: { xs: "100%", sm: 180 } }}
           />
           <DateField
@@ -133,7 +123,6 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
               setReport(undefined);
               setErrorMessage("");
             }}
-            min={INTEREST_REPORT_START_DATE}
             sx={{ width: { xs: "100%", sm: 180 } }}
           />
           <Button
@@ -163,6 +152,16 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
             sx={{ displayPrint: "none" }}
           >
             {errorMessage}
+          </Alert>
+        ) : null}
+
+        {recordsNote ? (
+          <Alert
+            severity="info"
+            className="no-print"
+            sx={{ displayPrint: "none" }}
+          >
+            {recordsNote}
           </Alert>
         ) : null}
 

@@ -1,8 +1,4 @@
 const CHANNELS = {
-  LOAD_BUYBACK_REPORT: "load-buyback-report",
-  LOAD_DAILY_REPORT: "load-daily-report",
-  LOAD_INTEREST_REPORT: "load-interest-report",
-  LOAD_OVERDUE_REPORT: "load-overdue-report",
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",

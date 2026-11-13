@@ -3,7 +3,7 @@
 The desktop shell: application lifecycle, native menus, windows and the preload bridge. The
 UI lives in `frontend/`, which Electron loads from Vite on port 5173.
 
-- [Main process](src/main/README.md): windows, IPC and the remaining report modules.
+- [Main process](src/main/README.md): windows, IPC and the XML report module.
 - [Preload](src/preload/README.md): the methods exposed to React.
 
 From the repository root:

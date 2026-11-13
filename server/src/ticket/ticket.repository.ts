@@ -5,6 +5,7 @@ import {
   ticketSelect,
   type TicketStatus,
 } from './ticket.mapper.js';
+import { clientNameSql } from '../common/client-name.sql.js';
 
 export type NewTicket = {
   transaction_datetime: Date;
@@ -96,9 +97,7 @@ export class TicketRepository {
     }>(
       `SELECT t.ticket_number, t.status, t.description, t.location, t.amount,
          t.client_number AS previous_client_number,
-         CONCAT(UPPER(c.last_name), ', ', UPPER(c.first_name),
-           CASE WHEN COALESCE(TRIM(c.middle_name), '') = '' THEN ''
-                ELSE CONCAT(' ', UPPER(c.middle_name)) END) AS previous_client_name,
+         ${clientNameSql('c')} AS previous_client_name,
          c.is_active AS previous_client_is_active
        FROM ticket t
        INNER JOIN client c ON c.client_number = t.client_number

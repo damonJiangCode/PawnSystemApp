@@ -1,10 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  LOAD_BUYBACK_REPORT: "load-buyback-report",
-  LOAD_DAILY_REPORT: "load-daily-report",
-  LOAD_INTEREST_REPORT: "load-interest-report",
-  LOAD_OVERDUE_REPORT: "load-overdue-report",
   CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
   LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
   SUBMIT_XML_REPORT: "submit-xml-report",
@@ -21,14 +17,6 @@ const CHANNELS = {
 };
 
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
-
-// Reports still run in Electron main; tickets moved to the HTTP server.
-const reportApi = {
-  loadBuybackReport: (input) => invoke(CHANNELS.LOAD_BUYBACK_REPORT, input),
-  loadDailyReport: (input) => invoke(CHANNELS.LOAD_DAILY_REPORT, input),
-  loadInterestReport: (input) => invoke(CHANNELS.LOAD_INTEREST_REPORT, input),
-  loadOverdueReport: (input) => invoke(CHANNELS.LOAD_OVERDUE_REPORT, input),
-};
 
 const xmlReportApi = {
   checkConnection: () => invoke(CHANNELS.CHECK_XML_REPORT_CONNECTION),
@@ -74,7 +62,6 @@ const windowApi = {
 };
 
 contextBridge.exposeInMainWorld("appAPI", {
-  report: reportApi,
   window: windowApi,
   xmlReport: xmlReportApi,
 });

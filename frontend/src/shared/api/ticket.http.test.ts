@@ -86,10 +86,10 @@ test("a missing ticket is null, other failures still throw", async (t) => {
   });
 });
 
-test("getAppApi serves every ticket method over HTTP and keeps desktop reports", async (t) => {
-  const loadDailyReport = () => Promise.resolve({} as never);
+test("getAppApi serves every ticket method over HTTP and keeps desktop XML reports", async (t) => {
+  const checkConnection = () => Promise.resolve({} as never);
   setWindow(t, {
-    report: { loadDailyReport },
+    xmlReport: { checkConnection },
     ticket: {
       loadTicketsByClient: () => {
         throw new Error("IPC must not be used");
@@ -101,7 +101,7 @@ test("getAppApi serves every ticket method over HTTP and keeps desktop reports",
     return Response.json([]);
   });
   const api = getAppApi()!;
-  assert.equal(api.report.loadDailyReport, loadDailyReport);
+  assert.equal(api.xmlReport.checkConnection, checkConnection);
   assert.deepEqual(await api.ticket.loadTicketsByClient(7), []);
 });
 

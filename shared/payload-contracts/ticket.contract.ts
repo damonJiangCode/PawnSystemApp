@@ -111,6 +111,10 @@ export type InterestReportRow = {
 };
 
 export type InterestReportResult = ReportDateRangeInput & {
+  // Shop day of the first recorded interest payment; null before any.
+  records_start_date: string | null;
+  // Reason some days in the range have no records; null when none are missing.
+  records_note: string | null;
   rows: InterestReportRow[];
   total_interest_paid: number;
 };
