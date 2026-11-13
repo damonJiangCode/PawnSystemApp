@@ -62,15 +62,8 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
   };
 
   const rows = report?.rows ?? [];
-  // Interest payments exist only from the first one this system recorded.
-  const recordsStart = report?.records_start_date;
-  const recordsNote = !report
-    ? ""
-    : recordsStart === null
-      ? "No interest payments have been recorded yet."
-      : recordsStart && report.from_date < recordsStart
-        ? `Interest payments are recorded from ${recordsStart}; earlier days have no records.`
-        : "";
+  // The server explains days without interest records.
+  const recordsNote = report?.records_note;
   const ticketCount = new Set(rows.map((row) => row.ticket_number)).size;
 
   return (

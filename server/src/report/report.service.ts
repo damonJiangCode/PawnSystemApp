@@ -65,6 +65,19 @@ const isKeyAfter = <T extends string | number>(
   b: [string, T],
 ) => (a[0] === b[0] ? a[1] > b[1] : a[0] > b[0]);
 
+// Reason some days in the range have no interest records, or null when none are missing.
+const interestRecordsNote = (
+  fromDate: string,
+  recordsStartDate: string | null,
+) => {
+  if (recordsStartDate === null) {
+    return 'No interest payments have been recorded yet.';
+  }
+  return fromDate < recordsStartDate
+    ? `Interest payments are recorded from ${recordsStartDate}; earlier days have no records.`
+    : null;
+};
+
 const roundMoney = (value: number) => Number(value.toFixed(2));
 
 // The same day one year later (Feb 29 rolls to Mar 1), as YYYY-MM-DD.
@@ -160,7 +173,7 @@ export class ReportService {
   async loadInterest(range: ReportDateRangeQueryDto) {
     this.requireValidRange(range);
     // interest_payment is only written by this system, so days before the
-    // first recorded payment have no data; records_start_date lets the UI say so.
+    // first recorded payment have no data; records_note tells the user so.
     const [rows, recordsStartDate] = await Promise.all([
       this.repository.loadInterestRows(range.from_date, range.to_date),
       this.repository.loadInterestRecordsStartDate(),
@@ -170,6 +183,7 @@ export class ReportService {
       from_date: range.from_date,
       to_date: range.to_date,
       records_start_date: recordsStartDate,
+      records_note: interestRecordsNote(range.from_date, recordsStartDate),
       rows,
       total_interest_paid: roundMoney(
         rows.reduce((sum, row) => sum + row.amount_paid, 0),

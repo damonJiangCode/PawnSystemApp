@@ -22,7 +22,8 @@ Read-only reports. Every route is a GET with query parameters. Unknown parameter
 
 `interest_payment` is written only by this system, so it has no rows before the first payment.
 The response includes `records_start_date`, the Regina day of the first recorded payment (`null`
-when there is none), so the window can explain why earlier days are empty.
+when there is none), and `records_note`, which the window shows as-is: it explains that the range
+starts before the first payment, or that no payment exists yet (`null` otherwise).
 
 ## Overdue
 

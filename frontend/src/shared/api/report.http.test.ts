@@ -61,6 +61,7 @@ test("restores interest payment times and keeps the records start date", async (
     return Response.json({
       ...range,
       records_start_date: "2026-10-29",
+      records_note: null,
       rows: [
         {
           ticket_number: 30,

@@ -298,6 +298,7 @@ describe('Report HTTP (mock PostgreSQL)', () => {
         from_date: '2026-11-01',
         to_date: '2026-11-01',
         records_start_date: '2026-10-29',
+        records_note: null,
         rows: [
           {
             ticket_number: 30,
@@ -317,6 +318,24 @@ describe('Report HTTP (mock PostgreSQL)', () => {
           },
         ],
         total_interest_paid: 60.3,
+      });
+    });
+
+    it('explains that days before the first recorded payment have no records', async () => {
+      pool.query.mockImplementation(async (sql: string) =>
+        sql.includes('MIN(payment_datetime)')
+          ? { rows: [{ start_date: '2026-10-29' }] }
+          : { rows: [] },
+      );
+
+      const response = await interest(
+        'from_date=2026-10-01&to_date=2026-10-31',
+      );
+
+      expect(await response.json()).toMatchObject({
+        records_start_date: '2026-10-29',
+        records_note:
+          'Interest payments are recorded from 2026-10-29; earlier days have no records.',
       });
     });
 
@@ -345,6 +364,7 @@ describe('Report HTTP (mock PostgreSQL)', () => {
         from_date: '2026-01-01',
         to_date: '2026-01-31',
         records_start_date: null,
+        records_note: 'No interest payments have been recorded yet.',
         rows: [],
         total_interest_paid: 0,
       });
