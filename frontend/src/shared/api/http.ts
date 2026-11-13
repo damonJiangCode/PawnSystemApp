@@ -21,9 +21,10 @@ export async function requestJson<T>(
 ): Promise<T> {
   let response: Response;
   try {
+    // 15 seconds unless the caller passes its own signal (a longer timeout).
     response = await fetch(url, {
       ...init,
-      signal: AbortSignal.timeout(15000),
+      signal: init.signal ?? AbortSignal.timeout(15000),
     });
   } catch {
     throw new Error(

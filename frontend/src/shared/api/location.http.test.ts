@@ -103,10 +103,10 @@ test("getAppApi routes all five location methods through HTTP and keeps other de
         : location,
     );
   });
-  const checkConnection = () => Promise.resolve({} as never);
-  setWindow(t, { xmlReport: { checkConnection } });
+  const focusMainWindow = () => Promise.resolve();
+  setWindow(t, { window: { focusMainWindow } });
   const api = getAppApi()!;
-  assert.equal(api.xmlReport.checkConnection, checkConnection);
+  assert.equal(api.window.focusMainWindow, focusMainWindow);
   assert.deepEqual(await api.reference.loadLocations(), ["AB12"]);
   assert.deepEqual(await api.reference.loadAllLocations(), [location]);
   assert.deepEqual(await api.reference.addLocation(location), location);
