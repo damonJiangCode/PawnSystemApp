@@ -429,13 +429,16 @@ const insertBatch = async (client, tickets) => {
   await client.query(query.text, query.values);
 };
 
+// Every import connection must run in the shop time zone (see dbConfig).
+const createPool = () => new Pool(dbConfig);
+
 const main = async () => {
   fs.mkdirSync(summaryDir, { recursive: true });
   if (!process.env.DB_PASSWORD) {
     throw new Error("Set DB_PASSWORD in private environment configuration.");
   }
 
-  const pool = new Pool(dbConfig);
+  const pool = createPool();
 
   const client = await pool.connect();
   const locationMapping = loadLocationMapping();
