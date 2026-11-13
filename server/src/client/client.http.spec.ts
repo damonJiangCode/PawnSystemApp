@@ -77,7 +77,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
           client_number: 1,
           first_name: 'Damon',
           last_name: 'Wang',
-          date_of_birth: new Date('1990-01-01T00:00:00Z'),
+          date_of_birth: '1990-01-01',
           updated_at: new Date('2026-10-19T00:00:00Z'),
           hold_until: '2026-10-20',
           image_path: 'images/clients/test.png',
@@ -91,7 +91,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
     expect(response.status).toBe(200);
     const [client] = await response.json();
     expect(client.first_name).toBe('DAMON');
-    expect(client.date_of_birth).toBe('1990-01-01T00:00:00.000Z');
+    expect(client.date_of_birth).toBe('1990-01-01');
     expect(client.hold_until).toBe('2026-10-20');
     expect(client.image_url).toMatch(/^\/clients\/\d+\/image\?v=[0-9a-f]{8}$/);
     expect(client).not.toHaveProperty('image_path');
@@ -120,7 +120,7 @@ describe('Client HTTP search (database replaced with a mock)', () => {
         {
           client_number: 1,
           first_name: 'Damon',
-          date_of_birth: new Date('2000-02-29T00:00:00Z'),
+          date_of_birth: '2000-02-29',
           identifications: [{ id: 1, id_type: 'TEST', id_value: '123' }],
         },
       ],
