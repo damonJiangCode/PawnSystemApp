@@ -34,6 +34,7 @@ Relative image paths resolve from the server working directory.
 | [Employee](src/employee/README.md)   | `/employees`                             |
 | [Item](src/item/README.md)           | `/tickets/:ticketNumber/items`, `/items` |
 | [Reference](src/reference/README.md) | `/reference/*`                           |
+| [Report](src/report/README.md)       | `/reports/*`                             |
 | [Ticket](src/ticket/README.md)       | `/tickets`                               |
 
 ## Conventions

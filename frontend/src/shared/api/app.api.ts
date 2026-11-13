@@ -3,10 +3,17 @@ import { createClientHttpApi } from "./client.http.ts";
 import { createEmployeeHttpApi } from "./employee.http.ts";
 import { createItemHttpApi } from "./item.http.ts";
 import { createReferenceHttpApi } from "./reference.http.ts";
+import { createReportHttpApi } from "./report.http.ts";
 import { createTicketHttpApi } from "./ticket.http.ts";
 
 // Domains served by the HTTP backend; the preload bridge provides the rest.
-type HttpDomains = "client" | "employee" | "item" | "reference" | "ticket";
+type HttpDomains =
+  | "client"
+  | "employee"
+  | "item"
+  | "reference"
+  | "report"
+  | "ticket";
 type DesktopApi = Omit<AppApi, HttpDomains>;
 
 declare global {
@@ -20,6 +27,7 @@ const httpApi: Pick<AppApi, HttpDomains> = {
   employee: createEmployeeHttpApi(),
   item: createItemHttpApi(),
   reference: createReferenceHttpApi(),
+  report: createReportHttpApi(),
   ticket: createTicketHttpApi(),
 };
 

@@ -5,12 +5,11 @@
 | `index.ts`             | Starts Electron, native menus and the main window |
 | `ipc/`                 | Channel names and handler registration            |
 | `window/`              | Window creation, reuse and focus                  |
-| `modules/reports/`     | Daily, buyback, interest and overdue reports      |
 | `modules/xml-reports/` | LeadsOnline XML preview and submission            |
 | `config/`, `shared/`   | Environment loading and small helpers             |
 
-Clients, employees, reference data, tickets and items moved to the NestJS server. The two
-report modules are next.
+Clients, employees, reference data, tickets, items and reports moved to the NestJS server.
+The XML report module is next.
 
 ## Request flow
 

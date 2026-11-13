@@ -7,7 +7,7 @@ import type {
   ReportDateRangeInput,
 } from "../payload-contracts/ticket.contract.ts";
 
-// Still served by the Electron preload bridge until reports are migrated.
+// Served by the HTTP backend (GET /reports/*).
 export type ReportApi = {
   loadBuybackReport: (
     input: ReportDateRangeInput,

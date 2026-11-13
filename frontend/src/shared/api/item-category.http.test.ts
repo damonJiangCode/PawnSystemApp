@@ -30,10 +30,10 @@ test("item categories use HTTP while other item operations keep their implementa
       return Response.json(categories);
     },
   );
-  const loadDailyReport = async () => ({}) as never;
-  setWindow(t, { report: { loadDailyReport } });
+  const checkConnection = async () => ({}) as never;
+  setWindow(t, { xmlReport: { checkConnection } });
   const api = getAppApi()!;
-  assert.equal(api.report.loadDailyReport, loadDailyReport);
+  assert.equal(api.xmlReport.checkConnection, checkConnection);
   assert.deepEqual(await api.reference.loadItemCategories(), categories);
   assert.deepEqual(calls, ["/reference/item-categories"]);
 });

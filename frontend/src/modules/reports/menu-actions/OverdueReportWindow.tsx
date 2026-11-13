@@ -109,11 +109,6 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
       return;
     }
 
-    if (!locations.includes(locationFrom) || !locations.includes(locationTo)) {
-      setErrorMessage("Select valid From and To locations from the list.");
-      return;
-    }
-
     setLoading(true);
     setErrorMessage("");
 
