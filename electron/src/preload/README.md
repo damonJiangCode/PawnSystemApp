@@ -1,7 +1,7 @@
 # Preload
 
-The controlled bridge between React and the main process. It exposes `window.appAPI` with the
-`xmlReport` and `window` domains; other domains use HTTP.
+The controlled bridge between React and the main process. It exposes `window.appAPI` with only the
+`window` domain (opening and focusing windows); every business domain uses HTTP.
 
 ```text
 frontend module API → getAppApi() → window.appAPI → preload/index.cjs → IPC → main handler

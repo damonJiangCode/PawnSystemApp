@@ -1,23 +1,13 @@
 # Main process
 
-| Path                   | Purpose                                           |
-| ---------------------- | ------------------------------------------------- |
-| `index.ts`             | Starts Electron, native menus and the main window |
-| `ipc/`                 | Channel names and handler registration            |
-| `window/`              | Window creation, reuse and focus                  |
-| `modules/xml-reports/` | LeadsOnline XML preview and submission            |
-| `config/`, `shared/`   | Environment loading and small helpers             |
+| Path       | Purpose                                           |
+| ---------- | ------------------------------------------------- |
+| `index.ts` | Starts Electron, native menus and the main window |
+| `ipc/`     | Channel names and handler registration            |
+| `window/`  | Window creation, reuse and focus                  |
 
-Clients, employees, reference data, tickets, items and reports moved to the NestJS server.
-The XML report module is next.
-
-## Request flow
-
-```text
-preload/index.cjs → IPC channel → *.handlers.ts → *.service.ts → *.repo.ts → database
-```
-
-Handlers receive IPC calls, services own the rules, and repos own the SQL.
+All business workflows (clients, employees, reference data, tickets, items, reports and
+LeadsOnline XML reports) run on the NestJS server. The main process only manages windows.
 
 ## Windows
 
