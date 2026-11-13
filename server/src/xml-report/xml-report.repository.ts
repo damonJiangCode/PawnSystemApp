@@ -60,9 +60,37 @@ export type SubmissionResultInput = {
 
 const text = (value: unknown) => (value == null ? '' : String(value));
 
+// Any fixed number works; it only has to be the same for every submit.
+const SUBMIT_LOCK_KEY = 4_200_001;
+
 @Injectable()
 export class XmlReportRepository {
   constructor(private readonly pool: Pool) {}
+
+  // Runs `work` while holding a PostgreSQL advisory lock, so two submits
+  // (a double click, or two computers) never send the same tickets at once.
+  // Returns null without running `work` if another submit holds the lock.
+  // The lock belongs to this connection, and PostgreSQL drops it if the
+  // connection dies, so a crash cannot leave it stuck.
+  async withSubmitLock<T>(work: () => Promise<T>): Promise<T | null> {
+    const connection = await this.pool.connect();
+    try {
+      const { rows } = await connection.query(
+        'SELECT pg_try_advisory_lock($1) AS locked',
+        [SUBMIT_LOCK_KEY],
+      );
+      if (!rows[0]?.locked) return null;
+      try {
+        return await work();
+      } finally {
+        await connection.query('SELECT pg_advisory_unlock($1)', [
+          SUBMIT_LOCK_KEY,
+        ]);
+      }
+    } finally {
+      connection.release();
+    }
+  }
 
   // Tickets written between the two shop days, with client, first ID and items.
   async loadSourceRows(
