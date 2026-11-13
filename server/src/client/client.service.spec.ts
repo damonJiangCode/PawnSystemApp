@@ -36,6 +36,7 @@ describe('ClientService', () => {
     images.save.mockResolvedValue(imagePath);
     repository.loadForUpdate.mockResolvedValue({
       client_number: 42,
+      date_of_birth: '1990-01-01',
       notes: 'Existing note',
       is_active: true,
       image_path: 'old.png',
@@ -43,6 +44,7 @@ describe('ClientService', () => {
     });
     repository.update.mockImplementation(async (number, changes) => ({
       client_number: number,
+      date_of_birth: '1990-01-01',
       notes: 'Existing note',
       image_path: 'old.png',
       redeem_count: 7,
@@ -86,6 +88,7 @@ describe('ClientService', () => {
       const clients = [
         mapRowToClient({
           client_number: 1,
+          date_of_birth: '1990-01-01',
           first_name: 'Damon',
           last_name: 'Wang',
         }),
@@ -119,7 +122,9 @@ describe('ClientService', () => {
     expect(repository.searchByName).toHaveBeenCalledExactlyOnceWith('Da', '');
   });
   it('trims the DOB and returns repository results', async () => {
-    const clients = [mapRowToClient({ client_number: 1 })];
+    const clients = [
+      mapRowToClient({ client_number: 1, date_of_birth: '1990-01-01' }),
+    ];
     repository.searchByDob.mockResolvedValue(clients);
     expect(await service.searchByDob(' 1990-01-01 ')).toEqual(clients);
     expect(repository.searchByDob).toHaveBeenCalledExactlyOnceWith(
@@ -195,7 +200,10 @@ describe('ClientService', () => {
   });
 
   it('rolls back and releases when inserting IDs fails', async () => {
-    repository.create.mockResolvedValue({ client_number: 1 });
+    repository.create.mockResolvedValue({
+      client_number: 1,
+      date_of_birth: '1990-01-01',
+    });
     const error = new Error('ID insert failed');
     repository.insertIds.mockRejectedValue(error);
     await expect(service.create(createInput())).rejects.toBe(error);
@@ -254,7 +262,10 @@ describe('ClientService', () => {
       employee_number: 7,
       first_name: 'STAFF',
     });
-    repository.create.mockResolvedValue({ client_number: 1 });
+    repository.create.mockResolvedValue({
+      client_number: 1,
+      date_of_birth: '1990-01-01',
+    });
     repository.insertIds.mockResolvedValue([]);
     await service.create(input);
     expect(employees.findActiveByPassword).toHaveBeenCalledWith(
@@ -268,7 +279,10 @@ describe('ClientService', () => {
     );
   });
   it('retains the photo if COMMIT has an uncertain outcome', async () => {
-    repository.create.mockResolvedValue({ client_number: 1 });
+    repository.create.mockResolvedValue({
+      client_number: 1,
+      date_of_birth: '1990-01-01',
+    });
     repository.insertIds.mockResolvedValue([]);
     const error = new Error('Connection lost during COMMIT');
     connection.query.mockImplementation(async (sql: string) => {
