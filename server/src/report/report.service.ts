@@ -1,6 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import type { ReportDateRangeQueryDto } from './report.dto.js';
-import { ReportRepository } from './report.repository.js';
+import type {
+  OverdueReportQueryDto,
+  ReportDateRangeQueryDto,
+} from './report.dto.js';
+import {
+  type OverdueLocationFilter,
+  ReportRepository,
+} from './report.repository.js';
 
 type DailyReportTicket = {
   ticket_number: number;
@@ -23,6 +29,41 @@ type DailyReportTicket = {
 
 const fieldError = (field: string, message: string) =>
   new BadRequestException({ field, message });
+
+type OverdueReportTicket = {
+  ticket_number: number;
+  client_name: string;
+  location: string;
+  transaction_date: string;
+  due_date: string;
+  interest_paid_months: number;
+  items: {
+    description: string;
+    brand_name: string;
+    model_number: string;
+    serial_number: string;
+  }[];
+};
+
+// AB11 -> shelf ['AB', 11]; RR-A -> lettered ['RR', 'A']; AK -> single.
+type ParsedLocation =
+  | { kind: 'shelf'; key: [string, number] }
+  | { kind: 'lettered'; key: [string, string] }
+  | { kind: 'single' };
+
+const parseLocation = (code: string): ParsedLocation => {
+  const shelf = /^([A-Z]+)(\d+)$/.exec(code);
+  if (shelf) return { kind: 'shelf', key: [shelf[1], Number(shelf[2])] };
+  const lettered = /^([A-Z]+)-([A-Z]+)$/.exec(code);
+  if (lettered) return { kind: 'lettered', key: [lettered[1], lettered[2]] };
+  return { kind: 'single' };
+};
+
+// Compares (first, second) keys the same way the SQL row comparison does.
+const isKeyAfter = <T extends string | number>(
+  a: [string, T],
+  b: [string, T],
+) => (a[0] === b[0] ? a[1] > b[1] : a[0] > b[0]);
 
 const roundMoney = (value: number) => Number(value.toFixed(2));
 
@@ -134,6 +175,99 @@ export class ReportService {
         rows.reduce((sum, row) => sum + row.amount_paid, 0),
       ),
     };
+  }
+
+  async loadOverdue(query: OverdueReportQueryDto) {
+    const rows = await this.repository.loadOverdueRows(
+      query.due_on_or_before,
+      await this.toLocationFilter(query.location_from, query.location_to),
+    );
+
+    // Group the item rows under their ticket, keeping the SQL order.
+    const tickets = new Map<number, OverdueReportTicket>();
+    for (const row of rows) {
+      let ticket = tickets.get(row.ticket_number);
+      if (!ticket) {
+        ticket = {
+          ticket_number: row.ticket_number,
+          client_name: row.client_name,
+          location: row.location,
+          transaction_date: row.transaction_date,
+          due_date: row.due_date,
+          interest_paid_months: row.interest_paid_months,
+          items: [],
+        };
+        tickets.set(row.ticket_number, ticket);
+      }
+      if (row.item_number !== null) {
+        ticket.items.push({
+          description: row.item_description,
+          brand_name: row.brand_name,
+          model_number: row.model_number,
+          serial_number: row.serial_number,
+        });
+      }
+    }
+
+    const list = [...tickets.values()];
+    return {
+      due_on_or_before: query.due_on_or_before,
+      location_from: query.location_from,
+      location_to: query.location_to,
+      tickets: list,
+      total_tickets: list.length,
+      total_items: list.reduce((sum, ticket) => sum + ticket.items.length, 0),
+    };
+  }
+
+  // AB11..AC43 and RR-A..RR-Z are ranges; other codes (AK) are reported alone.
+  private async toLocationFilter(
+    locationFrom: string,
+    locationTo: string,
+  ): Promise<OverdueLocationFilter> {
+    const existing = await this.repository.loadExistingLocations([
+      locationFrom,
+      locationTo,
+    ]);
+    if (!existing.includes(locationFrom)) {
+      throw fieldError(
+        'location_from',
+        'Select a From location from the list.',
+      );
+    }
+    if (!existing.includes(locationTo)) {
+      throw fieldError('location_to', 'Select a To location from the list.');
+    }
+
+    const from = parseLocation(locationFrom);
+    const to = parseLocation(locationTo);
+    if (from.kind === 'single' || to.kind === 'single') {
+      if (locationFrom !== locationTo) {
+        throw fieldError(
+          'location_to',
+          'This location can only be reported on its own: use the same From and To.',
+        );
+      }
+      return { kind: 'single', location: locationFrom };
+    }
+
+    const outOfOrder = () =>
+      fieldError(
+        'location_to',
+        'To location must be the same as or later than From location.',
+      );
+    if (from.kind === 'shelf' && to.kind === 'shelf') {
+      if (isKeyAfter(from.key, to.key)) throw outOfOrder();
+      return { kind: 'shelf', from: from.key, to: to.key };
+    }
+    if (from.kind === 'lettered' && to.kind === 'lettered') {
+      if (isKeyAfter(from.key, to.key)) throw outOfOrder();
+      return { kind: 'lettered', from: from.key, to: to.key };
+    }
+    throw fieldError(
+      'location_to',
+      'From and To must be the same kind of location, such as AA11 to AB20 or RR-A to RR-Z.',
+    );
   }
 
   // YYYY-MM-DD strings compare correctly as text.
