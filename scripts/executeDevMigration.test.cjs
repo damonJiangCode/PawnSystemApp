@@ -50,7 +50,7 @@ const fixture = (t, options = {}) => {
   }
   fs.writeFileSync(
     path.join(root, ".env"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\nEMPLOYEE_PIN_SECRET=test-only-employee-pin-secret-0123456789\n",
+    "DB_HOST=localhost\nDB_PORT=5432\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\nEMPLOYEE_PIN_SECRET=test-only-employee-pin-secret-0123456789\n",
   );
   const compiler = path.join(root, "node_modules/typescript/bin");
   fs.mkdirSync(compiler, { recursive: true });
@@ -103,7 +103,7 @@ const fixture = (t, options = {}) => {
       return {
         stdout: JSON.stringify({
           services: {
-            pawnsystemdb: {
+            db: {
               image: "postgres:16",
               volumes: [
                 {
@@ -113,7 +113,7 @@ const fixture = (t, options = {}) => {
                 },
               ],
               ports: [
-                { target: 5432, published: "5433", host_ip: "127.0.0.1" },
+                { target: 5432, published: "5432", host_ip: "127.0.0.1" },
               ],
               environment: {
                 POSTGRES_USER: "pawnsystem_dev",
@@ -136,7 +136,7 @@ const fixture = (t, options = {}) => {
                 },
               ],
               environment: {
-                DB_HOST: "pawnsystemdb",
+                DB_HOST: "db",
                 DB_PORT: "5432",
                 DB_USER: "pawnsystem_dev",
                 DB_PASSWORD: "test-only-private-password",

@@ -180,7 +180,7 @@ const executeDevMigration = async ({
       { capture: true },
     );
     const config = JSON.parse(configResult.stdout);
-    const databaseService = config.services.pawnsystemdb;
+    const databaseService = config.services.db;
     const migrationService = config.services.migration;
     const port = databaseService.ports.find((p) => Number(p.target) === 5432);
     if (
@@ -191,7 +191,7 @@ const executeDevMigration = async ({
       databaseService.environment.POSTGRES_USER !== values.DB_USER ||
       databaseService.environment.POSTGRES_PASSWORD !== values.DB_PASSWORD ||
       databaseService.environment.POSTGRES_DB !== values.DB_NAME ||
-      migrationService.environment.DB_HOST !== "pawnsystemdb" ||
+      migrationService.environment.DB_HOST !== "db" ||
       Number(migrationService.environment.DB_PORT) !== 5432
     ) {
       throw new Error("Compose and local database configuration do not agree.");
@@ -265,7 +265,7 @@ const executeDevMigration = async ({
       [
         "exec",
         "-T",
-        "pawnsystemdb",
+        "db",
         "psql",
         "-X",
         "-v",
@@ -348,7 +348,7 @@ const executeDevMigration = async ({
       await compose(`${name}-dump`, [
         "exec",
         "-T",
-        "pawnsystemdb",
+        "db",
         "pg_dump",
         "-U",
         values.DB_USER,
@@ -361,14 +361,14 @@ const executeDevMigration = async ({
       await compose(`${name}-archive-check`, [
         "exec",
         "-T",
-        "pawnsystemdb",
+        "db",
         "pg_restore",
         "--list",
         temporary,
       ]);
       await compose(`${name}-copy`, [
         "cp",
-        `pawnsystemdb:${temporary}`,
+        `db:${temporary}`,
         destination,
       ]);
       if (!fs.statSync(destination).size)

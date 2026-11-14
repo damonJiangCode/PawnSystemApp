@@ -62,7 +62,7 @@ Install dependencies with `npm ci`, start Docker Desktop and keep the app closed
 3. Start PostgreSQL.
 
    ```bash
-   docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+   docker compose --env-file .env -f docker/compose.yaml up -d --wait db
    ```
 
 4. Import. This initializes the schema, imports records, writes photos to `images/`,

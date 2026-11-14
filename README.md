@@ -87,12 +87,12 @@ cp .env.example .env
 Set the database credentials and `EMPLOYEE_PIN_SECRET` (at least 32 characters) in `.env`, then:
 
 ```bash
-docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+docker compose --env-file .env -f docker/compose.yaml up -d --wait db
 npm run db:init
 npm run dev
 ```
 
-This starts Vite on 5173, NestJS on 3000 and Electron; PostgreSQL uses host port 5433.
+This starts Vite on 5173, NestJS on 3000 and Electron; PostgreSQL uses 5432 (Docker, local-only). The server container also uses 3000, so stop it (`docker compose ... stop server`) before running the dev server.
 `db:init` does not create an employee. To import Access data instead, see the
 [migration guide](database/README.md#access-migration) or the
 [Windows setup](docs/instructions.md).

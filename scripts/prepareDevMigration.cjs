@@ -171,7 +171,7 @@ const prepareDevMigration = ({
       Number(values.DB_PORT) < 1 ||
       Number(values.DB_PORT) > 65535
     ) {
-      fail("DB_PORT must be a valid host port (default 5433).");
+      fail("DB_PORT must be a valid host port (default 5432).");
     }
   }
 
@@ -249,7 +249,7 @@ const prepareDevMigration = ({
       "Migration preparation checks passed. Input contents and target database state still require migration validation.",
     );
     log(
-      "Next: docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb",
+      "Next: docker compose --env-file .env -f docker/compose.yaml up -d --wait db",
     );
   }
   return finish();

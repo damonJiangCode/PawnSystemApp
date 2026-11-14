@@ -16,7 +16,7 @@ const fixture = (t) => {
   );
   fs.writeFileSync(
     path.join(root, ".env.example"),
-    "DB_HOST=localhost\nDB_PORT=5433\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\nEMPLOYEE_PIN_SECRET=\n",
+    "DB_HOST=localhost\nDB_PORT=5432\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=\nEMPLOYEE_PIN_SECRET=\n",
   );
   for (const name of ["pg", "csv-parser", "electron"]) {
     const folder = path.join(root, "node_modules", name);
