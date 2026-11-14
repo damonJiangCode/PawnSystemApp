@@ -1,28 +1,12 @@
-node_modules
+# Build context for docker/migration.Dockerfile (the repository root).
 .git
-.env
-.env.*
+**/node_modules
 .electron-build
 dist
-database/migration/source
-database/migration/exports
-database/migration/backups
 
+# Never send secrets or private store data to the Docker daemon.
+.env
+database/migration/source
 database/migration/reports
+database/migration/backups
 images
-backups
-exports
-logs
-private
-secrets
-credentials
-work
-SOAP
-*.pem
-*.key
-*.p12
-*.pfx
-*.log
-*.dump
-*.mdb
-*.accdb
