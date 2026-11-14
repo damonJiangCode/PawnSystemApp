@@ -7,7 +7,6 @@ dist
 database/migration/source
 database/migration/exports
 database/migration/backups
-test-results
 
 database/migration/reports
 images

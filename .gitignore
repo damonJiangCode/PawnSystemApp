@@ -1,11 +1,9 @@
 # Dependencies and generated builds
 node_modules/
 .electron-build/
-.db-build/
 dist/
 release/
 coverage/
-test-results/
 *.tsbuildinfo
 
 # Private configuration (only sanitized example templates may be public)
