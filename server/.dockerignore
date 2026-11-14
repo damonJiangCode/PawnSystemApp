@@ -1,0 +1,8 @@
+# Only package files, tsconfig files and src go into the server image.
+node_modules
+dist
+coverage
+test
+*.tsbuildinfo
+.env
+.env.*
