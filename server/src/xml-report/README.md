@@ -11,7 +11,8 @@ web service. Only the server holds the LeadsOnline login.
 
 ## Settings
 
-`LEADSONLINE_ENV` (`production`, anything else means `sandbox`), `LEADSONLINE_STORE_ID`,
+`LEADSONLINE_ENV` (`sandbox` or `production`, any case; empty means `sandbox`, any other value
+stops the server at startup), `LEADSONLINE_STORE_ID`,
 `LEADSONLINE_USERNAME`, `LEADSONLINE_PASSWORD` in the server `.env`. The server starts without
 them; connection and submit then answer 503, and preview still works.
 

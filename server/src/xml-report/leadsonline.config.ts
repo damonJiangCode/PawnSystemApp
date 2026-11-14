@@ -10,6 +10,18 @@ const WSDL_URLS: Record<LeadsOnlineEnvironment, string> = {
   production: 'https://w3api.leadsonline.ca/ticketWS.asmx?wsdl',
 };
 
+// Empty means sandbox. Any other unknown value stops the server, so a typo can
+// never send real tickets to the sandbox, or test tickets to production.
+const parseEnvironment = (value?: string): LeadsOnlineEnvironment => {
+  const environment = value?.trim().toLowerCase() || 'sandbox';
+  if (environment !== 'sandbox' && environment !== 'production') {
+    throw new Error(
+      `LEADSONLINE_ENV must be "sandbox" or "production", got "${value}".`,
+    );
+  }
+  return environment;
+};
+
 // LeadsOnline settings from the server's .env. Missing credentials do not stop
 // the server from starting: only the calls that talk to LeadsOnline fail, with 503.
 @Injectable()
@@ -19,10 +31,7 @@ export class LeadsOnlineConfig {
   private readonly credentials: LeadsOnlineLogin | null;
 
   constructor(config: ConfigService) {
-    this.environment =
-      config.get<string>('LEADSONLINE_ENV') === 'production'
-        ? 'production'
-        : 'sandbox';
+    this.environment = parseEnvironment(config.get<string>('LEADSONLINE_ENV'));
     this.wsdlUrl = WSDL_URLS[this.environment];
 
     const storeId = Number(config.get<string>('LEADSONLINE_STORE_ID'));

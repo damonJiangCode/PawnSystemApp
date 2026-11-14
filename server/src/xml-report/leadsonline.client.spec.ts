@@ -36,10 +36,16 @@ describe('LeadsOnlineConfig', () => {
 
     const production = makeConfig({
       ...SETTINGS,
-      LEADSONLINE_ENV: 'production',
+      LEADSONLINE_ENV: ' Production ',
     });
     expect(production.environment).toBe('production');
     expect(production.wsdlUrl).toContain('w3api.leadsonline.ca');
+  });
+
+  it('refuses an unknown environment instead of guessing', () => {
+    expect(() => makeConfig({ ...SETTINGS, LEADSONLINE_ENV: 'prod' })).toThrow(
+      'LEADSONLINE_ENV must be "sandbox" or "production", got "prod".',
+    );
   });
 
   it('returns the trimmed login', () => {
