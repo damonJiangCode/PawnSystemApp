@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import type { ReportDateRangeQueryDto } from './report.dto.js';
 
+// The same day one year later (Feb 29 rolls to Mar 1), as YYYY-MM-DD.
 const oneYearAfter = (date: string) => {
   const [year, month, day] = date.split('-').map(Number);
   return new Date(Date.UTC(year + 1, month - 1, day))

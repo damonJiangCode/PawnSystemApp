@@ -88,7 +88,6 @@ const interestRecordsNote = (
 
 const roundMoney = (value: number) => Number(value.toFixed(2));
 
-// The same day one year later (Feb 29 rolls to Mar 1), as YYYY-MM-DD.
 @Injectable()
 export class ReportService {
   constructor(private readonly repository: ReportRepository) {}
