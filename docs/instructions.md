@@ -16,7 +16,7 @@ For the first import, close the app and use a fresh development database with an
 npm ci
 npm --prefix server ci
 npm run migration:prepare
-docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+docker compose --env-file .env -f docker/compose.yaml up -d --wait db
 npm run migration:execute
 npm run dev
 ```
@@ -36,13 +36,13 @@ npm run dev
 If the database container is stopped, start it first:
 
 ```powershell
-docker compose --env-file .env -f docker/compose.yaml up -d --wait pawnsystemdb
+docker compose --env-file .env -f docker/compose.yaml up -d --wait db
 ```
 
 Run migration only for the initial import. Stop the app with `Ctrl+C`. To stop the database while keeping its data:
 
 ```powershell
-docker compose --env-file .env -f docker/compose.yaml stop pawnsystemdb
+docker compose --env-file .env -f docker/compose.yaml stop db
 ```
 
 Database data stays in Docker's persistent volume on this computer. Do not use `docker compose down -v`; it deletes that volume. Keep `.env` and private migration folders out of Git.

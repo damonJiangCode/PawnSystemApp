@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 import { ClientModule } from './client/client.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module.js';
 import { EmployeeModule } from './employee/employee.module.js';
+import { HealthModule } from './health/health.module.js';
 import { ItemModule } from './item/item.module.js';
 import { ReferenceModule } from './reference/reference.module.js';
 import { ReportModule } from './report/report.module.js';
@@ -23,6 +22,7 @@ import { fileURLToPath } from 'node:url';
     }),
     ClientModule,
     EmployeeModule,
+    HealthModule,
     ItemModule,
     ReferenceModule,
     ReportModule,
@@ -30,7 +30,5 @@ import { fileURLToPath } from 'node:url';
     XmlReportModule,
     DatabaseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

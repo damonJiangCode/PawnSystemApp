@@ -1,24 +1,54 @@
 name: pawnsystem
 
 services:
-  pawnsystemdb:
+  db:
     image: postgres:16
-    container_name: pawnsystemcontainer
+    container_name: db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:?Set DB_USER in the project .env}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in the project .env}
       POSTGRES_DB: ${DB_NAME:?Set DB_NAME in the project .env}
     ports:
-      - "127.0.0.1:${DB_PORT:-5433}:5432"
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 10s
+
+  server:
+    build:
+      context: ../server
+    image: pawnsystem-server
+    container_name: server
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:?Set DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      DB_NAME: ${DB_NAME:?Set DB_NAME}
+      EMPLOYEE_PIN_SECRET: ${EMPLOYEE_PIN_SECRET:?Set EMPLOYEE_PIN_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      CLIENT_IMAGE_DIR: /data/images/clients
+      ITEM_IMAGE_DIR: /data/images/items
+      LEADSONLINE_ENV: ${LEADSONLINE_ENV:-sandbox}
+      LEADSONLINE_STORE_ID: ${LEADSONLINE_STORE_ID:-}
+      LEADSONLINE_USERNAME: ${LEADSONLINE_USERNAME:-}
+      LEADSONLINE_PASSWORD: ${LEADSONLINE_PASSWORD:-}
+    # Host ports match container ports (DB 5432, server 3000). Shop computers reach
+    # the API on this port; PostgreSQL stays local-only.
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+    volumes:
+      - ${PHOTO_DIR:-../images}:/data/images
+    depends_on:
+      db:
+        condition: service_healthy
 
   migration:
     profiles: ["migration"]
@@ -26,14 +56,14 @@ services:
       context: ..
       dockerfile: docker/migration.Dockerfile
     environment:
-      DB_HOST: pawnsystemdb
+      DB_HOST: db
       DB_PORT: 5432
       DB_USER: ${DB_USER:?Set DB_USER}
       DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
       DB_NAME: ${DB_NAME:?Set DB_NAME}
       EMPLOYEE_PIN_SECRET: ${EMPLOYEE_PIN_SECRET:?Set EMPLOYEE_PIN_SECRET}
     depends_on:
-      pawnsystemdb:
+      db:
         condition: service_healthy
     volumes:
       - ../database/migration/source:/app/database/migration/source:ro
