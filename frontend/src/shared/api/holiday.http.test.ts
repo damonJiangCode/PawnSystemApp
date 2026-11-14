@@ -103,10 +103,10 @@ test("getAppApi routes all existing holiday methods through HTTP and preserves d
     calls.push(`${init.method ?? "GET"} ${url.pathname}`);
     return Response.json(!init.method ? [holiday] : holiday);
   });
-  const checkConnection = () => Promise.resolve({} as never);
-  setWindow(t, { xmlReport: { checkConnection } });
+  const focusMainWindow = () => Promise.resolve();
+  setWindow(t, { window: { focusMainWindow } });
   const api = getAppApi()!;
-  assert.equal(api.xmlReport.checkConnection, checkConnection);
+  assert.equal(api.window.focusMainWindow, focusMainWindow);
   assert.deepEqual(await api.reference.loadHolidayDates(), [holiday]);
   assert.deepEqual(await api.reference.addHolidayDate(holiday), holiday);
   assert.deepEqual(

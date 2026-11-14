@@ -79,10 +79,10 @@ test("getAppApi binds all ID type writes/reads to HTTP and preserves desktop met
       is_active: !url.pathname.endsWith("/deactivate"),
     });
   });
-  const checkConnection = () => Promise.resolve({} as never);
-  setWindow(t, { xmlReport: { checkConnection } });
+  const focusMainWindow = () => Promise.resolve();
+  setWindow(t, { window: { focusMainWindow } });
   const api = getAppApi()!;
-  assert.equal(api.xmlReport.checkConnection, checkConnection);
+  assert.equal(api.window.focusMainWindow, focusMainWindow);
   assert.deepEqual(await api.reference.loadIdTypes(), [item.type]);
   assert.deepEqual(await api.reference.loadAllIdTypes(), [item]);
   assert.deepEqual(await api.reference.addIdType(item.type), item);

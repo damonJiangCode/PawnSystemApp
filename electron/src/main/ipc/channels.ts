@@ -1,7 +1,4 @@
 const CHANNELS = {
-  CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
-  LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
-  SUBMIT_XML_REPORT: "submit-xml-report",
   OPEN_PAYMENT_WINDOW: "open-payment-window",
   NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
   OPEN_QUOTE_WINDOW: "open-quote-window",

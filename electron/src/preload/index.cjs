@@ -1,9 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const CHANNELS = {
-  CHECK_XML_REPORT_CONNECTION: "check-xml-report-connection",
-  LOAD_XML_REPORT_PREVIEW: "load-xml-report-preview",
-  SUBMIT_XML_REPORT: "submit-xml-report",
   OPEN_PAYMENT_WINDOW: "open-payment-window",
   NOTIFY_PAYMENT_WINDOW_INPUT_UPDATED: "notify-payment-window-input-updated",
   OPEN_QUOTE_WINDOW: "open-quote-window",
@@ -17,12 +14,6 @@ const CHANNELS = {
 };
 
 const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args);
-
-const xmlReportApi = {
-  checkConnection: () => invoke(CHANNELS.CHECK_XML_REPORT_CONNECTION),
-  loadPreview: (input) => invoke(CHANNELS.LOAD_XML_REPORT_PREVIEW, input),
-  submitReport: (input) => invoke(CHANNELS.SUBMIT_XML_REPORT, input),
-};
 
 const windowApi = {
   openPaymentWindow: (payload) => invoke(CHANNELS.OPEN_PAYMENT_WINDOW, payload),
@@ -63,7 +54,6 @@ const windowApi = {
 
 contextBridge.exposeInMainWorld("appAPI", {
   window: windowApi,
-  xmlReport: xmlReportApi,
 });
 
 console.log("Preload (CJS) loaded");

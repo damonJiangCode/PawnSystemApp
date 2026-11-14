@@ -97,9 +97,9 @@ test("reference HTTP surfaces server failures so the dropdown can show an error"
 });
 
 test("getAppApi serves client and reference over HTTP and keeps desktop domains", async (t) => {
-  const checkConnection = () => Promise.resolve({} as never);
+  const focusMainWindow = () => Promise.resolve();
   const host = globalThis as { window?: unknown };
-  host.window = { appAPI: { xmlReport: { checkConnection } } };
+  host.window = { appAPI: { window: { focusMainWindow } } };
   t.after(() => delete host.window);
   const paths: string[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL) => {
@@ -108,7 +108,7 @@ test("getAppApi serves client and reference over HTTP and keeps desktop domains"
     return Response.json([]);
   });
   const api = getAppApi()!;
-  assert.equal(api.xmlReport.checkConnection, checkConnection);
+  assert.equal(api.window.focusMainWindow, focusMainWindow);
   await api.reference.loadEyeColors();
   await api.client.searchClients("A", "B");
   assert.deepEqual(paths, ["/reference/colors/eye", "/clients"]);

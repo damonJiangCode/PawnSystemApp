@@ -5,6 +5,7 @@ import { createItemHttpApi } from "./item.http.ts";
 import { createReferenceHttpApi } from "./reference.http.ts";
 import { createReportHttpApi } from "./report.http.ts";
 import { createTicketHttpApi } from "./ticket.http.ts";
+import { createXmlReportHttpApi } from "./xmlReport.http.ts";
 
 // Domains served by the HTTP backend; the preload bridge provides the rest.
 type HttpDomains =
@@ -13,7 +14,8 @@ type HttpDomains =
   | "item"
   | "reference"
   | "report"
-  | "ticket";
+  | "ticket"
+  | "xmlReport";
 type DesktopApi = Omit<AppApi, HttpDomains>;
 
 declare global {
@@ -29,6 +31,7 @@ const httpApi: Pick<AppApi, HttpDomains> = {
   reference: createReferenceHttpApi(),
   report: createReportHttpApi(),
   ticket: createTicketHttpApi(),
+  xmlReport: createXmlReportHttpApi(),
 };
 
 export const getAppApi = (): AppApi | undefined => {

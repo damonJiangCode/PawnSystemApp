@@ -9,6 +9,7 @@ import { ItemModule } from './item/item.module.js';
 import { ReferenceModule } from './reference/reference.module.js';
 import { ReportModule } from './report/report.module.js';
 import { TicketModule } from './ticket/ticket.module.js';
+import { XmlReportModule } from './xml-report/xml-report.module.js';
 import { fileURLToPath } from 'node:url';
 
 @Module({
@@ -26,6 +27,7 @@ import { fileURLToPath } from 'node:url';
     ReferenceModule,
     ReportModule,
     TicketModule,
+    XmlReportModule,
     DatabaseModule,
   ],
   controllers: [AppController],

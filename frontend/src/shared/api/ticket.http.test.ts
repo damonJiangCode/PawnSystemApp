@@ -86,10 +86,10 @@ test("a missing ticket is null, other failures still throw", async (t) => {
   });
 });
 
-test("getAppApi serves every ticket method over HTTP and keeps desktop XML reports", async (t) => {
-  const checkConnection = () => Promise.resolve({} as never);
+test("getAppApi serves every ticket method over HTTP and keeps desktop windows", async (t) => {
+  const focusMainWindow = () => Promise.resolve();
   setWindow(t, {
-    xmlReport: { checkConnection },
+    window: { focusMainWindow },
     ticket: {
       loadTicketsByClient: () => {
         throw new Error("IPC must not be used");
@@ -101,7 +101,7 @@ test("getAppApi serves every ticket method over HTTP and keeps desktop XML repor
     return Response.json([]);
   });
   const api = getAppApi()!;
-  assert.equal(api.xmlReport.checkConnection, checkConnection);
+  assert.equal(api.window.focusMainWindow, focusMainWindow);
   assert.deepEqual(await api.ticket.loadTicketsByClient(7), []);
 });
 

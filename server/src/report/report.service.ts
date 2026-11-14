@@ -11,6 +11,7 @@ import {
   LETTERED_LOCATION_PATTERN,
   SHELF_LOCATION_PATTERN,
 } from './report-location.js';
+import { requireValidReportRange } from './report-range.js';
 
 type DailyReportTicket = {
   ticket_number: number;
@@ -87,20 +88,12 @@ const interestRecordsNote = (
 
 const roundMoney = (value: number) => Number(value.toFixed(2));
 
-// The same day one year later (Feb 29 rolls to Mar 1), as YYYY-MM-DD.
-const oneYearAfter = (date: string) => {
-  const [year, month, day] = date.split('-').map(Number);
-  return new Date(Date.UTC(year + 1, month - 1, day))
-    .toISOString()
-    .slice(0, 10);
-};
-
 @Injectable()
 export class ReportService {
   constructor(private readonly repository: ReportRepository) {}
 
   async loadDaily(range: ReportDateRangeQueryDto) {
-    this.requireValidRange(range);
+    requireValidReportRange(range);
     const rows = await this.repository.loadDailyRows(
       range.from_date,
       range.to_date,
@@ -157,7 +150,7 @@ export class ReportService {
   }
 
   async loadBuyback(range: ReportDateRangeQueryDto) {
-    this.requireValidRange(range);
+    requireValidReportRange(range);
     const rows = await this.repository.loadBuybackRows(
       range.from_date,
       range.to_date,
@@ -178,7 +171,7 @@ export class ReportService {
   }
 
   async loadInterest(range: ReportDateRangeQueryDto) {
-    this.requireValidRange(range);
+    requireValidReportRange(range);
     // interest_payment is only written by this system, so days before the
     // first recorded payment have no data; records_note tells the user so.
     const [rows, recordsStartDate] = await Promise.all([
@@ -289,18 +282,5 @@ export class ReportService {
       'location_to',
       'From and To must be the same kind of location, such as AA11 to AB20 or RR-A to RR-Z.',
     );
-  }
-
-  // YYYY-MM-DD strings compare correctly as text.
-  private requireValidRange({ from_date, to_date }: ReportDateRangeQueryDto) {
-    if (from_date > to_date) {
-      throw fieldError(
-        'to_date',
-        'To date must be the same as or later than From date.',
-      );
-    }
-    if (to_date >= oneYearAfter(from_date)) {
-      throw fieldError('to_date', 'Date range cannot exceed 1 year.');
-    }
   }
 }
