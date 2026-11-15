@@ -3,15 +3,15 @@
 PostgreSQL schema, seed data and the legacy Access migration. There is no migration
 framework: `database/schema/` holds `CREATE ... IF NOT EXISTS` SQL.
 
-| Path            | Purpose                                      |
-| --------------- | -------------------------------------------- |
-| `schema/`       | Tables and indexes                           |
-| `seed/`         | Reference data, including cities             |
-| `functions/`    | Database guard functions                     |
-| `views/`        | Views such as item status lookup             |
-| `initialize.ts` | Creates the schema and reference data        |
-| `connection.ts` | PostgreSQL connections for Electron          |
-| `migration/`    | Access import scripts and JSON mapping rules |
+| Path            | Purpose                               |
+| --------------- | ------------------------------------- |
+| `schema/`       | Tables and indexes                    |
+| `seed/`         | Reference data, including cities      |
+| `functions/`    | Database guard functions              |
+| `views/`        | Views such as item status lookup      |
+| `initialize.ts` | Creates the schema and reference data |
+| `connection.ts` | PostgreSQL connections for Electron   |
+| `migration/`    | Access import, described below        |
 
 NestJS uses its own pool in `server/src/database/database.module.ts`.
 
@@ -49,6 +49,13 @@ hand and document it here. These have already been applied to the dev database:
   ```
 
 ## Access migration
+
+| Path                  | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `migration/runner/`   | `migration:prepare` and `migration:execute`, and their checks  |
+| `migration/scripts/`  | One importer per table, run inside the migration container     |
+| `migration/mappings/` | Versioned JSON mapping rules                                   |
+| `migration/tools/`    | Manual checks: photo paths, row counts, active-location review |
 
 Install dependencies with `npm ci`, start Docker Desktop and keep the app closed.
 

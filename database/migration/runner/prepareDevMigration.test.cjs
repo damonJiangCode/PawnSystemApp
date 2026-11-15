@@ -38,7 +38,7 @@ const fixture = (t) => {
         ? fs.readFileSync(
             path.join(
               __dirname,
-              "../database/migration/mappings/id-type-mapping.json",
+              "../mappings/id-type-mapping.json",
             ),
           )
         : "Synthetic test input; not a real customer record.\n",

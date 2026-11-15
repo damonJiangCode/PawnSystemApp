@@ -8,7 +8,7 @@ const ts = require("typescript");
 // Execute real TypeScript functions with isolated database/IPC dependencies.
 function load(relativePath, dependencies = {}) {
   const source = fs.readFileSync(
-    path.join(__dirname, "..", relativePath),
+    path.join(__dirname, "../../../../..", relativePath),
     "utf8",
   );
   const code = ts.transpileModule(source, {

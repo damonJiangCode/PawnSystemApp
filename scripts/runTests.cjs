@@ -9,8 +9,9 @@ const result = spawnSync(
     "frontend/src/**/*.test.ts",
     "electron/src/**/*.test.ts",
     "shared/**/*.test.ts",
-    "scripts/*.test.cjs",
+    "frontend/src/**/*.test.cjs",
     "database/migration/scripts/*.test.cjs",
+    "database/migration/runner/*.test.cjs",
   ],
   {
     stdio: "inherit",

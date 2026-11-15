@@ -6,8 +6,8 @@
   "main": ".electron-build/electron/src/main/index.js",
   "scripts": {
     "test": "node scripts/runTests.cjs",
-    "migration:prepare": "node scripts/prepareDevMigration.cjs",
-    "migration:execute": "node scripts/executeDevMigration.cjs",
+    "migration:prepare": "node database/migration/runner/prepareDevMigration.cjs",
+    "migration:execute": "node database/migration/runner/executeDevMigration.cjs",
     "dev:frontend": "vite --config frontend/vite.config.ts",
     "dev:server": "npm --prefix server run dev:server",
     "dev:main": "node scripts/prepareElectronBuild.cjs && tsc -p electron/tsconfig.json --watch --preserveWatchOutput",

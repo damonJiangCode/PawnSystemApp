@@ -92,7 +92,7 @@ const connectDatabase = async (values) => {
 };
 
 const executeDevMigration = async ({
-  projectRoot = path.resolve(__dirname, ".."),
+  projectRoot = path.resolve(__dirname, "../../.."),
   prepare = prepareDevMigration,
   run = runCommand,
   connect = connectDatabase,

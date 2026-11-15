@@ -52,7 +52,7 @@ const findDocker = (command) => {
 };
 
 const prepareDevMigration = ({
-  projectRoot = path.resolve(__dirname, ".."),
+  projectRoot = path.resolve(__dirname, "../../.."),
   run = spawnSync,
   log = console.log,
 } = {}) => {
@@ -189,7 +189,7 @@ const prepareDevMigration = ({
     }
   }
   try {
-    require("../database/migration/scripts/id-type-mapping.cjs").loadIdTypeMapping(
+    require("../scripts/id-type-mapping.cjs").loadIdTypeMapping(
       path.join(
         projectRoot,
         "database/migration/mappings/id-type-mapping.json",
