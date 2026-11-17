@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../../components/DateField";
 import PrintIcon from "@mui/icons-material/Print";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {
@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { reportApi } from "../../api/report";
-import { formatIsoDate } from "../../shared/utils/formatters";
+import { formatIsoDate } from "../../lib/formatters";
 import WindowFrame from "../WindowFrame";
 import type { WindowScreenProps } from "../registry";
 import ReportDocument from "./ReportDocument";

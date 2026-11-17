@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../../components/DateField";
 import PrintIcon from "@mui/icons-material/Print";
 import {
   Alert,
@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { formatCurrency, formatIsoDate } from "../../shared/utils/formatters";
+import { formatCurrency, formatIsoDate } from "../../lib/formatters";
 import WindowFrame from "../WindowFrame";
 import type { WindowScreenProps } from "../registry";
 import { useQuoteWindow } from "./useQuoteWindow";

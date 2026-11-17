@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../../components/DateField";
 import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import PreviewIcon from "@mui/icons-material/Preview";
 import SendIcon from "@mui/icons-material/Send";
@@ -23,7 +23,7 @@ import type {
   XmlReportSubmissionResult,
 } from "@pawnsystem/shared/payload-contracts/xmlReport.contract";
 import { xmlReportApi } from "../../api/xmlReport";
-import { formatCurrency, formatIsoDate } from "../../shared/utils/formatters";
+import { formatCurrency, formatIsoDate } from "../../lib/formatters";
 import WindowFrame from "../WindowFrame";
 import type { WindowScreenProps } from "../registry";
 

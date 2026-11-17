@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DataGrid } from "@mui/x-data-grid";
-import ClientBar from "../../shared/components/ClientBar";
-import { formatCurrency } from "../../shared/utils/formatters";
+import ClientBar from "../../components/ClientBar";
+import { formatCurrency } from "../../lib/formatters";
 import { type PaymentMode, usePaymentWindow } from "./usePaymentWindow";
 import TicketOwnerCheckDialog from "./TicketOwnerCheckDialog";
 import PickupHoldDialog from "./PickupHoldDialog";

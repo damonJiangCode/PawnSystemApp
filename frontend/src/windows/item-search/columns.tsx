@@ -1,7 +1,7 @@
 import type { GridColDef } from "@mui/x-data-grid";
 import type { Item } from "@pawnsystem/shared/models/item.model";
-import CellTooltip from "../../shared/components/CellTooltip";
-import { formatCurrency, formatUppercase } from "../../shared/utils/formatters";
+import CellTooltip from "../../components/CellTooltip";
+import { formatCurrency, formatUppercase } from "../../lib/formatters";
 
 const formatTicketStatus = (status?: string) => {
   if (status === "pawned") {

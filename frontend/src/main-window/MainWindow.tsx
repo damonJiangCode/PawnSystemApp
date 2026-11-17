@@ -4,9 +4,9 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import TopBar from "./TopBar";
-import ClientPage from "../modules/clients/pages/ClientPage";
-import TransactionPage from "../modules/transactions/pages/TransactionPage";
-import HistoryPage from "../modules/history/pages/HistoryPage";
+import ClientPage from "../pages/client/ClientPage";
+import TransactionPage from "../pages/transaction/TransactionPage";
+import HistoryPage from "../pages/history/HistoryPage";
 import { useMainWindow } from "./useMainWindow";
 import { referenceApi } from "../api/reference";
 

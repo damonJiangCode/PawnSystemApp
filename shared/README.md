@@ -21,7 +21,7 @@ Rules:
 
 - No functions, constants or classes. `tsconfig.json` allows erasable syntax only.
 - No logic. Calculations belong to the server, which owns business rules. The frontend's
-  display previews live in `frontend/src/shared/utils`.
+  display previews live in `frontend/src/lib`.
 - No React, Electron, database or filesystem imports.
 
 ```bash

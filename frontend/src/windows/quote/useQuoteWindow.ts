@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import type { Item } from "@pawnsystem/shared/models/item.model";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type { OpenQuoteWindowInput } from "@pawnsystem/shared/payload-contracts/window.contract";
-import { calculation } from "../../shared/utils/calculation";
-import { getTicketPickupAmount } from "../../shared/utils/ticketFinance";
+import { calculation } from "../../lib/calculation";
+import { getTicketPickupAmount } from "../../lib/ticketFinance";
 import { getWindowApi } from "../../api/window";
-import { formatIsoDate } from "../../shared/utils/formatters";
+import { formatIsoDate } from "../../lib/formatters";
 import { itemApi } from "../../api/item";
 import { ticketApi } from "../../api/ticket";
 

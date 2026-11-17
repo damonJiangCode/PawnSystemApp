@@ -1,0 +1,56 @@
+import React from "react";
+import { Box, Button } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
+import { actionButtonSx } from "../styles/buttonStyles";
+
+// Buttons that show an icon and their label, used under the ticket tables.
+export type LabeledAction = {
+  label: string;
+  icon: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+  sx?: SxProps<Theme>;
+};
+
+interface LabeledActionsProps {
+  actions: LabeledAction[];
+  justifyContent?: "center" | "space-between";
+}
+
+const LabeledActions: React.FC<LabeledActionsProps> = ({
+  actions,
+  justifyContent = "center",
+}) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent,
+        alignItems: "stretch",
+        gap: 1,
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      {actions.map((action) => (
+        <Button
+          key={action.label}
+          size="small"
+          variant="contained"
+          sx={{
+            ...actionButtonSx,
+            ...action.sx,
+          }}
+          disabled={action.disabled}
+          onClick={action.onClick}
+          startIcon={action.icon}
+        >
+          {action.label}
+        </Button>
+      ))}
+    </Box>
+  );
+};
+
+export default LabeledActions;

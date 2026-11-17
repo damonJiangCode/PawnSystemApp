@@ -1,6 +1,6 @@
 import type { GridColDef } from "@mui/x-data-grid";
-import CellTooltip from "../../shared/components/CellTooltip";
-import { formatCurrency, formatIsoDate } from "../../shared/utils/formatters";
+import CellTooltip from "../../components/CellTooltip";
+import { formatCurrency, formatIsoDate } from "../../lib/formatters";
 import type { PaymentMode, PaymentTicketRow } from "./types";
 
 export const createPaymentColumns = (

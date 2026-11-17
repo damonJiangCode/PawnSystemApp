@@ -39,7 +39,7 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
 
 | Area      | Technology                                                    |
 | --------- | ------------------------------------------------------------- |
-| Frontend  | React 18, TypeScript, Material UI, MUI Data Grid, Vite        |
+| Frontend  | React 19, TypeScript, Material UI, MUI Data Grid, Vite        |
 | Desktop   | Electron                                                      |
 | Backend   | NestJS, class-validator, node-postgres with parameterized SQL |
 | Database  | PostgreSQL 16 in Docker                                       |

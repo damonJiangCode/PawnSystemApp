@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../../components/DateField";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import PrintIcon from "@mui/icons-material/Print";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -25,7 +25,7 @@ import type { OverdueReportTicket } from "@pawnsystem/shared/payload-contracts/t
 import { reportApi } from "../../api/report";
 import { ticketApi } from "../../api/ticket";
 import { getWindowApi } from "../../api/window";
-import { formatIsoDate } from "../../shared/utils/formatters";
+import { formatIsoDate } from "../../lib/formatters";
 import WindowFrame from "../WindowFrame";
 import type { WindowScreenProps } from "../registry";
 import ReportDocument from "./ReportDocument";

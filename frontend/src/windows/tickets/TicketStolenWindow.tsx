@@ -22,7 +22,7 @@ import type { WindowScreenProps } from "../registry";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { TicketFormError } from "../../api/ticket";
 import { ticketApi } from "../../api/ticket";
-import { formatIsoDate, formatUppercase } from "../../shared/utils/formatters";
+import { formatIsoDate, formatUppercase } from "../../lib/formatters";
 
 const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
   const ticketInputRef = React.useRef<HTMLInputElement>(null);

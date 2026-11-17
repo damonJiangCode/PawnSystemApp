@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
-import { formatIsoDate } from "../../shared/utils/formatters";
+import { formatIsoDate } from "../../lib/formatters";
 
 type TicketOwnerCheckDialogProps = {
   open: boolean;

@@ -1,0 +1,48 @@
+import React from "react";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import type { Item } from "@pawnsystem/shared/models/item.model";
+import IconActions from "../../components/IconActions";
+import { destructiveButtonSx } from "../../styles/buttonStyles";
+
+interface TransactionItemActionsProps {
+  selectedItem?: Item;
+  onAdd: () => void;
+  onEdit: (i: Item) => void;
+  onDelete: (i: Item) => void;
+}
+
+const TransactionItemActions: React.FC<TransactionItemActionsProps> = (
+  props,
+) => {
+  const { selectedItem, onAdd, onEdit, onDelete } = props;
+  const disabled = !selectedItem;
+
+  return (
+    <IconActions
+      actions={[
+        {
+          label: "Add Item",
+          icon: <AddIcon />,
+          onClick: onAdd,
+        },
+        {
+          label: "Edit Item",
+          icon: <EditIcon />,
+          disabled,
+          onClick: () => selectedItem && onEdit(selectedItem),
+        },
+        {
+          label: "Remove Item",
+          icon: <DeleteIcon />,
+          disabled,
+          onClick: () => selectedItem && onDelete(selectedItem),
+          sx: destructiveButtonSx,
+        },
+      ]}
+    />
+  );
+};
+
+export default TransactionItemActions;

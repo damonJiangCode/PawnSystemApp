@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../../components/DateField";
 import React from "react";
 import {
   Alert,

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import type { IdType } from "@pawnsystem/shared/models/id-type.model";
 import WindowFrame from "../WindowFrame";
-import ConfirmDialog from "../../shared/components/ConfirmDialog";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import IdTypeAddDialog from "./IdTypeAddDialog";
 import { referenceApi } from "../../api/reference";
 

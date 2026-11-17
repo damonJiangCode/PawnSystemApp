@@ -22,8 +22,8 @@ import type { WindowScreenProps } from "../registry";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { TicketFormError } from "../../api/ticket";
 import { ticketApi } from "../../api/ticket";
-import { calculation } from "../../shared/utils/calculation";
-import { formatIsoDate, formatUppercase } from "../../shared/utils/formatters";
+import { calculation } from "../../lib/calculation";
+import { formatIsoDate, formatUppercase } from "../../lib/formatters";
 
 const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
   const ticketInputRef = React.useRef<HTMLInputElement>(null);

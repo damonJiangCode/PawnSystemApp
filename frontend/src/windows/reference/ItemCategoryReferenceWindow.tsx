@@ -18,7 +18,7 @@ import type {
   ItemSubcategory,
 } from "@pawnsystem/shared/models/item-category.model";
 import WindowFrame from "../WindowFrame";
-import ConfirmDialog from "../../shared/components/ConfirmDialog";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import ItemCategoryAddDialog from "./ItemCategoryAddDialog";
 import { referenceApi } from "../../api/reference";
 

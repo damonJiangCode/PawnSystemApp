@@ -1,4 +1,4 @@
-import ConfirmDialog from "../../shared/components/ConfirmDialog";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import React from "react";
 import {
   Alert,

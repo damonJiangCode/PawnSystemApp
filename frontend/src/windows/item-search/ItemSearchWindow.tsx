@@ -20,7 +20,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import WindowFrame from "../WindowFrame";
 import type { WindowScreenProps } from "../registry";
-import TransactionItemImage from "../../modules/items/components/transaction/TransactionItemImage";
+import ItemImage from "../../components/ItemImage";
 import { itemSearchWindowColumns } from "./columns";
 import {
   isItemAddable,
@@ -289,9 +289,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
             </Stack>
 
             <Box sx={{ height: 112, minWidth: 0 }}>
-              <TransactionItemImage
-                selectedItem={state.selectedItem ?? undefined}
-              />
+              <ItemImage selectedItem={state.selectedItem ?? undefined} />
             </Box>
           </Box>
         </Box>

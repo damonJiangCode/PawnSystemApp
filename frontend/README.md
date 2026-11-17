@@ -5,38 +5,56 @@ React, TypeScript and Material UI, served and built with Vite. This folder is th
 
 ```text
 frontend/src/
-├── boot/       # React startup; chooses the main workspace or a window view
-├── workspace/  # Main screen shell, search and tabs
-├── windows/    # Registry and layout for additional desktop windows
-├── modules/    # Feature screens, components, hooks and API wrappers
-└── shared/     # Reusable UI, HTTP adapters and browser utilities
+├── main.tsx      # Entry: renders the main window, or a popup window for `?window=<name>`
+├── main-window/  # The main window: top bar, client search, shortcut buttons and page tabs
+├── pages/        # The three tabs: client/, transaction/, history/
+├── windows/      # Popup windows: registry.ts, PopupWindow, WindowFrame and one folder each
+├── dialogs/      # Dialogs used from more than one place, by entity: client/, ticket/, item/
+├── components/   # Small shared UI pieces (DateField, ConfirmDialog, ItemsTable, ...)
+├── api/          # One file per server module, plus http.ts and the preload window bridge
+├── lib/          # Pure functions: formatting, dates, form errors, money previews, printing
+└── styles/       # Shared sizes, button styles and colors
 ```
 
-## Modules
+Where things live:
 
-| Module         | Owns                                                              | API                                                                                 |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                                            |
-| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                                            |
-| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                                            |
-| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                                            |
-| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                                                |
-| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)                                        |
-| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)                                      |
-| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md), [XML](../server/src/xml-report/README.md) |
+- A page or popup window keeps its own hooks, tables, handlers and helpers in its folder, such as
+  `pages/transaction/useTransactionPage.ts` or `windows/payment/columns.tsx`.
+- A dialog only one window opens stays with that window (`windows/payment/PickupHoldDialog.tsx`);
+  dialogs opened from several places live in `dialogs/`.
+- Tests sit next to the file they test, as `<name>.test.ts`.
+
+Naming: folders in kebab-case, components `PascalCase.tsx`, hooks `useX.ts`, everything else
+`camelCase.ts`. No dotted names (`columns.tsx`, not `payment.columns.tsx`) and at most three
+folder levels.
+
+## Pages and windows
+
+| Folder                                   | Shows                                                 | API                                                                                          |
+| ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `pages/client`                           | Client search results, profile, photo and statistics  | [Client](../server/src/client/README.md)                                                     |
+| `pages/transaction`                      | Active tickets (`pawned`, `sold`) and their items     | [Ticket](../server/src/ticket/README.md), [Item](../server/src/item/README.md)               |
+| `pages/history`                          | Closed tickets; repawn, load and reverse              | [Ticket](../server/src/ticket/README.md)                                                     |
+| `windows/payment`, `windows/quote`       | Pickups and interest extensions; a quote for a client | [Ticket](../server/src/ticket/README.md)                                                     |
+| `windows/tickets`                        | Ticket Search, Expire and Stolen                      | [Ticket](../server/src/ticket/README.md)                                                     |
+| `windows/item-search`                    | Item Search                                           | [Item](../server/src/item/README.md)                                                         |
+| `windows/reports`                        | Daily, Buyback, Interest, Overdue and XML reports     | [Report](../server/src/report/README.md), [XML](../server/src/xml-report/README.md)          |
+| `windows/reference`, `windows/employees` | Lookup data management; employee administration       | [Reference](../server/src/reference/README.md), [Employee](../server/src/employee/README.md) |
 
 ## Boundaries
 
 - The frontend requests and renders. The server owns validation, calculations, signatures and
   transactions; frontend validation only improves feedback.
-- Screens call a feature's `*.api.ts`, which calls `getAppApi()`.
-- `src/shared/api/` holds `http.ts` and one `<domain>.http.ts` per backend module. `client`,
-  `employee`, `item`, `reference`, `report`, `ticket` and `xmlReport` use HTTP. Only `window`
-  uses the preload bridge.
-- All lookup data goes through `referenceApi` in `modules/reference/reference.api.ts`.
-- `src/windows/` renders window content; `electron/src/main/window/` manages the native windows.
-- Transaction page state lives in `useTransactionPage`. Its `handlers/` may call APIs and set state;
-  `helpers/` are pure functions.
+- Screens import the API object for a server module, such as `clientApi` from `api/client.ts`.
+  Each file holds that module's HTTP calls; `api/http.ts` builds URLs and turns error responses
+  into `Error`s that keep the server's `field` and `status`.
+- Only opening and focusing windows goes through Electron: `getWindowApi()` in `api/window.ts`
+  returns the preload bridge, or `undefined` in a plain browser.
+- All lookup data goes through `referenceApi`, which caches item categories per window.
+- `src/windows/` renders popup content; `electron/src/main/window/` manages the native windows.
+  A new popup needs an entry in `windows/registry.ts`.
+- Transaction page state lives in `useTransactionPage`. Its `*Handlers.ts` files may call APIs and
+  set state; `transactionHelpers.ts` holds pure functions.
 
 ## Key workflows
 
@@ -89,7 +107,7 @@ photo cannot replace a newer one.
 
 - Money fields do not change on mouse wheel scroll.
 - The selected ticket survives edits, and a new pawn or sale becomes selected.
-- `print/ticketPrintTemplate.ts` prints on colored paper, so it adds no background color.
+- `lib/ticketPrintTemplate.ts` prints on colored paper, so it adds no background color.
 
 ## Commands
 
