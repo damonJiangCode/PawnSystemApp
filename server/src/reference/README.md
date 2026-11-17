@@ -48,5 +48,5 @@ controller, service, repository, DTOs and specs. Paths below start with `/refere
 ## Tests
 
 From `server/`: `npm test -- src/reference`. Each resource has HTTP specs with a mocked
-PostgreSQL pool, and most have service specs. The frontend adapters have matching
-`*.http.test.ts` files in `frontend/src/shared/api/`.
+PostgreSQL pool, and most have service specs. The frontend adapter is tested in
+`frontend/src/api/reference.test.ts`.
