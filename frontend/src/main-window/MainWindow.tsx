@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, Tabs, Tab, Paper } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -32,7 +32,7 @@ const MainTabPanel: React.FC<MainTabPanelProps> = ({ active, children }) => {
 };
 
 const MainWindow: React.FC = () => {
-  const lastNameSearchInputRef = React.useRef<HTMLInputElement>(null);
+  const lastNameSearchInputRef = useRef<HTMLInputElement>(null);
   const { state, actions } = useMainWindow();
 
   useEffect(() => {

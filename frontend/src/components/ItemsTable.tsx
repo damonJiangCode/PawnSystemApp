@@ -6,10 +6,10 @@ import type { Item } from "@pawnsystem/shared/models/item.model";
 import CellTooltip from "./CellTooltip";
 import { formatDisplayValue } from "../lib/formatters";
 
-export const getTransactionItemRowId = (row: Item): number | string =>
+const getItemRowId = (row: Item): number | string =>
   row.draft_id ?? row.item_number;
 
-export const transactionItemColumns: GridColDef[] = [
+const itemColumns: GridColDef[] = [
   {
     field: "item_number_display",
     headerName: "ITM_NO",
@@ -70,7 +70,7 @@ export const transactionItemColumns: GridColDef[] = [
   },
 ];
 
-export const transactionItemsTableSx = {
+const itemsTableSx = {
   border: "1px solid #ccc",
   "& .MuiDataGrid-cell": {
     borderRight: "1px solid #ddd",
@@ -119,14 +119,12 @@ const ItemsTable: React.FC<ItemsTableProps> = ({
         columnHeaderHeight={34}
         rowHeight={30}
         rows={items}
-        columns={transactionItemColumns}
-        getRowId={getTransactionItemRowId}
-        rowSelectionModel={
-          selectedItem ? [getTransactionItemRowId(selectedItem)] : []
-        }
+        columns={itemColumns}
+        getRowId={getItemRowId}
+        rowSelectionModel={selectedItem ? [getItemRowId(selectedItem)] : []}
         onRowClick={(params) => {
           const selectedItem = items.find(
-            (item) => getTransactionItemRowId(item) === params.id,
+            (item) => getItemRowId(item) === params.id,
           );
           if (selectedItem) onItemSelected(selectedItem);
         }}
@@ -139,7 +137,7 @@ const ItemsTable: React.FC<ItemsTableProps> = ({
         localeText={{
           noRowsLabel: "No items",
         }}
-        sx={transactionItemsTableSx}
+        sx={itemsTableSx}
       />
     </Box>
   );
