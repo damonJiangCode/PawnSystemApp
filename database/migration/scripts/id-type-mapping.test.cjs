@@ -3,7 +3,6 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { test } = require("node:test");
-const vm = require("node:vm");
 const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
 const file = path.join(__dirname, "../mappings/id-type-mapping.json");
 const read = () => JSON.parse(fs.readFileSync(file, "utf8"));
@@ -99,30 +98,10 @@ test("accepts Windows JSON line endings", (t) => {
 });
 
 test("seed uses the same targets and never resets existing type activation", async () => {
-  const ts = require("typescript");
-  const source = fs.readFileSync(
-    path.join(__dirname, "../../seed/clientSeeds.ts"),
-    "utf8",
-  );
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(source, {
-      compilerOptions: {
-        module: ts.ModuleKind.CommonJS,
-        esModuleInterop: true,
-      },
-    }).outputText,
-    {
-      exports,
-      __dirname: path.join(__dirname, "../../seed"),
-      require: (name) =>
-        name === "../migration/scripts/id-type-mapping.cjs"
-          ? { loadIdTypeMapping }
-          : require(name),
-    },
-  );
+  // Node runs the seed's TypeScript directly, as `npm run db:init` does.
+  const { seedIdTypes } = await import("../../seed/clientSeeds.ts");
   let query;
-  await exports.seedIdTypes({
+  await seedIdTypes({
     query: async (sql, values) => (query = { sql, values }),
   });
   assert.match(query.sql, /ON CONFLICT \(type\) DO NOTHING/);

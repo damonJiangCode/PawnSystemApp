@@ -10,8 +10,6 @@ const result = spawnSync(
     "electron/src/**/*.test.ts",
     "shared/**/*.test.ts",
     "frontend/src/**/*.test.cjs",
-    "database/migration/scripts/*.test.cjs",
-    "database/migration/runner/*.test.cjs",
   ],
   {
     stdio: "inherit",

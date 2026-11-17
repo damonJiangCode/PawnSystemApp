@@ -1,0 +1,23 @@
+{
+  "name": "@pawnsystem/database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PostgreSQL schema, seed data and the Access-to-PostgreSQL migration.",
+  "type": "module",
+  "scripts": {
+    "db:init": "node runInit.ts",
+    "migration:prepare": "node migration/runner/prepareDevMigration.cjs",
+    "migration:execute": "node migration/runner/executeDevMigration.cjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test \"migration/**/*.test.cjs\""
+  },
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "pg": "^8.17.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "@types/pg": "^8.16.0",
+    "typescript": "^5.9.3"
+  }
+}

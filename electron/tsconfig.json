@@ -12,5 +12,5 @@
     "noEmitOnError": true,
     "types": ["node"]
   },
-  "include": ["src/main", "../shared/**/*.ts", "../database/**/*.ts"]
+  "include": ["src/main", "../shared/**/*.ts"]
 }

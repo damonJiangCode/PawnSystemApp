@@ -3,27 +3,37 @@
 PostgreSQL schema, seed data and the legacy Access migration. There is no migration
 framework: `database/schema/` holds `CREATE ... IF NOT EXISTS` SQL.
 
-| Path            | Purpose                               |
-| --------------- | ------------------------------------- |
-| `schema/`       | Tables and indexes                    |
-| `seed/`         | Reference data, including cities      |
-| `functions/`    | Database guard functions              |
-| `views/`        | Views such as item status lookup      |
-| `initialize.ts` | Creates the schema and reference data |
-| `connection.ts` | PostgreSQL connections for Electron   |
-| `migration/`    | Access import, described below        |
+This folder is the npm workspace `@pawnsystem/database`, with its own dependencies
+(`pg`, `csv-parser`). Node runs the `.ts` files directly (type stripping), so there is no
+build step; `tsconfig.json` is only for type checking and allows erasable syntax only.
+
+| Path            | Purpose                                 |
+| --------------- | --------------------------------------- |
+| `schema/`       | Tables and indexes                      |
+| `seed/`         | Reference data, including cities        |
+| `functions/`    | Database guard functions                |
+| `views/`        | Views such as item status lookup        |
+| `initialize.ts` | Creates the schema and reference data   |
+| `connection.ts` | PostgreSQL pool used by `initialize.ts` |
+| `migration/`    | Access import, described below          |
 
 NestJS uses its own pool in `server/src/database/database.module.ts`.
 
 ## Commands
 
-Run from the project root, with PostgreSQL running and `.env` configured.
+Run from the project root, with PostgreSQL running and `.env` configured at the root.
 
 ```bash
 npm run db:init
 ```
 
-This builds and initializes the database. It does not import Access records or create an employee.
+This creates the schema and reference data. It does not import Access records or create an
+employee. The root script forwards to this workspace; these run only the database package:
+
+```bash
+npm run typecheck -w database
+npm test -w database
+```
 
 ## Changing an existing database
 

@@ -52,12 +52,6 @@ const fixture = (t, options = {}) => {
     path.join(root, ".env"),
     "DB_HOST=localhost\nDB_PORT=5432\nDB_NAME=pawnsystemdb\nDB_USER=pawnsystem_dev\nDB_PASSWORD=test-only-private-password\nEMPLOYEE_PIN_SECRET=test-only-employee-pin-secret-0123456789\n",
   );
-  const compiler = path.join(root, "node_modules/typescript/bin");
-  fs.mkdirSync(compiler, { recursive: true });
-  fs.writeFileSync(
-    path.join(compiler, "tsc"),
-    "// fake compiler; never executed\n",
-  );
   const counts = {
     client: 0,
     client_id: 0,
@@ -164,7 +158,7 @@ const fixture = (t, options = {}) => {
     }
     if (args[0] === "-czf")
       fs.writeFileSync(args[1], "synthetic photo archive");
-    if (args.some((arg) => arg.endsWith("/database/runInit.js")))
+    if (args.some((arg) => arg.endsWith("/database/runInit.ts")))
       initialized = true;
     const script = args.find((arg) =>
       arg.startsWith("database/migration/scripts/"),

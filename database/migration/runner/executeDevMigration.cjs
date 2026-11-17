@@ -377,19 +377,10 @@ const executeDevMigration = async ({
       saveManifest();
     };
     await backup("before-migration");
-    const tsc = require.resolve("typescript/bin/tsc", { paths: [projectRoot] });
-    await command("prepare-backend", process.execPath, [
-      path.join(projectRoot, "scripts/prepareElectronBuild.cjs"),
-    ]);
-    await command("compile-backend", process.execPath, [
-      tsc,
-      "-p",
-      "electron/tsconfig.json",
-    ]);
     await assertEmptyDatabase(client);
     writesStarted = true;
     await command("initialize-schema", process.execPath, [
-      path.join(projectRoot, ".electron-build/database/runInit.js"),
+      path.join(projectRoot, "database/runInit.ts"),
     ]);
     await assertEmptyDatabase(client);
     await compose("build-migration-image", ["build", "migration"]);
