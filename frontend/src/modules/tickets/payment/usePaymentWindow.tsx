@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { TicketSearchResult } from "../../../../../shared/payload-contracts/ticket.contract";
+import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type {
   OpenPaymentWindowInput,
   PaymentCompletedEvent,
-} from "../../../../../shared/payload-contracts/window.contract";
+} from "@pawnsystem/shared/payload-contracts/window.contract";
 import { getAppApi } from "../../../shared/api/app.api";
 import { getImageSrc } from "../../../shared/api/http";
 import { ticketApi } from "../ticket.api";

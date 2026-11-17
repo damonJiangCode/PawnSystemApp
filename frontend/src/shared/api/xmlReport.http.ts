@@ -1,10 +1,10 @@
-import type { XmlReportApi } from "../../../../shared/api-contracts/xmlReportApi.contract.ts";
-import type { ReportDateRangeInput } from "../../../../shared/payload-contracts/ticket.contract.ts";
+import type { XmlReportApi } from "@pawnsystem/shared/api-contracts/xmlReportApi.contract.ts";
+import type { ReportDateRangeInput } from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
 import type {
   XmlReportConnectionResult,
   XmlReportPreviewResult,
   XmlReportSubmissionResult,
-} from "../../../../shared/payload-contracts/xmlReport.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/xmlReport.contract.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 // The server talks to LeadsOnline, which can take up to 30 seconds per request

@@ -13,7 +13,7 @@ import ClientProfile from "../components/profile/ClientProfile";
 import ClientsPanel from "../components/results/ClientsPanel";
 import { CLIENT_RESULTS_HEIGHT } from "../layout/clientLayout";
 import defaultClient from "../data/defaultClient";
-import type { Client } from "../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import { useClientPage } from "../hooks/useClientPage";
 
 interface ClientPageProps {

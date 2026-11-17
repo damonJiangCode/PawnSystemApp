@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import type { Client } from "../../../../../shared/models/client.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import { useTransactionPage } from "../hooks/useTransactionPage";
 import ClientBar from "../../../shared/components/ClientBar";
 import TransactionTicketsPanel from "../../tickets/components/transaction/TransactionTicketsPanel";

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { Client } from "../../../shared/models/client.model";
-import type { Ticket } from "../../../shared/models/ticket.model";
-import type { ReverseTicketResult } from "../../../shared/payload-contracts/ticket.contract";
-import type { PaymentCompletedEvent } from "../../../shared/payload-contracts/window.contract";
+import type { Client } from "@pawnsystem/shared/models/client.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import type { ReverseTicketResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
+import type { PaymentCompletedEvent } from "@pawnsystem/shared/payload-contracts/window.contract";
 import { itemApi } from "../modules/items/item.api";
 import { getAppApi } from "../shared/api/app.api";
 

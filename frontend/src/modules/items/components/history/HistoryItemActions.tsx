@@ -1,6 +1,6 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import ItemActionsLayout from "../shared/ItemActionsLayout";
 
 interface HistoryItemActionsProps {

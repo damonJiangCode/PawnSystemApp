@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { calculation } from '../../../shared/utils/calculation.ts';
-import { getTicketPickupAmount as sharedTicketPickupAmount } from '../../../shared/utils/ticketFinance.ts';
+import { calculation } from '../../../frontend/src/shared/utils/calculation.ts';
+import { getTicketPickupAmount as sharedTicketPickupAmount } from '../../../frontend/src/shared/utils/ticketFinance.ts';
 import type { Ticket } from '../../../shared/models/ticket.model.ts';
 import * as finance from './ticket-finance.js';
 

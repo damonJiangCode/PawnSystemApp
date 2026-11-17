@@ -115,7 +115,7 @@ npm run build
 - [Electron](electron/README.md)
 - [Server](server/README.md)
 - [Database](database/README.md)
-- [Shared code](shared/README.md)
+- [Shared types](shared/README.md)
 
 ## Private data
 

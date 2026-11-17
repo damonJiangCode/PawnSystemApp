@@ -3,7 +3,7 @@ import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { Box, Tooltip } from "@mui/material";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import type { Ticket } from "../../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import CellTooltip from "../../../../shared/components/CellTooltip";
 import {
   formatCurrency,
@@ -11,7 +11,7 @@ import {
   formatIsoDateTime,
   formatUppercase,
 } from "../../../../shared/utils/formatters";
-import { calculation } from "../../../../../../shared/utils/calculation";
+import { calculation } from "../../../../shared/utils/calculation";
 
 interface TransactionTicketsTableProps {
   tickets: Ticket[];

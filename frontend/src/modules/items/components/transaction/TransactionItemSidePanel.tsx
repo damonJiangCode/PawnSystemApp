@@ -1,6 +1,6 @@
 import React from "react";
 import { Paper, Typography } from "@mui/material";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import {
   SIDE_ACTIONS_PANEL_WIDTH,
   SIDE_PANEL_WIDTH,

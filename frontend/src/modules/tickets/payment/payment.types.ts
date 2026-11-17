@@ -1,5 +1,5 @@
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 
 export type PaymentMode = "pickup" | "extension";
 export type PaymentStatusSeverity = "info" | "success" | "warning" | "lost";

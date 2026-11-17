@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Employee } from "../../../../../shared/models/employee.model";
+import type { Employee } from "@pawnsystem/shared/models/employee.model";
 import { employeeApi, type EmployeeSearchInput } from "../employee.api";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";

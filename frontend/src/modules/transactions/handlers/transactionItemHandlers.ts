@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Item } from "../../../../../shared/models/item.model";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import { itemApi } from "../../items/item.api";
 
 type TransactionItemHandlerDeps = {

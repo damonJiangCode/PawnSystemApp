@@ -1,4 +1,4 @@
-import type { Ticket } from "../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 
 export const canRepawnTicket = (ticket?: Ticket | null) =>
   ticket?.status === "pawned_expired" || ticket?.status === "pawned_picked_up";

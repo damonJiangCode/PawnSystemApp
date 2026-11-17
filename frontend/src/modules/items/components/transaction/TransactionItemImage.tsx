@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import { getImageSrc } from "../../../../shared/api/http";
 
 interface TransactionItemImageProps {

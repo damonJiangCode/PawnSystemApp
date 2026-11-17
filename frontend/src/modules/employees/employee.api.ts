@@ -1,11 +1,11 @@
-import type { EmployeeApi } from "../../../../shared/api-contracts/employeeApi.contract";
-import type { Employee } from "../../../../shared/models/employee.model";
+import type { EmployeeApi } from "@pawnsystem/shared/api-contracts/employeeApi.contract";
+import type { Employee } from "@pawnsystem/shared/models/employee.model";
 import type {
   CreateEmployeeInput,
   EmployeeFormField,
   EmployeeSearchInput,
   UpdateEmployeeInput,
-} from "../../../../shared/payload-contracts/employee.contract";
+} from "@pawnsystem/shared/payload-contracts/employee.contract";
 import { getAppApi } from "../../shared/api/app.api";
 
 export type EmployeeFormError = Error & {

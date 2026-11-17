@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PrintIcon from "@mui/icons-material/Print";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import type { Ticket } from "../../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import TicketActionsLayout from "../shared/TicketActionsLayout";
 
 interface TransactionTicketActionsProps {

@@ -10,11 +10,11 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import type { Client } from "../../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import type {
   ClientPhotoInput,
   UpdateClientInput,
-} from "../../../../../../shared/payload-contracts/client.contract";
+} from "@pawnsystem/shared/payload-contracts/client.contract";
 import ClientPhotoCapture from "./fields/ClientPhotoCapture";
 import HeightWeightFields from "./fields/HeightWeightFields";
 import NameFields from "./fields/NameFields";

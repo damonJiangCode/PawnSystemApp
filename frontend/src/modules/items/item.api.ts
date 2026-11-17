@@ -1,11 +1,11 @@
-import type { Item } from "../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import type {
   CreateItemInput,
   ItemPhotoInput,
   ItemSearchInput,
   ItemSearchResult,
   UpdateItemInput,
-} from "../../../../shared/payload-contracts/item.contract";
+} from "@pawnsystem/shared/payload-contracts/item.contract";
 import { getAppApi } from "../../shared/api/app.api";
 
 export const itemApi = {

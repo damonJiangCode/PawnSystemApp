@@ -3,7 +3,7 @@ import type {
   GridPaginationModel,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import { getAppApi } from "../../../../shared/api/app.api";
 import { itemApi } from "../../item.api";
 import { ticketApi } from "../../../tickets/ticket.api";
@@ -17,7 +17,7 @@ import {
   type ItemSearchWindowMode,
   type ItemSearchWindowTargetStatus,
 } from "./itemSearchWindow.helpers";
-import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
+import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
 import { referenceApi } from "../../../reference/reference.api";
 
 type ItemSearchAddToTicketResultEvent = {

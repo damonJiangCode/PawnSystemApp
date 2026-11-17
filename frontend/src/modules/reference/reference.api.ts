@@ -1,9 +1,9 @@
-import type { ReferenceApi } from "../../../../shared/api-contracts/referenceApi.contract";
+import type { ReferenceApi } from "@pawnsystem/shared/api-contracts/referenceApi.contract";
 import type {
   ItemCategoryOption,
   SaveHolidayInput,
   SaveLocationInput,
-} from "../../../../shared/payload-contracts/reference.contract";
+} from "@pawnsystem/shared/payload-contracts/reference.contract";
 import { getAppApi } from "../../shared/api/app.api";
 
 const api = (): ReferenceApi => {

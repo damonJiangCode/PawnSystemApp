@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { Item } from "../../../../../shared/models/item.model";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import { itemApi } from "../../items/item.api";
-import type { ItemCategoryOption } from "../../../../../shared/payload-contracts/reference.contract";
+import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
 import {
   ticketApi,
   type CreatePawnTicketInput,

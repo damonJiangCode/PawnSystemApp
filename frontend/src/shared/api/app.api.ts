@@ -1,4 +1,4 @@
-import type { AppApi } from "../../../../shared/api-contracts/appApi.contract.ts";
+import type { AppApi } from "@pawnsystem/shared/api-contracts/appApi.contract.ts";
 import { createClientHttpApi } from "./client.http.ts";
 import { createEmployeeHttpApi } from "./employee.http.ts";
 import { createItemHttpApi } from "./item.http.ts";

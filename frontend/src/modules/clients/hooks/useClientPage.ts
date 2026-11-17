@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { ClientNotesAction } from "../../../../../shared/payload-contracts/client.contract";
-import type { Client, ID } from "../../../../../shared/models/client.model";
+import type { ClientNotesAction } from "@pawnsystem/shared/payload-contracts/client.contract";
+import type { Client, ID } from "@pawnsystem/shared/models/client.model";
 import { useClientSearch } from "./useClientSearch";
 import { clientApi } from "../client.api";
 

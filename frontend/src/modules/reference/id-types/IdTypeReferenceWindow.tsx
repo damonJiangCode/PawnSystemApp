@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { IdType } from "../../../../../shared/models/id-type.model";
+import type { IdType } from "@pawnsystem/shared/models/id-type.model";
 import WindowLayout from "../../../windows/WindowLayout";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import IdTypeAddDialog from "./IdTypeAddDialog";

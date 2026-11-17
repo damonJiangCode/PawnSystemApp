@@ -11,7 +11,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import type { ItemCategoryOption } from "../../../../../../shared/payload-contracts/reference.contract";
+import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
 
 interface ItemCategoryDialogProps {
   open: boolean;

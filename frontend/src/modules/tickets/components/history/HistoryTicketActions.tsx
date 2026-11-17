@@ -2,7 +2,7 @@ import React from "react";
 import ReplayIcon from "@mui/icons-material/Replay";
 import InputIcon from "@mui/icons-material/Input";
 import UndoIcon from "@mui/icons-material/Undo";
-import type { Ticket } from "../../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import { canRepawnTicket } from "../../../history/history.helpers";
 import TicketActionsLayout from "../shared/TicketActionsLayout";
 

@@ -1,20 +1,20 @@
-import type { ReferenceApi } from "../../../../shared/api-contracts/referenceApi.contract.ts";
-import type { EyeColor } from "../../../../shared/models/eye-color.model.ts";
-import type { HairColor } from "../../../../shared/models/hair-color.model.ts";
-import type { HolidayDate } from "../../../../shared/models/holiday-date.model.ts";
-import type { IdType } from "../../../../shared/models/id-type.model.ts";
+import type { ReferenceApi } from "@pawnsystem/shared/api-contracts/referenceApi.contract.ts";
+import type { EyeColor } from "@pawnsystem/shared/models/eye-color.model.ts";
+import type { HairColor } from "@pawnsystem/shared/models/hair-color.model.ts";
+import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model.ts";
+import type { IdType } from "@pawnsystem/shared/models/id-type.model.ts";
 import type {
   ItemCategory,
   ItemCategoryTree,
   ItemSubcategory,
-} from "../../../../shared/models/item-category.model.ts";
-import type { Location } from "../../../../shared/models/location.model.ts";
+} from "@pawnsystem/shared/models/item-category.model.ts";
+import type { Location } from "@pawnsystem/shared/models/location.model.ts";
 import type {
   CitiesResponse,
   ItemCategoryOption,
   SaveHolidayInput,
   SaveLocationInput,
-} from "../../../../shared/payload-contracts/reference.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/reference.contract.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 export type ColorKind = "hair" | "eye";

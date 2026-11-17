@@ -61,7 +61,7 @@ at pickup. The earliest pickup date is two business days after the transaction, 
 and holidays, then the next day.
 
 Calendar dates use `America/Regina` explicitly, so results do not depend on the server's time
-zone. The frontend keeps `shared/utils/calculation.ts` for display previews only.
+zone. The frontend keeps `frontend/src/shared/utils/calculation.ts` for display previews only.
 
 ## Tests
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import TransactionItemsTable from "../transaction/TransactionItemsTable";
 import TransactionItemImage from "../transaction/TransactionItemImage";
 import HistoryItemActions from "./HistoryItemActions";

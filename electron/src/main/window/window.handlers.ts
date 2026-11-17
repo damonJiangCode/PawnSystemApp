@@ -3,8 +3,8 @@ import type {
   OpenItemSearchWindowInput,
   OpenPaymentWindowInput,
   OpenQuoteWindowInput,
-} from "../../../../shared/payload-contracts/window.contract.ts";
-import type { Item } from "../../../../shared/models/item.model.ts";
+} from "@pawnsystem/shared/payload-contracts/window.contract.ts";
+import type { Item } from "@pawnsystem/shared/models/item.model.ts";
 import { CHANNELS } from "../ipc/channels.ts";
 import { openFeatureWindow } from "./window.feature.ts";
 import { focusMainWindow } from "./window.main.ts";

@@ -1,5 +1,5 @@
 import type { GridRowSelectionModel } from "@mui/x-data-grid";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 
 export type ItemSearchWindowMode = "details" | "item-number";
 

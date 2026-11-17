@@ -8,7 +8,6 @@ const result = spawnSync(
     "--test",
     "frontend/src/**/*.test.ts",
     "electron/src/**/*.test.ts",
-    "shared/**/*.test.ts",
     "frontend/src/**/*.test.cjs",
   ],
   {

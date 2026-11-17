@@ -2,7 +2,7 @@ import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import CellTooltip from "../../../../shared/components/CellTooltip";
 import { formatDisplayValue } from "../../../../shared/utils/formatters";
 

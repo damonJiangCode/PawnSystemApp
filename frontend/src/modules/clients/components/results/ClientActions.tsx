@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import type { Client } from "../../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import ClientActionsLayout from "./shared/ClientActionsLayout";
 import ClientAddEditDialog from "../dialogs/ClientAddEditDialog";
 

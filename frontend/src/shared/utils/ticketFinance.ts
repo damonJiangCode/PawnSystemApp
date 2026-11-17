@@ -1,4 +1,4 @@
-import type { Ticket } from "../models/ticket.model.ts";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model.ts";
 import { calculation } from "./calculation.ts";
 
 export const getTicketPickupAmount = (ticket: Ticket, asOf = new Date()) => {

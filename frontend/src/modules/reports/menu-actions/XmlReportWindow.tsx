@@ -21,7 +21,7 @@ import type {
   XmlReportConnectionResult,
   XmlReportPreviewResult,
   XmlReportSubmissionResult,
-} from "../../../../../shared/payload-contracts/xmlReport.contract";
+} from "@pawnsystem/shared/payload-contracts/xmlReport.contract";
 import { getAppApi } from "../../../shared/api/app.api";
 import {
   formatCurrency,
