@@ -19,10 +19,10 @@ import {
 } from "@mui/material";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
-import type { TicketSearchResult } from "../../../../../shared/payload-contracts/ticket.contract";
+import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { TicketFormError } from "../ticket.api";
 import { ticketApi } from "../ticket.api";
-import { calculation } from "../../../../../shared/utils/calculation";
+import { calculation } from "../../../shared/utils/calculation";
 import {
   formatIsoDate,
   formatUppercase,

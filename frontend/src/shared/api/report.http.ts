@@ -1,4 +1,4 @@
-import type { ReportApi } from "../../../../shared/api-contracts/reportApi.contract.ts";
+import type { ReportApi } from "@pawnsystem/shared/api-contracts/reportApi.contract.ts";
 import type {
   BuybackReportResult,
   DailyReportResult,
@@ -6,7 +6,7 @@ import type {
   OverdueReportInput,
   OverdueReportResult,
   ReportDateRangeInput,
-} from "../../../../shared/payload-contracts/ticket.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
 import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
 
 // JSON carries instants as ISO strings; the contracts use Date.

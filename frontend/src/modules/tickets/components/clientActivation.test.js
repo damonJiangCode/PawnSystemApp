@@ -1,0 +1,93 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
+import { test } from "node:test";
+import * as React from "react";
+import ts from "typescript";
+
+// Execute real TypeScript functions with isolated database/IPC dependencies.
+function load(relativePath, dependencies = {}) {
+  const source = fs.readFileSync(
+    path.join(import.meta.dirname, "../../../../..", relativePath),
+    "utf8",
+  );
+  const code = ts.transpileModule(source, {
+    fileName: relativePath,
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+      jsx: ts.JsxEmit.React,
+    },
+  }).outputText;
+  const exports = {};
+  vm.runInNewContext(code, {
+    exports,
+    console,
+    Date,
+    require: (name) => {
+      if (!(name in dependencies))
+        throw new Error(`Unexpected test dependency: ${name}`);
+      // TypeScript 6 always emits esModuleInterop helpers; marking the fake as an
+      // ES module keeps `import X from` reading its `default` directly.
+      return { __esModule: true, ...dependencies[name] };
+    },
+  });
+  return exports;
+}
+
+// Ticket issuing, convert and transfer guards for deactivated clients run on
+// the server now: server/src/ticket/ticket-issue.http.spec.ts and
+// ticket-actions.http.spec.ts. This file keeps the UI checks.
+test("deactivation disables ticket issuance buttons while preserving existing-ticket actions", () => {
+  const dependencies = {
+    react: { default: React },
+    "../shared/TicketActionsLayout": { default: () => null },
+    "../../../history/history.helpers": load(
+      "frontend/src/modules/history/history.helpers.ts",
+    ),
+  };
+  for (const icon of [
+    "Add",
+    "Sell",
+    "Edit",
+    "Print",
+    "SwapHoriz",
+    "Autorenew",
+    "Replay",
+    "Input",
+    "Undo",
+  ]) {
+    dependencies[`@mui/icons-material/${icon}`] = { default: () => null };
+  }
+  const Transaction = load(
+    "frontend/src/modules/tickets/components/transaction/TransactionTicketActions.tsx",
+    dependencies,
+  ).default;
+  const History = load(
+    "frontend/src/modules/tickets/components/history/HistoryTicketActions.tsx",
+    dependencies,
+  ).default;
+  const transactionActions = Transaction({
+    selectedTicket: { status: "pawned" },
+    issuanceDisabled: true,
+  }).props.actions;
+  for (const action of transactionActions) {
+    assert.equal(
+      Boolean(action.disabled),
+      ["Pawn", "Sell", "Conv", "Trns"].includes(action.label),
+      action.label,
+    );
+  }
+  const historyActions = History({
+    selectedTicket: { status: "pawned_expired" },
+    issuanceDisabled: true,
+  }).props.actions;
+  for (const action of historyActions) {
+    assert.equal(
+      Boolean(action.disabled),
+      action.label === "Repn",
+      action.label,
+    );
+  }
+});

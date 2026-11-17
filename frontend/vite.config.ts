@@ -3,24 +3,25 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "..");
+const frontendRoot = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(frontendRoot, "..");
 
 export default defineConfig({
-  root: __dirname,
+  root: frontendRoot,
+  // The private .env lives at the repository root.
   envDir: projectRoot,
   plugins: [react()],
   server: {
     host: "localhost",
     port: 5173,
     strictPort: true,
+    // The shared types and the hoisted node_modules live at the repository root.
     fs: {
       allow: [projectRoot],
     },
   },
+  // Default outDir: frontend/dist, owned by this package.
   build: {
-    outDir: path.resolve(projectRoot, "dist"),
     emptyOutDir: true,
   },
 });

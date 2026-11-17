@@ -1,4 +1,4 @@
-import type { Ticket } from "../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 
 export const filterVisibleTickets = (nextTickets: Ticket[]) =>
   nextTickets.filter(

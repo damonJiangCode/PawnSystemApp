@@ -3,27 +3,41 @@
 PostgreSQL schema, seed data and the legacy Access migration. There is no migration
 framework: `database/schema/` holds `CREATE ... IF NOT EXISTS` SQL.
 
-| Path            | Purpose                                      |
-| --------------- | -------------------------------------------- |
-| `schema/`       | Tables and indexes                           |
-| `seed/`         | Reference data, including cities             |
-| `functions/`    | Database guard functions                     |
-| `views/`        | Views such as item status lookup             |
-| `initialize.ts` | Creates the schema and reference data        |
-| `connection.ts` | PostgreSQL connections for Electron          |
-| `migration/`    | Access import scripts and JSON mapping rules |
+This folder is the npm workspace `@pawnsystem/database`, with its own dependencies
+(`pg`, `csv-parser`). Node runs the `.ts` files directly (type stripping), so there is no
+build step; `tsconfig.json` is only for type checking and allows erasable syntax only.
+
+Everything here is ESM. The migration scripts are plain `.js` modules: each runs its
+`main()` only when executed directly (`import.meta.main`, Node 24+), so tests can import
+their helpers.
+
+| Path            | Purpose                                 |
+| --------------- | --------------------------------------- |
+| `schema/`       | Tables and indexes                      |
+| `seed/`         | Reference data, including cities        |
+| `functions/`    | Database guard functions                |
+| `views/`        | Views such as item status lookup        |
+| `initialize.ts` | Creates the schema and reference data   |
+| `connection.ts` | PostgreSQL pool used by `initialize.ts` |
+| `migration/`    | Access import, described below          |
 
 NestJS uses its own pool in `server/src/database/database.module.ts`.
 
 ## Commands
 
-Run from the project root, with PostgreSQL running and `.env` configured.
+Run from the project root, with PostgreSQL running and `.env` configured at the root.
 
 ```bash
 npm run db:init
 ```
 
-This builds and initializes the database. It does not import Access records or create an employee.
+This creates the schema and reference data. It does not import Access records or create an
+employee. The root script forwards to this workspace; these run only the database package:
+
+```bash
+npm run typecheck -w database
+npm test -w database
+```
 
 ## Changing an existing database
 
@@ -44,11 +58,18 @@ hand and document it here. These have already been applied to the dev database:
 - Converted plain-text employee passwords to `pin_hash`. Back up the table, preview, then commit:
 
   ```bash
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs --commit
+  node --env-file=.env database/migration/scripts/hash-employee-pins.js
+  node --env-file=.env database/migration/scripts/hash-employee-pins.js --commit
   ```
 
 ## Access migration
+
+| Path                  | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `migration/runner/`   | `migration:prepare` and `migration:execute`, and their checks  |
+| `migration/scripts/`  | One importer per table, run inside the migration container     |
+| `migration/mappings/` | Versioned JSON mapping rules                                   |
+| `migration/tools/`    | Manual checks: photo paths, row counts, active-location review |
 
 Install dependencies with `npm ci`, start Docker Desktop and keep the app closed.
 
@@ -90,7 +111,7 @@ The database stores relative photo paths such as `images/items/<file>`. `source/
 The read-only audit writes counts, without customer data, to `migration/reports/`:
 
 ```bash
-node --env-file=.env database/migration/scripts/audit-id-types.cjs
+node --env-file=.env database/migration/scripts/audit-id-types.js
 ```
 
 ## Employee PINs

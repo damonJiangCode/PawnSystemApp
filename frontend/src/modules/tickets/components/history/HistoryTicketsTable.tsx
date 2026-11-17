@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import type { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import type { Ticket } from "../../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import CellTooltip from "../../../../shared/components/CellTooltip";
 import {
   formatCurrency,

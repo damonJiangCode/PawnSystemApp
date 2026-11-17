@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Item } from "../../../../../shared/models/item.model";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import type { OpenQuoteWindowInput } from "../../../../../shared/payload-contracts/window.contract";
-import { calculation } from "../../../../../shared/utils/calculation";
-import { getTicketPickupAmount } from "../../../../../shared/utils/ticketFinance";
+import type { Item } from "@pawnsystem/shared/models/item.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import type { OpenQuoteWindowInput } from "@pawnsystem/shared/payload-contracts/window.contract";
+import { calculation } from "../../../shared/utils/calculation";
+import { getTicketPickupAmount } from "../../../shared/utils/ticketFinance";
 import { getAppApi } from "../../../shared/api/app.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 import { itemApi } from "../../items/item.api";

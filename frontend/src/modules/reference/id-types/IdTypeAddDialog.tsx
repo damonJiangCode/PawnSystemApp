@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { IdType } from "../../../../../shared/models/id-type.model";
+import type { IdType } from "@pawnsystem/shared/models/id-type.model";
 import { referenceApi } from "../reference.api";
 
 type Props = {

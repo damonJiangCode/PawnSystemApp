@@ -1,11 +1,11 @@
-import type { ItemApi } from "../../../../shared/api-contracts/itemApi.contract.ts";
-import type { Item } from "../../../../shared/models/item.model.ts";
+import type { ItemApi } from "@pawnsystem/shared/api-contracts/itemApi.contract.ts";
+import type { Item } from "@pawnsystem/shared/models/item.model.ts";
 import type {
   CreateItemInput,
   ItemSearchInput,
   ItemSearchResult,
   UpdateItemInput,
-} from "../../../../shared/payload-contracts/item.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/item.contract.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 export function loadItemsByTicketHttp(

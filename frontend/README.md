@@ -1,7 +1,7 @@
 # Frontend
 
-React, TypeScript and Material UI, served and built with Vite. Dependencies and commands are in the
-root `package.json`.
+React, TypeScript and Material UI, served and built with Vite. This folder is the npm workspace
+`@pawnsystem/frontend`, with its own dependencies and scripts in `package.json`.
 
 ```text
 frontend/src/
@@ -14,16 +14,16 @@ frontend/src/
 
 ## Modules
 
-| Module         | Owns                                                              | API                                                       |
-| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------- |
-| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                  |
-| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                  |
-| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                  |
-| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                  |
-| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                      |
-| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)              |
-| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)            |
-| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md); XML in Electron |
+| Module         | Owns                                                              | API                                                                                 |
+| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                                            |
+| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                                            |
+| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                                            |
+| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                                            |
+| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                                                |
+| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)                                        |
+| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)                                      |
+| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md), [XML](../server/src/xml-report/README.md) |
 
 ## Boundaries
 
@@ -31,8 +31,8 @@ frontend/src/
   transactions; frontend validation only improves feedback.
 - Screens call a feature's `*.api.ts`, which calls `getAppApi()`.
 - `src/shared/api/` holds `http.ts` and one `<domain>.http.ts` per backend module. `client`,
-  `employee`, `item`, `reference`, `report` and `ticket` use HTTP. `xmlReport` and `window`
-  use the preload bridge.
+  `employee`, `item`, `reference`, `report`, `ticket` and `xmlReport` use HTTP. Only `window`
+  uses the preload bridge.
 - All lookup data goes through `referenceApi` in `modules/reference/reference.api.ts`.
 - `src/windows/` renders window content; `electron/src/main/window/` manages the native windows.
 - Transaction page state lives in `useTransactionPage`. Its `handlers/` may call APIs and set state;
@@ -95,12 +95,15 @@ photo cannot replace a newer one.
 
 Run from the repository root.
 
+`npm run dev` starts the whole app. To run only the frontend:
+
 ```bash
-npm run dev
-npm run dev:frontend
-npm run typecheck:renderer
-npm test
-npm run build
+npm run dev -w frontend
+npm run typecheck -w frontend
+npm test -w frontend
+npm run build -w frontend
 ```
 
-Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to the root `dist/`.
+Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to `frontend/dist/`. Tests use
+`node:test` with the `tsx` loader (`node --import tsx --test`), which strips types without
+checking them; type errors are caught by `npm run typecheck`.

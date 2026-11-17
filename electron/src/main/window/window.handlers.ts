@@ -1,10 +1,10 @@
-import type { IpcMainInvokeEvent } from "electron";
+import { BrowserWindow, ipcMain, type IpcMainInvokeEvent } from "electron";
 import type {
   OpenItemSearchWindowInput,
   OpenPaymentWindowInput,
   OpenQuoteWindowInput,
-} from "../../../../shared/payload-contracts/window.contract.ts";
-import type { Item } from "../../../../shared/models/item.model.ts";
+} from "@pawnsystem/shared/payload-contracts/window.contract.ts";
+import type { Item } from "@pawnsystem/shared/models/item.model.ts";
 import { CHANNELS } from "../ipc/channels.ts";
 import { openFeatureWindow } from "./window.feature.ts";
 import { focusMainWindow } from "./window.main.ts";
@@ -13,9 +13,6 @@ import {
   openManagedWindow,
   registerManagedWindow,
 } from "./window.manager.ts";
-
-const { BrowserWindow, ipcMain } =
-  require("electron/main") as typeof import("electron");
 
 const ITEM_SEARCH_WINDOW_X = 24;
 const ITEM_SEARCH_WINDOW_Y = 24;

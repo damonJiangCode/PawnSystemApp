@@ -1,4 +1,4 @@
-import type { Client, ID } from "../../../../../../shared/models/client.model";
+import type { Client, ID } from "@pawnsystem/shared/models/client.model";
 import {
   formatLocalIsoDatePart,
   resolveDate,

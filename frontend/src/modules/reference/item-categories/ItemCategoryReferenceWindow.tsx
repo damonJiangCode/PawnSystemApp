@@ -16,7 +16,7 @@ import type {
   ItemCategory,
   ItemCategoryTree,
   ItemSubcategory,
-} from "../../../../../shared/models/item-category.model";
+} from "@pawnsystem/shared/models/item-category.model";
 import WindowLayout from "../../../windows/WindowLayout";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import ItemCategoryAddDialog from "./ItemCategoryAddDialog";

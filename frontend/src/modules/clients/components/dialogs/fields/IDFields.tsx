@@ -2,7 +2,7 @@ import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import { Box, Typography, Button, MenuItem, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import type { ID } from "../../../../../../../shared/models/client.model";
+import type { ID } from "@pawnsystem/shared/models/client.model";
 import { formatClientIdType } from "../../../utils/clientDisplay.ts";
 import { referenceApi } from "../../../../reference/reference.api";
 

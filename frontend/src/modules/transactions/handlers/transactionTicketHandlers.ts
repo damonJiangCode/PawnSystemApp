@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Item } from "../../../../../shared/models/item.model";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import type { Client } from "../../../../../shared/models/client.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import {
   type ConvertTicketInput,
   ticketApi,

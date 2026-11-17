@@ -1,5 +1,5 @@
-import type { TicketApi } from "../../../../shared/api-contracts/ticketApi.contract";
-import type { Ticket } from "../../../../shared/models/ticket.model";
+import type { TicketApi } from "@pawnsystem/shared/api-contracts/ticketApi.contract";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type {
   ConvertTicketInput,
   CreatePawnTicketInput,
@@ -14,7 +14,7 @@ import type {
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
-} from "../../../../shared/payload-contracts/ticket.contract";
+} from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import { getAppApi } from "../../shared/api/app.api";
 import {
   createEnvelopePrintHtml,
@@ -27,8 +27,7 @@ const api = (): TicketApi => {
   return ticket;
 };
 
-const isTicketNumber = (value: number) =>
-  Number.isInteger(value) && value > 0;
+const isTicketNumber = (value: number) => Number.isInteger(value) && value > 0;
 
 const openPrintWindow = (html: string) => {
   const printWindow = window.open("", "_blank", "width=445,height=900");

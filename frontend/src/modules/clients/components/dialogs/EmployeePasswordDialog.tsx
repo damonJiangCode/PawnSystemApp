@@ -15,7 +15,7 @@ type EmployeePasswordDialogProps = {
   submitError: string;
   employeePassword: string;
   employeePasswordError: string;
-  passwordInputRef: React.RefObject<HTMLInputElement>;
+  passwordInputRef: React.RefObject<HTMLInputElement | null>;
   onPasswordChange: (value: string) => void;
   onCancel: () => void;
   onConfirm: () => void;

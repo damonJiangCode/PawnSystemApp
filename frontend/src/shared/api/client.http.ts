@@ -1,9 +1,9 @@
-import type { ClientApi } from "../../../../shared/api-contracts/clientApi.contract.ts";
-import type { Client } from "../../../../shared/models/client.model.ts";
+import type { ClientApi } from "@pawnsystem/shared/api-contracts/clientApi.contract.ts";
+import type { Client } from "@pawnsystem/shared/models/client.model.ts";
 import type {
   CreateClientInput,
   UpdateClientInput,
-} from "../../../../shared/payload-contracts/client.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/client.contract.ts";
 import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
 
 export async function createClientHttp(

@@ -29,7 +29,7 @@ use to resolve a PIN to an employee. Unknown fields return 400.
 ## PINs and concurrency
 
 - PINs are stored as HMAC-SHA256(`EMPLOYEE_PIN_SECRET`, trimmed PIN), matching
-  [employee-pin.cjs](../../../database/migration/scripts/employee-pin.cjs). A keyed hash is
+  [employee-pin.js](../../../database/migration/scripts/employee-pin.js). A keyed hash is
   used instead of bcrypt because employees are identified by PIN alone, which needs lookup by value.
 - The `employee_pin_hash_key` constraint enforces uniqueness (a violation returns 409).
 - Updates lock all active managers in number order before the target row, so two

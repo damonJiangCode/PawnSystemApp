@@ -13,7 +13,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import type { Employee } from "../../../../../shared/models/employee.model";
+import type { Employee } from "@pawnsystem/shared/models/employee.model";
 import {
   employeeApi,
   type CreateEmployeeInput,

@@ -21,7 +21,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
 
 interface SearchBarProps {
-  lastNameInputRef?: React.RefObject<HTMLInputElement>;
+  lastNameInputRef?: React.RefObject<HTMLInputElement | null>;
   onSearch?: (params: { firstName: string; lastName: string }) => void;
   onBirthdaySearch?: (params: { dateOfBirth: string }) => void;
   onClear?: () => void;

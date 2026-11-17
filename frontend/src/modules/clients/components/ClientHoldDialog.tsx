@@ -11,8 +11,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Client } from "../../../../../shared/models/client.model";
-import { normalizeClientHoldDate } from "../../../../../shared/utils/clientHold";
+import type { Client } from "@pawnsystem/shared/models/client.model";
+import { normalizeClientHoldDate } from "../../../shared/utils/clientHold";
 import { clientApi } from "../client.api";
 
 type Props = {

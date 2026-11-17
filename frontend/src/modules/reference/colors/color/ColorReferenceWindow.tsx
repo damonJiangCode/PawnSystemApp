@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { EyeColor } from "../../../../../../shared/models/eye-color.model";
+import type { EyeColor } from "@pawnsystem/shared/models/eye-color.model";
 import WindowLayout from "../../../../windows/WindowLayout";
 import ColorAddDialog from "./ColorAddDialog";
 

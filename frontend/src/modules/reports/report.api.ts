@@ -1,4 +1,4 @@
-import type { ReportApi } from "../../../../shared/api-contracts/reportApi.contract";
+import type { ReportApi } from "@pawnsystem/shared/api-contracts/reportApi.contract";
 import { getAppApi } from "../../shared/api/app.api";
 
 const api = (): ReportApi => {

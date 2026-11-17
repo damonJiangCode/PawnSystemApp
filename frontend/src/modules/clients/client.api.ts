@@ -1,10 +1,10 @@
-import type { Client } from "../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import type {
   ClientNotesAction,
   SaveClientInput,
   CreateClientInput,
   UpdateClientInput,
-} from "../../../../shared/payload-contracts/client.contract";
+} from "@pawnsystem/shared/payload-contracts/client.contract";
 import { getAppApi } from "../../shared/api/app.api";
 import { extractBackendFieldError } from "../../shared/utils/formError";
 

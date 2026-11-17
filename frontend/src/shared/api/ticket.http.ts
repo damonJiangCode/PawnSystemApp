@@ -1,6 +1,6 @@
-import type { TicketApi } from "../../../../shared/api-contracts/ticketApi.contract.ts";
-import type { Client } from "../../../../shared/models/client.model.ts";
-import type { Ticket } from "../../../../shared/models/ticket.model.ts";
+import type { TicketApi } from "@pawnsystem/shared/api-contracts/ticketApi.contract.ts";
+import type { Client } from "@pawnsystem/shared/models/client.model.ts";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model.ts";
 import type {
   ConvertTicketInput,
   CreatePawnTicketInput,
@@ -14,7 +14,7 @@ import type {
   TransferTicketInput,
   TransferTicketPreview,
   UpdateTicketInput,
-} from "../../../../shared/payload-contracts/ticket.contract.ts";
+} from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
 import { restoreClientDates } from "./client.http.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 

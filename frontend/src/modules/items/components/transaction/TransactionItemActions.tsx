@@ -2,7 +2,7 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import type { Item } from "../../../../../../shared/models/item.model";
+import type { Item } from "@pawnsystem/shared/models/item.model";
 import ItemActionsLayout from "../shared/ItemActionsLayout";
 import { destructiveButtonSx } from "../../../../shared/styles/actionButtonStyles";
 

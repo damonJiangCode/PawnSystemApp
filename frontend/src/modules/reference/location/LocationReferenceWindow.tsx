@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Location } from "../../../../../shared/models/location.model";
+import type { Location } from "@pawnsystem/shared/models/location.model";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
 import LocationAddDialog from "./LocationAddDialog";

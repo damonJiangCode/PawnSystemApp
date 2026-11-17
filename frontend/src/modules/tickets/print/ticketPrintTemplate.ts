@@ -1,6 +1,6 @@
-import type { Client } from "../../../../../shared/models/client.model";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import { calculation } from "../../../../../shared/utils/calculation";
+import type { Client } from "@pawnsystem/shared/models/client.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import { calculation } from "../../../shared/utils/calculation";
 
 export type PrintClient = Pick<
   Client,

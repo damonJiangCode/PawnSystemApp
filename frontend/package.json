@@ -1,0 +1,31 @@
+{
+  "name": "@pawnsystem/frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "React renderer for the pawn shop app, served and built with Vite.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --import tsx --test \"src/**/*.test.ts\" \"src/**/*.test.js\""
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^6.5.0",
+    "@mui/material": "^6.5.0",
+    "@mui/x-data-grid": "^7.29.13",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.9",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.8"
+  }
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Paper } from "@mui/material";
-import type { Client } from "../../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import {
   SIDE_ACTIONS_PANEL_WIDTH,
   SIDE_PANEL_WIDTH,

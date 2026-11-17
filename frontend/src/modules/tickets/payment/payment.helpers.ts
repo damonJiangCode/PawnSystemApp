@@ -1,6 +1,6 @@
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import { calculation } from "../../../../../shared/utils/calculation";
-import { getTicketPickupAmount } from "../../../../../shared/utils/ticketFinance";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import { calculation } from "../../../shared/utils/calculation";
+import { getTicketPickupAmount } from "../../../shared/utils/ticketFinance";
 import type {
   PaymentMode,
   PaymentRowsByMode,

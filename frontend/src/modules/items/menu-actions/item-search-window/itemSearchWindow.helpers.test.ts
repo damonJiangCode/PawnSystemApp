@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import type { Item } from "../../../../../../shared/models/item.model.ts";
+import type { Item } from "@pawnsystem/shared/models/item.model.ts";
 import {
   getItemStatusRowClass,
   isItemAddable,

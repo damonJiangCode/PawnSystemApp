@@ -1,0 +1,14 @@
+{
+  // Type check only. This package holds types, so every import of it is
+  // `import type` and nothing from it exists at run time.
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "noEmit": true,
+    "types": []
+  },
+  "include": ["**/*.ts"]
+}

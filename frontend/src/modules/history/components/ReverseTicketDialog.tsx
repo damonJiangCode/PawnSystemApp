@@ -10,8 +10,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import { getTicketPickupAmount } from "../../../../../shared/utils/ticketFinance";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import { getTicketPickupAmount } from "../../../shared/utils/ticketFinance";
 import ClientBar from "../../../shared/components/ClientBar";
 import { formatCurrency } from "../../../shared/utils/formatters";
 

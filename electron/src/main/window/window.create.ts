@@ -1,9 +1,9 @@
-import path from "path";
-import type { Event as ElectronEvent } from "electron";
+import path from "node:path";
+import { app, BrowserWindow, type Event as ElectronEvent } from "electron";
 
-const { BrowserWindow } = require("electron/main") as typeof import("electron");
-
-const preloadPath = path.resolve(process.cwd(), "electron/src/preload/index.cjs");
+// The app root is the electron/ folder in development and the packaged app later,
+// so this does not depend on the folder Electron was started from.
+const preloadPath = () => path.join(app.getAppPath(), "src/preload/index.cjs");
 
 type CreateAppWindowInput = {
   width: number;
@@ -45,7 +45,7 @@ export const createAppWindow = ({
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: preloadPath,
+      preload: preloadPath(),
     },
   });
 

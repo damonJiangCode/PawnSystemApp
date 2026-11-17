@@ -4,7 +4,14 @@
     "noEmit": true,
     "incremental": false,
     "rootDir": "..",
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    // ticket-finance.spec.ts compares against the frontend's display copy,
+    // which imports the shared types by package name. The server is not an
+    // npm workspace, so resolve that name to the folder directly instead of
+    // relying on the root node_modules being installed (CI installs only server/).
+    "paths": {
+      "@pawnsystem/shared/*": ["../shared/*"]
+    }
   },
   "include": ["src"]
 }

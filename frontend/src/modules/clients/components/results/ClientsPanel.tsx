@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import type { Client } from "../../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import ClientsTable from "./ClientsTable";
 import ClientSidePanel from "./ClientSidePanel";
 

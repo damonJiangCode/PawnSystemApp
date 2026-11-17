@@ -20,8 +20,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import type { Ticket } from "../../../../../shared/models/ticket.model";
-import type { OverdueReportTicket } from "../../../../../shared/payload-contracts/ticket.contract";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
+import type { OverdueReportTicket } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import { reportApi } from "../report.api";
 import { ticketApi } from "../../tickets/ticket.api";
 import { getAppApi } from "../../../shared/api/app.api";

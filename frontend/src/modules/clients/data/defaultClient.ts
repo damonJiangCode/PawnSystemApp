@@ -1,4 +1,4 @@
-import type { Client } from "../../../../../shared/models/client.model";
+import type { Client } from "@pawnsystem/shared/models/client.model";
 import { formatLocalIsoDatePart } from "../../../shared/utils/formatters.ts";
 
 const today = new Date();

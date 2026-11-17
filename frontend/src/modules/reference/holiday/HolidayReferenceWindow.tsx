@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { HolidayDate } from "../../../../../shared/models/holiday-date.model";
+import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model";
 import WindowLayout from "../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../windows/windowRegistry";
 import HolidayAddDialog from "./HolidayAddDialog";

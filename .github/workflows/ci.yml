@@ -16,8 +16,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  app:
-    name: Frontend + Electron
+  # database, shared, frontend and electron share one install at the root
+  workspaces:
+    name: Workspaces
     runs-on: ubuntu-latest
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
@@ -30,6 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - run: npm run build
 
   server:
     name: Server

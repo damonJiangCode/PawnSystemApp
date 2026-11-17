@@ -10,10 +10,10 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { Ticket } from "../../../../../../shared/models/ticket.model";
+import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type { ConvertTicketInput, TicketFormError } from "../../ticket.api";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
-import { calculation } from "../../../../../../shared/utils/calculation";
+import { calculation } from "../../../../shared/utils/calculation";
 import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import { referenceApi } from "../../../reference/reference.api";
 

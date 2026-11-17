@@ -34,7 +34,7 @@ _Screenshots use fictional demo data from a local stub API; photos are placehold
 ```text
 React UI ── HTTP ── NestJS controllers → services → repositories → PostgreSQL
     │
-    └── preload bridge ── Electron windows, menus, XML reports
+    └── preload bridge ── Electron windows and menus
 ```
 
 | Area      | Technology                                                    |
@@ -45,6 +45,24 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
 | Database  | PostgreSQL 16 in Docker                                       |
 | Migration | Node.js, mdbtools, versioned JSON mapping rules               |
 | Testing   | Vitest for the server; Node test runner for everything else   |
+
+## Project structure
+
+The root `package.json` only coordinates. Each folder below is an npm workspace with its own
+dependencies and scripts, installed together by one `npm ci` at the root. Shared TypeScript
+options live in `tsconfig.base.json`.
+
+| Folder      | Workspace              | Role                                                      |
+| ----------- | ---------------------- | --------------------------------------------------------- |
+| `frontend/` | `@pawnsystem/frontend` | React renderer, served and built with Vite                |
+| `electron/` | `@pawnsystem/electron` | Desktop shell and Electron app root                       |
+| `shared/`   | `@pawnsystem/shared`   | Types only, imported with `import type`                   |
+| `database/` | `@pawnsystem/database` | Schema, seed data and the Access migration                |
+| `server/`   | not a workspace        | NestJS API with its own lockfile, built by its Dockerfile |
+| `docker/`   | —                      | Compose file for PostgreSQL, the server and the migration |
+
+Everything is ESM except the Electron preload, which a sandboxed window requires to be
+CommonJS.
 
 ## Engineering highlights
 
@@ -65,18 +83,17 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
 
 ## Current status
 
-The business workflows are moving from Electron IPC to the NestJS server.
+All business workflows run on the NestJS server over HTTP: clients, employees, reference
+data, tickets, items, reports and LeadsOnline XML reports. Electron only manages windows.
 
-- Clients, employees, reference data, tickets, items and reports use HTTP.
-- XML reports (LeadsOnline) still run in Electron.
 - API routes have no authentication yet. Employee PINs attribute actions but do not
   create a login session, so this must stay on a trusted network for now.
-- There is no installer or server container yet: the desktop app needs Vite, and
-  Docker runs PostgreSQL only.
+- There is no installer yet: the desktop app needs Vite. Docker runs PostgreSQL and the
+  server.
 
 ## Getting started
 
-You need Node.js 22, Docker Desktop and a desktop environment. From the repository root:
+You need Node.js 24 or later, Docker Desktop and a desktop environment. From the repository root:
 
 ```bash
 npm ci
@@ -100,14 +117,16 @@ This starts Vite on 5173, NestJS on 3000 and Electron; PostgreSQL uses 5432 (Doc
 ## Verification
 
 ```bash
-npm run typecheck:main
-npm run typecheck:renderer
+npm run typecheck
 npm test
+npm run build
 npm --prefix server test
 npm --prefix server run test:e2e
 npm --prefix server run build
-npm run build
 ```
+
+`typecheck` and `test` run in every workspace; add `-w <folder>` to run one, such as
+`npm run typecheck -w electron`.
 
 ## Documentation
 
@@ -115,7 +134,7 @@ npm run build
 - [Electron](electron/README.md)
 - [Server](server/README.md)
 - [Database](database/README.md)
-- [Shared code](shared/README.md)
+- [Shared types](shared/README.md)
 
 ## Private data
 

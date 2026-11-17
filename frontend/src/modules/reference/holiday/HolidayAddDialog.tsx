@@ -10,8 +10,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import type { HolidayDate } from "../../../../../shared/models/holiday-date.model";
-import type { SaveHolidayInput } from "../../../../../shared/payload-contracts/reference.contract";
+import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model";
+import type { SaveHolidayInput } from "@pawnsystem/shared/payload-contracts/reference.contract";
 import { referenceApi } from "../reference.api";
 
 type HolidayAddDialogProps = {

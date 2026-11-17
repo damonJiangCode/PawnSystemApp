@@ -9,7 +9,8 @@ export const loadEnv = () => {
   }
 
   isLoaded = true;
-  const envPath = path.resolve(process.cwd(), ".env");
+  // The private .env lives at the repository root, one level above this package.
+  const envPath = path.resolve(import.meta.dirname, "..", ".env");
 
   if (!fs.existsSync(envPath)) {
     return;

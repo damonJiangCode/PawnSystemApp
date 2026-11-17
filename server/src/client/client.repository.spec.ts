@@ -115,11 +115,9 @@ describe('ClientRepository.update', () => {
     expect(query.mock.calls[0][1]).toEqual([42]);
   });
   it('reads type states using parameters and share locks to serialize deactivation', async () => {
-    const query = vi
-      .fn()
-      .mockResolvedValue({
-        rows: [{ type: 'Legacy LIB: LIBRARY', is_active: false }],
-      });
+    const query = vi.fn().mockResolvedValue({
+      rows: [{ type: 'Legacy LIB: LIBRARY', is_active: false }],
+    });
     const repository = new ClientRepository({} as Pool);
     const result = await repository.loadIdTypeStates(['Legacy LIB: LIBRARY'], {
       query,

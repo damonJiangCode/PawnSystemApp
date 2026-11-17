@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { HairColor } from "../../../../../../shared/models/hair-color.model";
+import type { HairColor } from "@pawnsystem/shared/models/hair-color.model";
 import WindowLayout from "../../../../windows/WindowLayout";
 import type { WindowScreenProps } from "../../../../windows/windowRegistry";
 import ColorAddDialog from "../color/ColorAddDialog";

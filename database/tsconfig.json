@@ -1,0 +1,14 @@
+{
+  // Type check only. Node runs these .ts files directly (type stripping),
+  // so only syntax that can be erased is allowed.
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["**/*.ts"]
+}

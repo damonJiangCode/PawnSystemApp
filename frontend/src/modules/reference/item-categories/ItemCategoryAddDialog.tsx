@@ -11,7 +11,7 @@ import {
 import type {
   ItemCategory,
   ItemSubcategory,
-} from "../../../../../shared/models/item-category.model";
+} from "@pawnsystem/shared/models/item-category.model";
 import { referenceApi } from "../reference.api";
 
 // A null parent adds a category; a parent adds a subcategory under it.

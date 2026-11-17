@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 import SideButtons from "./SideButtons";
 
 interface TopBarProps {
-  lastNameInputRef?: React.RefObject<HTMLInputElement>;
+  lastNameInputRef?: React.RefObject<HTMLInputElement | null>;
   onSearch?: (params: { firstName: string; lastName: string }) => void;
   onBirthdaySearch?: (params: { dateOfBirth: string }) => void;
   onClear?: () => void;

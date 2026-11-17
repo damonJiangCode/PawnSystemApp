@@ -10,7 +10,7 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import type { TicketSearchResult } from "../../../../../shared/payload-contracts/ticket.contract";
+import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 
 type TicketOwnerCheckDialogProps = {

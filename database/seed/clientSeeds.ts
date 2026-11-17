@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 import type { DbClient } from "../connection.ts";
+import { loadIdTypeMapping } from "../migration/scripts/id-type-mapping.js";
 
 const HAIR_COLORS = [
   "BLACK",
@@ -53,7 +54,7 @@ const seedColors = async (
 };
 
 export const seedCities = async (client: DbClient) => {
-  const filePath = path.join(__dirname, "canadacities.csv");
+  const filePath = path.join(import.meta.dirname, "canadacities.csv");
   const stream = fs.createReadStream(filePath).pipe(csv());
   const cities = new Map<
     string,
@@ -101,12 +102,6 @@ export const seedEyeColors = async (client: DbClient) => {
 };
 
 export const seedIdTypes = async (client: DbClient) => {
-  const { loadIdTypeMapping } =
-    require("../migration/scripts/id-type-mapping.cjs") as {
-      loadIdTypeMapping: () => {
-        targetTypes: { type: string; is_active: boolean }[];
-      };
-    };
   const { targetTypes } = loadIdTypeMapping();
   await client.query(
     `INSERT INTO id_type (type, is_active)
