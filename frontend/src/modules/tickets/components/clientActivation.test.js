@@ -1,14 +1,15 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-const { test } = require("node:test");
-const ts = require("typescript");
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
+import { test } from "node:test";
+import * as React from "react";
+import ts from "typescript";
 
 // Execute real TypeScript functions with isolated database/IPC dependencies.
 function load(relativePath, dependencies = {}) {
   const source = fs.readFileSync(
-    path.join(__dirname, "../../../../..", relativePath),
+    path.join(import.meta.dirname, "../../../../..", relativePath),
     "utf8",
   );
   const code = ts.transpileModule(source, {
@@ -38,7 +39,7 @@ function load(relativePath, dependencies = {}) {
 // ticket-actions.http.spec.ts. This file keeps the UI checks.
 test("deactivation disables ticket issuance buttons while preserving existing-ticket actions", () => {
   const dependencies = {
-    react: { default: require("react") },
+    react: { default: React },
     "../shared/TicketActionsLayout": { default: () => null },
     "../../../history/history.helpers": load(
       "frontend/src/modules/history/history.helpers.ts",

@@ -1,7 +1,7 @@
 # Frontend
 
-React, TypeScript and Material UI, served and built with Vite. Dependencies and commands are in the
-root `package.json`.
+React, TypeScript and Material UI, served and built with Vite. This folder is the npm workspace
+`@pawnsystem/frontend`, with its own dependencies and scripts in `package.json`.
 
 ```text
 frontend/src/
@@ -103,4 +103,14 @@ npm test
 npm run build
 ```
 
-Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to the root `dist/`.
+These run from the project root and forward to this workspace. To run only the frontend:
+
+```bash
+npm run dev -w frontend
+npm run typecheck -w frontend
+npm test -w frontend
+npm run build -w frontend
+```
+
+Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to `frontend/dist/`. Tests use
+`node:test` through the `ts-node/esm` loader, transpile only (see `"ts-node"` in `tsconfig.json`).
