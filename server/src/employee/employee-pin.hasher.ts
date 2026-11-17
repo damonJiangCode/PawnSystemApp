@@ -4,7 +4,7 @@ import { createHmac } from 'node:crypto';
 
 const MIN_SECRET_LENGTH = 32;
 
-// Same algorithm as database/migration/scripts/employee-pin.cjs. A keyed hash
+// Same algorithm as database/migration/scripts/employee-pin.js. A keyed hash
 // (not a salted one) so an employee can still be found by PIN alone.
 @Injectable()
 export class EmployeePinHasher {

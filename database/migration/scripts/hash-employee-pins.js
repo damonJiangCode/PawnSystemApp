@@ -1,10 +1,7 @@
 #!/usr/bin/env node
-
-const { Pool } = require("pg");
-const {
-  readEmployeePinSecret,
-  hashEmployeePin,
-} = require("./employee-pin.cjs");
+import pg from "pg";
+import { readEmployeePinSecret, hashEmployeePin } from "./employee-pin.js";
+const { Pool } = pg;
 
 const shouldCommit = process.argv.includes("--commit");
 
@@ -120,7 +117,8 @@ const main = async () => {
   }
 };
 
-main().catch((error) => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });

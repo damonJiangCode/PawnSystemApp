@@ -1,9 +1,6 @@
-const assert = require("node:assert/strict");
-const { test } = require("node:test");
-const {
-  readEmployeePinSecret,
-  hashEmployeePin,
-} = require("./employee-pin.cjs");
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { readEmployeePinSecret, hashEmployeePin } from "./employee-pin.js";
 
 const secret = "a".repeat(32);
 

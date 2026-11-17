@@ -1,19 +1,16 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const os = require("node:os");
-const path = require("node:path");
-const { test } = require("node:test");
-const { spawnSync } = require("node:child_process");
-const {
-  executeDevMigration,
-  runCommand,
-} = require("./executeDevMigration.cjs");
-const {
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { test } from "node:test";
+import { spawnSync } from "node:child_process";
+import { executeDevMigration, runCommand } from "./executeDevMigration.js";
+import {
   previewCounts,
   assertEmptyDatabase,
   validateImportedDatabase,
   validationPassed,
-} = require("./devMigrationChecks.cjs");
+} from "./devMigrationChecks.js";
 
 const validMetrics = () => ({
   active_managers: 1,
@@ -171,7 +168,7 @@ const fixture = (t, options = {}) => {
           .split("=/app/")[1],
       );
       const kind = script.match(
-        /migrate-(client|employee|ticket|item)\.cjs$/,
+        /migrate-(client|employee|ticket|item)\.js$/,
       )?.[1];
       if (kind) {
         const commit = args.includes("--commit");
@@ -229,7 +226,7 @@ const fixture = (t, options = {}) => {
 const committed = (f, kind) =>
   f.calls.some(
     ({ args }) =>
-      args.includes(`database/migration/scripts/migrate-${kind}.cjs`) &&
+      args.includes(`database/migration/scripts/migrate-${kind}.js`) &&
       args.includes("--commit"),
   );
 
@@ -245,7 +242,7 @@ test("simulated execution imports in order, writes backups, and never starts/res
   assert.deepEqual(
     commits,
     ["client", "employee", "ticket", "item", "client-statistics"].map(
-      (kind) => `database/migration/scripts/migrate-${kind}.cjs`,
+      (kind) => `database/migration/scripts/migrate-${kind}.js`,
     ),
   );
   assert.ok(
@@ -415,17 +412,21 @@ test("final validation cannot pass with missing metrics or without an active man
 });
 
 test("termination stops the child command rather than leaving a migration running", () => {
-  const runner = require.resolve("./executeDevMigration.cjs");
+  const runner = new URL("./executeDevMigration.js", import.meta.url).href;
   const code = `
-    const {runCommand} = require(${JSON.stringify(runner)});
+    const {runCommand} = await import(${JSON.stringify(runner)});
     const task = runCommand(process.execPath, ['-e', 'setTimeout(() => {}, 10000)'], {cwd:process.cwd(),env:process.env});
     setTimeout(() => process.kill(process.pid, 'SIGTERM'), 100);
     task.then(() => {process.exitCode=2;}, () => console.log('child cancelled'));
   `;
-  const result = spawnSync(process.execPath, ["-e", code], {
-    encoding: "utf8",
-    timeout: 5000,
-  });
+  const result = spawnSync(
+    process.execPath,
+    ["--input-type=module", "-e", code],
+    {
+      encoding: "utf8",
+      timeout: 5000,
+    },
+  );
   assert.equal(result.status, 0);
   assert.match(result.stdout, /child cancelled/);
 });

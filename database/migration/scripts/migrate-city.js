@@ -1,15 +1,16 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "city-migration.md");
 
 const dbConfig = {
@@ -23,9 +24,7 @@ const dbConfig = {
 const normalizeText = (value) => String(value ?? "").trim();
 const normalizeUpper = (value) => normalizeText(value).toUpperCase();
 const normalizeCityKeyPart = (value) =>
-  normalizeUpper(value)
-    .replace(/\./g, "")
-    .replace(/\s+/g, " ");
+  normalizeUpper(value).replace(/\./g, "").replace(/\s+/g, " ");
 
 const cityKey = (city, province, country) =>
   `${normalizeCityKeyPart(city)}|${normalizeCityKeyPart(province)}|${normalizeCityKeyPart(country)}`;
@@ -58,9 +57,13 @@ const getValue = (row, key) => {
 const readAccessTable = (tableName) => {
   return new Promise((resolve, reject) => {
     const rows = [];
-    const child = spawn("mdb-export", ["-b", "strip", sourceDbPath, tableName], {
-      cwd: projectRoot,
-    });
+    const child = spawn(
+      "mdb-export",
+      ["-b", "strip", sourceDbPath, tableName],
+      {
+        cwd: projectRoot,
+      },
+    );
 
     child.stdout.pipe(csv()).on("data", (row) => rows.push(row));
 
@@ -123,10 +126,14 @@ const loadLegacyClientCities = async () => {
   const countryByCode = buildLookupByCode(countryRows, "MF120CODE", (row) =>
     normalizeText(getValue(row, "MF120COUNTRY")),
   );
-  const provinceByCode = buildLookupByCode(provinceRows, "MF110CODE", (row) => ({
-    province: normalizeText(getValue(row, "MF110PROVINCE")),
-    countryCode: normalizeText(getValue(row, "MF110COUNTRYCODE")),
-  }));
+  const provinceByCode = buildLookupByCode(
+    provinceRows,
+    "MF110CODE",
+    (row) => ({
+      province: normalizeText(getValue(row, "MF110PROVINCE")),
+      countryCode: normalizeText(getValue(row, "MF110COUNTRYCODE")),
+    }),
+  );
   const cityByCode = buildLookupByCode(cityRows, "MF100CITY", (row) => {
     const provinceCode = normalizeText(getValue(row, "MF100PROVINCENO"));
     const province = provinceByCode.get(provinceCode);
@@ -135,7 +142,8 @@ const loadLegacyClientCities = async () => {
 
     return {
       city: normalizeText(getValue(row, "MF100NAME")),
-      province: province?.province || normalizeText(getValue(row, "MF100PROVSHNAME")),
+      province:
+        province?.province || normalizeText(getValue(row, "MF100PROVSHNAME")),
       country: countryByCode.get(countryCode) || "",
     };
   });
@@ -166,7 +174,12 @@ const loadLegacyClientCities = async () => {
     }
 
     const key = cityKey(city, province, country);
-    const current = usedCities.get(key) || { city, province, country, count: 0 };
+    const current = usedCities.get(key) || {
+      city,
+      province,
+      country,
+      count: 0,
+    };
     current.count += 1;
     usedCities.set(key, current);
     addSample(
@@ -188,7 +201,8 @@ const main = async () => {
   const pool = new Pool(dbConfig);
 
   try {
-    const { clientRows, usedCities, samplesByKey } = await loadLegacyClientCities();
+    const { clientRows, usedCities, samplesByKey } =
+      await loadLegacyClientCities();
 
     await pool.query("BEGIN");
 
@@ -197,7 +211,9 @@ const main = async () => {
     );
 
     const beforeKeys = new Set(
-      beforeResult.rows.map((row) => cityKey(row.city, row.province, row.country)),
+      beforeResult.rows.map((row) =>
+        cityKey(row.city, row.province, row.country),
+      ),
     );
     const usedKeys = new Set(usedCities.keys());
     const missingRows = [...usedCities.entries()]
@@ -253,10 +269,9 @@ const main = async () => {
     }
 
     if (deleteCandidates.length) {
-      await pool.query(
-        "DELETE FROM city WHERE id = ANY($1::int[])",
-        [deleteCandidates.map((row) => row.id)],
-      );
+      await pool.query("DELETE FROM city WHERE id = ANY($1::int[])", [
+        deleteCandidates.map((row) => row.id),
+      ]);
     }
 
     const afterCleanupResult = await pool.query(
@@ -264,7 +279,9 @@ const main = async () => {
     );
 
     const finalKeys = new Set(
-      afterCleanupResult.rows.map((row) => cityKey(row.city, row.province, row.country)),
+      afterCleanupResult.rows.map((row) =>
+        cityKey(row.city, row.province, row.country),
+      ),
     );
     const stillMissingRows = [...usedCities.entries()]
       .filter(([key]) => !finalKeys.has(key))
@@ -278,7 +295,10 @@ const main = async () => {
       0,
     );
     const deletedTableRows = deleteCandidates
-      .sort((a, b) => a.province.localeCompare(b.province) || a.city.localeCompare(b.city))
+      .sort(
+        (a, b) =>
+          a.province.localeCompare(b.province) || a.city.localeCompare(b.city),
+      )
       .map((row) => [
         row.city,
         row.province,
@@ -286,13 +306,17 @@ const main = async () => {
         row.legacyCity,
         String(row.legacyCount),
       ]);
-    const topInsertedRows = missingRows.slice(0, 120).map((row) => [
-      String(row.count),
-      row.city,
-      row.province,
-      row.country,
-      (samplesByKey.get(cityKey(row.city, row.province, row.country)) || []).join("<br>"),
-    ]);
+    const topInsertedRows = missingRows
+      .slice(0, 120)
+      .map((row) => [
+        String(row.count),
+        row.city,
+        row.province,
+        row.country,
+        (
+          samplesByKey.get(cityKey(row.city, row.province, row.country)) || []
+        ).join("<br>"),
+      ]);
 
     const report = [
       "# Client City Migration",
@@ -323,7 +347,13 @@ const main = async () => {
       "## Deleted Overlapping Unused Current Rows",
       "",
       formatTable(
-        ["deleted_city", "province", "country", "kept_legacy_city", "legacy_use_count"],
+        [
+          "deleted_city",
+          "province",
+          "country",
+          "kept_legacy_city",
+          "legacy_use_count",
+        ],
         deletedTableRows,
       ),
       "",
@@ -333,7 +363,9 @@ const main = async () => {
         ["use_count", "city", "province", "country", "example_clients"],
         topInsertedRows,
       ),
-      missingRows.length > 120 ? `\n\n... ${missingRows.length - 120} more inserted rows` : "",
+      missingRows.length > 120
+        ? `\n\n... ${missingRows.length - 120} more inserted rows`
+        : "",
       "",
       "## Still Missing",
       "",
@@ -365,7 +397,8 @@ const main = async () => {
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

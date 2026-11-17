@@ -1,10 +1,10 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const os = require("node:os");
-const path = require("node:path");
-const { spawnSync } = require("node:child_process");
-const { test } = require("node:test");
-const { prepareDevMigration } = require("./prepareDevMigration.cjs");
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { test } from "node:test";
+import { prepareDevMigration } from "./prepareDevMigration.js";
 
 const fixture = (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "prepare-migration-"));
@@ -36,10 +36,7 @@ const fixture = (t) => {
       file,
       input.endsWith("id-type-mapping.json")
         ? fs.readFileSync(
-            path.join(
-              __dirname,
-              "../mappings/id-type-mapping.json",
-            ),
+            path.join(import.meta.dirname, "../mappings/id-type-mapping.json"),
           )
         : "Synthetic test input; not a real customer record.\n",
     );

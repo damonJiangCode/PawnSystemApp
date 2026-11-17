@@ -1,12 +1,13 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+import { loadIdTypeMapping, resolveIdType } from "./id-type-mapping.js";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 const summaryDir =
@@ -39,7 +40,6 @@ const EYE_COLOR_MAPPING = {
   "DARK BROWN": "BROWN",
   "LIGHT BROWN": "BROWN",
 };
-const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
 const idTypeMapping = loadIdTypeMapping();
 const mapHairColor = (value) => {
   const normalized = normalizeUpper(value);
@@ -479,7 +479,8 @@ const main = async () => {
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

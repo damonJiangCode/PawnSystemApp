@@ -1,12 +1,12 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 const summaryDir =
   process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
@@ -82,8 +82,10 @@ const readAccessTable = (tableName) =>
 const targetKey = (category, subcategory) =>
   `${normalizeKey(category)} / ${normalizeKey(subcategory)}`;
 
-const parseCategoryMappings = () => {
-  const input = JSON.parse(fs.readFileSync(categoryMappingPath, "utf8"));
+const parseCategoryMappings = (
+  content = fs.readFileSync(categoryMappingPath, "utf8"),
+) => {
+  const input = JSON.parse(content);
   if (
     !input ||
     Object.keys(input).sort().join(",") !== "parentRules,subcategoryRules"
@@ -625,7 +627,11 @@ ${formatCounts(warningCounts, 80)}
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+// Exported for tests; importing this file does not run the migration.
+export { parseCategoryMappings };
+
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

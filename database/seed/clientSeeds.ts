@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 import type { DbClient } from "../connection.ts";
-import { loadIdTypeMapping } from "../migration/scripts/id-type-mapping.cjs";
+import { loadIdTypeMapping } from "../migration/scripts/id-type-mapping.js";
 
 const HAIR_COLORS = [
   "BLACK",

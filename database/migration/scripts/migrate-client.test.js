@@ -1,25 +1,8 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-const { test } = require("node:test");
-
-// Load helpers only: never run Access exports, migration main(), or database writes.
-const source = fs
-  .readFileSync(path.join(__dirname, "migrate-client.cjs"), "utf8")
-  .split("const main = async () => {")[0];
-const { insertClients } = vm.runInNewContext(
-  source + "\n({ insertClients });",
-  {
-    __dirname,
-    process: { env: {}, argv: [] },
-    console,
-    require: (name) =>
-      name === "./id-type-mapping.cjs"
-        ? require("./id-type-mapping.cjs")
-        : require(name),
-  },
-);
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { test } from "node:test";
+import { insertClients } from "./migrate-client.js";
 
 test("migration starts ordinary and fallback clients active with no hold", async () => {
   const calls = [];
@@ -44,7 +27,7 @@ test("migration starts ordinary and fallback clients active with no hold", async
   assert.equal((sql.match(/\$\d+/g) ?? []).length, values.length);
   // The database supplies NULL when this nullable, default-free column is omitted.
   const schema = fs.readFileSync(
-    path.join(__dirname, "../../schema/client/clientTable.ts"),
+    path.join(import.meta.dirname, "../../schema/client/clientTable.ts"),
     "utf8",
   );
   assert.match(schema, /hold_until DATE\s*,/);

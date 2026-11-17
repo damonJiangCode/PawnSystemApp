@@ -5,7 +5,7 @@ import { EmployeePinHasher } from './employee-pin.hasher.js';
 
 const require = createRequire(import.meta.url);
 const migrationPin =
-  require('../../../database/migration/scripts/employee-pin.cjs') as {
+  require('../../../database/migration/scripts/employee-pin.js') as {
     hashEmployeePin: (pin: string, secret: string) => string;
   };
 

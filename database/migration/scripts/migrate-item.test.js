@@ -1,11 +1,7 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-const { test } = require("node:test");
-const script = fs
-  .readFileSync(path.join(__dirname, "migrate-item.cjs"), "utf8")
-  .split("const main = async () => {")[0];
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { parseCategoryMappings } from "./migrate-item.js";
+
 // Fictional mapping rules keep this regression test independent of private mappings.
 const rules = {
   subcategoryRules: [
@@ -21,16 +17,7 @@ const rules = {
   ],
 };
 const mapping = JSON.stringify(rules, null, 2);
-function parse(content) {
-  const context = {
-    __dirname,
-    process,
-    console,
-    require: (name) =>
-      name === "fs" ? { ...fs, readFileSync: () => content } : require(name),
-  };
-  return vm.runInNewContext(script + "\nparseCategoryMappings();", context);
-}
+const parse = (content) => parseCategoryMappings(content);
 test("category JSON loads identically with Windows and Linux line endings", () => {
   const linux = parse(mapping.replace(/\r\n/g, "\n"));
   const windows = parse(mapping.replace(/\r?\n/g, "\r\n"));

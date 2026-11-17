@@ -1,7 +1,9 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const crypto = require("node:crypto");
-const { spawnSync } = require("node:child_process");
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
+import { spawnSync } from "node:child_process";
+import { createRequire } from "node:module";
+import { loadIdTypeMapping } from "../scripts/id-type-mapping.js";
 
 const PRIVATE_PATHS = [
   ".env",
@@ -52,7 +54,7 @@ const findDocker = (command) => {
 };
 
 const prepareDevMigration = ({
-  projectRoot = path.resolve(__dirname, "../../.."),
+  projectRoot = path.resolve(import.meta.dirname, "../../.."),
   run = spawnSync,
   log = console.log,
 } = {}) => {
@@ -189,7 +191,7 @@ const prepareDevMigration = ({
     }
   }
   try {
-    require("../scripts/id-type-mapping.cjs").loadIdTypeMapping(
+    loadIdTypeMapping(
       path.join(
         projectRoot,
         "database/migration/mappings/id-type-mapping.json",
@@ -198,9 +200,11 @@ const prepareDevMigration = ({
   } catch (error) {
     fail(`Invalid ID type mapping: ${error.message}`);
   }
-  for (const dependency of ["pg", "csv-parser", "electron"]) {
+  // Resolve from the project root, where npm installs workspace dependencies.
+  const resolveFromRoot = createRequire(path.join(projectRoot, "package.json"));
+  for (const dependency of ["pg", "csv-parser"]) {
     try {
-      require.resolve(dependency, { paths: [projectRoot] });
+      resolveFromRoot.resolve(dependency);
     } catch {
       fail(`Dependency ${dependency} is missing. Run npm ci.`);
     }
@@ -255,9 +259,9 @@ const prepareDevMigration = ({
   return finish();
 };
 
-module.exports = { prepareDevMigration, parseEnv, findDocker };
+export { prepareDevMigration, parseEnv, findDocker };
 
-if (require.main === module) {
+if (import.meta.main) {
   try {
     process.exitCode = prepareDevMigration();
   } catch {

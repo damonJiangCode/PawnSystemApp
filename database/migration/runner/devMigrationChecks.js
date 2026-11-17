@@ -1,5 +1,5 @@
-const fs = require("node:fs");
-const path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
 
 const REFERENCE_TABLES = new Set([
   "city",
@@ -195,7 +195,7 @@ const validationPassed = (metrics) => {
   );
 };
 
-module.exports = {
+export {
   IDENTITY_SQL,
   previewCounts,
   readMetric,

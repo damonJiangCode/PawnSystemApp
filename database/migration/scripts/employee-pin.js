@@ -1,4 +1,4 @@
-const crypto = require("node:crypto");
+import crypto from "node:crypto";
 
 const MIN_SECRET_LENGTH = 32;
 
@@ -18,4 +18,4 @@ function hashEmployeePin(pin, secret) {
   return crypto.createHmac("sha256", secret).update(value).digest("hex");
 }
 
-module.exports = { MIN_SECRET_LENGTH, readEmployeePinSecret, hashEmployeePin };
+export { MIN_SECRET_LENGTH, readEmployeePinSecret, hashEmployeePin };

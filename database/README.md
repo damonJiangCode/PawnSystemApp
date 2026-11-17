@@ -7,6 +7,10 @@ This folder is the npm workspace `@pawnsystem/database`, with its own dependenci
 (`pg`, `csv-parser`). Node runs the `.ts` files directly (type stripping), so there is no
 build step; `tsconfig.json` is only for type checking and allows erasable syntax only.
 
+Everything here is ESM. The migration scripts are plain `.js` modules: each runs its
+`main()` only when executed directly (`import.meta.main`, Node 24+), so tests can import
+their helpers.
+
 | Path            | Purpose                                 |
 | --------------- | --------------------------------------- |
 | `schema/`       | Tables and indexes                      |
@@ -54,8 +58,8 @@ hand and document it here. These have already been applied to the dev database:
 - Converted plain-text employee passwords to `pin_hash`. Back up the table, preview, then commit:
 
   ```bash
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs
-  node --env-file=.env database/migration/scripts/hash-employee-pins.cjs --commit
+  node --env-file=.env database/migration/scripts/hash-employee-pins.js
+  node --env-file=.env database/migration/scripts/hash-employee-pins.js --commit
   ```
 
 ## Access migration
@@ -107,7 +111,7 @@ The database stores relative photo paths such as `images/items/<file>`. `source/
 The read-only audit writes counts, without customer data, to `migration/reports/`:
 
 ```bash
-node --env-file=.env database/migration/scripts/audit-id-types.cjs
+node --env-file=.env database/migration/scripts/audit-id-types.js
 ```
 
 ## Employee PINs

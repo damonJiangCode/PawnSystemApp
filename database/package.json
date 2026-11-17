@@ -6,10 +6,10 @@
   "type": "module",
   "scripts": {
     "db:init": "node runInit.ts",
-    "migration:prepare": "node migration/runner/prepareDevMigration.cjs",
-    "migration:execute": "node migration/runner/executeDevMigration.cjs",
+    "migration:prepare": "node migration/runner/prepareDevMigration.js",
+    "migration:execute": "node migration/runner/executeDevMigration.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "node --test \"migration/**/*.test.cjs\""
+    "test": "node --test \"migration/**/*.test.js\""
   },
   "dependencies": {
     "csv-parser": "^3.2.0",

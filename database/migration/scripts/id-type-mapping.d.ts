@@ -1,4 +1,4 @@
-// Types for id-type-mapping.cjs, which database/seed/clientSeeds.ts imports.
+// Types for id-type-mapping.js, which database/seed/clientSeeds.ts imports.
 export interface IdTypeTarget {
   type: string;
   is_active: boolean;

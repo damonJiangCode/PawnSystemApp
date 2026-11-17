@@ -1,8 +1,8 @@
-const fs = require("node:fs");
-const path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
 
 function loadIdTypeMapping(
-  file = path.join(__dirname, "../mappings/id-type-mapping.json"),
+  file = path.join(import.meta.dirname, "../mappings/id-type-mapping.json"),
 ) {
   const document = JSON.parse(fs.readFileSync(file, "utf8"));
   if (document.status !== "ready")
@@ -74,4 +74,4 @@ function resolveIdType(mapping, value) {
     }
   );
 }
-module.exports = { loadIdTypeMapping, resolveIdType };
+export { loadIdTypeMapping, resolveIdType };

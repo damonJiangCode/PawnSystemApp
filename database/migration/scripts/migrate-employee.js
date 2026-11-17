@@ -1,16 +1,13 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+import { readEmployeePinSecret, hashEmployeePin } from "./employee-pin.js";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-const {
-  readEmployeePinSecret,
-  hashEmployeePin,
-} = require("./employee-pin.cjs");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 const summaryDir =
   process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
@@ -304,7 +301,8 @@ Mode: ${shouldCommit ? "commit" : "preview"}
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

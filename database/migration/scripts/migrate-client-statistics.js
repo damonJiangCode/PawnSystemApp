@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import pg from "pg";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "client-migration.md");
 const shouldCommit = process.argv.includes("--commit");
 
@@ -291,10 +292,16 @@ const main = async () => {
       : "# Client Migration\n";
     fs.writeFileSync(
       reportPath,
-      replaceReportSection(existingReport, "Client Statistics Recalculation", section),
+      replaceReportSection(
+        existingReport,
+        "Client Statistics Recalculation",
+        section,
+      ),
     );
 
-    console.log(`Client statistics ${shouldCommit ? "committed" : "previewed"}`);
+    console.log(
+      `Client statistics ${shouldCommit ? "committed" : "previewed"}`,
+    );
     console.log(`Changed clients: ${changed.toLocaleString()}`);
     console.log(`Report: ${reportPath}`);
   } catch (error) {
@@ -306,7 +313,8 @@ const main = async () => {
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

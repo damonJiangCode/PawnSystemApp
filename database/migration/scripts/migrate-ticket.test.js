@@ -1,24 +1,13 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-const { test } = require("node:test");
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import {
+  loadLocationMapping,
+  parseLegacyTime,
+  combineDateTime,
+  dbConfig,
+} from "./migrate-ticket.js";
 
-const source = fs
-  .readFileSync(path.join(__dirname, "migrate-ticket.cjs"), "utf8")
-  .split("const main = async () => {")[0];
-const parse = (content) =>
-  vm.runInNewContext(
-    source + "\nloadLocationMapping();",
-    {
-      __dirname,
-      process,
-      console,
-      require: (name) =>
-        name === "fs" ? { ...fs, readFileSync: () => content } : require(name),
-    },
-    { timeout: 5000 },
-  );
+const parse = (content) => loadLocationMapping(content);
 const rules = [
   { legacy_location: " old1 ", mapped_location: "aa11" },
   { legacy_location: "OLD2", mapped_location: "UNKNOWN" },
@@ -66,15 +55,7 @@ test("rejects metadata, missing fields, empty values and malformed JSON", () => 
   assert.throws(() => parse("{broken"), /JSON|property/i);
 });
 
-const helpers = () =>
-  vm.runInNewContext(
-    source + "\n({ parseLegacyTime, combineDateTime, dbConfig });",
-    { __dirname, process, console, require },
-    { timeout: 5000 },
-  );
-
 test("reads unmarked 1:00-8:59 times as PM and keeps the rest", () => {
-  const { parseLegacyTime, combineDateTime } = helpers();
   const cases = [
     ["1:19:31", "13:19:31"],
     ["04:39:03", "16:39:03"],
@@ -98,27 +79,8 @@ test("reads unmarked 1:00-8:59 times as PM and keeps the rest", () => {
 });
 
 test("imports in the shop time zone so zoneless values mean Regina time", () => {
-  // Capture what the script hands to pg's Pool instead of connecting.
-  let poolConfig;
-  const fakePg = {
-    Pool: class {
-      constructor(config) {
-        poolConfig = config;
-      }
-    },
-  };
-  const { createPool, combineDateTime } = vm.runInNewContext(
-    source + "\n({ createPool, combineDateTime });",
-    {
-      __dirname,
-      process,
-      console,
-      require: (name) => (name === "pg" ? fakePg : require(name)),
-    },
-    { timeout: 5000 },
-  );
-  createPool();
-  assert.equal(poolConfig.options, "-c timezone=America/Regina");
+  // createPool() passes dbConfig to pg, so the session time zone is set here.
+  assert.equal(dbConfig.options, "-c timezone=America/Regina");
   assert.equal(
     combineDateTime("10/29/2026", "2:17:56").value,
     "2026-10-29 14:17:56",

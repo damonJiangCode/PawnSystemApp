@@ -1,6 +1,6 @@
 # One-off Access-to-PostgreSQL import. Build context: the repository root.
-# Only the database workspace is installed; the scripts are plain CommonJS.
-FROM node:22-bookworm-slim
+# Only the database workspace is installed. Node 24 is needed for import.meta.main.
+FROM node:24-bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends mdbtools postgresql-client ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json package-lock.json ./

@@ -1,15 +1,17 @@
 #!/usr/bin/env node
+import fs from "node:fs";
+import path from "node:path";
+import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
+import { loadIdTypeMapping, resolveIdType } from "./id-type-mapping.js";
+import assert from "node:assert/strict";
+import csv from "csv-parser";
+import pg from "pg";
+const { Pool } = pg;
+
 // Read-only source/target audit using the exact same JSON rules as the importer.
 // Writes private aggregate reports; never changes mappings or database records.
-const fs = require("node:fs");
-const path = require("node:path");
-const { spawn } = require("node:child_process");
-const { createHash } = require("node:crypto");
-const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
-const assert = require("node:assert/strict");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-const root = path.resolve(__dirname, "../../..");
+const root = path.resolve(import.meta.dirname, "../../..");
 const migration = path.join(root, "database/migration");
 const mappingPath = path.join(migration, "mappings/id-type-mapping.json");
 const text = (value) => String(value ?? "").trim();
@@ -350,7 +352,7 @@ async function main() {
     "Run from repository root:",
     "",
     "```bash",
-    "node --env-file=.env database/migration/scripts/audit-id-types.cjs",
+    "node --env-file=.env database/migration/scripts/audit-id-types.js",
     "```",
     "",
     "The mapping is a versioned runtime input and is never rewritten by the audit.",
@@ -379,7 +381,7 @@ async function main() {
     ),
   );
 }
-if (require.main === module)
+if (import.meta.main)
   main().catch((error) => {
     console.error(error.message);
     process.exitCode = 1;

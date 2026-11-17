@@ -1,12 +1,12 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 const summaryDir =
   process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
@@ -66,9 +66,11 @@ const formatCounts = (map, limit = 50) => {
   ].join("\n");
 };
 
-const loadLocationMapping = () => {
+const loadLocationMapping = (
+  content = fs.readFileSync(locationMappingPath, "utf8"),
+) => {
   const mapping = new Map();
-  const rules = JSON.parse(fs.readFileSync(locationMappingPath, "utf8"));
+  const rules = JSON.parse(content);
   if (!Array.isArray(rules))
     throw new Error("Location mapping must be an array.");
   for (const rule of rules) {
@@ -777,7 +779,11 @@ The ticket number identity sequence is also advanced to the maximum migrated tic
   }
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+// Exported for tests; importing this file does not run the migration.
+export { loadLocationMapping, parseLegacyTime, combineDateTime, dbConfig };
+
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

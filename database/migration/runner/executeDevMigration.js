@@ -1,20 +1,21 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const crypto = require("node:crypto");
-const { spawn, spawnSync } = require("node:child_process");
-const {
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
+import { spawn, spawnSync } from "node:child_process";
+import pg from "pg";
+import {
   prepareDevMigration,
   parseEnv,
   findDocker,
-} = require("./prepareDevMigration.cjs");
-const {
+} from "./prepareDevMigration.js";
+import {
   IDENTITY_SQL,
   previewCounts,
   assertEmptyDatabase,
   assertCounts,
   validateImportedDatabase,
   validationPassed,
-} = require("./devMigrationChecks.cjs");
+} from "./devMigrationChecks.js";
 
 const hashFile = (filename) =>
   new Promise((resolve, reject) => {
@@ -69,8 +70,7 @@ const runCommand = (
   });
 
 const connectDatabase = async (values) => {
-  const { Client } = require("pg");
-  const client = new Client({
+  const client = new pg.Client({
     host: values.DB_HOST,
     port: Number(values.DB_PORT),
     database: values.DB_NAME,
@@ -92,7 +92,7 @@ const connectDatabase = async (values) => {
 };
 
 const executeDevMigration = async ({
-  projectRoot = path.resolve(__dirname, "../../.."),
+  projectRoot = path.resolve(import.meta.dirname, "../../.."),
   prepare = prepareDevMigration,
   run = runCommand,
   connect = connectDatabase,
@@ -366,11 +366,7 @@ const executeDevMigration = async ({
         "--list",
         temporary,
       ]);
-      await compose(`${name}-copy`, [
-        "cp",
-        `db:${temporary}`,
-        destination,
-      ]);
+      await compose(`${name}-copy`, ["cp", `db:${temporary}`, destination]);
       if (!fs.statSync(destination).size)
         throw new Error("Database backup is empty.");
       manifest.backups[`${name}.dump`] = await hash(destination);
@@ -387,7 +383,7 @@ const executeDevMigration = async ({
 
     const migrate = async (script, args = []) => {
       const label =
-        script.replace(/\.cjs$/, "") +
+        script.replace(/\.js$/, "") +
         (args.includes("--commit")
           ? "-commit"
           : args.includes("--update-db")
@@ -407,16 +403,16 @@ const executeDevMigration = async ({
       saveManifest();
     };
     const expectedCounts = {};
-    await migrate("migrate-static.cjs");
-    await migrate("migrate-city.cjs"); // This legacy script writes immediately.
+    await migrate("migrate-static.js");
+    await migrate("migrate-city.js"); // This legacy script writes immediately.
     for (const kind of ["client", "employee", "ticket", "item"]) {
-      await migrate(`migrate-${kind}.cjs`);
+      await migrate(`migrate-${kind}.js`);
       currentStep = `check-${kind}-preview`;
       const reportPath = path.join(reportDir, `${kind}-migration.md`);
       const report = fs.readFileSync(reportPath, "utf8");
       const counts = previewCounts(kind, report);
       fs.copyFileSync(reportPath, path.join(reportDir, `${kind}-preview.md`));
-      await migrate(`migrate-${kind}.cjs`, ["--commit"]);
+      await migrate(`migrate-${kind}.js`, ["--commit"]);
       const committed = fs.readFileSync(reportPath, "utf8");
       if (!/^Mode: commit\s*$/m.test(committed))
         throw new Error("Expected a fresh commit report.");
@@ -424,10 +420,10 @@ const executeDevMigration = async ({
       await assertCounts(client, counts);
       Object.assign(expectedCounts, counts);
       if (kind === "client" || kind === "item")
-        await migrate(`migrate-${kind}-photos.cjs`, ["--update-db"]);
+        await migrate(`migrate-${kind}-photos.js`, ["--update-db"]);
     }
-    await migrate("migrate-client-statistics.cjs");
-    await migrate("migrate-client-statistics.cjs", ["--commit"]);
+    await migrate("migrate-client-statistics.js");
+    await migrate("migrate-client-statistics.js", ["--commit"]);
     await assertCounts(client, expectedCounts);
     for (const [folder, fingerprints] of [
       ["source", manifest.sources],
@@ -507,8 +503,8 @@ const executeDevMigration = async ({
   }
 };
 
-module.exports = { executeDevMigration, runCommand, hashFile };
-if (require.main === module) {
+export { executeDevMigration, runCommand, hashFile };
+if (import.meta.main) {
   executeDevMigration()
     .then((code) => {
       process.exitCode = code;

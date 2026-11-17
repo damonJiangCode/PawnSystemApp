@@ -1,10 +1,11 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const os = require("node:os");
-const path = require("node:path");
-const { test } = require("node:test");
-const { loadIdTypeMapping, resolveIdType } = require("./id-type-mapping.cjs");
-const file = path.join(__dirname, "../mappings/id-type-mapping.json");
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { test } from "node:test";
+import { loadIdTypeMapping, resolveIdType } from "./id-type-mapping.js";
+
+const file = path.join(import.meta.dirname, "../mappings/id-type-mapping.json");
 const read = () => JSON.parse(fs.readFileSync(file, "utf8"));
 
 function fixture(t, doc) {

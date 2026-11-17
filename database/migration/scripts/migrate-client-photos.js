@@ -1,17 +1,18 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import csv from "csv-parser";
+import pg from "pg";
+const { Pool } = pg;
 
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
-const csv = require("csv-parser");
-const { Pool } = require("pg");
-
-const migrationRoot = path.resolve(__dirname, "..");
+const migrationRoot = path.resolve(import.meta.dirname, "..");
 const projectRoot = path.resolve(migrationRoot, "..", "..");
 const sourceDbPath = path.join(migrationRoot, "source", "superpawnconv.mdb");
 // The folder the server reads and writes; the DB stores images/clients/<file>.
 const outputDir = path.join(projectRoot, "images", "clients");
-const summaryDir = process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
+const summaryDir =
+  process.env.MIGRATION_REPORT_DIR || path.join(migrationRoot, "reports");
 const reportPath = path.join(summaryDir, "client-migration.md");
 const shouldUpdateDb = process.argv.includes("--update-db");
 
@@ -40,10 +41,12 @@ const getValue = (row, key) => {
 
 const sanitizeFilePart = (value) => {
   const normalized = normalizeText(value) || "null";
-  return normalized
-    .replace(/[^a-zA-Z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "")
-    .slice(0, 60) || "null";
+  return (
+    normalized
+      .replace(/[^a-zA-Z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 60) || "null"
+  );
 };
 
 const decodeMdbOctalBytes = (value) => {
@@ -63,7 +66,12 @@ const decodeMdbOctalBytes = (value) => {
 };
 
 const imageExtension = (buffer) => {
-  if (buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+  if (
+    buffer.length >= 3 &&
+    buffer[0] === 0xff &&
+    buffer[1] === 0xd8 &&
+    buffer[2] === 0xff
+  ) {
     return "jpg";
   }
   if (
@@ -94,7 +102,10 @@ const ensureUniquePath = (filePath) => {
 
   const parsed = path.parse(filePath);
   for (let index = 2; ; index += 1) {
-    const candidate = path.join(parsed.dir, `${parsed.name}_${index}${parsed.ext}`);
+    const candidate = path.join(
+      parsed.dir,
+      `${parsed.name}_${index}${parsed.ext}`,
+    );
     if (!fs.existsSync(candidate)) {
       return candidate;
     }
@@ -104,9 +115,13 @@ const ensureUniquePath = (filePath) => {
 const getNextGeneratedClientNumber = () =>
   new Promise((resolve, reject) => {
     const sourceClientNumbers = [];
-    const child = spawn("mdb-export", ["-b", "strip", sourceDbPath, "AR200CLIENT"], {
-      cwd: projectRoot,
-    });
+    const child = spawn(
+      "mdb-export",
+      ["-b", "strip", sourceDbPath, "AR200CLIENT"],
+      {
+        cwd: projectRoot,
+      },
+    );
 
     child.stdout.pipe(csv()).on("data", (row) => {
       const clientNumber = Number(normalizeText(getValue(row, "AR200CLIENT")));
@@ -145,9 +160,13 @@ const exportRows = (initialGeneratedClientNumber) =>
     let totalBytes = 0;
     const samples = [];
 
-    const child = spawn("mdb-export", ["-b", "octal", sourceDbPath, "AR200CLIENT"], {
-      cwd: projectRoot,
-    });
+    const child = spawn(
+      "mdb-export",
+      ["-b", "octal", sourceDbPath, "AR200CLIENT"],
+      {
+        cwd: projectRoot,
+      },
+    );
 
     child.stdout.pipe(csv()).on("data", (row) => {
       totalRows += 1;
@@ -336,7 +355,8 @@ const main = async () => {
   console.log(`Client photo export section written to ${reportPath}`);
 };
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (import.meta.main)
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
