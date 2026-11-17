@@ -14,16 +14,16 @@ frontend/src/
 
 ## Modules
 
-| Module         | Owns                                                              | API                                                       |
-| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------- |
-| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                  |
-| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                  |
-| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                  |
-| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                  |
-| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                      |
-| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)              |
-| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)            |
-| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md); XML in Electron |
+| Module         | Owns                                                              | API                                                                                 |
+| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                                            |
+| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                                            |
+| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                                            |
+| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                                            |
+| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                                                |
+| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)                                        |
+| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)                                      |
+| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md), [XML](../server/src/xml-report/README.md) |
 
 ## Boundaries
 
@@ -31,8 +31,8 @@ frontend/src/
   transactions; frontend validation only improves feedback.
 - Screens call a feature's `*.api.ts`, which calls `getAppApi()`.
 - `src/shared/api/` holds `http.ts` and one `<domain>.http.ts` per backend module. `client`,
-  `employee`, `item`, `reference`, `report` and `ticket` use HTTP. `xmlReport` and `window`
-  use the preload bridge.
+  `employee`, `item`, `reference`, `report`, `ticket` and `xmlReport` use HTTP. Only `window`
+  uses the preload bridge.
 - All lookup data goes through `referenceApi` in `modules/reference/reference.api.ts`.
 - `src/windows/` renders window content; `electron/src/main/window/` manages the native windows.
 - Transaction page state lives in `useTransactionPage`. Its `handlers/` may call APIs and set state;

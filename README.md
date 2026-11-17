@@ -34,7 +34,7 @@ _Screenshots use fictional demo data from a local stub API; photos are placehold
 ```text
 React UI ── HTTP ── NestJS controllers → services → repositories → PostgreSQL
     │
-    └── preload bridge ── Electron windows, menus, XML reports
+    └── preload bridge ── Electron windows and menus
 ```
 
 | Area      | Technology                                                    |
@@ -83,14 +83,13 @@ CommonJS.
 
 ## Current status
 
-The business workflows are moving from Electron IPC to the NestJS server.
+All business workflows run on the NestJS server over HTTP: clients, employees, reference
+data, tickets, items, reports and LeadsOnline XML reports. Electron only manages windows.
 
-- Clients, employees, reference data, tickets, items and reports use HTTP.
-- XML reports (LeadsOnline) still run in Electron.
 - API routes have no authentication yet. Employee PINs attribute actions but do not
   create a login session, so this must stay on a trusted network for now.
-- There is no installer or server container yet: the desktop app needs Vite, and
-  Docker runs PostgreSQL only.
+- There is no installer yet: the desktop app needs Vite. Docker runs PostgreSQL and the
+  server.
 
 ## Getting started
 

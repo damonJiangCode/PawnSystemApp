@@ -157,8 +157,6 @@ export type ReverseTicketInput = EmployeeAuthorizedInput & {
   ticket_number: number;
 };
 
-export type ReverseTicketFormField = "ticket_number" | "employee_password";
-
 export type ReverseTicketResult = {
   ticket: Ticket;
   client: Client;
