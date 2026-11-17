@@ -1,4 +1,4 @@
-import { ticketApi } from "../ticket.api";
+import { ticketApi } from "../../../api/ticket";
 import type {
   PaymentMode,
   PaymentRowsByMode,

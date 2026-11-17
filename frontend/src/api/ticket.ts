@@ -1,10 +1,10 @@
-import type { TicketApi } from "@pawnsystem/shared/api-contracts/ticketApi.contract.ts";
 import type { Client } from "@pawnsystem/shared/models/client.model.ts";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model.ts";
 import type {
   ConvertTicketInput,
   CreatePawnTicketInput,
   CreateSellTicketInput,
+  ExpireTicketInput,
   ExtendTicketsInput,
   MarkTicketStolenInput,
   PickupTicketsInput,
@@ -15,7 +15,11 @@ import type {
   TransferTicketPreview,
   UpdateTicketInput,
 } from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
-import { restoreClientDates } from "./client.http.ts";
+import {
+  createEnvelopePrintHtml,
+  type PrintClient,
+} from "../modules/tickets/print/ticketPrintTemplate";
+import { restoreClientDates } from "./client.ts";
 import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
 
 type TicketResponse = Omit<
@@ -255,26 +259,104 @@ export async function reverseTicketHttp(
   };
 }
 
-export const createTicketHttpApi = (baseUrl = API_BASE_URL): TicketApi => ({
-  loadTicketsByClient: (clientNumber) =>
-    loadTicketsByClientHttp(clientNumber, baseUrl),
-  searchTicketByNumber: (ticketNumber) =>
-    searchTicketByNumberHttp(ticketNumber, baseUrl),
-  searchPaymentTicketByNumber: (ticketNumber) =>
-    searchTicketByNumberHttp(ticketNumber, baseUrl),
-  createPawnTicket: (input) => createPawnTicketHttp(input, baseUrl),
-  createSellTicket: (input) => createSellTicketHttp(input, baseUrl),
-  updateTicket: (input) => updateTicketHttp(input, baseUrl),
-  convertTicket: (input) => convertTicketHttp(input, baseUrl),
-  loadTransferTicketPreview: (ticketNumber) =>
-    loadTransferTicketPreviewHttp(ticketNumber, baseUrl),
-  transferTicket: (input) => transferTicketHttp(input, baseUrl),
-  pickupTickets: (input) => pickupTicketsHttp(input, baseUrl),
-  extendTickets: (input) => extendTicketsHttp(input, baseUrl),
-  expireTicket: (input) => expireTicketHttp(input.ticket_number, baseUrl),
-  markTicketStolen: ({ ticket_number, ...input }) =>
-    setTicketStolenHttp(ticket_number, input, baseUrl),
-  unmarkTicketStolen: (ticketNumber) =>
-    setTicketStolenHttp(ticketNumber, null, baseUrl),
-  reverseTicket: (input) => reverseTicketHttp(input, baseUrl),
-});
+const isTicketNumber = (value: number) => Number.isInteger(value) && value > 0;
+
+const openPrintWindow = (html: string) => {
+  const printWindow = window.open("", "_blank", "width=445,height=900");
+
+  if (!printWindow) {
+    window.alert("Unable to open print window.");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+};
+
+// The server validates and normalizes every request; errors keep its
+// `field`/`status` so dialogs can show them under the right input.
+export const ticketApi = {
+  printEnvelopeTicket: (ticket: Ticket, client?: PrintClient) => {
+    openPrintWindow(createEnvelopePrintHtml(ticket, client));
+  },
+
+  loadTickets: async (clientNumber?: number): Promise<Ticket[]> =>
+    clientNumber ? loadTicketsByClientHttp(clientNumber) : [],
+
+  searchTicketByNumber: async (
+    ticketNumber: number,
+  ): Promise<TicketSearchResult | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? searchTicketByNumberHttp(Number(ticketNumber))
+      : null,
+
+  searchPaymentTicketByNumber: async (
+    ticketNumber: number,
+  ): Promise<TicketSearchResult | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? searchTicketByNumberHttp(Number(ticketNumber))
+      : null,
+
+  createPawnTicket: (input: CreatePawnTicketInput): Promise<Ticket> =>
+    createPawnTicketHttp(input),
+
+  createSellTicket: (input: CreateSellTicketInput): Promise<Ticket> =>
+    createSellTicketHttp(input),
+
+  updateTicket: (input: UpdateTicketInput): Promise<Ticket> =>
+    updateTicketHttp(input),
+
+  convertTicket: (input: ConvertTicketInput): Promise<Ticket> =>
+    convertTicketHttp(input),
+
+  loadTransferTicketPreview: async (
+    ticketNumber: number,
+  ): Promise<TransferTicketPreview | null> =>
+    isTicketNumber(Number(ticketNumber))
+      ? loadTransferTicketPreviewHttp(Number(ticketNumber))
+      : null,
+
+  transferTicket: (input: TransferTicketInput): Promise<Ticket> =>
+    transferTicketHttp(input),
+
+  pickupTickets: async (input: PickupTicketsInput): Promise<Ticket[]> =>
+    input.tickets.length ? pickupTicketsHttp(input) : [],
+
+  extendTickets: async (input: ExtendTicketsInput): Promise<Ticket[]> =>
+    input.extensions.length ? extendTicketsHttp(input) : [],
+
+  expireTicket: (input: ExpireTicketInput): Promise<Ticket> =>
+    expireTicketHttp(input.ticket_number),
+
+  markTicketStolen: ({
+    ticket_number,
+    ...input
+  }: MarkTicketStolenInput): Promise<Ticket> =>
+    setTicketStolenHttp(ticket_number, input),
+
+  unmarkTicketStolen: (ticketNumber: number): Promise<Ticket> =>
+    setTicketStolenHttp(ticketNumber, null),
+
+  reverseTicket: (input: ReverseTicketInput): Promise<ReverseTicketResult> =>
+    reverseTicketHttp(input),
+};
+
+export type {
+  ConvertTicketInput,
+  CreatePawnTicketInput,
+  CreateSellTicketInput,
+  ExpireTicketInput,
+  ExtendTicketsInput,
+  MarkTicketStolenInput,
+  PickupTicketsInput,
+  ReverseTicketInput,
+  ReverseTicketResult,
+  TransferTicketInput,
+  TransferTicketPreview,
+  UpdateTicketInput,
+};
+export type {
+  TicketFormError,
+  TicketFormField,
+} from "../modules/tickets/helpers/ticketApiUtils";

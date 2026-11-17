@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import type { Location } from "@pawnsystem/shared/models/location.model";
 import type { SaveLocationInput } from "@pawnsystem/shared/payload-contracts/reference.contract";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 type LocationAddDialogProps = {
   open: boolean;

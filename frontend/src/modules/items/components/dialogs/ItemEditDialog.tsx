@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import type { Item } from "@pawnsystem/shared/models/item.model";
 import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
-import { itemApi, type ItemPhotoInput } from "../../item.api";
+import { itemApi, type ItemPhotoInput } from "../../../../api/item";
 import ItemCategoryDialog from "./ItemCategoryDialog";
 import ItemPhotoCapture from "./ItemPhotoCapture";
 

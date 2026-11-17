@@ -4,10 +4,10 @@ import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type { OpenQuoteWindowInput } from "@pawnsystem/shared/payload-contracts/window.contract";
 import { calculation } from "../../../shared/utils/calculation";
 import { getTicketPickupAmount } from "../../../shared/utils/ticketFinance";
-import { getAppApi } from "../../../shared/api/app.api";
+import { getWindowApi } from "../../../api/window";
 import { formatIsoDate } from "../../../shared/utils/formatters";
-import { itemApi } from "../../items/item.api";
-import { ticketApi } from "../ticket.api";
+import { itemApi } from "../../../api/item";
+import { ticketApi } from "../../../api/ticket";
 
 export type QuoteRow = {
   ticket: Ticket;
@@ -41,7 +41,7 @@ export const useQuoteWindow = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    return getAppApi()?.window.onQuoteWindowInputUpdated(setInput);
+    return getWindowApi()?.onQuoteWindowInputUpdated(setInput);
   }, []);
 
   useEffect(() => {

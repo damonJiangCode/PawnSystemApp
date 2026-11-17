@@ -1,4 +1,3 @@
-import type { XmlReportApi } from "@pawnsystem/shared/api-contracts/xmlReportApi.contract.ts";
 import type { ReportDateRangeInput } from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
 import type {
   XmlReportConnectionResult,
@@ -43,10 +42,8 @@ export function submitXmlReportHttp(
   );
 }
 
-export const createXmlReportHttpApi = (
-  baseUrl = API_BASE_URL,
-): XmlReportApi => ({
-  checkConnection: () => checkXmlReportConnectionHttp(baseUrl),
-  loadPreview: (input) => loadXmlReportPreviewHttp(input, baseUrl),
-  submitReport: (input) => submitXmlReportHttp(input, baseUrl),
-});
+export const xmlReportApi = {
+  checkConnection: () => checkXmlReportConnectionHttp(),
+  loadPreview: (input: ReportDateRangeInput) => loadXmlReportPreviewHttp(input),
+  submitReport: (input: ReportDateRangeInput) => submitXmlReportHttp(input),
+};

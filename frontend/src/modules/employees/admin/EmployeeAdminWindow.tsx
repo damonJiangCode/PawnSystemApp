@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { Employee } from "@pawnsystem/shared/models/employee.model";
-import { employeeApi, type EmployeeSearchInput } from "../employee.api";
+import { employeeApi, type EmployeeSearchInput } from "../../../api/employee";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
 import EmployeeAddEditDialog from "./EmployeeAddEditDialog";

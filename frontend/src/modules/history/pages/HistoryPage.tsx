@@ -8,7 +8,7 @@ import HistoryTicketsPanel from "../../tickets/components/history/HistoryTickets
 import HistoryItemsPanel from "../../items/components/history/HistoryItemsPanel";
 import TicketPawnDialog from "../../tickets/components/dialogs/TicketPawnDialog";
 import ItemEditDialog from "../../items/components/dialogs/ItemEditDialog";
-import type { ReverseTicketResult } from "../../tickets/ticket.api";
+import type { ReverseTicketResult } from "../../../api/ticket";
 import ReverseTicketDialog from "../components/ReverseTicketDialog";
 import { useHistoryPage } from "../hooks/useHistoryPage";
 

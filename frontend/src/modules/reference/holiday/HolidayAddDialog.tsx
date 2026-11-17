@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model";
 import type { SaveHolidayInput } from "@pawnsystem/shared/payload-contracts/reference.contract";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 type HolidayAddDialogProps = {
   open: boolean;

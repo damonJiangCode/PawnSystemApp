@@ -9,9 +9,9 @@ import {
   type CreateSellTicketInput,
   type TransferTicketPreview,
   type UpdateTicketInput,
-} from "../../tickets/ticket.api";
-import { itemApi } from "../../items/item.api";
-import { getAppApi } from "../../../shared/api/app.api";
+} from "../../../api/ticket";
+import { itemApi } from "../../../api/item";
+import { getWindowApi } from "../../../api/window";
 import {
   filterVisibleTickets,
   sortTickets,
@@ -66,7 +66,7 @@ export const createTransactionTicketHandlers = ({
       return;
     }
 
-    await getAppApi()?.window.openQuoteWindow({
+    await getWindowApi()?.openQuoteWindow({
       clientNumber,
       clientLastName: client.last_name,
       clientFirstName: client.first_name,

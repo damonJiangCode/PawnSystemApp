@@ -28,7 +28,7 @@ import {
   clientApi,
   type ClientFormError,
   type SaveClientInput,
-} from "../../client.api";
+} from "../../../../api/client";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import EmployeePasswordDialog from "./EmployeePasswordDialog";
 import {

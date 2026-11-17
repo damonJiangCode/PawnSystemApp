@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
-import test, { type TestContext } from "node:test";
-import { getAppApi } from "./app.api.ts";
-import * as http from "./report.http.ts";
-
-const setWindow = (t: TestContext, appAPI: unknown) => {
-  const host = globalThis as { window?: unknown };
-  host.window = { appAPI };
-  t.after(() => delete host.window);
-};
+import test from "node:test";
+import * as http from "./report.ts";
 
 const base = "http://store-server:3000/";
 const range = { from_date: "2026-11-01", to_date: "2026-11-02" };
@@ -115,16 +108,13 @@ test("sends overdue locations as typed and surfaces the server's field error", a
   );
 });
 
-test("getAppApi serves the report domain over HTTP", async (t) => {
-  // The preload bridge no longer has a report domain, so this needs only HTTP.
-  setWindow(t, {});
+test("the API object serves the report domain over HTTP", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     assert.equal(url.pathname, "/reports/overdue");
     return Response.json({ tickets: [] });
   });
-  const api = getAppApi()!;
   assert.deepEqual(
-    await api.report.loadOverdueReport({
+    await http.reportApi.loadOverdueReport({
       due_on_or_before: "2026-11-10",
       location_from: "AK",
       location_to: "AK",

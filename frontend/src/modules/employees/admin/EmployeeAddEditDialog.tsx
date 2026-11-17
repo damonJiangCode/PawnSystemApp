@@ -18,7 +18,7 @@ import {
   employeeApi,
   type CreateEmployeeInput,
   type EmployeeFormError,
-} from "../employee.api";
+} from "../../../api/employee";
 
 type EmployeeFormErrors = Record<keyof CreateEmployeeInput, string>;
 

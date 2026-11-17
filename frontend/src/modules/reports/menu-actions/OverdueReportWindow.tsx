@@ -22,14 +22,14 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type { OverdueReportTicket } from "@pawnsystem/shared/payload-contracts/ticket.contract";
-import { reportApi } from "../report.api";
-import { ticketApi } from "../../tickets/ticket.api";
-import { getAppApi } from "../../../shared/api/app.api";
+import { reportApi } from "../../../api/report";
+import { ticketApi } from "../../../api/ticket";
+import { getWindowApi } from "../../../api/window";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
 import ReportDocument from "../components/ReportDocument";
-import { referenceApi } from "../../reference/reference.api";
+import { referenceApi } from "../../../api/reference";
 
 const valueOrDash = (value: string) => value || "---";
 
@@ -152,7 +152,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
           : "transaction",
       });
       channel.close();
-      await getAppApi()?.window.focusMainWindow();
+      await getWindowApi()?.focusMainWindow();
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to open ticket.",

@@ -20,8 +20,8 @@ import {
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
-import type { TicketFormError } from "../ticket.api";
-import { ticketApi } from "../ticket.api";
+import type { TicketFormError } from "../../../api/ticket";
+import { ticketApi } from "../../../api/ticket";
 import {
   formatIsoDate,
   formatUppercase,

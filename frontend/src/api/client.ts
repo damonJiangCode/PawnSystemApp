@@ -1,9 +1,11 @@
-import type { ClientApi } from "@pawnsystem/shared/api-contracts/clientApi.contract.ts";
 import type { Client } from "@pawnsystem/shared/models/client.model.ts";
 import type {
+  ClientNotesAction,
   CreateClientInput,
+  SaveClientInput,
   UpdateClientInput,
 } from "@pawnsystem/shared/payload-contracts/client.contract.ts";
+import { extractBackendFieldError } from "../shared/utils/formError";
 import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
 
 export async function createClientHttp(
@@ -140,19 +142,114 @@ export function restoreClientDates(client: Client): Client {
   };
 }
 
-export const createClientHttpApi = (baseUrl = API_BASE_URL): ClientApi => ({
-  searchClients: (firstName, lastName) =>
-    searchClientsHttp(firstName, lastName, baseUrl),
-  searchClientsByDob: (dateOfBirth) =>
-    searchClientsByDobHttp(dateOfBirth, baseUrl),
-  createClient: (input) => createClientHttp(input, baseUrl),
-  updateClient: (input) => updateClientHttp(input, baseUrl),
-  setHoldUntil: (clientNumber, holdUntil, employeePassword) =>
-    updateClientHttp(
-      {
-        client: { client_number: clientNumber, hold_until: holdUntil },
-        ...(holdUntil !== null ? { employee_password: employeePassword } : {}),
-      },
-      baseUrl,
-    ),
+export type ClientFormField = "employee_password";
+
+export type ClientFormError = Error & {
+  field?: ClientFormField;
+};
+
+const normalizeSearchInput = (value?: string) => value?.trim() ?? "";
+const normalizeNameInput = (value?: string) =>
+  value?.trim().toUpperCase() ?? "";
+
+const createFieldError = (
+  field: ClientFormField,
+  message: string,
+): ClientFormError => {
+  const error = new Error(message) as ClientFormError;
+  error.field = field;
+  return error;
+};
+
+const mapBackendError = (error: unknown): Error => {
+  if (!(error instanceof Error)) {
+    return new Error("Unknown client error");
+  }
+
+  const backendFieldError = extractBackendFieldError(error.message);
+
+  if (!backendFieldError) {
+    return error;
+  }
+
+  return createFieldError(
+    backendFieldError.field as ClientFormField,
+    backendFieldError.message,
+  );
+};
+
+const normalizeSaveClientInput = (input: SaveClientInput): SaveClientInput => ({
+  client: {
+    ...input.client,
+    first_name: normalizeNameInput(input.client.first_name),
+    last_name: normalizeNameInput(input.client.last_name),
+    middle_name: normalizeNameInput(input.client.middle_name),
+    gender: input.client.gender?.trim().toUpperCase() ?? "",
+    hair_color: input.client.hair_color?.trim().toUpperCase() ?? "",
+    eye_color: input.client.eye_color?.trim().toUpperCase() ?? "",
+    address: input.client.address?.trim() ?? "",
+    postal_code: input.client.postal_code?.trim() ?? "",
+    city: input.client.city?.trim() ?? "",
+    province: input.client.province?.trim() ?? "",
+    country: input.client.country?.trim() ?? "",
+    email: input.client.email?.trim() ?? "",
+    phone: input.client.phone?.trim() ?? "",
+    notes: input.client.notes?.trim() ?? "",
+  },
+  identifications: (input.identifications ?? []).map((id) => ({
+    ...id,
+    id_type: id.id_type?.trim() ?? "",
+    id_value: id.id_value?.trim() ?? "",
+  })),
+  employee_password: input.employee_password?.trim() ?? "",
+  notes_action: input.notes_action ?? "keep",
 });
+
+export const clientApi = {
+  setHoldUntil: (
+    clientNumber: number,
+    holdUntil: string | null,
+    employeePassword?: string,
+  ): Promise<Client> =>
+    updateClientHttp({
+      client: { client_number: clientNumber, hold_until: holdUntil },
+      ...(holdUntil !== null ? { employee_password: employeePassword } : {}),
+    }),
+
+  searchClients: async (
+    firstName: string,
+    lastName: string,
+  ): Promise<Client[]> => {
+    const normalizedFirstName = normalizeSearchInput(firstName);
+    const normalizedLastName = normalizeSearchInput(lastName);
+    if (!normalizedFirstName && !normalizedLastName) return [];
+    return searchClientsHttp(normalizedFirstName, normalizedLastName);
+  },
+
+  searchClientsByDob: async (dateOfBirth: string): Promise<Client[]> => {
+    const normalizedDob = normalizeSearchInput(dateOfBirth);
+    if (!normalizedDob) return [];
+    return searchClientsByDobHttp(normalizedDob);
+  },
+
+  createClient: async (input: CreateClientInput): Promise<Client> => {
+    try {
+      return await createClientHttp({
+        ...normalizeSaveClientInput(input),
+        photo: input.photo,
+      });
+    } catch (error) {
+      throw mapBackendError(error);
+    }
+  },
+
+  updateClient: async (input: UpdateClientInput): Promise<Client> => {
+    try {
+      return await updateClientHttp(input);
+    } catch (error) {
+      throw mapBackendError(error);
+    }
+  },
+};
+
+export type { ClientNotesAction, SaveClientInput };

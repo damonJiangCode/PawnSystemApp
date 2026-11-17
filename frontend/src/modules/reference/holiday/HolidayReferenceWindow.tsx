@@ -13,7 +13,7 @@ import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
 import HolidayAddDialog from "./HolidayAddDialog";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 const formatHolidayDate = (dateKey: string) => {
   const [year, month, day] = dateKey.split("-").map(Number);

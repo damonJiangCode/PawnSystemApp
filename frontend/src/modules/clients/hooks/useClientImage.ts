@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getImageSrc } from "../../../shared/api/http";
+import { getImageSrc } from "../../../api/http";
 
 export const useClientImage = (imageUrl?: string | null) => {
   const [src, setSrc] = useState<string | null>(null);

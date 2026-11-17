@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import type { Item } from "@pawnsystem/shared/models/item.model";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
-import { itemApi } from "../../items/item.api";
+import { itemApi } from "../../../api/item";
 import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
 import {
   ticketApi,
   type CreatePawnTicketInput,
   type ReverseTicketResult,
   type TicketFormError,
-} from "../../tickets/ticket.api";
+} from "../../../api/ticket";
 import type { PrintClient } from "../../tickets/print/ticketPrintTemplate";
-import { getAppApi } from "../../../shared/api/app.api";
+import { getWindowApi } from "../../../api/window";
 import { canRepawnTicket, sortHistoryTickets } from "../history.helpers";
-import { referenceApi } from "../../reference/reference.api";
+import { referenceApi } from "../../../api/reference";
 
 interface UseHistoryPageParams {
   isActive?: boolean;
@@ -289,7 +289,7 @@ export const useHistoryPage = ({
 
     setStatusMessage("");
     if (items.length) {
-      await getAppApi()?.window.openItemSearchWindow({
+      await getWindowApi()?.openItemSearchWindow({
         sourceTicketNumber: selectedTicket.ticket_number,
         items,
         mode: "repawn",
@@ -333,7 +333,7 @@ export const useHistoryPage = ({
       return;
     }
 
-    void getAppApi()?.window.openItemSearchWindow({
+    void getWindowApi()?.openItemSearchWindow({
       sourceTicketNumber: selectedTicket.ticket_number,
       items,
       mode: "load",

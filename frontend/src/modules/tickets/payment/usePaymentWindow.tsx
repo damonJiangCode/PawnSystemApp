@@ -5,9 +5,9 @@ import type {
   OpenPaymentWindowInput,
   PaymentCompletedEvent,
 } from "@pawnsystem/shared/payload-contracts/window.contract";
-import { getAppApi } from "../../../shared/api/app.api";
-import { getImageSrc } from "../../../shared/api/http";
-import { ticketApi } from "../ticket.api";
+import { getWindowApi } from "../../../api/window";
+import { getImageSrc } from "../../../api/http";
+import { ticketApi } from "../../../api/ticket";
 import { createPaymentColumns } from "./payment.columns";
 import { loadAvailablePaymentRows, processPaymentRows } from "./payment.data";
 import {
@@ -132,7 +132,7 @@ export const usePaymentWindow = () => {
   }, []);
 
   useEffect(() => {
-    const windowApi = getAppApi()?.window;
+    const windowApi = getWindowApi();
 
     if (!windowApi) {
       return;

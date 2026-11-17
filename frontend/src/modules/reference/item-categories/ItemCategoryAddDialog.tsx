@@ -12,7 +12,7 @@ import type {
   ItemCategory,
   ItemSubcategory,
 } from "@pawnsystem/shared/models/item-category.model";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 // A null parent adds a category; a parent adds a subcategory under it.
 type Props = {

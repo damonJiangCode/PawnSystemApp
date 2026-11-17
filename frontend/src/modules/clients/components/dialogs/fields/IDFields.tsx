@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { ID } from "@pawnsystem/shared/models/client.model";
 import { formatClientIdType } from "../../../utils/clientDisplay.ts";
-import { referenceApi } from "../../../../reference/reference.api";
+import { referenceApi } from "../../../../../api/reference";
 
 export interface IDFieldsRef {
   getIDs: () => ID[];

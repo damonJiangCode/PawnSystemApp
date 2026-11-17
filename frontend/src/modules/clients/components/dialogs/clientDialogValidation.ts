@@ -3,7 +3,7 @@ import {
   formatLocalIsoDatePart,
   resolveDate,
 } from "../../../../shared/utils/formatters";
-import type { ClientNotesAction } from "../../client.api";
+import type { ClientNotesAction } from "../../../../api/client";
 
 export interface PendingClientUpdate {
   client: Client;

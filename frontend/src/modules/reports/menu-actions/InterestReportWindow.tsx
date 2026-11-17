@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { reportApi } from "../report.api";
+import { reportApi } from "../../../api/report";
 import { formatIsoDate } from "../../../shared/utils/formatters";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";

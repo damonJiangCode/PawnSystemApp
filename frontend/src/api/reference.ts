@@ -1,4 +1,3 @@
-import type { ReferenceApi } from "@pawnsystem/shared/api-contracts/referenceApi.contract.ts";
 import type { EyeColor } from "@pawnsystem/shared/models/eye-color.model.ts";
 import type { HairColor } from "@pawnsystem/shared/models/hair-color.model.ts";
 import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model.ts";
@@ -200,51 +199,76 @@ export function setItemSubcategoryActiveHttp(
   );
 }
 
-export const createReferenceHttpApi = (
-  baseUrl = API_BASE_URL,
-): ReferenceApi => ({
-  loadCities: () => loadCitiesHttp(baseUrl),
+const upper = (value: string) => value.trim().toUpperCase();
 
-  loadIdTypes: () => loadIdTypesHttp(baseUrl),
-  loadAllIdTypes: () => loadAllIdTypesHttp(baseUrl),
-  addIdType: (type) => addIdTypeHttp(type, baseUrl),
-  activateIdType: (type) => setIdTypeActiveHttp(type, true, baseUrl),
-  deactivateIdType: (type) => setIdTypeActiveHttp(type, false, baseUrl),
+let itemCategoryCache: ItemCategoryOption[] | null = null;
+let itemCategoryPromise: Promise<ItemCategoryOption[]> | null = null;
 
-  loadHairColors: () => loadColorsHttp("hair", baseUrl),
-  loadAllHairColors: () => loadAllColorsHttp("hair", baseUrl),
-  addHairColor: (color) => addColorHttp("hair", color, baseUrl),
-  activateHairColor: (color) =>
-    setColorActiveHttp("hair", color, true, baseUrl),
-  deactivateHairColor: (color) =>
-    setColorActiveHttp("hair", color, false, baseUrl),
-  loadEyeColors: () => loadColorsHttp("eye", baseUrl),
-  loadAllEyeColors: () => loadAllColorsHttp("eye", baseUrl),
-  addEyeColor: (color) => addColorHttp("eye", color, baseUrl),
-  activateEyeColor: (color) => setColorActiveHttp("eye", color, true, baseUrl),
-  deactivateEyeColor: (color) =>
-    setColorActiveHttp("eye", color, false, baseUrl),
+export const referenceApi = {
+  loadCities: () => loadCitiesHttp(),
 
-  loadLocations: () => loadLocationsHttp(baseUrl),
-  loadAllLocations: () => loadAllLocationsHttp(baseUrl),
-  addLocation: (input) => addLocationHttp(input, baseUrl),
-  activateLocation: (location) =>
-    setLocationActiveHttp(location, true, baseUrl),
-  deactivateLocation: (location) =>
-    setLocationActiveHttp(location, false, baseUrl),
+  loadIdTypes: () => loadIdTypesHttp(),
+  loadAllIdTypes: () => loadAllIdTypesHttp(),
+  addIdType: (type: string) => addIdTypeHttp(type.trim()),
+  activateIdType: (type: string) => setIdTypeActiveHttp(type.trim(), true),
+  deactivateIdType: (type: string) => setIdTypeActiveHttp(type.trim(), false),
 
-  loadHolidayDates: () => loadHolidayDatesHttp(baseUrl),
-  addHolidayDate: (input) => addHolidayDateHttp(input, baseUrl),
-  deleteHolidayDate: (holidayDate) =>
-    deleteHolidayDateHttp(holidayDate, baseUrl),
+  loadHairColors: () => loadColorsHttp("hair"),
+  loadAllHairColors: () => loadAllColorsHttp("hair"),
+  addHairColor: (color: string) => addColorHttp("hair", upper(color)),
+  activateHairColor: (color: string) =>
+    setColorActiveHttp("hair", upper(color), true),
+  deactivateHairColor: (color: string) =>
+    setColorActiveHttp("hair", upper(color), false),
+  loadEyeColors: () => loadColorsHttp("eye"),
+  loadAllEyeColors: () => loadAllColorsHttp("eye"),
+  addEyeColor: (color: string) => addColorHttp("eye", upper(color)),
+  activateEyeColor: (color: string) =>
+    setColorActiveHttp("eye", upper(color), true),
+  deactivateEyeColor: (color: string) =>
+    setColorActiveHttp("eye", upper(color), false),
 
-  loadItemCategories: () => loadItemCategoriesHttp(baseUrl),
-  loadAllItemCategories: () => loadAllItemCategoriesHttp(baseUrl),
-  addItemCategory: (name) => addItemCategoryHttp(name, baseUrl),
-  addItemSubcategory: (categoryId, name) =>
-    addItemSubcategoryHttp(categoryId, name, baseUrl),
-  setItemCategoryActive: (categoryId, isActive) =>
-    setItemCategoryActiveHttp(categoryId, isActive, baseUrl),
-  setItemSubcategoryActive: (subcategoryId, isActive) =>
-    setItemSubcategoryActiveHttp(subcategoryId, isActive, baseUrl),
-});
+  loadLocations: () => loadLocationsHttp(),
+  loadAllLocations: () => loadAllLocationsHttp(),
+  addLocation: (input: SaveLocationInput) =>
+    addLocationHttp({
+      location: upper(input.location),
+      description: input.description.trim(),
+    }),
+  activateLocation: (location: string) =>
+    setLocationActiveHttp(upper(location), true),
+  deactivateLocation: (location: string) =>
+    setLocationActiveHttp(upper(location), false),
+
+  loadHolidayDates: () => loadHolidayDatesHttp(),
+  addHolidayDate: (input: SaveHolidayInput) =>
+    addHolidayDateHttp({
+      holiday_date: input.holiday_date.trim(),
+      name: input.name.trim(),
+    }),
+  deleteHolidayDate: (holidayDate: string) =>
+    deleteHolidayDateHttp(holidayDate.trim()),
+
+  // Active options for item pickers, loaded once per window.
+  preloadItemCategories: (): Promise<ItemCategoryOption[]> => {
+    if (itemCategoryCache) return Promise.resolve(itemCategoryCache);
+    if (itemCategoryPromise) return itemCategoryPromise;
+    itemCategoryPromise = loadItemCategoriesHttp()
+      .then((categories) => {
+        itemCategoryCache = categories;
+        return categories;
+      })
+      .finally(() => {
+        itemCategoryPromise = null;
+      });
+    return itemCategoryPromise;
+  },
+  loadAllItemCategories: () => loadAllItemCategoriesHttp(),
+  addItemCategory: (name: string) => addItemCategoryHttp(name.trim()),
+  addItemSubcategory: (categoryId: number, name: string) =>
+    addItemSubcategoryHttp(categoryId, name.trim()),
+  setItemCategoryActive: (categoryId: number, isActive: boolean) =>
+    setItemCategoryActiveHttp(categoryId, isActive),
+  setItemSubcategoryActive: (subcategoryId: number, isActive: boolean) =>
+    setItemSubcategoryActiveHttp(subcategoryId, isActive),
+};

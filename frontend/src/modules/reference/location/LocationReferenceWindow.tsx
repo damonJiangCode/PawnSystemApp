@@ -13,7 +13,7 @@ import type { Location } from "@pawnsystem/shared/models/location.model";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
 import LocationAddDialog from "./LocationAddDialog";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 const sortLocations = (locations: Location[]) =>
   [...locations].sort(

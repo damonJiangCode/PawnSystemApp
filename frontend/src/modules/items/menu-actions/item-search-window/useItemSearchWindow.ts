@@ -4,9 +4,9 @@ import type {
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import type { Item } from "@pawnsystem/shared/models/item.model";
-import { getAppApi } from "../../../../shared/api/app.api";
-import { itemApi } from "../../item.api";
-import { ticketApi } from "../../../tickets/ticket.api";
+import { getWindowApi } from "../../../../api/window";
+import { itemApi } from "../../../../api/item";
+import { ticketApi } from "../../../../api/ticket";
 import {
   getItemId,
   isItemAddable,
@@ -18,7 +18,7 @@ import {
   type ItemSearchWindowTargetStatus,
 } from "./itemSearchWindow.helpers";
 import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
-import { referenceApi } from "../../../reference/reference.api";
+import { referenceApi } from "../../../../api/reference";
 
 type ItemSearchAddToTicketResultEvent = {
   type: "item-search-add-to-ticket-result";
@@ -166,7 +166,7 @@ export const useItemSearchWindow = () => {
   };
 
   const appendLoadedItems = React.useCallback(async () => {
-    const windowApi = getAppApi()?.window;
+    const windowApi = getWindowApi();
     if (!windowApi) {
       setError("Item search window is unavailable.");
       return;
@@ -330,7 +330,7 @@ export const useItemSearchWindow = () => {
       );
     });
 
-    const windowApi = getAppApi()?.window;
+    const windowApi = getWindowApi();
     const unsubscribe = windowApi
       ? windowApi.onItemSearchWindowInputUpdated(() => {
           void appendLoadedItems().catch((err) => {
@@ -513,7 +513,7 @@ export const useItemSearchWindow = () => {
         targetTab,
       });
       channel.close();
-      await getAppApi()?.window.focusMainWindow();
+      await getWindowApi()?.focusMainWindow();
     } catch (err) {
       console.error(err);
       setError("Unable to open the selected item's ticket right now.");

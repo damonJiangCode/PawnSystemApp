@@ -1,7 +1,7 @@
-import type { ItemApi } from "@pawnsystem/shared/api-contracts/itemApi.contract.ts";
 import type { Item } from "@pawnsystem/shared/models/item.model.ts";
 import type {
   CreateItemInput,
+  ItemPhotoInput,
   ItemSearchInput,
   ItemSearchResult,
   UpdateItemInput,
@@ -66,14 +66,34 @@ export function linkItemsToTicketHttp(
   );
 }
 
-export const createItemHttpApi = (baseUrl = API_BASE_URL): ItemApi => ({
-  loadItemsByTicket: (ticketNumber) =>
-    loadItemsByTicketHttp(ticketNumber, baseUrl),
-  searchItems: (input) => searchItemsHttp(input, baseUrl),
-  createItem: (input) => createItemHttp(input, baseUrl),
-  updateItem: (input) => updateItemHttp(input, baseUrl),
-  deleteItem: (ticketNumber, itemNumber) =>
-    deleteItemHttp(ticketNumber, itemNumber, baseUrl),
-  linkItemsToTicket: (ticketNumber, itemNumbers) =>
-    linkItemsToTicketHttp(ticketNumber, itemNumbers, baseUrl),
-});
+export const itemApi = {
+  loadItems: async (ticketNumber?: number): Promise<Item[]> =>
+    ticketNumber ? loadItemsByTicketHttp(ticketNumber) : [],
+
+  searchItems: (input: ItemSearchInput): Promise<ItemSearchResult> =>
+    searchItemsHttp({
+      client_number: input.client_number,
+      item_number: input.item_number ? Number(input.item_number) : undefined,
+      category_id: input.category_id ? Number(input.category_id) : undefined,
+      subcategory_id: input.subcategory_id
+        ? Number(input.subcategory_id)
+        : undefined,
+      brand_name: input.brand_name?.trim() ?? "",
+      model_number: input.model_number?.trim() ?? "",
+      serial_number: input.serial_number?.trim() ?? "",
+    }),
+
+  createItem: (input: CreateItemInput) => createItemHttp(input),
+  updateItem: (input: UpdateItemInput) => updateItemHttp(input),
+  deleteItem: (ticketNumber: number, itemNumber: number) =>
+    deleteItemHttp(ticketNumber, itemNumber),
+  linkItemsToTicket: (ticketNumber: number, itemNumbers: number[]) =>
+    linkItemsToTicketHttp(ticketNumber, itemNumbers),
+};
+
+export type {
+  CreateItemInput,
+  ItemPhotoInput,
+  ItemSearchInput,
+  UpdateItemInput,
+};

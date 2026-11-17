@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
-import test, { type TestContext } from "node:test";
-import { getAppApi } from "./app.api.ts";
-import * as http from "./employee.http.ts";
-
-const setWindow = (t: TestContext, appAPI: unknown) => {
-  const host = globalThis as { window?: unknown };
-  host.window = { appAPI };
-  t.after(() => delete host.window);
-};
+import test from "node:test";
+import * as http from "./employee.ts";
 
 const base = "http://store-server:3000/";
 const details = {
@@ -104,17 +97,10 @@ test("save errors keep the server field for the form", async (t) => {
   );
 });
 
-test("getAppApi serves employee over HTTP, not the desktop bridge", async (t) => {
-  setWindow(t, {
-    employee: {
-      searchEmployees: () => {
-        throw new Error("IPC must not be used");
-      },
-    },
-  });
+test("the API object serves employee over HTTP", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     assert.equal(url.pathname, "/employees");
     return Response.json([]);
   });
-  assert.deepEqual(await getAppApi()?.employee.searchEmployees({}), []);
+  assert.deepEqual(await http.employeeApi.searchEmployees({}), []);
 });

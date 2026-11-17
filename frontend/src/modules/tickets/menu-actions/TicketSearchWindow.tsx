@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 import WindowFrame from "../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../windows/registry";
-import { ticketApi } from "../ticket.api";
+import { ticketApi } from "../../../api/ticket";
 
 const ticketSearchHistoryStatuses = new Set([
   "pawned_expired",

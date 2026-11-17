@@ -1,7 +1,7 @@
 import React from "react";
 import type { WindowScreenProps } from "../../../../windows/registry";
 import ColorReferenceWindow from "../color/ColorReferenceWindow";
-import { referenceApi } from "../../reference.api";
+import { referenceApi } from "../../../../api/reference";
 
 const EyeColorReferenceWindow: React.FC<WindowScreenProps> = () => (
   <ColorReferenceWindow

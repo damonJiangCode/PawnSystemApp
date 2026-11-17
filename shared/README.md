@@ -3,11 +3,10 @@
 The npm workspace `@pawnsystem/shared`: TypeScript types that describe what the frontend,
 Electron and the server exchange. It holds **types only**.
 
-| Path                 | Contains                                                     |
-| -------------------- | ------------------------------------------------------------ |
-| `models/`            | Business data, such as `client.model.ts`                     |
-| `payload-contracts/` | Method inputs and results, such as `CreatePawnTicketInput`   |
-| `api-contracts/`     | Methods available through `getAppApi()`, such as `TicketApi` |
+| Path                 | Contains                                                   |
+| -------------------- | ---------------------------------------------------------- |
+| `models/`            | Business data, such as `client.model.ts`                   |
+| `payload-contracts/` | Method inputs and results, such as `CreatePawnTicketInput` |
 
 Import by package name, always with `import type`:
 

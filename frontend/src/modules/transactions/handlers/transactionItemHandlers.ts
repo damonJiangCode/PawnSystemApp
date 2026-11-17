@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Item } from "@pawnsystem/shared/models/item.model";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
-import { itemApi } from "../../items/item.api";
+import { itemApi } from "../../../api/item";
 
 type TransactionItemHandlerDeps = {
   items: Item[];

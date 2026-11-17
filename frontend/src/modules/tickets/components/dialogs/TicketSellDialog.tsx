@@ -14,10 +14,10 @@ import type {
   CreateSellTicketInput,
   TicketFormError,
   TicketFormField,
-} from "../../ticket.api";
+} from "../../../../api/ticket";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
-import { referenceApi } from "../../../reference/reference.api";
+import { referenceApi } from "../../../../api/reference";
 
 const DEFAULT_SELL_LOCATION = "BIWK";
 

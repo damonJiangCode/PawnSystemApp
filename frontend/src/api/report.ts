@@ -1,4 +1,3 @@
-import type { ReportApi } from "@pawnsystem/shared/api-contracts/reportApi.contract.ts";
 import type {
   BuybackReportResult,
   DailyReportResult,
@@ -21,7 +20,6 @@ type InterestResponse = Omit<InterestReportResult, "rows"> & {
   })[];
 };
 
-// The server trims, validates and applies every report rule.
 const reportUrl = (
   report: string,
   query: ReportDateRangeInput | OverdueReportInput,
@@ -80,9 +78,13 @@ export function loadOverdueReportHttp(
   return requestJson<OverdueReportResult>(reportUrl("overdue", input, baseUrl));
 }
 
-export const createReportHttpApi = (baseUrl = API_BASE_URL): ReportApi => ({
-  loadDailyReport: (input) => loadDailyReportHttp(input, baseUrl),
-  loadBuybackReport: (input) => loadBuybackReportHttp(input, baseUrl),
-  loadInterestReport: (input) => loadInterestReportHttp(input, baseUrl),
-  loadOverdueReport: (input) => loadOverdueReportHttp(input, baseUrl),
-});
+// The server trims, validates and applies every report rule.
+export const reportApi = {
+  loadDailyReport: (input: ReportDateRangeInput) => loadDailyReportHttp(input),
+  loadBuybackReport: (input: ReportDateRangeInput) =>
+    loadBuybackReportHttp(input),
+  loadInterestReport: (input: ReportDateRangeInput) =>
+    loadInterestReportHttp(input),
+  loadOverdueReport: (input: OverdueReportInput) =>
+    loadOverdueReportHttp(input),
+};

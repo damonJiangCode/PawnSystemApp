@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { getImageSrc } from "../../../../shared/api/http";
+import { getImageSrc } from "../../../../api/http";
 
 interface ItemPhotoCaptureProps {
   imageUrl?: string | null;

@@ -16,13 +16,13 @@ import type {
   TicketFormError,
   TicketFormField,
   UpdateTicketInput,
-} from "../../ticket.api";
+} from "../../../../api/ticket";
 import { calculation } from "../../../../shared/utils/calculation";
 import Autocomplete from "@mui/material/Autocomplete";
 import { resolveFormFieldError } from "../../../../shared/utils/formError";
 import ConfirmDialog from "../../../../shared/components/ConfirmDialog";
 import { preventNumberInputWheel } from "./preventNumberInputWheel";
-import { referenceApi } from "../../../reference/reference.api";
+import { referenceApi } from "../../../../api/reference";
 
 interface TicketEditDialogProps {
   open: boolean;

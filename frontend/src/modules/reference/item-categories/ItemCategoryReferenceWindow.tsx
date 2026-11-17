@@ -20,7 +20,7 @@ import type {
 import WindowFrame from "../../../windows/WindowFrame";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import ItemCategoryAddDialog from "./ItemCategoryAddDialog";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 const byStateThenName =
   <T extends { is_active: boolean }>(name: (item: T) => string) =>

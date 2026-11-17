@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
-import test, { type TestContext } from "node:test";
-import { getAppApi } from "./app.api.ts";
-import * as http from "./item.http.ts";
-
-const setWindow = (t: TestContext, appAPI: unknown) => {
-  const host = globalThis as { window?: unknown };
-  host.window = { appAPI };
-  t.after(() => delete host.window);
-};
+import test from "node:test";
+import * as http from "./item.ts";
 
 const base = "http://store-server:3000/";
 const itemJson = {
@@ -181,11 +174,8 @@ test("link shows which item is active on another ticket", async (t) => {
   });
 });
 
-test("getAppApi serves the whole item domain over HTTP", async (t) => {
-  // The preload bridge no longer has an item domain, so this needs only HTTP.
-  setWindow(t, {});
+test("the API object serves the whole item domain over HTTP", async (t) => {
   t.mock.method(globalThis, "fetch", async () => Response.json([]));
-  const api = getAppApi()!;
-  assert.deepEqual(await api.item.loadItemsByTicket(10), []);
-  assert.deepEqual(await api.item.linkItemsToTicket(10, [40]), []);
+  assert.deepEqual(await http.itemApi.loadItems(10), []);
+  assert.deepEqual(await http.itemApi.linkItemsToTicket(10, [40]), []);
 });

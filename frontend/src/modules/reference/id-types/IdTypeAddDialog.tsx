@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { IdType } from "@pawnsystem/shared/models/id-type.model";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 type Props = {
   open: boolean;

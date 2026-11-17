@@ -8,7 +8,7 @@ import ClientPage from "../modules/clients/pages/ClientPage";
 import TransactionPage from "../modules/transactions/pages/TransactionPage";
 import HistoryPage from "../modules/history/pages/HistoryPage";
 import { useMainWindow } from "./useMainWindow";
-import { referenceApi } from "../modules/reference/reference.api";
+import { referenceApi } from "../api/reference";
 
 interface MainTabPanelProps {
   active: boolean;

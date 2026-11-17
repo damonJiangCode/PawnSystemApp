@@ -13,7 +13,7 @@ import type { HairColor } from "@pawnsystem/shared/models/hair-color.model";
 import WindowFrame from "../../../../windows/WindowFrame";
 import type { WindowScreenProps } from "../../../../windows/registry";
 import ColorAddDialog from "../color/ColorAddDialog";
-import { referenceApi } from "../../reference.api";
+import { referenceApi } from "../../../../api/reference";
 
 const sortHairColors = (colors: HairColor[]) =>
   [...colors].sort(

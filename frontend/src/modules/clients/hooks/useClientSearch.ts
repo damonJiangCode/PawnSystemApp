@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Client } from "@pawnsystem/shared/models/client.model";
-import { clientApi } from "../client.api";
+import { clientApi } from "../../../api/client";
 
 export const useClientSearch = (
   firstName: string,

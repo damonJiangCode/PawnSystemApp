@@ -22,7 +22,7 @@ import type {
   XmlReportPreviewResult,
   XmlReportSubmissionResult,
 } from "@pawnsystem/shared/payload-contracts/xmlReport.contract";
-import { getAppApi } from "../../../shared/api/app.api";
+import { xmlReportApi } from "../../../api/xmlReport";
 import {
   formatCurrency,
   formatIsoDate,
@@ -44,16 +44,10 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const checkConnection = async () => {
-    const api = getAppApi()?.xmlReport;
-    if (!api) {
-      setErrorMessage("XML Report API is unavailable.");
-      return;
-    }
-
     setIsChecking(true);
     setErrorMessage("");
     try {
-      setConnection(await api.checkConnection());
+      setConnection(await xmlReportApi.checkConnection());
     } catch (error) {
       setConnection(undefined);
       setErrorMessage(
@@ -65,11 +59,6 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
   };
 
   const loadPreview = async () => {
-    const api = getAppApi()?.xmlReport;
-    if (!api) {
-      setErrorMessage("XML Report API is unavailable.");
-      return;
-    }
     if (!fromDate || !toDate || fromDate > toDate) {
       setErrorMessage("Select a valid From and To date range.");
       return;
@@ -80,7 +69,10 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
     setSubmissionResult(undefined);
     try {
       setPreview(
-        await api.loadPreview({ from_date: fromDate, to_date: toDate }),
+        await xmlReportApi.loadPreview({
+          from_date: fromDate,
+          to_date: toDate,
+        }),
       );
     } catch (error) {
       setPreview(undefined);
@@ -93,8 +85,7 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
   };
 
   const submitReport = async () => {
-    const api = getAppApi()?.xmlReport;
-    if (!api || !preview) {
+    if (!preview) {
       return;
     }
 
@@ -102,13 +93,16 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
     setErrorMessage("");
     setSubmissionResult(undefined);
     try {
-      const result = await api.submitReport({
+      const result = await xmlReportApi.submitReport({
         from_date: fromDate,
         to_date: toDate,
       });
       setSubmissionResult(result);
       setPreview(
-        await api.loadPreview({ from_date: fromDate, to_date: toDate }),
+        await xmlReportApi.loadPreview({
+          from_date: fromDate,
+          to_date: toDate,
+        }),
       );
     } catch (error) {
       setErrorMessage(

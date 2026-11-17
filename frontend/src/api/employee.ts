@@ -1,7 +1,7 @@
-import type { EmployeeApi } from "@pawnsystem/shared/api-contracts/employeeApi.contract.ts";
 import type { Employee } from "@pawnsystem/shared/models/employee.model.ts";
 import type {
   CreateEmployeeInput,
+  EmployeeFormField,
   EmployeeSearchInput,
   UpdateEmployeeInput,
 } from "@pawnsystem/shared/payload-contracts/employee.contract.ts";
@@ -74,9 +74,22 @@ export async function updateEmployeeHttp(
   return toEmployee(employee);
 }
 
-export const createEmployeeHttpApi = (baseUrl = API_BASE_URL): EmployeeApi => ({
-  createEmployee: (input) => createEmployeeHttp(input, baseUrl),
-  searchEmployees: (input) => searchEmployeesHttp(input, baseUrl),
-  updateEmployee: (employeeNumber, input) =>
-    updateEmployeeHttp(employeeNumber, input, baseUrl),
-});
+export type EmployeeFormError = Error & {
+  field?: EmployeeFormField;
+};
+
+// The server trims, uppercases and validates; errors keep the server's `field`.
+export const employeeApi = {
+  createEmployee: (input: CreateEmployeeInput) => createEmployeeHttp(input),
+  searchEmployees: (input: EmployeeSearchInput) => searchEmployeesHttp(input),
+  updateEmployee: (employeeNumber: number, input: UpdateEmployeeInput) =>
+    updateEmployeeHttp(employeeNumber, input),
+};
+
+export type {
+  CreateEmployeeInput,
+  Employee,
+  EmployeeFormField,
+  EmployeeSearchInput,
+  UpdateEmployeeInput,
+};

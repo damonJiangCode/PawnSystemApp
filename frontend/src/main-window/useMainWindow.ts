@@ -3,8 +3,8 @@ import type { Client } from "@pawnsystem/shared/models/client.model";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
 import type { ReverseTicketResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { PaymentCompletedEvent } from "@pawnsystem/shared/payload-contracts/window.contract";
-import { itemApi } from "../modules/items/item.api";
-import { getAppApi } from "../shared/api/app.api";
+import { itemApi } from "../api/item";
+import { getWindowApi } from "../api/window";
 
 type SearchParams = {
   firstName: string;
@@ -359,7 +359,7 @@ export const useMainWindow = () => {
   };
 
   const handlePayment = () => {
-    void getAppApi()?.window.openPaymentWindow({
+    void getWindowApi()?.openPaymentWindow({
       clientNumber: selectedClient?.client_number,
       clientLastName: selectedClient?.last_name,
       clientFirstName: selectedClient?.first_name,
@@ -367,11 +367,11 @@ export const useMainWindow = () => {
   };
 
   const handleOpenTicketSearch = () => {
-    void getAppApi()?.window.openTicketSearchWindow();
+    void getWindowApi()?.openTicketSearchWindow();
   };
 
   const handleOpenItemSearch = () => {
-    void getAppApi()?.window.openItemSearchWindow();
+    void getWindowApi()?.openItemSearchWindow();
   };
 
   // Mirrors the server: sell +1, convert to sold +1, back to pawned -1 (min 0).

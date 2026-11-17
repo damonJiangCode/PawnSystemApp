@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Item } from "@pawnsystem/shared/models/item.model";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model";
-import { itemApi } from "../../items/item.api";
+import { itemApi } from "../../../api/item";
 import type { ItemCategoryOption } from "@pawnsystem/shared/payload-contracts/reference.contract";
-import { ticketApi } from "../../tickets/ticket.api";
+import { ticketApi } from "../../../api/ticket";
 import {
   filterVisibleTickets,
   sortTickets,
@@ -11,7 +11,7 @@ import {
 import type { Client } from "@pawnsystem/shared/models/client.model";
 import { createTransactionItemHandlers } from "../handlers/transactionItemHandlers";
 import { createTransactionTicketHandlers } from "../handlers/transactionTicketHandlers";
-import { referenceApi } from "../../reference/reference.api";
+import { referenceApi } from "../../../api/reference";
 
 interface UseTransactionPageParams {
   isActive?: boolean;

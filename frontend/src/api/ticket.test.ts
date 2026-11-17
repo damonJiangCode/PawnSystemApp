@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
-import test, { type TestContext } from "node:test";
-import { getAppApi } from "./app.api.ts";
-import * as http from "./ticket.http.ts";
-
-const setWindow = (t: TestContext, appAPI: unknown) => {
-  const host = globalThis as { window?: unknown };
-  host.window = { appAPI };
-  t.after(() => delete host.window);
-};
+import test from "node:test";
+import * as http from "./ticket.ts";
 
 const base = "http://store-server:3000/";
 const ticketJson = {
@@ -86,23 +79,12 @@ test("a missing ticket is null, other failures still throw", async (t) => {
   });
 });
 
-test("getAppApi serves every ticket method over HTTP and keeps desktop windows", async (t) => {
-  const focusMainWindow = () => Promise.resolve();
-  setWindow(t, {
-    window: { focusMainWindow },
-    ticket: {
-      loadTicketsByClient: () => {
-        throw new Error("IPC must not be used");
-      },
-    },
-  });
+test("the API object serves every ticket method over HTTP", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     assert.equal(url.pathname, "/tickets");
     return Response.json([]);
   });
-  const api = getAppApi()!;
-  assert.equal(api.window.focusMainWindow, focusMainWindow);
-  assert.deepEqual(await api.ticket.loadTicketsByClient(7), []);
+  assert.deepEqual(await http.ticketApi.loadTickets(7), []);
 });
 
 const pawnInput = {
@@ -167,7 +149,7 @@ test("each ticket action calls its route with only the accepted body", async (t)
       return Response.json([ticketJson]);
     return Response.json(ticketJson);
   });
-  const api = http.createTicketHttpApi(base);
+  const api = http.ticketApi;
   const edit = { ...pawnInput, ticket_number: 123, is_lost: true };
   await api.updateTicket(edit);
   await api.convertTicket({ ...edit, target_status: "sold" });

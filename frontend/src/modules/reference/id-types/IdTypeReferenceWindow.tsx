@@ -12,7 +12,7 @@ import type { IdType } from "@pawnsystem/shared/models/id-type.model";
 import WindowFrame from "../../../windows/WindowFrame";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import IdTypeAddDialog from "./IdTypeAddDialog";
-import { referenceApi } from "../reference.api";
+import { referenceApi } from "../../../api/reference";
 
 const sortIdTypes = (types: IdType[]) =>
   [...types].sort(

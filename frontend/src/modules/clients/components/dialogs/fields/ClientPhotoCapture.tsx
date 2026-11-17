@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import type { Client } from "@pawnsystem/shared/models/client.model";
-import { getImageSrc } from "../../../../../shared/api/http";
+import { getImageSrc } from "../../../../../api/http";
 
 interface ClientPhotoCaptureProps {
   client: Client;
