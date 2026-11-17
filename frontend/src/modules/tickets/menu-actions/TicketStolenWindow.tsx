@@ -17,8 +17,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { TicketFormError } from "../ticket.api";
 import { ticketApi } from "../ticket.api";
@@ -182,7 +182,7 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Mark Ticket Stolen"
       description="Search a ticket, confirm the details, then mark it stolen or not stolen."
     >
@@ -335,7 +335,7 @@ const TicketStolenWindow: React.FC<WindowScreenProps> = () => {
           </DialogActions>
         </Dialog>
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

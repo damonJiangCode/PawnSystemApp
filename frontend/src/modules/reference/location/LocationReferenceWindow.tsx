@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import type { Location } from "@pawnsystem/shared/models/location.model";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import LocationAddDialog from "./LocationAddDialog";
 import { referenceApi } from "../reference.api";
 
@@ -129,7 +129,7 @@ const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
   const activeCount = locations.filter((location) => location.is_active).length;
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Location"
       description="Add storage locations and activate or deactivate available locations."
     >
@@ -302,7 +302,7 @@ const LocationReferenceWindow: React.FC<WindowScreenProps> = () => {
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

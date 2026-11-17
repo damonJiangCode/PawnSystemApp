@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import type { Employee } from "@pawnsystem/shared/models/employee.model";
 import { employeeApi, type EmployeeSearchInput } from "../employee.api";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import EmployeeAddEditDialog from "./EmployeeAddEditDialog";
 
 const EmployeeAdminWindow: React.FC<WindowScreenProps> = () => {
@@ -133,7 +133,7 @@ const EmployeeAdminWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Edit Employee"
       description="Search employees by first name and last name, then update employee information."
     >
@@ -320,7 +320,7 @@ const EmployeeAdminWindow: React.FC<WindowScreenProps> = () => {
           }}
         />
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

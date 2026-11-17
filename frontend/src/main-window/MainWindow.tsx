@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Tabs, Tab, Paper } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
-import TopBar from "./shell/TopBar";
+import TopBar from "./TopBar";
 import ClientPage from "../modules/clients/pages/ClientPage";
 import TransactionPage from "../modules/transactions/pages/TransactionPage";
 import HistoryPage from "../modules/history/pages/HistoryPage";
-import { useWorkspaceLayout } from "./useWorkspaceLayout";
+import { useMainWindow } from "./useMainWindow";
+import { referenceApi } from "../modules/reference/reference.api";
 
 interface MainTabPanelProps {
   active: boolean;
@@ -30,9 +31,15 @@ const MainTabPanel: React.FC<MainTabPanelProps> = ({ active, children }) => {
   );
 };
 
-const WorkspaceLayout: React.FC = () => {
+const MainWindow: React.FC = () => {
   const lastNameSearchInputRef = React.useRef<HTMLInputElement>(null);
-  const { state, actions } = useWorkspaceLayout();
+  const { state, actions } = useMainWindow();
+
+  useEffect(() => {
+    referenceApi.preloadItemCategories().catch((err) => {
+      console.error("Failed to preload item categories", err);
+    });
+  }, []);
   const {
     currentTab,
     searchFirstName,
@@ -191,4 +198,4 @@ const WorkspaceLayout: React.FC = () => {
   );
 };
 
-export default WorkspaceLayout;
+export default MainWindow;

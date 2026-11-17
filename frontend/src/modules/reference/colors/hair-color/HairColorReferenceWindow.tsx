@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import type { HairColor } from "@pawnsystem/shared/models/hair-color.model";
-import WindowLayout from "../../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../../windows/windowRegistry";
+import WindowFrame from "../../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../../windows/registry";
 import ColorAddDialog from "../color/ColorAddDialog";
 import { referenceApi } from "../../reference.api";
 
@@ -142,7 +142,7 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
   const activeCount = colors.filter((color) => color.is_active).length;
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Hair Color"
       description="Search, add, or deactivate hair color options."
     >
@@ -302,7 +302,7 @@ const HairColorReferenceWindow: React.FC<WindowScreenProps> = () => {
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

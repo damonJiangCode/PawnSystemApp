@@ -18,7 +18,7 @@ const spinnerStyle: CSSProperties = {
   animation: "renderer-loading-spin 700ms linear infinite",
 };
 
-const RendererLoading = () => {
+const LoadingScreen = () => {
   return (
     <div style={loadingStyle} role="status" aria-label="Loading">
       <style>{`@keyframes renderer-loading-spin { to { transform: rotate(360deg); } }`}</style>
@@ -27,4 +27,4 @@ const RendererLoading = () => {
   );
 };
 
-export default RendererLoading;
+export default LoadingScreen;

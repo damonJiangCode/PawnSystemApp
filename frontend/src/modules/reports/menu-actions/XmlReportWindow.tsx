@@ -27,8 +27,8 @@ import {
   formatCurrency,
   formatIsoDate,
 } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 
 const XmlReportWindow = (_props: WindowScreenProps) => {
   const today = useMemo(() => formatIsoDate(new Date()), []);
@@ -130,7 +130,7 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
   );
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="XML Report"
       description="Validate LeadsOnline transactions before submission."
       footerActions={
@@ -302,7 +302,7 @@ const XmlReportWindow = (_props: WindowScreenProps) => {
           </Box>
         )}
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

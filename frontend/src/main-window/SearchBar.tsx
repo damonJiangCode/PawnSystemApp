@@ -1,4 +1,4 @@
-import DateField from "../../shared/components/DateField";
+import DateField from "../shared/components/DateField";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,

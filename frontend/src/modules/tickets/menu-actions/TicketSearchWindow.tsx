@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import { ticketApi } from "../ticket.api";
 
 const ticketSearchHistoryStatuses = new Set([
@@ -80,7 +80,7 @@ const TicketSearchWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Search Ticket"
       description="Search tickets by ticket number."
     >
@@ -120,7 +120,7 @@ const TicketSearchWindow: React.FC<WindowScreenProps> = () => {
           Found tickets will open on Transaction or History automatically.
         </Alert>
       </Box>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

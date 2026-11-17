@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import SearchBar from "./SearchBar";
-import SideButtons from "./SideButtons";
+import ShortcutButtons from "./ShortcutButtons";
 
 interface TopBarProps {
   lastNameInputRef?: React.RefObject<HTMLInputElement | null>;
@@ -41,7 +41,7 @@ const TopBar: React.FC<TopBarProps> = ({
         onBirthdaySearch={onBirthdaySearch}
         onClear={onClear}
       />
-      <SideButtons
+      <ShortcutButtons
         onPayment={onPayment}
         onTicketSearch={onTicketSearch}
         onItemSearch={onItemSearch}

@@ -22,8 +22,8 @@ import {
   formatCurrency,
   formatIsoDate,
 } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import ReportDocument from "../components/ReportDocument";
 
 const getBuybackReportFileName = (date: Date) => {
@@ -88,7 +88,7 @@ const BuybackReportWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Buyback Report"
       description="Generate  buyback payment records."
     >
@@ -237,7 +237,7 @@ const BuybackReportWindow: React.FC<WindowScreenProps> = () => {
           </Typography>
         ) : null}
       </Box>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

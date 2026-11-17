@@ -21,8 +21,8 @@ import {
   formatCurrency,
   formatIsoDate,
 } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import ReportDocument from "../components/ReportDocument";
 
 const detailValue = (value: string | number | undefined) =>
@@ -100,7 +100,7 @@ const DailyReportWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Daily Report"
       description="Generate detailed item records."
     >
@@ -322,7 +322,7 @@ const DailyReportWindow: React.FC<WindowScreenProps> = () => {
           </Typography>
         ) : null}
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

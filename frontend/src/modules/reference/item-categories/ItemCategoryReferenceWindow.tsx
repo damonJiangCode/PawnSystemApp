@@ -17,7 +17,7 @@ import type {
   ItemCategoryTree,
   ItemSubcategory,
 } from "@pawnsystem/shared/models/item-category.model";
-import WindowLayout from "../../../windows/WindowLayout";
+import WindowFrame from "../../../windows/WindowFrame";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import ItemCategoryAddDialog from "./ItemCategoryAddDialog";
 import { referenceApi } from "../reference.api";
@@ -163,7 +163,7 @@ export default function ItemCategoryReferenceWindow() {
     </Button>
   );
   return (
-    <WindowLayout
+    <WindowFrame
       title="Item Categories"
       description="Add categories and subcategories, or change their state. Existing items keep their category when it is deactivated."
     >
@@ -392,6 +392,6 @@ export default function ItemCategoryReferenceWindow() {
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 }

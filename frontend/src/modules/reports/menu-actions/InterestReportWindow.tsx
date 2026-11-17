@@ -19,8 +19,8 @@ import {
 import React, { useMemo, useState } from "react";
 import { reportApi } from "../report.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import ReportDocument from "../components/ReportDocument";
 
 const InterestReportWindow: React.FC<WindowScreenProps> = () => {
@@ -67,7 +67,7 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
   const ticketCount = new Set(rows.map((row) => row.ticket_number)).size;
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Interest Report"
       description="Generate interest payment records."
     >
@@ -248,7 +248,7 @@ const InterestReportWindow: React.FC<WindowScreenProps> = () => {
           </Typography>
         ) : null}
       </Box>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

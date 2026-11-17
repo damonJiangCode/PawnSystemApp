@@ -18,8 +18,8 @@ import {
   LastPage,
 } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import WindowLayout from "../../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../../windows/windowRegistry";
+import WindowFrame from "../../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../../windows/registry";
 import TransactionItemImage from "../../components/transaction/TransactionItemImage";
 import { itemSearchWindowColumns } from "./itemSearchWindowColumns";
 import {
@@ -122,7 +122,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
   );
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Search Item"
       description="Search by item number, or by item details."
       denseFooter
@@ -428,7 +428,7 @@ const ItemSearchWindow: React.FC<WindowScreenProps> = () => {
           />
         </Box>
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

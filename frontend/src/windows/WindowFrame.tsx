@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 
-export type WindowLayoutProps = {
+export type WindowFrameProps = {
   title: string;
   description: string;
   denseFooter?: boolean;
@@ -9,7 +9,7 @@ export type WindowLayoutProps = {
   children?: React.ReactNode;
 };
 
-const WindowLayout: React.FC<WindowLayoutProps> = ({
+const WindowFrame: React.FC<WindowFrameProps> = ({
   title,
   description,
   denseFooter = false,
@@ -100,4 +100,4 @@ const WindowLayout: React.FC<WindowLayoutProps> = ({
   );
 };
 
-export default WindowLayout;
+export default WindowFrame;

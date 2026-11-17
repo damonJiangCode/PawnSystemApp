@@ -17,8 +17,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import type { TicketSearchResult } from "@pawnsystem/shared/payload-contracts/ticket.contract";
 import type { TicketFormError } from "../ticket.api";
 import { ticketApi } from "../ticket.api";
@@ -159,7 +159,7 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
   };
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Expire Ticket"
       description="Search tickets, confirm the details, then expire them."
     >
@@ -293,7 +293,7 @@ const TicketExpireWindow: React.FC<WindowScreenProps> = () => {
           </DialogActions>
         </Dialog>
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

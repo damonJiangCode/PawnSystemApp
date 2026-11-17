@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import type { HolidayDate } from "@pawnsystem/shared/models/holiday-date.model";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import HolidayAddDialog from "./HolidayAddDialog";
 import { referenceApi } from "../reference.api";
 
@@ -132,7 +132,7 @@ const HolidayReferenceWindow: React.FC<WindowScreenProps> = () => {
   const busy = loading || Boolean(removingDate);
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Holiday"
       description="Search holidays by year, add new dates, or remove existing dates."
     >
@@ -294,7 +294,7 @@ const HolidayReferenceWindow: React.FC<WindowScreenProps> = () => {
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

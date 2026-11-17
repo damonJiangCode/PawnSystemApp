@@ -20,8 +20,8 @@ import {
   formatCurrency,
   formatIsoDate,
 } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import { useQuoteWindow } from "./useQuoteWindow";
 
 const QuoteWindow: React.FC<WindowScreenProps> = () => {
@@ -45,7 +45,7 @@ const QuoteWindow: React.FC<WindowScreenProps> = () => {
     .join(" ");
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Quote"
       description="Preview pickup and interest amounts for the selected client."
       denseFooter
@@ -213,7 +213,7 @@ const QuoteWindow: React.FC<WindowScreenProps> = () => {
           </Stack>
         </Box>
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

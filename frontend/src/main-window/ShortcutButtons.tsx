@@ -4,13 +4,13 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 
-interface SideButtonsProps {
+interface ShortcutButtonsProps {
   onPayment?: () => void;
   onTicketSearch?: () => void;
   onItemSearch?: () => void;
 }
 
-const SideButtons: React.FC<SideButtonsProps> = ({
+const ShortcutButtons: React.FC<ShortcutButtonsProps> = ({
   onPayment,
   onTicketSearch,
   onItemSearch,
@@ -52,4 +52,4 @@ const SideButtons: React.FC<SideButtonsProps> = ({
   );
 };
 
-export default SideButtons;
+export default ShortcutButtons;

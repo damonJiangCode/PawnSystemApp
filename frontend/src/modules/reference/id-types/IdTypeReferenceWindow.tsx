@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { IdType } from "@pawnsystem/shared/models/id-type.model";
-import WindowLayout from "../../../windows/WindowLayout";
+import WindowFrame from "../../../windows/WindowFrame";
 import ConfirmDialog from "../../../shared/components/ConfirmDialog";
 import IdTypeAddDialog from "./IdTypeAddDialog";
 import { referenceApi } from "../reference.api";
@@ -81,7 +81,7 @@ export default function IdTypeReferenceWindow() {
     item.type.toLowerCase().includes(search.trim().toLowerCase()),
   );
   return (
-    <WindowLayout
+    <WindowFrame
       title="ID Types"
       description="Add, activate or deactivate ID types. Existing client IDs are retained when a type is deactivated."
     >
@@ -184,6 +184,6 @@ export default function IdTypeReferenceWindow() {
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 }

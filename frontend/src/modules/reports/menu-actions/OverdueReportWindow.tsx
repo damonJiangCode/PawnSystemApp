@@ -26,8 +26,8 @@ import { reportApi } from "../report.api";
 import { ticketApi } from "../../tickets/ticket.api";
 import { getAppApi } from "../../../shared/api/app.api";
 import { formatIsoDate } from "../../../shared/utils/formatters";
-import WindowLayout from "../../../windows/WindowLayout";
-import type { WindowScreenProps } from "../../../windows/windowRegistry";
+import WindowFrame from "../../../windows/WindowFrame";
+import type { WindowScreenProps } from "../../../windows/registry";
 import ReportDocument from "../components/ReportDocument";
 import { referenceApi } from "../../reference/reference.api";
 
@@ -169,7 +169,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
   );
 
   return (
-    <WindowLayout
+    <WindowFrame
       title="Overdue Report"
       description="Review overdue pawn tickets by location range."
     >
@@ -461,7 +461,7 @@ const OverdueReportWindow: React.FC<WindowScreenProps> = () => {
           </Typography>
         )}
       </Stack>
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

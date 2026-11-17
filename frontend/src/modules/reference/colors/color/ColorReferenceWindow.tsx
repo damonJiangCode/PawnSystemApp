@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { EyeColor } from "@pawnsystem/shared/models/eye-color.model";
-import WindowLayout from "../../../../windows/WindowLayout";
+import WindowFrame from "../../../../windows/WindowFrame";
 import ColorAddDialog from "./ColorAddDialog";
 
 type ColorReferenceWindowProps = {
@@ -156,7 +156,7 @@ const ColorReferenceWindow: React.FC<ColorReferenceWindowProps> = ({
   const activeCount = colors.filter((color) => color.is_active).length;
 
   return (
-    <WindowLayout
+    <WindowFrame
       title={`${colorType} Color`}
       description={`Search, add, or deactivate ${colorType.toLowerCase()} color options.`}
     >
@@ -327,7 +327,7 @@ const ColorReferenceWindow: React.FC<ColorReferenceWindowProps> = ({
           setPending(null);
         }}
       />
-    </WindowLayout>
+    </WindowFrame>
   );
 };
 

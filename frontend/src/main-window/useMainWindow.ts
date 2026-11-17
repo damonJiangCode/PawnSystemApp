@@ -107,7 +107,7 @@ const isPaymentCompletedEvent = (
   );
 };
 
-export const useWorkspaceLayout = () => {
+export const useMainWindow = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [searchFirstName, setSearchFirstName] = useState("");
   const [searchLastName, setSearchLastName] = useState("");
