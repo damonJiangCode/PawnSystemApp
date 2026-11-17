@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Install Node.js 22, Git, and Docker Desktop.
+- Install Node.js 24 or later, Git, and Docker Desktop.
 - Start Docker Desktop with Linux containers.
 - Place `superpawnconv.mdb` and `Pictureconv.mdb` in `database/migration/source/`.
 
@@ -53,4 +53,4 @@ Database data stays in Docker's persistent volume on this computer. Do not use `
 npm run build
 ```
 
-This compiles the application; it does not create a Windows installer.
+This compiles Electron to `electron/dist` and the frontend to `frontend/dist`; it does not create a Windows installer.

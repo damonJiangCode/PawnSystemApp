@@ -46,6 +46,24 @@ React UI ── HTTP ── NestJS controllers → services → repositories →
 | Migration | Node.js, mdbtools, versioned JSON mapping rules               |
 | Testing   | Vitest for the server; Node test runner for everything else   |
 
+## Project structure
+
+The root `package.json` only coordinates. Each folder below is an npm workspace with its own
+dependencies and scripts, installed together by one `npm ci` at the root. Shared TypeScript
+options live in `tsconfig.base.json`.
+
+| Folder      | Workspace              | Role                                                      |
+| ----------- | ---------------------- | --------------------------------------------------------- |
+| `frontend/` | `@pawnsystem/frontend` | React renderer, served and built with Vite                |
+| `electron/` | `@pawnsystem/electron` | Desktop shell and Electron app root                       |
+| `shared/`   | `@pawnsystem/shared`   | Types only, imported with `import type`                   |
+| `database/` | `@pawnsystem/database` | Schema, seed data and the Access migration                |
+| `server/`   | not a workspace        | NestJS API with its own lockfile, built by its Dockerfile |
+| `docker/`   | —                      | Compose file for PostgreSQL, the server and the migration |
+
+Everything is ESM except the Electron preload, which a sandboxed window requires to be
+CommonJS.
+
 ## Engineering highlights
 
 - **The server owns business rules.** The frontend requests and renders; interest,
@@ -76,7 +94,7 @@ The business workflows are moving from Electron IPC to the NestJS server.
 
 ## Getting started
 
-You need Node.js 22, Docker Desktop and a desktop environment. From the repository root:
+You need Node.js 24 or later, Docker Desktop and a desktop environment. From the repository root:
 
 ```bash
 npm ci
@@ -100,14 +118,16 @@ This starts Vite on 5173, NestJS on 3000 and Electron; PostgreSQL uses 5432 (Doc
 ## Verification
 
 ```bash
-npm run typecheck:main
-npm run typecheck:renderer
+npm run typecheck
 npm test
+npm run build
 npm --prefix server test
 npm --prefix server run test:e2e
 npm --prefix server run build
-npm run build
 ```
+
+`typecheck` and `test` run in every workspace; add `-w <folder>` to run one, such as
+`npm run typecheck -w electron`.
 
 ## Documentation
 

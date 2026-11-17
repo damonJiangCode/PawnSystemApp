@@ -14,8 +14,8 @@ From the repository root:
 
 ```bash
 npm run dev            # Vite, the server, the main-process compiler and Electron together
-npm run build:main     # npm run build -w electron
-npm run typecheck:main # npm run typecheck -w electron
+npm run build -w electron
+npm run typecheck -w electron
 ```
 
 `npm start -w electron` runs `scripts/start.js`, which starts Electron on this folder. It clears

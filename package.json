@@ -1,8 +1,12 @@
 {
-  "name": "pawnsystemsub",
+  "name": "pawnsystem",
   "version": "1.0.0",
   "private": true,
+  "description": "Pawn shop management: React and Electron desktop app, NestJS server, PostgreSQL.",
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "workspaces": [
     "database",
     "shared",
@@ -10,32 +14,23 @@
     "electron"
   ],
   "scripts": {
-    "test": "npm test -w frontend -w database",
-    "migration:prepare": "npm run migration:prepare -w database",
-    "migration:execute": "npm run migration:execute -w database",
+    "dev": "npm-run-all --print-label --parallel dev:frontend dev:server dev:main dev:app",
     "dev:frontend": "npm run dev -w frontend",
     "dev:server": "npm --prefix server run dev:server",
     "dev:main": "npm run dev -w electron",
     "dev:app": "wait-on http://localhost:5173 tcp:localhost:3000 file:electron/dist/main/index.js && npm start -w electron",
-    "dev": "npm-run-all --print-label --parallel dev:frontend dev:server dev:main dev:app",
-    "typecheck:main": "npm run typecheck -w electron",
-    "typecheck:renderer": "npm run typecheck -w frontend",
-    "typecheck": "npm run typecheck:main && npm run typecheck:renderer && npm run typecheck -w database -w shared",
-    "build:main": "npm run build -w electron",
-    "build": "npm run build:main && npm run build -w frontend",
+    "build": "npm run build -w electron -w frontend",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm test --workspaces --if-present",
     "db:init": "npm run db:init -w database",
+    "migration:prepare": "npm run migration:prepare -w database",
+    "migration:execute": "npm run migration:execute -w database",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "@types/node": "^25.0.9",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.8.3",
-    "typescript": "^5.9.3",
     "wait-on": "^9.0.3"
   }
 }

@@ -95,15 +95,7 @@ photo cannot replace a newer one.
 
 Run from the repository root.
 
-```bash
-npm run dev
-npm run dev:frontend
-npm run typecheck:renderer
-npm test
-npm run build
-```
-
-These run from the project root and forward to this workspace. To run only the frontend:
+`npm run dev` starts the whole app. To run only the frontend:
 
 ```bash
 npm run dev -w frontend
