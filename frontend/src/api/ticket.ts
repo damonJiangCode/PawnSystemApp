@@ -10,6 +10,7 @@ import type {
   PickupTicketsInput,
   ReverseTicketInput,
   ReverseTicketResult,
+  TicketFormField,
   TicketSearchResult,
   TransferTicketInput,
   TransferTicketPreview,
@@ -356,7 +357,10 @@ export type {
   TransferTicketPreview,
   UpdateTicketInput,
 };
-export type {
-  TicketFormError,
-  TicketFormField,
-} from "../modules/tickets/helpers/ticketApiUtils";
+export type { TicketFormField };
+
+// Errors from the /tickets API carry the server's `field` and HTTP `status`.
+export type TicketFormError = Error & {
+  field?: TicketFormField;
+  status?: number;
+};

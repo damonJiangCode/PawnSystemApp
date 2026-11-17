@@ -1,7 +1,7 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import type { Item } from "@pawnsystem/shared/models/item.model";
-import ItemActionsLayout from "../shared/ItemActionsLayout";
+import ItemActionsLayout from "../../../clients/components/results/shared/ClientActionsLayout";
 
 interface HistoryItemActionsProps {
   selectedItem?: Item;

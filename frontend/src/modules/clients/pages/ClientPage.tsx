@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import ClientProfile from "../components/profile/ClientProfile";
 import ClientsPanel from "../components/results/ClientsPanel";
-import { CLIENT_RESULTS_HEIGHT } from "../layout/clientLayout";
+import { CLIENT_RESULTS_HEIGHT } from "../../../shared/styles/layoutSizing";
 import defaultClient from "../data/defaultClient";
 import type { Client } from "@pawnsystem/shared/models/client.model";
 import { useClientPage } from "../hooks/useClientPage";
