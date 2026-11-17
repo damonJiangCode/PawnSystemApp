@@ -28,7 +28,9 @@ function load(relativePath, dependencies = {}) {
     require: (name) => {
       if (!(name in dependencies))
         throw new Error(`Unexpected test dependency: ${name}`);
-      return dependencies[name];
+      // TypeScript 6 always emits esModuleInterop helpers; marking the fake as an
+      // ES module keeps `import X from` reading its `default` directly.
+      return { __esModule: true, ...dependencies[name] };
     },
   });
   return exports;

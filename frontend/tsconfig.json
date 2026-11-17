@@ -14,7 +14,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  // Used by `npm test`: transpile only, type errors are caught by `npm run typecheck`.
-  "ts-node": { "transpileOnly": true },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]
 }

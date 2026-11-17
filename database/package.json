@@ -12,12 +12,12 @@
     "test": "node --test \"migration/**/*.test.js\""
   },
   "dependencies": {
-    "csv-parser": "^3.2.0",
-    "pg": "^8.17.2"
+    "csv-parser": "^3.2.1",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
-    "@types/node": "^25.0.9",
-    "@types/pg": "^8.16.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.9.9",
+    "@types/pg": "^8.23.1",
+    "typescript": "^6.0.3"
   }
 }

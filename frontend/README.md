@@ -105,4 +105,5 @@ npm run build -w frontend
 ```
 
 Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to `frontend/dist/`. Tests use
-`node:test` through the `ts-node/esm` loader, transpile only (see `"ts-node"` in `tsconfig.json`).
+`node:test` with the `tsx` loader (`node --import tsx --test`), which strips types without
+checking them; type errors are caught by `npm run typecheck`.

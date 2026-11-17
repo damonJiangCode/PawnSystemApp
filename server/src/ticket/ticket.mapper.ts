@@ -1,9 +1,5 @@
 export type TicketStatus =
-  | 'pawned'
-  | 'pawned_expired'
-  | 'pawned_picked_up'
-  | 'sold'
-  | 'sold_expired';
+  'pawned' | 'pawned_expired' | 'pawned_picked_up' | 'sold' | 'sold_expired';
 
 export type TicketRecord = {
   ticket_number: number;
