@@ -1,4 +1,4 @@
-import type { IpcMainInvokeEvent } from "electron";
+import { BrowserWindow, ipcMain, type IpcMainInvokeEvent } from "electron";
 import type {
   OpenItemSearchWindowInput,
   OpenPaymentWindowInput,
@@ -13,9 +13,6 @@ import {
   openManagedWindow,
   registerManagedWindow,
 } from "./window.manager.ts";
-
-const { BrowserWindow, ipcMain } =
-  require("electron/main") as typeof import("electron");
 
 const ITEM_SEARCH_WINDOW_X = 24;
 const ITEM_SEARCH_WINDOW_Y = 24;

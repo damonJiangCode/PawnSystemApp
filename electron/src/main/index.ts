@@ -1,9 +1,7 @@
+import { app, BrowserWindow, Menu } from "electron";
 import { registerHandlers } from "./ipc/register.ts";
 import { hasMainWindow, openMainWindow } from "./window/window.main.ts";
 import { openManagedWindow } from "./window/window.manager.ts";
-
-const { app, BrowserWindow, Menu } =
-  require("electron/main") as typeof import("electron");
 
 app.setName("ME");
 

@@ -1,8 +1,7 @@
 # Build context for docker/migration.Dockerfile (the repository root).
 .git
 **/node_modules
-.electron-build
-dist
+**/dist
 
 # Never send secrets or private store data to the Docker daemon.
 .env

@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": ".electron-build/electron/src/main/index.js",
   "workspaces": [
     "database",
     "shared",
-    "frontend"
+    "frontend",
+    "electron"
   ],
   "scripts": {
     "test": "npm test -w frontend -w database",
@@ -15,13 +15,13 @@
     "migration:execute": "npm run migration:execute -w database",
     "dev:frontend": "npm run dev -w frontend",
     "dev:server": "npm --prefix server run dev:server",
-    "dev:main": "node scripts/prepareElectronBuild.cjs && tsc -p electron/tsconfig.json --watch --preserveWatchOutput",
-    "dev:app": "wait-on http://localhost:5173 tcp:localhost:3000 file:.electron-build/package.json file:.electron-build/electron/src/main/index.js && node scripts/runElectron.cjs",
+    "dev:main": "npm run dev -w electron",
+    "dev:app": "wait-on http://localhost:5173 tcp:localhost:3000 file:electron/dist/main/index.js && npm start -w electron",
     "dev": "npm-run-all --print-label --parallel dev:frontend dev:server dev:main dev:app",
-    "typecheck:main": "tsc --noEmit -p electron/tsconfig.json",
+    "typecheck:main": "npm run typecheck -w electron",
     "typecheck:renderer": "npm run typecheck -w frontend",
     "typecheck": "npm run typecheck:main && npm run typecheck:renderer && npm run typecheck -w database -w shared",
-    "build:main": "node scripts/prepareElectronBuild.cjs && tsc -p electron/tsconfig.json",
+    "build:main": "npm run build -w electron",
     "build": "npm run build:main && npm run build -w frontend",
     "db:init": "npm run db:init -w database",
     "format": "prettier . --write",
@@ -33,7 +33,6 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^25.0.9",
-    "electron": "^41.1.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",

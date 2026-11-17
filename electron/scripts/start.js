@@ -1,12 +1,16 @@
-const { spawn } = require("node:child_process");
-const path = require("node:path");
+// Starts Electron with this folder as the app root (package.json "main").
+import { spawn } from "node:child_process";
+import path from "node:path";
+import electron from "electron";
 
+// Some terminals set ELECTRON_RUN_AS_NODE, which makes Electron run as plain
+// Node and never open a window.
 const environment = { ...process.env };
 delete environment.ELECTRON_RUN_AS_NODE;
 
 const child = spawn(
-  require("electron"),
-  [path.resolve(__dirname, "../.electron-build"), ...process.argv.slice(2)],
+  electron,
+  [path.resolve(import.meta.dirname, ".."), ...process.argv.slice(2)],
   { env: environment, stdio: "inherit" },
 );
 

@@ -1,7 +1,6 @@
+import { screen } from "electron";
 import { createAppWindow } from "./window.create.ts";
 import { buildRendererUrl } from "./window.url.ts";
-
-const { screen } = require("electron/main") as typeof import("electron");
 
 let mainWindow: Electron.BrowserWindow | null = null;
 
