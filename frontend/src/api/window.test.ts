@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getWindowApi } from "./window.ts";
+import { getWindowApi } from "./window";
 
 test("getWindowApi returns the preload bridge, or undefined in a plain browser", (t) => {
   const host = globalThis as { window?: unknown };

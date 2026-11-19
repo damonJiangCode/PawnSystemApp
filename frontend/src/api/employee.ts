@@ -5,7 +5,7 @@ import type {
   EmployeeSearchInput,
   UpdateEmployeeInput,
 } from "@pawnsystem/shared/payload-contracts/employee.contract.ts";
-import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http";
 
 type EmployeeResponse = Omit<Employee, "created_at" | "updated_at"> & {
   created_at?: string;

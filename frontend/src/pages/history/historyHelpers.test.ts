@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { Ticket } from "@pawnsystem/shared/models/ticket.model.ts";
-import { canRepawnTicket, sortHistoryTickets } from "./historyHelpers.ts";
+import { canRepawnTicket, sortHistoryTickets } from "./historyHelpers";
 
 const createHistoryTicket = (
   ticketNumber: number,

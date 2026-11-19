@@ -1,9 +1,9 @@
-import { formatClientOption } from "../../lib/clientDisplay.ts";
+import { formatClientOption } from "../../lib/clientDisplay";
 import {
   formatDisplayValue,
   formatShortDate,
   formatUppercase,
-} from "../../lib/formatters.ts";
+} from "../../lib/formatters";
 
 export const clientProfilePanelSx = {
   minWidth: 0,

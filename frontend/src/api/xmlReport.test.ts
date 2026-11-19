@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import * as http from "./xmlReport.ts";
+import * as http from "./xmlReport";
 
 const base = "http://store-server:3000/";
 const range = { from_date: "2026-11-01", to_date: "2026-11-02" };

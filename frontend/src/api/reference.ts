@@ -14,7 +14,7 @@ import type {
   SaveHolidayInput,
   SaveLocationInput,
 } from "@pawnsystem/shared/payload-contracts/reference.contract.ts";
-import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http";
 
 export type ColorKind = "hair" | "eye";
 

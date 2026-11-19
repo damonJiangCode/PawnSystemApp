@@ -5,8 +5,8 @@ import {
   searchClientsByDobHttp,
   createClientHttp,
   updateClientHttp,
-} from "./client.ts";
-import defaultClient from "../lib/defaultClient.ts";
+} from "./client";
+import defaultClient from "../lib/defaultClient";
 
 test("activation PATCH sends the boolean and employee password without overwriting notes", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL, init: RequestInit) => {

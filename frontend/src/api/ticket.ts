@@ -20,8 +20,8 @@ import {
   createEnvelopePrintHtml,
   type PrintClient,
 } from "../lib/ticketPrintTemplate";
-import { restoreClientDates } from "./client.ts";
-import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
+import { restoreClientDates } from "./client";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http";
 
 type TicketResponse = Omit<
   Ticket,

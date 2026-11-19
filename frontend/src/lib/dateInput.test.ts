@@ -5,7 +5,7 @@ import {
   dateParts,
   pastedDate,
   segmentDigits,
-} from "./dateInput.ts";
+} from "./dateInput";
 
 describe("segmented date input", () => {
   it("keeps client and report display orders separate from the API date", () => {

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatClientIdType, formatClientOption } from "./clientDisplay.ts";
-import { createClientProfileDisplay } from "../pages/client/clientProfileDisplay.ts";
+import { formatClientIdType, formatClientOption } from "./clientDisplay";
+import { createClientProfileDisplay } from "../pages/client/clientProfileDisplay";
 
 test("known options display consistently without rewriting custom option labels", () => {
   assert.equal(formatClientOption("MALE"), "Male");

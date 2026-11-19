@@ -4,7 +4,7 @@ import {
   formatIsoDate,
   formatShortDate,
   parseMonthDayYear,
-} from "./formatters.ts";
+} from "./formatters";
 
 describe("renderer date formatters", () => {
   it("converts birthday input to an API calendar date without changing the day", () => {

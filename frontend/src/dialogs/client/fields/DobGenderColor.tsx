@@ -1,7 +1,7 @@
 import DateField from "../../../components/DateField";
 import React, { useEffect, useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
-import { formatClientOption } from "../../../lib/clientDisplay.ts";
+import { formatClientOption } from "../../../lib/clientDisplay";
 import { referenceApi } from "../../../api/reference";
 
 interface DobGenderColorProps {

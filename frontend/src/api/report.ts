@@ -6,7 +6,7 @@ import type {
   OverdueReportResult,
   ReportDateRangeInput,
 } from "@pawnsystem/shared/payload-contracts/ticket.contract.ts";
-import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, requestJson } from "./http";
 
 // JSON carries instants as ISO strings; the contracts use Date.
 type BuybackResponse = Omit<BuybackReportResult, "rows"> & {

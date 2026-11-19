@@ -3,7 +3,7 @@ import { Box, Typography, Button, MenuItem, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { ID } from "@pawnsystem/shared/models/client.model";
-import { formatClientIdType } from "../../../lib/clientDisplay.ts";
+import { formatClientIdType } from "../../../lib/clientDisplay";
 import { referenceApi } from "../../../api/reference";
 
 export interface IDFieldsRef {

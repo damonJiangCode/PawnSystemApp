@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { normalizeClientHoldDate } from "./clientHold.ts";
+import { normalizeClientHoldDate } from "./clientHold";
 
 test("hold dates retain their calendar day without timezone conversion", () => {
   assert.equal(normalizeClientHoldDate("2026-10-23"), "2026-10-23");

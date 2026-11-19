@@ -6,7 +6,7 @@ import type {
   UpdateClientInput,
 } from "@pawnsystem/shared/payload-contracts/client.contract.ts";
 import { extractBackendFieldError } from "../lib/formError";
-import { API_BASE_URL, apiUrl, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, requestJson } from "./http";
 
 export async function createClientHttp(
   input: CreateClientInput,

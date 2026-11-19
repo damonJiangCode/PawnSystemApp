@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { resolveFormFieldError } from "./formError.ts";
+import { resolveFormFieldError } from "./formError";
 
 const fieldError = (field: string, message: string) =>
   Object.assign(new Error(message), { field });

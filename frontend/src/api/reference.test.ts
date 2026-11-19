@@ -7,9 +7,9 @@ import {
   loadColorsHttp,
   loadIdTypesHttp,
   setColorActiveHttp,
-} from "./reference.ts";
-import * as http from "./reference.ts";
-import { clientApi } from "./client.ts";
+} from "./reference";
+import * as http from "./reference";
+import { clientApi } from "./client";
 
 const baseUrl = "http://store-server:3000/";
 

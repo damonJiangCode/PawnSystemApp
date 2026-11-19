@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getImageSrc } from "./http.ts";
+import { getImageSrc } from "./http";
 
 test("getImageSrc adds the server address and keeps the photo version", () => {
   assert.equal(

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { Item } from "@pawnsystem/shared/models/item.model.ts";
-import { getItemStatusRowClass, isItemAddable, mergeItems } from "./helpers.ts";
+import { getItemStatusRowClass, isItemAddable, mergeItems } from "./helpers";
 
 const item = (status?: Item["latest_ticket_status"]): Item => ({
   item_number: 1,

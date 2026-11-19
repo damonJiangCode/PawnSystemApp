@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import * as http from "./employee.ts";
+import * as http from "./employee";
 
 const base = "http://store-server:3000/";
 const details = {

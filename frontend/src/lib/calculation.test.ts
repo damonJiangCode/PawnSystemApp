@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { calculation } from "./calculation.ts";
+import { calculation } from "./calculation";
 
 const utcDate = (year: number, month: number, day: number) =>
   new Date(Date.UTC(year, month - 1, day, 12, 0, 0));

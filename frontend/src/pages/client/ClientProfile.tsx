@@ -19,7 +19,7 @@ import {
   clientProfilePanelSx,
   createClientProfileDisplay,
 } from "./clientProfileDisplay";
-import { formatClientIdType } from "../../lib/clientDisplay.ts";
+import { formatClientIdType } from "../../lib/clientDisplay";
 
 interface ClientProfileProps {
   client: Client;

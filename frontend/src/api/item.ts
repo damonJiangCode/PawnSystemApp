@@ -6,7 +6,7 @@ import type {
   ItemSearchResult,
   UpdateItemInput,
 } from "@pawnsystem/shared/payload-contracts/item.contract.ts";
-import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http";
 
 export function loadItemsByTicketHttp(
   ticketNumber: number,

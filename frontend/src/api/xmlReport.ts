@@ -4,7 +4,7 @@ import type {
   XmlReportPreviewResult,
   XmlReportSubmissionResult,
 } from "@pawnsystem/shared/payload-contracts/xmlReport.contract.ts";
-import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http.ts";
+import { API_BASE_URL, apiUrl, jsonBody, requestJson } from "./http";
 
 // The server talks to LeadsOnline, which can take up to 30 seconds per request
 // (one per ticket when submitting), so these calls wait longer than usual.

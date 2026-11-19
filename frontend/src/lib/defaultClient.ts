@@ -1,5 +1,5 @@
 import type { Client } from "@pawnsystem/shared/models/client.model";
-import { formatLocalIsoDatePart } from "./formatters.ts";
+import { formatLocalIsoDatePart } from "./formatters";
 
 const today = new Date();
 const defaultDob = formatLocalIsoDatePart(
