@@ -1,101 +1,62 @@
 # Frontend
 
-React, TypeScript and Material UI, served and built with Vite. This folder is the npm workspace
-`@pawnsystem/frontend`, with its own dependencies and scripts in `package.json`.
+React, TypeScript and Material UI, built with Vite. npm workspace `@pawnsystem/frontend`.
 
 ```text
 frontend/src/
-├── boot/       # React startup; chooses the main workspace or a window view
-├── workspace/  # Main screen shell, search and tabs
-├── windows/    # Registry and layout for additional desktop windows
-├── modules/    # Feature screens, components, hooks and API wrappers
-└── shared/     # Reusable UI, HTTP adapters and browser utilities
+├── main.tsx      # Entry: the main window, or a popup for `?window=<name>`
+├── main-window/  # Top bar, client search, shortcut buttons and page tabs
+├── pages/        # The three tabs: client/, transaction/, history/
+├── windows/      # Popup windows, one folder each; registry.ts maps names to screens
+├── dialogs/      # Dialogs opened from several places: client/, ticket/, item/
+├── components/   # Small shared UI (DateField, ConfirmDialog, ItemsTable, ...)
+├── api/          # One file per server module, plus http.ts and window.ts
+├── lib/          # Pure functions: formatting, dates, form errors, money previews, printing
+└── styles/       # Shared sizes, button styles and colors
 ```
 
-## Modules
+## Rules
 
-| Module         | Owns                                                              | API                                                                                 |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `clients`      | Search, profiles, add and edit dialogs, photos, statistics        | [Client](../server/src/client/README.md)                                            |
-| `transactions` | The page for active tickets (`pawned`, `sold`)                    | [Ticket](../server/src/ticket/README.md)                                            |
-| `history`      | The page for closed tickets; repawn, load and reverse             | [Ticket](../server/src/ticket/README.md)                                            |
-| `tickets`      | Ticket dialogs and tables, menu windows, Payment, print templates | [Ticket](../server/src/ticket/README.md)                                            |
-| `items`        | Item tables, edit dialogs, photos, Item Search                    | [Item](../server/src/item/README.md)                                                |
-| `employees`    | Employee administration                                           | [Employee](../server/src/employee/README.md)                                        |
-| `reference`    | Lookup data and its management windows                            | [Reference](../server/src/reference/README.md)                                      |
-| `reports`      | Daily, Buyback, Interest, Overdue and XML report windows          | [Report](../server/src/report/README.md), [XML](../server/src/xml-report/README.md) |
+- A page or window keeps its own hooks, tables, handlers and helpers in its folder. A dialog used
+  by one window stays with it; shared dialogs go in `dialogs/`.
+- Tests sit next to the file: `<name>.test.ts`.
+- Folders kebab-case, components `PascalCase.tsx`, hooks `useX.ts`, others `camelCase.ts`. No
+  dotted names, at most three folder levels.
+- Screens call the API object for a server module, such as `clientApi` from `api/client.ts`.
+  `api/http.ts` turns error responses into `Error`s that keep the server's `field` and `status`.
+- Only opening and focusing windows goes through Electron, via `getWindowApi()` in `api/window.ts`.
+  A new popup needs an entry in `windows/registry.ts`.
+- The server owns validation, calculations and transactions. The frontend requests and renders.
 
-## Boundaries
+## Pages and windows
 
-- The frontend requests and renders. The server owns validation, calculations, signatures and
-  transactions; frontend validation only improves feedback.
-- Screens call a feature's `*.api.ts`, which calls `getAppApi()`.
-- `src/shared/api/` holds `http.ts` and one `<domain>.http.ts` per backend module. `client`,
-  `employee`, `item`, `reference`, `report`, `ticket` and `xmlReport` use HTTP. Only `window`
-  uses the preload bridge.
-- All lookup data goes through `referenceApi` in `modules/reference/reference.api.ts`.
-- `src/windows/` renders window content; `electron/src/main/window/` manages the native windows.
-- Transaction page state lives in `useTransactionPage`. Its `handlers/` may call APIs and set state;
-  `helpers/` are pure functions.
+| Folder                                   | Shows                                             | Server module       |
+| ---------------------------------------- | ------------------------------------------------- | ------------------- |
+| `pages/client`                           | Client search, profile, photo and statistics      | client              |
+| `pages/transaction`                      | Active tickets (`pawned`, `sold`) and their items | ticket, item        |
+| `pages/history`                          | Closed tickets; repawn, load and reverse          | ticket              |
+| `windows/payment`, `windows/quote`       | Pickups, interest extensions and quotes           | ticket              |
+| `windows/tickets`                        | Ticket Search, Expire and Stolen                  | ticket              |
+| `windows/item-search`                    | Item Search                                       | item                |
+| `windows/reports`                        | Daily, Buyback, Interest, Overdue and XML reports | report, xml-report  |
+| `windows/reference`, `windows/employees` | Lookup data; employee administration              | reference, employee |
 
-## Key workflows
+Server module docs are in `server/src/<module>/README.md`.
 
-### Ticket statuses
+## Behavior worth knowing
 
-| Status             | Page        | History display |
-| ------------------ | ----------- | --------------- |
-| `pawned`           | Transaction |                 |
-| `sold`             | Transaction |                 |
-| `pawned_expired`   | History     | `E`             |
-| `pawned_picked_up` | History     | `P`             |
-| `sold_expired`     | History     | `E`             |
-
-### Repawn
-
-```text
-Open Item Search with the source items → TicketPawnDialog → Save creates the ticket
-→ print → switch to Transaction with the new ticket selected → Add To Ticket becomes available
-```
-
-The item window opens first, but items cannot be added until Transaction has a selected ticket.
-
-### Reverse
-
-`ReverseTicketDialog` shows the pickup amount and asks for a PIN. The server validates and restores
-the ticket to Transaction, then both pages refresh with it selected. Only `pawned_expired` and
-`pawned_picked_up` can be reversed.
-
-### Item Search
-
-- **Modes:** detail search (AND logic, at least one field) or exact item number.
-- **Selection:** checkboxes are for Add To Ticket; selecting a row previews its image. Changing mode
-  keeps checked rows, and a new search replaces only unchecked rows.
-- **Actions:** Go To Ticket needs exactly one checked item. Add To Ticket takes several and needs a
-  selected ticket on the Transaction page. Load appends items without duplicates.
-
-### Payment
-
-On Done, the window sends the amounts it showed. If any differs, the server rejects the batch (409)
-and the window asks to reopen Payment for current amounts. The legal pickup hold comes from the
-server's `pickup_allowed` and `earliest_pickup_date`; the window only warns and asks for confirmation.
-
-### Photos
-
-Records display from the server's `image_url`. A new photo stays in dialog state until Save, then the
-server stores the file. `useClientImage` shows a client photo only after it loads, so a slow older
-photo cannot replace a newer one.
-
-## UI rules
-
-- Money fields do not change on mouse wheel scroll.
-- The selected ticket survives edits, and a new pawn or sale becomes selected.
-- `print/ticketPrintTemplate.ts` prints on colored paper, so it adds no background color.
+- **Payment:** Done sends the amounts the window showed. If any differs, the server rejects the
+  batch (409) and the window asks to reopen. The legal pickup hold only warns.
+- **Repawn:** Item Search opens first, but items are added only after the new ticket is selected
+  on Transaction.
+- **Reverse:** only `pawned_expired` and `pawned_picked_up`; needs a PIN, then both pages refresh.
+- **Item Search:** checkboxes are for Add To Ticket; a new search keeps checked rows.
+- **Photos:** shown from the server's `image_url`; a new photo uploads on Save.
+- Money fields ignore the mouse wheel. The print template adds no background (colored paper).
 
 ## Commands
 
-Run from the repository root.
-
-`npm run dev` starts the whole app. To run only the frontend:
+From the repository root. `npm run dev` starts the whole app.
 
 ```bash
 npm run dev -w frontend
@@ -104,6 +65,5 @@ npm test -w frontend
 npm run build -w frontend
 ```
 
-Vite reads `VITE_API_BASE_URL` from the root `.env` and builds to `frontend/dist/`. Tests use
-`node:test` with the `tsx` loader (`node --import tsx --test`), which strips types without
-checking them; type errors are caught by `npm run typecheck`.
+Vite reads `VITE_API_BASE_URL` from the root `.env` (default `http://localhost:3000`). Keep it on
+localhost for development: the shop server holds production data.

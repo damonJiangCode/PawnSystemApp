@@ -3,11 +3,10 @@
 The npm workspace `@pawnsystem/shared`: TypeScript types that describe what the frontend,
 Electron and the server exchange. It holds **types only**.
 
-| Path                 | Contains                                                     |
-| -------------------- | ------------------------------------------------------------ |
-| `models/`            | Business data, such as `client.model.ts`                     |
-| `payload-contracts/` | Method inputs and results, such as `CreatePawnTicketInput`   |
-| `api-contracts/`     | Methods available through `getAppApi()`, such as `TicketApi` |
+| Path                 | Contains                                                   |
+| -------------------- | ---------------------------------------------------------- |
+| `models/`            | Business data, such as `client.model.ts`                   |
+| `payload-contracts/` | Method inputs and results, such as `CreatePawnTicketInput` |
 
 Import by package name, always with `import type`:
 
@@ -22,7 +21,7 @@ Rules:
 
 - No functions, constants or classes. `tsconfig.json` allows erasable syntax only.
 - No logic. Calculations belong to the server, which owns business rules. The frontend's
-  display previews live in `frontend/src/shared/utils`.
+  display previews live in `frontend/src/lib`.
 - No React, Electron, database or filesystem imports.
 
 ```bash
